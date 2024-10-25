@@ -58,16 +58,24 @@ public:
   virtual ~Particle();
 
   const std::array<double, 3> &getX() const;
+  void setX(std::array<double, 3> & x);
 
   const std::array<double, 3> &getV() const;
+  void setV(std::array<double, 3> & x);
+
 
   const std::array<double, 3> &getF() const;
+  void setF(std::array<double, 3> & x);
+
 
   const std::array<double, 3> &getOldF() const;
+  void setOldF(std::array<double, 3> & x);
+
 
   double getM() const;
 
   int getType() const;
+
 
   bool operator==(Particle &other);
 

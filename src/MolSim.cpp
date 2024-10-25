@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <list>
+#include <cmath>
 
 /**** forward declaration of the calculation functions ****/
 
@@ -31,6 +32,7 @@ void plotParticles(int iteration);
 constexpr double start_time = 0;
 constexpr double end_time = 1000;
 constexpr double delta_t = 0.014;
+// constexpr double end_time = 50*delta_t;
 
 // TODO: what data structure to pick?
 std::list<Particle> particles;
@@ -63,6 +65,16 @@ int main(int argc, char *argsv[]) {
     if (iteration % 10 == 0) {
       plotParticles(iteration);
     }
+
+    // for (auto &p : particles)
+    // {
+    // std::cout << p.getF() << std::endl;
+    //   std::cout << p.getX() << std::endl;
+    //   std::cout << p.getF() << std::endl;
+    //   std::cout << std::endl;
+    //
+    // }
+
     std::cout << "Iteration " << iteration << " finished." << std::endl;
 
     current_time += delta_t;
@@ -77,21 +89,31 @@ void calculateF() {
   iterator = particles.begin();
 
   for (auto &p1 : particles) {
+    std::array<double, 3> new_F = {0};
     for (auto &p2 : particles) {
       // @TODO: insert calculation of forces here!
+      if (p1 == p2) continue;
+      double dist  = ArrayUtils::L2Norm(p1.getX() - p2.getX());
+      double F_mag =  p1.getM() * p2.getM() / pow(dist, 3);
+      new_F = new_F + F_mag * dist * (p2.getX() - p1.getX());
     }
+    p1.setF(new_F);
   }
 }
 
 void calculateX() {
   for (auto &p : particles) {
     // @TODO: insert calculation of position updates here!
+    std::array<double, 3> new_x = p.getX() + (delta_t * p.getV()) + (pow(delta_t, 2)/(2*p.getM()) *  p.getOldF());
+    p.setX(new_x);
   }
 }
 
 void calculateV() {
   for (auto &p : particles) {
     // @TODO: insert calculation of veclocity updates here!
+    std::array<double, 3> new_v = p.getV() + delta_t/2/p.getM() * (p.getF() + p.getOldF()) ;
+    p.setV(new_v);
   }
 }
 
