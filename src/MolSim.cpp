@@ -2,6 +2,7 @@
 #include "FileReader.h"
 #include "outputWriter/XYZWriter.h"
 #include "utils/ArrayUtils.h"
+#include "outputWriter/VTKWriter.h"
 
 #include <iostream>
 #include <list>
@@ -25,14 +26,15 @@ void calculateX();
 void calculateV();
 
 /**
- * plot the particles to a xyz-file
+ * plot the particles to a xyz-file and a vtk-file
  */
 void plotParticles(int iteration);
 
 constexpr double start_time = 0;
-constexpr double end_time = 1000;
-constexpr double delta_t = 0.014;
-// constexpr double end_time = 50*delta_t;
+//constexpr double end_time = 1000;
+//constexpr double delta_t = 0.014;
+double end_time = 0.0;
+double delta_t = 0.0;
 
 // TODO: what data structure to pick?
 std::list<Particle> particles;
@@ -40,14 +42,17 @@ std::list<Particle> particles;
 int main(int argc, char *argsv[]) {
 
   std::cout << "Hello from MolSim for PSE!" << std::endl;
-  if (argc != 2) {
+  if (argc != 4) {
     std::cout << "Erroneous programme call! " << std::endl;
-    std::cout << "./molsym filename" << std::endl;
+    std::cout << "./MolSim filename end_time delta_t" << std::endl;
+    return 0;
   }
 
   FileReader fileReader;
   fileReader.readFile(particles, argsv[1]);
 
+  end_time = std::stod(argsv[2]);
+  delta_t = std::stod(argsv[3]);
   double current_time = start_time;
 
   int iteration = 0;
@@ -118,9 +123,18 @@ void calculateV() {
 }
 
 void plotParticles(int iteration) {
+  //xyz output
+  std::string out_name_xyz("MD_xyz");
+  outputWriter::XYZWriter writer_XYZ;
+  writer_XYZ.plotParticles(particles, out_name_xyz, iteration);
 
-  std::string out_name("MD_vtk");
-
-  outputWriter::XYZWriter writer;
-  writer.plotParticles(particles, out_name, iteration);
+  //vtk output
+  std::string out_name_vtk("MD_vtk");
+  outputWriter::VTKWriter writer_VTK;
+  writer_VTK.initializeOutput(int(particles.size()));
+  // @TODO: Put loop into VTKWriter::plotParticle?
+  for (auto &p : particles) {
+      writer_VTK.plotParticle(p);
+  }
+  writer_VTK.writeFile(out_name_vtk, iteration);
 }
