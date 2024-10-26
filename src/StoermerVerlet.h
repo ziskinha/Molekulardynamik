@@ -6,7 +6,7 @@
 
 class StoermerVerlet : public SimulationAlgorithm{
 public:
-	StoermerVerlet(ParticleContainer & particles, outputWriter::VTKWriter & writer);
+	StoermerVerlet(ParticleContainer & particles, outputWriter::OutputWriter & writer);
 
 private:
 	void simulation_step(double dt) override;

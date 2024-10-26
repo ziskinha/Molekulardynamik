@@ -21,7 +21,8 @@ int main(const int argc, char* argv[]) {
 	double delta_t = std::stod(argv[3]);
 
 	ParticleContainer particles(FileReader::read_file(argv[1]));
-	outputWriter::VTKWriter writer("MD_vtk", particles.size());
+	// outputWriter::VTKWriter writer("MD_vtk", particles.size());
+	outputWriter::XYZWriter writer("MD_xyz");
 
 	StoermerVerlet simulator(particles, writer);
 	simulator.simulate(start_time, end_time, delta_t);

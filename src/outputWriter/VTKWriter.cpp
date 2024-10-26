@@ -16,11 +16,13 @@
 
 namespace outputWriter {
 
-	VTKWriter::VTKWriter(std::string file_name, size_t numParticles): OutputWriter(std::move(file_name)) {
-		initializeOutput(numParticles);
-	}
+	VTKWriter::VTKWriter(std::string file_name, size_t num_particles):
+		OutputWriter(std::move(file_name)),
+		num_particles(num_particles)
+	{}
 
 	void VTKWriter::plot_particles(const ParticleContainer& container, int iteration) {
+		initializeOutput(num_particles);
 		for (auto& particle : container) {
 			plotParticle(particle);
 		}

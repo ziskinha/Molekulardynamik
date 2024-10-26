@@ -6,12 +6,12 @@
 
 #include "utils/ArrayUtils.h"
 
-StoermerVerlet::StoermerVerlet(ParticleContainer& particles, outputWriter::VTKWriter & writer):
+StoermerVerlet::StoermerVerlet(ParticleContainer& particles, outputWriter::OutputWriter & writer):
 	SimulationAlgorithm(particles, writer)
 {}
 
 
-void StoermerVerlet::simulation_step(double dt) {
+void StoermerVerlet::simulation_step(const double dt) {
 
 	// calculate forces
 	// TODO: using newtons actio = reactio halve the number of calcualtions
@@ -21,9 +21,9 @@ void StoermerVerlet::simulation_step(double dt) {
 			if (p1 == p2) continue;
 			double dist  = ArrayUtils::L2Norm(p1.position - p2.position);
 			double f_mag =  p1.mass * p2.mass / pow(dist, 3);
-			new_F = new_F + f_mag * (p2.position - p1.position);
+			new_F = new_F + f_mag  * (p2.position - p1.position);
 		}
-		p1.position = new_F;
+		p1.force = new_F;
 	}
 
 	// update position

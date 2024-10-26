@@ -30,3 +30,5 @@ struct Particle {
 };
 
 std::ostream& operator<<(std::ostream& stream, Particle& p);
+
+

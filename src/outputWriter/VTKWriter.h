@@ -47,5 +47,6 @@ namespace outputWriter {
 		 */
 		void writeFile(unsigned int iteration) const;
 		VTKFile_t * vtkFile{};
+		size_t num_particles;
 	};
 } // namespace outputWriter
