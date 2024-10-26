@@ -38,7 +38,6 @@ Particle::~Particle() {
 }
 
 
-
 std::string Particle::to_string() const {
 	std::stringstream stream;
 	stream << "Particle: X:" << position << " v: " << velocity << " f: " << force

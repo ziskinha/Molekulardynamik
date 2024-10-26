@@ -61,7 +61,7 @@ void VTKWriter::writeFile(const std::string &filename, int iteration) {
   delete vtkFile;
 }
 
-void VTKWriter::plotParticle(Particle &p) {
+void VTKWriter::plotParticle(Particle & p) {
   if (vtkFile->UnstructuredGrid().present()) {
     std::cout << "UnstructuredGrid is present" << std::endl;
   } else {
@@ -72,30 +72,30 @@ void VTKWriter::plotParticle(Particle &p) {
       vtkFile->UnstructuredGrid()->Piece().PointData().DataArray();
   PointData::DataArray_iterator dataIterator = pointDataSequence.begin();
 
-  dataIterator->push_back(p.getM());
+  dataIterator->push_back(p.mass);
   // cout << "Appended mass data in: " << dataIterator->Name();
 
   dataIterator++;
-  dataIterator->push_back(p.getV()[0]);
-  dataIterator->push_back(p.getV()[1]);
-  dataIterator->push_back(p.getV()[2]);
+  dataIterator->push_back(p.velocity[0]);
+  dataIterator->push_back(p.velocity[1]);
+  dataIterator->push_back(p.velocity[2]);
   // cout << "Appended velocity data in: " << dataIterator->Name();
 
   dataIterator++;
-  dataIterator->push_back(p.getOldF()[0]);
-  dataIterator->push_back(p.getOldF()[1]);
-  dataIterator->push_back(p.getOldF()[2]);
+  dataIterator->push_back(p.old_force[0]);
+  dataIterator->push_back(p.old_force[1]);
+  dataIterator->push_back(p.old_force[2]);
   // cout << "Appended force data in: " << dataIterator->Name();
 
   dataIterator++;
-  dataIterator->push_back(p.getType());
+  dataIterator->push_back(p.type);
 
   Points::DataArray_sequence &pointsSequence =
       vtkFile->UnstructuredGrid()->Piece().Points().DataArray();
   Points::DataArray_iterator pointsIterator = pointsSequence.begin();
-  pointsIterator->push_back(p.getX()[0]);
-  pointsIterator->push_back(p.getX()[1]);
-  pointsIterator->push_back(p.getX()[2]);
+  pointsIterator->push_back(p.position[0]);
+  pointsIterator->push_back(p.position[1]);
+  pointsIterator->push_back(p.position[2]);
 }
 
 } // namespace outputWriter

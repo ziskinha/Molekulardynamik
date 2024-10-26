@@ -8,12 +8,12 @@
 #include "Particle.h"
 
 
-using vec3 = std::array<double, 3>;
 
 class ParticleContainer {
 public:
     ParticleContainer() = default;
-    template <typename Container> explicit ParticleContainer(const Container& container);
+    explicit ParticleContainer(const std::vector<Particle> & particles);
+
 
     using iterator = std::vector<Particle>::iterator;
     using const_iterator = std::vector<Particle>::const_iterator;
@@ -25,7 +25,7 @@ public:
     [[nodiscard]] const_iterator cbegin() const { return particles.cbegin(); }
     [[nodiscard]] const_iterator cend() const { return particles.cend(); }
 private:
-    std::vector<Particle> particles;
+    std::vector<Particle> particles = {};
 };
 
 

@@ -4,7 +4,7 @@
 #include "SimulationAlgorithm.h"
 
 
-class StoermerVerlet : SimulationAlgorithm{
+class StoermerVerlet : public SimulationAlgorithm{
 public:
 	StoermerVerlet(ParticleContainer & particles, outputWriter::VTKWriter & writer);
 
