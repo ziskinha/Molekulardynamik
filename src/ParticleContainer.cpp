@@ -1,6 +1,3 @@
-//
-// Created by jdyma on 26/10/2024.
-//
 
 #include "ParticleContainer.h"
 
@@ -13,5 +10,9 @@
 ParticleContainer::ParticleContainer(const std::vector<Particle> & particles):
 	particles(particles)
 {}
+
+size_t ParticleContainer::size() const {
+	return particles.size();
+}
 
 

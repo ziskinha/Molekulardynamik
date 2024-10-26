@@ -11,12 +11,12 @@
 #include "utils/ArrayUtils.h"
 
 Particle::Particle(int type):
-	type(type),
 	position({}),
 	velocity({}),
 	force({}),
 	old_force({}),
-	mass(0)
+	mass(0),
+	type(type)
 {
 	std::cout << "Particle generated!" << std::endl;
 }

@@ -12,17 +12,20 @@
 
 #include <list>
 
+#include "OutputWriter.h"
+
 namespace outputWriter {
 	/**
 	 * This class implements the functionality to generate vtk output from
 	 * particles.
 	 */
-	class VTKWriter {
+	class VTKWriter : public OutputWriter{
 	public:
-		VTKWriter();
+		explicit VTKWriter(std::string file_name, size_t numParticles);
+		~VTKWriter() override;
 
-		virtual ~VTKWriter();
-
+		void plot_particles(const ParticleContainer& container, int iteration) override;
+	private:
 		/**
 		 * set up internal data structures and prepare to plot a particle.
 		 */
@@ -33,7 +36,7 @@ namespace outputWriter {
 		 *
 		 * @note: initializeOutput() must have been called before.
 		 */
-		void plotParticle(Particle& p);
+		void plotParticle(const Particle& p) const;
 
 		/**
 		 * writes the final output file.
@@ -42,9 +45,7 @@ namespace outputWriter {
 		 * @param iteration the number of the current iteration,
 		 *        which is used to generate an unique filename
 		 */
-		void writeFile(const std::string& filename, int iteration);
-
-	private:
+		void writeFile(unsigned int iteration) const;
 		VTKFile_t * vtkFile{};
 	};
 } // namespace outputWriter
