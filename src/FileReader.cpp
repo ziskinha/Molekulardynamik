@@ -12,58 +12,59 @@
 #include <iostream>
 #include <sstream>
 
-FileReader::FileReader() = default;
 
-FileReader::~FileReader() = default;
+std::vector<Particle> FileReader::read_file(char* filename) {
+	std::vector<Particle> particles = {};
+	int num_particles = 0;
+	std::array<double, 3> x{};
+	std::array<double, 3> v{};
+	double m;
 
-void FileReader::readFile(std::list<Particle> &particles, char *filename) {
-  std::array<double, 3> x;
-  std::array<double, 3> v;
-  double m;
-  int num_particles = 0;
+	std::ifstream input_file(filename);
+	if (!input_file.is_open()) {
+		std::cout << "Error: could not open file " << filename << std::endl;
+		exit(-1);
+	}
 
-  std::ifstream input_file(filename);
-  std::string tmp_string;
+	std::string tmp_string;
+	getline(input_file, tmp_string);
+	std::cout << "Read line: " << tmp_string << std::endl;
 
-  if (input_file.is_open()) {
+	while (tmp_string.empty() or tmp_string[0] == '#') {
+		getline(input_file, tmp_string);
+		std::cout << "Read line: " << tmp_string << std::endl;
+	}
 
-    getline(input_file, tmp_string);
-    std::cout << "Read line: " << tmp_string << std::endl;
+	std::istringstream num_stream(tmp_string);
+	num_stream >> num_particles;
+	particles.reserve(num_particles);
 
-    while (tmp_string.empty() or tmp_string[0] == '#') {
-      getline(input_file, tmp_string);
-      std::cout << "Read line: " << tmp_string << std::endl;
-    }
+	std::cout << "Reading " << num_particles << "." << std::endl;
+	getline(input_file, tmp_string);
+	std::cout << "Read line: " << tmp_string << std::endl;
 
-    std::istringstream numstream(tmp_string);
-    numstream >> num_particles;
-    std::cout << "Reading " << num_particles << "." << std::endl;
-    getline(input_file, tmp_string);
-    std::cout << "Read line: " << tmp_string << std::endl;
+	for (int i = 0; i < num_particles; i++) {
+		std::istringstream data_stream(tmp_string);
 
-    for (int i = 0; i < num_particles; i++) {
-      std::istringstream datastream(tmp_string);
+		for (auto& xj : x) {
+			data_stream >> xj;
+		}
+		for (auto& vj : v) {
+			data_stream >> vj;
+		}
+		if (data_stream.eof()) {
+			std::cout
+				<< "Error reading file: eof reached unexpectedly reading from line "
+				<< i << std::endl;
+			exit(-1);
+		}
+		data_stream >> m;
+		particles.emplace_back(x, v, m);
 
-      for (auto &xj : x) {
-        datastream >> xj;
-      }
-      for (auto &vj : v) {
-        datastream >> vj;
-      }
-      if (datastream.eof()) {
-        std::cout
-            << "Error reading file: eof reached unexpectedly reading from line "
-            << i << std::endl;
-        exit(-1);
-      }
-      datastream >> m;
-      particles.emplace_back(x, v, m);
+		getline(input_file, tmp_string);
+		std::cout << "Read line: " << tmp_string << std::endl;
+	}
 
-      getline(input_file, tmp_string);
-      std::cout << "Read line: " << tmp_string << std::endl;
-    }
-  } else {
-    std::cout << "Error: could not open file " << filename << std::endl;
-    exit(-1);
-  }
+	return particles;
 }
+

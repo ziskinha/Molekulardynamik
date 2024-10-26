@@ -8,14 +8,14 @@
 #pragma once
 
 #include "Particle.h"
+#include "ParticleContainer.h"
 
 #include <list>
 
-class FileReader {
-
+class FileReader final {
 public:
-  FileReader();
-  virtual ~FileReader();
+    FileReader() = default;
+    ~FileReader() = default;
 
-  void readFile(std::list<Particle> &particles, char *filename);
+    static std::vector<Particle> read_file(char* filename);
 };
