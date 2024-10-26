@@ -8,7 +8,7 @@
 
 class ParticleContainer {
 public:
-    ParticleContainer() = default;
+    ParticleContainer() = delete;
     explicit ParticleContainer(const std::vector<Particle> & particles);
 
 
@@ -23,6 +23,10 @@ public:
     [[nodiscard]] const_iterator cend() const { return particles.cend(); }
 
     [[nodiscard]] size_t size() const;
+
+    // making class non copyable to avoid accidentally copying all the data
+    ParticleContainer(const ParticleContainer&) = delete;
+    ParticleContainer& operator=(const ParticleContainer&) = delete;
 private:
     std::vector<Particle> particles = {};
 };

@@ -23,6 +23,8 @@ void StoermerVerlet::simulation_step(const double dt) {
 			double f_mag =  p1.mass * p2.mass / pow(dist, 3);
 			new_F = new_F + f_mag  * (p2.position - p1.position);
 		}
+
+		p1.old_force = p1.force;
 		p1.force = new_F;
 	}
 
