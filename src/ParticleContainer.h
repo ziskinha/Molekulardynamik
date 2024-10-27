@@ -24,6 +24,14 @@ public:
 
     [[nodiscard]] size_t size() const;
 
+    Particle& operator[](size_t index) {
+        return particles[index];
+    }
+
+    const Particle& operator[](size_t index) const {
+        return particles[index];
+    }
+
     // making class non copyable to avoid accidentally copying all the data
     ParticleContainer(const ParticleContainer&) = delete;
     ParticleContainer& operator=(const ParticleContainer&) = delete;

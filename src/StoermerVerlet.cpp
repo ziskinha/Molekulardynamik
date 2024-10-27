@@ -14,19 +14,26 @@ StoermerVerlet::StoermerVerlet(ParticleContainer& particles, outputWriter::Outpu
 void StoermerVerlet::simulation_step(const double dt) {
 
 	// calculate forces
-	// TODO: using newtons actio = reactio halve the number of calcualtions
-	for (auto &p1 : particles) {
-		std::array<double, 3> new_F = {};
-		for (auto &p2 : particles) {
-			if (p1 == p2) continue;
+	for (auto &p : particles) {
+		p.old_force = p.force;
+		p.force = {0,0,0};
+	}
+
+	for (size_t i = 0; i < particles.size(); ++i) {
+		auto& p1 = particles[i];
+		for (size_t j = i + 1; j < particles.size(); ++j) {
+			auto& p2 = particles[j];
+			vec3 new_F = {};
+
 			double dist  = ArrayUtils::L2Norm(p1.position - p2.position);
 			double f_mag =  p1.mass * p2.mass / pow(dist, 3);
 			new_F = new_F + f_mag  * (p2.position - p1.position);
-		}
 
-		p1.old_force = p1.force;
-		p1.force = new_F;
+			p2.force = p2.force - new_F;
+			p1.force = p1.force + new_F;
+		}
 	}
+
 
 	// update position
 	for (auto &p : particles) {
