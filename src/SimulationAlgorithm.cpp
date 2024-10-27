@@ -3,23 +3,6 @@
 
 #include <iostream>
 
-// void plotParticles(int iteration, outputWriter::VTKWriter & writer) {
-// 	//xyz output
-// 	std::string out_name_xyz("MD_xyz");
-// 	writer_XYZ.plotParticles(particles, out_name_xyz, iteration);
-//
-// 	//vtk output
-// 	std::string out_name_vtk("MD_vtk");
-// 	outputWriter::VTKWriter writer_VTK;
-// 	writer_VTK.initializeOutput(int(particles.size()));
-// 	// @TODO: Put loop into VTKWriter::plotParticle?
-// 	for (auto &p : particles) {
-// 		writer_VTK.plotParticle(p);
-// 	}
-// 	writer_VTK.writeFile(out_name_vtk, iteration);
-// }
-
-
 
 SimulationAlgorithm::SimulationAlgorithm(ParticleContainer& particles, outputWriter::OutputWriter & writer):
 	particles(particles), writer(writer)

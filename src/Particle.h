@@ -12,9 +12,30 @@
 
 
 using vec3 = std::array<double, 3>;
+
+/**
+ * @brief Struct representing a particle.
+ */
 struct Particle {
+    /**
+     * @brief Constructor that creates a particle with a specified type.
+     * @param type
+     */
 	explicit Particle(int type = 0);
+
+    /**
+     * @brief Constructor that creates a particle with position, velocity, mass and type.
+     * @param position
+     * @param velocity
+     * @param mass
+     * @param type (default value is 0).
+     */
 	Particle(vec3 position, vec3 velocity, double mass, int type = 0);
+
+    /**
+     * @brief Copy constructor that creates a new particle from an existing one.
+     * @param other
+     */
 	Particle(const Particle& other);
 	~Particle();
 
