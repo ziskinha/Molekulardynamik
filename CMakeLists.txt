@@ -62,16 +62,18 @@ target_compile_options(MolSim
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
-include(doxygen)
-
-# integrate Doxygen into project
+#add Doxygen
 find_package(Doxygen)
-if(DOXYGEN_FOUND)
+
+#option to disable creating the Doxygen target
+option(ENABLE_DOXYGEN "Creating Doxygen target" OFF)
+
+if(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
     set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
 
-    add_custom_target(doxys_documentation ALL
-            ${DOXYGEN_EXECUTABLE} ${DOXYGEN_IN}
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            COMMENT "Generating Doxygen documentation"
-            VERBATIM)
+        add_custom_target(doc_doxygen
+                ${DOXYGEN_EXECUTABLE} ${DOXYGEN_IN}
+                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                COMMENT "Generating Doxygen documentation"
+                VERBATIM)
 endif ()
