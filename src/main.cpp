@@ -24,9 +24,8 @@ int main(const int argc, char* argv[]) {
 	outputWriter::VTKWriter writer("MD_vtk", particles.size());
 	// outputWriter::XYZWriter writer("MD_xyz");
 
-	StoermerVerlet simulator(particles, writer);
+	StoermerVerlet simulator(particles, inverse_square_force,writer);
 	simulator.simulate(start_time, end_time, delta_t);
 
 	std::cout << "output written. Terminating..." << std::endl;
-	return 0;
 }

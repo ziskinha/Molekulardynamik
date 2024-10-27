@@ -4,10 +4,13 @@
 
 #include "StoermerVerlet.h"
 
+#include <utility>
+
 #include "utils/ArrayUtils.h"
 
-StoermerVerlet::StoermerVerlet(ParticleContainer& particles, outputWriter::OutputWriter & writer):
-	SimulationAlgorithm(particles, writer)
+StoermerVerlet::StoermerVerlet(ParticleContainer& particles, Force force_func, outputWriter::OutputWriter & writer):
+	SimulationAlgorithm(particles, writer),
+	force_func(std::move(force_func))
 {}
 
 
@@ -23,11 +26,11 @@ void StoermerVerlet::simulation_step(const double dt) {
 		auto& p1 = particles[i];
 		for (size_t j = i + 1; j < particles.size(); ++j) {
 			auto& p2 = particles[j];
-			vec3 new_F = {};
+			vec3 new_F = force_func(p1, p2);
 
-			double dist  = ArrayUtils::L2Norm(p1.position - p2.position);
-			double f_mag =  p1.mass * p2.mass / pow(dist, 3);
-			new_F = new_F + f_mag  * (p2.position - p1.position);
+			// double dist  = ArrayUtils::L2Norm(p1.position - p2.position);
+			// double f_mag =  p1.mass * p2.mass / pow(dist, 3);
+			// new_F = new_F + f_mag  * (p2.position - p1.position);
 
 			p2.force = p2.force - new_F;
 			p1.force = p1.force + new_F;
