@@ -27,7 +27,10 @@ add_executable(MolSim ${MY_SRC}
         src/SimulationAlgorithm.h
         src/StoermerVerlet.cpp
         src/StoermerVerlet.h
-        src/outputWriter/OutputWriter.h)
+        src/outputWriter/OutputWriter.h
+        src/outputWriter/OutputStrategy.cpp
+        src/outputWriter/OutputStrategy.h
+)
 
 # set cxx standard. You may raise this if you want.
 target_compile_features(MolSim
