@@ -1,15 +1,15 @@
 
-#include "Integrator.h"
+#include "IntegratorBase.h"
 
 #include <iostream>
 
 
-namespace md::core {
-	Integrator::Integrator(ParticleContainer& particles, io::OutputWriter & writer):
+namespace md::Integrator {
+	IntegratorBase::IntegratorBase(ParticleContainer& particles, io::OutputWriter & writer):
 		particles(particles), writer(writer)
 	{}
 
-	void Integrator::simulate(const double start_time, const double end_time, const double dt,
+	void IntegratorBase::simulate(const double start_time, const double end_time, const double dt,
 									   unsigned int write_freq)
 	{
 		int i = 0;

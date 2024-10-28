@@ -12,10 +12,11 @@
 #include <vector>
 
 
-
-namespace md::core {
+namespace md {
 	using vec3 = std::array<double, 3>;
+}
 
+namespace md {
 	/**
 	 * @brief Struct representing a particle.
 	 */

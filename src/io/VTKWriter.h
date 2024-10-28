@@ -28,7 +28,7 @@ namespace md::io {
 		explicit VTKWriter(std::string file_name, size_t numParticles);
 		~VTKWriter() override;
 
-		void plot_particles(const core::ParticleContainer& container, int iteration) override;
+		void plot_particles(const ParticleContainer& container, int iteration) override;
 	private:
 		/**
 		 * set up internal data structures and prepare to plot a particle.
@@ -40,7 +40,7 @@ namespace md::io {
 		 *
 		 * @note: initializeOutput() must have been called before.
 		 */
-		void plotParticle(const core::Particle& p) const;
+		void plotParticle(const Particle& p) const;
 
 		/**
 		 * writes the final output file.

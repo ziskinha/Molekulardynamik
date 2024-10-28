@@ -21,8 +21,8 @@ file(GLOB_RECURSE MY_SRC
 
 # create make target
 add_executable(MolSim ${MY_SRC}
-        src/Integrator.cpp
-        src/Integrator.h
+        src/IntegratorBase.cpp
+        src/IntegratorBase.h
         src/StoermerVerlet.cpp
         src/StoermerVerlet.h
         src/io/OutputStrategy.h

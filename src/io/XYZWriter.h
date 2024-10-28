@@ -16,6 +16,6 @@ namespace md::io {
 		explicit XYZWriter(std::string fileName);
 		~XYZWriter() override;
 
-		void plot_particles(const core::ParticleContainer & container, int iteration) override;
+		void plot_particles(const ParticleContainer & container, int iteration) override;
 	};
 } // namespace outputWriter

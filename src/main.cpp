@@ -22,10 +22,10 @@ int main(const int argc, char* argv[]) {
 	double delta_t = std::stod(argv[3]);
     bool useVTK = std::stoi(argv[4]) != 0;
 
-	md::core::ParticleContainer particles(md::io::FileReader::read_file(argv[1]));
+	md::ParticleContainer particles(md::io::FileReader::read_file(argv[1]));
 	const auto writer = md::io::createWriter(useVTK, particles.size());
 
-	md::core::StoermerVerlet simulator(particles, md::core::inverse_square_force,*writer);
+	md::Integrator::StoermerVerlet simulator(particles, md::Integrator::inverse_square_force,*writer);
 	simulator.simulate(start_time, end_time, delta_t);
 
 	std::cout << "output written. Terminating..." << std::endl;

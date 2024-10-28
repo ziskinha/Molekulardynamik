@@ -11,7 +11,7 @@
 #include "utils/ArrayUtils.h"
 
 
-namespace md::core {
+namespace md {
 	Particle::Particle(int type):
 		position({}),
 		velocity({}),

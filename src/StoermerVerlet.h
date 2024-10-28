@@ -2,11 +2,11 @@
 
 
 #include <functional>
-#include "Integrator.h"
+#include "IntegratorBase.h"
 #include "utils/ArrayUtils.h"
 
 
-namespace md::core {
+namespace md::Integrator {
 	/**
 	 * @brief Calculates the inverse-square force between two particles.
 	 * @param p1
@@ -23,7 +23,7 @@ namespace md::core {
 	/**
 	 * @brief Implements the calculation of Stoermer-Verlet.
 	 */
-	class StoermerVerlet final : public Integrator {
+	class StoermerVerlet final : public IntegratorBase {
 	public:
 		using Force = std::function<vec3(const Particle&, const Particle&)>;
 

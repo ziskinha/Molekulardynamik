@@ -21,7 +21,7 @@ namespace md::io {
 		num_particles(num_particles)
 	{}
 
-	void VTKWriter::plot_particles(const core::ParticleContainer& container, int iteration) {
+	void VTKWriter::plot_particles(const ParticleContainer& container, int iteration) {
 		initializeOutput(num_particles);
 		for (auto& particle : container) {
 			plotParticle(particle);
@@ -73,7 +73,7 @@ namespace md::io {
 		delete vtkFile;
 	}
 
-	void VTKWriter::plotParticle(const core::Particle& p) const {
+	void VTKWriter::plotParticle(const Particle& p) const {
 		if (vtkFile->UnstructuredGrid().present()) {
 			std::cout << "UnstructuredGrid is present" << std::endl;
 		}

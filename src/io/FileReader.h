@@ -15,6 +15,6 @@ namespace md::io {
 	    FileReader() = default;
 	    ~FileReader() = default;
 
-	    static std::vector<core::Particle> read_file(char* filename);
+	    static std::vector<Particle> read_file(char* filename);
 	};
 }

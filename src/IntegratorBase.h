@@ -1,20 +1,21 @@
 #pragma once
-#include "io/VTKWriter.h"
 
+#include "io/OutputStrategy.h"
+#include "Particle.h"
 
-namespace md::core {
+namespace md::Integrator {
 	/**
 	 * @brief Manages the main simulation loop.
 	 */
-	class Integrator {
+	class IntegratorBase {
 	public:
 		/**
 		 * @brief Constructs a SimulationAlgorithm object with a reference to a ParticleContainer and OutputWriter.
 		 * @param particles
 		 * @param writer
 		 */
-		Integrator(ParticleContainer & particles, io::OutputWriter & writer);
-		virtual ~Integrator() = default;
+		IntegratorBase(ParticleContainer & particles, io::OutputWriter & writer);
+		virtual ~IntegratorBase() = default;
 
 		/**
 		 * @brief Runs the simulation over a given time interval with specified step size and output frequency.

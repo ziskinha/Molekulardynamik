@@ -13,8 +13,8 @@
 #include <sstream>
 
 namespace md::io {
-	std::vector<core::Particle> FileReader::read_file(char* filename) {
-		std::vector<core::Particle> particles = {};
+	std::vector<Particle> FileReader::read_file(char* filename) {
+		std::vector<Particle> particles = {};
 		int num_particles = 0;
 		std::array<double, 3> x{};
 		std::array<double, 3> v{};

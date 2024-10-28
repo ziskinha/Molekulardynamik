@@ -30,7 +30,7 @@ namespace md::io {
 		 * @param container The particle container to be plotted.
 		 * @param iteration The current simulation iteration.
 		 */
-		virtual void plot_particles(const core::ParticleContainer& container, int iteration) = 0;
+		virtual void plot_particles(const ParticleContainer& container, int iteration) = 0;
 
 	protected:
 		const std::string file_name;
