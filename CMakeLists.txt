@@ -26,7 +26,8 @@ add_executable(MolSim ${MY_SRC}
         src/StoermerVerlet.cpp
         src/StoermerVerlet.h
         src/io/OutputStrategy.h
-        src/io/OutputStrategy.h
+        src/io/FileReader.h
+        src/io/FileReader.cpp
 )
 
 # set cxx standard. You may raise this if you want.

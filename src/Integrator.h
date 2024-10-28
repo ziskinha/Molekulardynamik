@@ -1,5 +1,3 @@
-
-
 #pragma once
 #include "io/VTKWriter.h"
 
@@ -25,7 +23,7 @@ namespace md::core {
 		 * @param dt Δt The time increment for each simulation step.
 		 * @param write_freq The frequency with which the data is written to output.
 		 */
-		void simulate(const double start_time, const double end_time, const double dt, unsigned int write_freq = 10);
+		 void simulate(const double start_time, const double end_time, const double dt, unsigned int write_freq = 10);
 
 	protected:
 		/**

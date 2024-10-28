@@ -8,7 +8,6 @@
 #pragma once
 
 #include <fstream>
-
 #include "OutputStrategy.h"
 
 namespace md::io {

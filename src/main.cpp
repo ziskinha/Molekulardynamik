@@ -1,7 +1,7 @@
 #include <iostream>
 
 
-#include "FileReader.h"
+#include "io/FileReader.h"
 #include "io/OutputStrategy.h"
 
 #include "StoermerVerlet.h"
