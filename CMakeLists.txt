@@ -21,15 +21,12 @@ file(GLOB_RECURSE MY_SRC
 
 # create make target
 add_executable(MolSim ${MY_SRC}
-        src/ParticleContainer.cpp
-        src/ParticleContainer.h
-        src/SimulationAlgorithm.cpp
-        src/SimulationAlgorithm.h
+        src/Integrator.cpp
+        src/Integrator.h
         src/StoermerVerlet.cpp
         src/StoermerVerlet.h
-        src/outputWriter/OutputWriter.h
-        src/outputWriter/OutputStrategy.cpp
-        src/outputWriter/OutputStrategy.h
+        src/io/OutputStrategy.h
+        src/io/OutputStrategy.h
 )
 
 # set cxx standard. You may raise this if you want.

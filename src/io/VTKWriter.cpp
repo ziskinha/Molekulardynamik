@@ -14,14 +14,14 @@
 #include <string>
 #include <utility>
 
-namespace outputWriter {
+namespace md::io {
 
 	VTKWriter::VTKWriter(std::string file_name, size_t num_particles):
 		OutputWriter(std::move(file_name)),
 		num_particles(num_particles)
 	{}
 
-	void VTKWriter::plot_particles(const ParticleContainer& container, int iteration) {
+	void VTKWriter::plot_particles(const core::ParticleContainer& container, int iteration) {
 		initializeOutput(num_particles);
 		for (auto& particle : container) {
 			plotParticle(particle);
@@ -54,7 +54,7 @@ namespace outputWriter {
 		points.DataArray().push_back(pointCoordinates);
 
 		Cells cells; // we don't have cells, => leave it empty
-		// for some reasons, we have to add a dummy entry for paraview
+		// for some reason, we have to add a dummy entry for paraview
 		DataArray_t cells_data(type::Float32, "types", 0);
 		cells.DataArray().push_back(cells_data);
 
@@ -73,7 +73,7 @@ namespace outputWriter {
 		delete vtkFile;
 	}
 
-	void VTKWriter::plotParticle(const Particle& p) const {
+	void VTKWriter::plotParticle(const core::Particle& p) const {
 		if (vtkFile->UnstructuredGrid().present()) {
 			std::cout << "UnstructuredGrid is present" << std::endl;
 		}

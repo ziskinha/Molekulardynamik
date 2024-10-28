@@ -8,14 +8,13 @@
 #pragma once
 
 #include "Particle.h"
-#include "ParticleContainer.h"
 
-#include <list>
+namespace md::io {
+	class FileReader final {
+	public:
+	    FileReader() = default;
+	    ~FileReader() = default;
 
-class FileReader final {
-public:
-    FileReader() = default;
-    ~FileReader() = default;
-
-    static std::vector<Particle> read_file(char* filename);
-};
+	    static std::vector<core::Particle> read_file(char* filename);
+	};
+}

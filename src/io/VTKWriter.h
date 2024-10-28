@@ -8,13 +8,13 @@
 #pragma once
 
 #include "Particle.h"
-#include "outputWriter/vtk-unstructured.h"
+#include "io/vtk-unstructured.h"
 
 #include <list>
 
-#include "OutputWriter.h"
+#include "OutputStrategy.h"
 
-namespace outputWriter {
+namespace md::io {
 	/**
 	 * This class implements the functionality to generate vtk output from
 	 * particles.
@@ -28,7 +28,7 @@ namespace outputWriter {
 		explicit VTKWriter(std::string file_name, size_t numParticles);
 		~VTKWriter() override;
 
-		void plot_particles(const ParticleContainer& container, int iteration) override;
+		void plot_particles(const core::ParticleContainer& container, int iteration) override;
 	private:
 		/**
 		 * set up internal data structures and prepare to plot a particle.
@@ -40,7 +40,7 @@ namespace outputWriter {
 		 *
 		 * @note: initializeOutput() must have been called before.
 		 */
-		void plotParticle(const Particle& p) const;
+		void plotParticle(const core::Particle& p) const;
 
 		/**
 		 * writes the final output file.
@@ -52,4 +52,4 @@ namespace outputWriter {
 		VTKFile_t * vtkFile{};
 		size_t num_particles;
 	};
-} // namespace outputWriter
+} // namespace md::io

@@ -1,12 +1,11 @@
-#include "FileReader.h"
-//#include "outputWriter/XYZWriter.h"
-//#include "outputWriter/VTKWriter.h"
-#include "outputWriter/OutputStrategy.h"
-
 #include <iostream>
 
+
+#include "FileReader.h"
+#include "io/OutputStrategy.h"
+
 #include "StoermerVerlet.h"
-#include "ParticleContainer.h"
+#include "Particle.h"
 
 
 int main(const int argc, char* argv[]) {
@@ -23,12 +22,11 @@ int main(const int argc, char* argv[]) {
 	double delta_t = std::stod(argv[3]);
     bool useVTK = std::stoi(argv[4]) != 0;
 
-	ParticleContainer particles(FileReader::read_file(argv[1]));
-    outputWriter::OutputWriter* writer = OutputStrategy::createWriter(useVTK, particles.size());
+	md::core::ParticleContainer particles(md::io::FileReader::read_file(argv[1]));
+	const auto writer = md::io::createWriter(useVTK, particles.size());
 
-	StoermerVerlet simulator(particles, inverse_square_force,*writer);
+	md::core::StoermerVerlet simulator(particles, md::core::inverse_square_force,*writer);
 	simulator.simulate(start_time, end_time, delta_t);
 
 	std::cout << "output written. Terminating..." << std::endl;
-    delete(writer);
 }
