@@ -27,9 +27,9 @@ public:
 
     /**
      * @brief Constructs a StoermerVerlet object with specified force calculation.
-     * @param particles
+     * @param particles contains the to-be-simulated particles
      * @param force_func Defines the force function which is being used.
-     * @param writer
+     * @param writer writes the output to disk
      */
 	StoermerVerlet(ParticleContainer & particles, Force force_func,outputWriter::OutputWriter & writer);
 

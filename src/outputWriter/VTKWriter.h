@@ -21,6 +21,10 @@ namespace outputWriter {
 	 */
 	class VTKWriter : public OutputWriter{
 	public:
+		/*
+		 *
+		 * @param filename the base name of the file to be written.
+		 */
 		explicit VTKWriter(std::string file_name, size_t numParticles);
 		~VTKWriter() override;
 
@@ -41,7 +45,6 @@ namespace outputWriter {
 		/**
 		 * writes the final output file.
 		 *
-		 * @param filename the base name of the file to be written.
 		 * @param iteration the number of the current iteration,
 		 *        which is used to generate an unique filename
 		 */

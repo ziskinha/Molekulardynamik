@@ -34,7 +34,7 @@ protected:
 	virtual void simulation_step(double dt) = 0;
 	ParticleContainer & particles;
 private:
-	outputWriter::OutputWriter & writer; // TODO: replace with abstract superclass meant for implementing writing operations
+	outputWriter::OutputWriter & writer;
 };
 
 
