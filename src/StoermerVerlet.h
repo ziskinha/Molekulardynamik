@@ -2,7 +2,7 @@
 
 
 #include "IntegratorBase.h"
-#include "Force.hpp"
+#include "force.hpp"
 
 
 namespace md::Integrator {
@@ -18,7 +18,7 @@ namespace md::Integrator {
 		 * @param force_func Defines the force function which is being used.
 		 * @param writer writes the output to disk
 		 */
-		StoermerVerlet(ParticleContainer& particles, Force::ForceFunc force_func, io::OutputWriter& writer);
+		StoermerVerlet(ParticleContainer& particles, force::ForceFunc force_func, io::OutputWriter& writer);
 
 	private:
 		/**
@@ -26,7 +26,7 @@ namespace md::Integrator {
 		 * @param dt Δt The time increment for each simulation step.
 		 */
 		void simulation_step(double dt) override;
-		Force::ForceFunc force_func;
+		force::ForceFunc force_func;
 	};
 }
 
