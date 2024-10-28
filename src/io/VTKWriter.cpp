@@ -75,7 +75,7 @@ namespace md::io {
 
 	void VTKWriter::plotParticle(const Particle& p) const {
 		if (vtkFile->UnstructuredGrid().present()) {
-			std::cout << "UnstructuredGrid is present" << std::endl;
+			// std::cout << "UnstructuredGrid is present" << std::endl;
 		}
 		else {
 			std::cout << "ERROR: No UnstructuredGrid present" << std::endl;

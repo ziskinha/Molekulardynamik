@@ -1,6 +1,7 @@
 #include <iostream>
 
 
+#include "Force.hpp"
 #include "io/FileReader.h"
 #include "io/OutputStrategy.h"
 
@@ -25,8 +26,8 @@ int main(const int argc, char* argv[]) {
 	md::ParticleContainer particles(md::io::FileReader::read_file(argv[1]));
 	const auto writer = md::io::createWriter(useVTK, particles.size());
 
-	md::Integrator::StoermerVerlet simulator(particles, md::Integrator::inverse_square_force,*writer);
-	simulator.simulate(start_time, end_time, delta_t);
+	md::Integrator::StoermerVerlet simulator(particles, md::Force::hookes_law(0.0071),*writer);
+	simulator.simulate(start_time, end_time, delta_t, 200);
 
 	std::cout << "output written. Terminating..." << std::endl;
 }

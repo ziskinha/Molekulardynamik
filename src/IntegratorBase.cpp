@@ -19,7 +19,7 @@ namespace md::Integrator {
 				writer.plot_particles(particles, i);
 			}
 
-			std::cout << "Iteration " << i << " finished." << std::endl;
+			// std::cout << "Iteration " << i << " finished." << std::endl;
 		}
 	}
 }

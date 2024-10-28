@@ -17,6 +17,8 @@ namespace md {
 }
 
 namespace md {
+
+
 	/**
 	 * @brief Struct representing a particle.
 	 */
@@ -54,7 +56,10 @@ namespace md {
 		int type;
 	};
 
+
 	std::ostream& operator<<(std::ostream& stream, Particle& p);
+
+
 
 
 	/**
@@ -108,6 +113,8 @@ namespace md {
 	private:
 		std::vector<Particle> particles = {};
 	};
+
+
 }
 
 
