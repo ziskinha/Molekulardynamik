@@ -66,6 +66,10 @@ namespace md::io {
 
 	void VTKWriter::writeFile(unsigned int iteration) const {
 		std::stringstream strstr;
+		if (!std::filesystem::exists("output")) {
+			std::filesystem::create_directories("output");
+		}
+		strstr << "output" << '/';
 		strstr << file_name << "_" << std::setfill('0') << std::setw(4) << iteration << ".vtu";
 
 		std::ofstream file(strstr.str().c_str());
