@@ -31,6 +31,8 @@ add_executable(MolSim ${MY_SRC}
         src/force.hpp
         src/utils/parse.cpp
         src/utils/parse.h
+        src/Force.hpp
+        src/RungeKutta.h
 )
 
 # set cxx standard. You may raise this if you want.
