@@ -15,7 +15,7 @@ void displayHelp();
 int main(const int argc, char* argv[]) {
 	double end_time;
 	double delta_t;
-	bool useVTK;
+	bool output_format;
 	std::cout << "Hello from MolSim for PSE!" << std::endl;
 
 	if (argc != 5) {
@@ -61,14 +61,14 @@ int main(const int argc, char* argv[]) {
 	}
 
 	try {
-		useVTK = std::stoi(argv[4]);
+        output_format = std::stoi(argv[4]);
 	}
 	catch (const std::invalid_argument& e) {
-		std::cerr << "Error while reading useVTK argument! Caught a invalid_argument exception: " << e.what() <<
+		std::cerr << "Error while reading output_format argument! Caught a invalid_argument exception: " << e.what() <<
 			std::endl << "for help run the program with ./MolSim -h or ./MolSim --help" << std::endl;
 		return 0;
 	}catch (std::out_of_range& e) {
-		std::cerr << "Error while reading useVTK argument! Caught a out_of_range exception: " << e.what() << std::endl
+		std::cerr << "Error while reading output_format argument! Caught a out_of_range exception: " << e.what() << std::endl
 			<< "for help run the program with ./MolSim -h or ./MolSim --help" << std::endl;
 		return 0;
 	}
@@ -85,7 +85,7 @@ int main(const int argc, char* argv[]) {
 	}
 
 	md::ParticleContainer particles(file);
-	const auto writer = md::io::createWriter(useVTK, particles.size());
+	const auto writer = md::io::createWriter(output_format, particles.size());
 
 	md::Integrator::StoermerVerlet simulator(particles, md::force::inverse_square(), *writer);
 	simulator.simulate(start_time, end_time, delta_t, 200);
@@ -96,13 +96,13 @@ int main(const int argc, char* argv[]) {
 
 void displayHelp() {
 	std::cout << "Usage:\n"
-		<< "  ./MolSim filename end_time delta_t useVTK\n"
+		<< "  ./MolSim filename end_time delta_t output_format\n"
 		<< "  ./MolSim -h\n"
 		<< "  ./MolSim --help\n\n"
 		<< "Arguments:\n"
 		<< "  filename         Name of a file from which the particle data is read\n"
 		<< "  end_time         End time for the simulation (e.g., 10.0)\n"
 		<< "  delta_t          Time step delta_t (e.g., 0.01)\n"
-		<< "  useVTK           Use VTK output: 1 to enable, 0 to disable\n"
+		<< "  output_format    Defines output format: 0 for XYZ, 1 for VTK\n"
 		<< "  -h, --help       Show this help message and exit\n";
 }

@@ -40,9 +40,9 @@ namespace md::io {
 
 	/**
 	 * @brief Factory function to create an output writer.
-	 * @param useVTK A boolean flag indicating whether to use the VTK output format or XYZ.
+	 * @param output_format A boolean flag indicating whether to use the VTK output format or XYZ.
 	 * @param num_particles
 	 * @return A pointer to an OutputWriter object.
 	 */
-	std::unique_ptr<OutputWriter> createWriter(bool useVTK, size_t num_particles);
+	std::unique_ptr<OutputWriter> createWriter(bool output_format, size_t num_particles);
 }
