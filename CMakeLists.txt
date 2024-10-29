@@ -65,7 +65,7 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 find_package(Doxygen)
 
 #option to disable creating the Doxygen target
-option(ENABLE_DOXYGEN "Creating Doxygen target" OFF)
+option(ENABLE_DOXYGEN "Creating Doxygen target" ON)
 
 if(ENABLE_DOXYGEN AND DOXYGEN_FOUND)
     set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
