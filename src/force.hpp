@@ -4,7 +4,7 @@
 #include "Particle.h"
 #include "utils/ArrayUtils.h"
 
-namespace md::Force {
+namespace md::force {
 	using ForceFunc = std::function<vec3(const Particle&, const Particle&)>;
 
 
