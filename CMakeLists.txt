@@ -29,6 +29,7 @@ add_executable(MolSim ${MY_SRC}
         src/io/FileReader.h
         src/io/FileReader.cpp
         src/Force.hpp
+        src/RungeKutta.h
 )
 
 # set cxx standard. You may raise this if you want.

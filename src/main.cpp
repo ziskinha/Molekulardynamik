@@ -7,6 +7,7 @@
 
 #include "StoermerVerlet.h"
 #include "Particle.h"
+#include "RungeKutta.h"
 
 #include <cstring>
 
@@ -88,7 +89,7 @@ int main(const int argc, char* argv[]) {
 	const auto writer = md::io::createWriter(useVTK, particles.size());
 
 	md::Integrator::StoermerVerlet simulator(particles, md::force::inverse_square(), *writer);
-	simulator.simulate(start_time, end_time, delta_t, 200);
+	simulator.simulate(start_time, end_time, delta_t, 600);
 
 	std::cout << "output written. Terminating..." << std::endl;
 	return 0;

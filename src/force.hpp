@@ -15,8 +15,8 @@ namespace md::force {
 	 */
 	inline ForceFunc inverse_square (const double pre_factor = 1.0) {
 		return [=] (const Particle& p1, const Particle& p2) {
-			double dist = ArrayUtils::L2Norm(p1.position - p2.position);
-			double f_mag = p1.mass * p2.mass / pow(dist, 3);
+			const double dist = ArrayUtils::L2Norm(p1.position - p2.position);
+			const double f_mag = p1.mass * p2.mass / pow(dist, 3);
 			return pre_factor * f_mag * (p2.position - p1.position);
 		};
 	}
@@ -44,8 +44,8 @@ namespace md::force {
 	 */
 	inline ForceFunc lennard_jones (const double epsilon = 1.0, const double sigma = 1.0) {
 		return [=] (const Particle& p1, const Particle& p2) {
-			double dist = ArrayUtils::L2Norm(p1.position - p2.position);
-			double f_mag = 4 * epsilon *
+			const double dist = ArrayUtils::L2Norm(p1.position - p2.position);
+			const double f_mag = 4 * epsilon *
 				(6 * pow(sigma, 6)/ pow(dist, 7) - 12 *  pow(sigma, 12)/ pow(dist, 13));
 			return f_mag * (p2.position - p1.position);
 		};
