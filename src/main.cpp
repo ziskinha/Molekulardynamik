@@ -2,7 +2,7 @@
 #include "StoermerVerlet.h"
 #include "Particle.h"
 #include <iostream>
-#include "io/OutputStrategy.h"
+#include "io/IOStrategy.h"
 #include "force.hpp"
 
 int main(const int argc, char* argv[]) {

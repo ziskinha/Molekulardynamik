@@ -37,6 +37,13 @@ namespace md::io {
 		const std::string file_name;
 	};
 
+    /**
+     * @brief Checks if the filename ends with the specific extension.
+     * @param filename The filename of the file to check.
+     * @param extension The file extension to check for, e.g., ".txt" or ".xml"
+     * @return true if the filename ends with the specific extension, false otherwise.
+     */
+    bool checkFormat(const char* filename, const std::string& extension);
 
 	/**
 	 * @brief Factory function to create an output writer.
@@ -45,4 +52,12 @@ namespace md::io {
 	 * @return A pointer to an OutputWriter object.
 	 */
 	std::unique_ptr<OutputWriter> createWriter(bool output_format, size_t num_particles);
+
+    /**
+     * @brief Reads a file.
+     * Not used yet. Preparation for the XML files.
+     * @param filename
+     * @return A vector of Particle objects containing the data read from the file.
+     */
+    std::vector<Particle> read_file(char *filename);
 }

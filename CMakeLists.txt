@@ -25,12 +25,12 @@ add_executable(MolSim ${MY_SRC}
         src/IntegratorBase.h
         src/StoermerVerlet.cpp
         src/StoermerVerlet.h
-        src/io/OutputStrategy.h
+        src/io/IOStrategy.h
         src/io/FileReader.h
         src/io/FileReader.cpp
         src/force.hpp
-        src/utils/parse.cpp
-        src/utils/parse.h
+        src/utils/Parse.cpp
+        src/utils/Parse.h
         src/RungeKutta.h
 )
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "io/OutputStrategy.h"
+#include "io/IOStrategy.h"
 #include "Particle.h"
 
 namespace md::Integrator {
