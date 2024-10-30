@@ -1,6 +1,6 @@
 #pragma once
 #include <optional>
-#include "io/OutputStrategy.h"
+#include "io/IOStrategy.h"
 
 
 namespace md::parse {

@@ -12,7 +12,7 @@
 
 #include <list>
 
-#include "OutputStrategy.h"
+#include "IOStrategy.h"
 
 namespace md::io {
 	/**

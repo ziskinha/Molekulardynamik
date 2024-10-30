@@ -8,7 +8,7 @@
 #pragma once
 
 #include <fstream>
-#include "OutputStrategy.h"
+#include "IOStrategy.h"
 
 namespace md::io {
 	class XYZWriter : public OutputWriter {
