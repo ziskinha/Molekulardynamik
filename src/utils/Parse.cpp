@@ -1,4 +1,4 @@
-#include "parse.h"
+#include "Parse.h"
 #include <iostream>
 #include <filesystem>
 #include "force.hpp"
@@ -6,7 +6,7 @@
 #include <optional>
 #include "io/FileReader.h"
 
-namespace  md::Parse {
+namespace  md::parse {
 
 	struct Parse_arguments {
 		std::vector<Particle> file;
@@ -17,7 +17,7 @@ namespace  md::Parse {
 		bool delete_output = false;
 	};
 
-	void parse::displayHelp() {
+	void Parse::displayHelp() {
 		std::cout << "Usage:\n"
 			<< "  ./MolSim filename end_time delta_t output_format\n"
 			<< "  ./MolSim -h\n"
@@ -32,7 +32,7 @@ namespace  md::Parse {
 			<<"   -f               Delete the ../cmake-build-debug/output directory with all its contents";
 	}
 
-    std::optional <parse::Parse_arguments> parse::parse_args(const int argc, char *argv[]) {
+    std::optional <Parse::Parse_arguments> Parse::parse_args(const int argc, char *argv[]) {
 		Parse_arguments arguments;
 	std::cout << "Hello from MolSim for PSE!" << std::endl;
 
@@ -107,8 +107,7 @@ namespace  md::Parse {
 		return std::nullopt;
 	}
 		try {
-
-			arguments.file = md::io::FileReader::read_file(argv[1]);
+			arguments.file = io::FileReader::read_file(argv[1]);
 		}
 		catch (std::exception& e) {
 			std::cerr << "Error while reading filename argument! " << e.what() << std::endl <<

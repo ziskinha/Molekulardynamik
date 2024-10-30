@@ -3,12 +3,12 @@
 #include "io/OutputStrategy.h"
 
 
-namespace  md ::Parse {
+namespace md::parse {
 
     /**
      * @brief Parses arguments from the terminal.
      */
-    class parse {
+    class Parse {
     public:
 
         /**
