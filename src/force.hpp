@@ -29,9 +29,9 @@ namespace md::force {
 	 */
 	inline ForceFunc hookes_law (const double k = 0.1, const double rest_length=0.0) {
 		return [=] (const Particle& p1, const Particle& p2) {
-			// double dist = ArrayUtils::L2Norm(p1.position - p2.position) - rest_length;
-			// double f_mag = k * dist;
-			return k * (p2.position - p1.position);
+			double dist = ArrayUtils::L2Norm(p1.position - p2.position) ;
+			double f_mag = k * (dist - rest_length) / dist;
+			return f_mag * (p2.position - p1.position);
 		};
 	}
 
