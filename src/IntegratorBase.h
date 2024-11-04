@@ -14,7 +14,7 @@ namespace md::Integrator {
 		 * @param particles
 		 * @param writer
 		 */
-		IntegratorBase(ParticleContainer & particles, io::OutputWriter & writer);
+		IntegratorBase(ParticleContainer & particles, std::unique_ptr<io::OutputWriter> writer);
 		virtual ~IntegratorBase() = default;
 
 		/**
@@ -34,7 +34,7 @@ namespace md::Integrator {
 		virtual void simulation_step(double dt) = 0;
 		ParticleContainer & particles;
 	private:
-		io::OutputWriter & writer;
+		std::unique_ptr<io::OutputWriter> writer;
 	};
 }
 

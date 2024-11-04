@@ -17,7 +17,7 @@ namespace md::Integrator {
 		 * @param force_func Defines the force function which is being used.
 		 * @param writer writes the output to disk
 		 */
-		RungeKutta(ParticleContainer& particles, force::ForceFunc force_func, io::OutputWriter& writer);
+		RungeKutta(ParticleContainer& particles, force::ForceFunc force_func, std::unique_ptr<io::OutputWriter> writer);
 
 	private:
 		/**

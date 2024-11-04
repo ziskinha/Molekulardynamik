@@ -7,12 +7,12 @@
 
 namespace md::Integrator {
 	RungeKutta::RungeKutta(ParticleContainer& particles, force::ForceFunc force_func,
-	                       io::OutputWriter& writer):
-		IntegratorBase(particles, writer),
+	                       std::unique_ptr<io::OutputWriter> writer):
+		IntegratorBase(particles, std::move(writer)),
 		force_func(std::move(force_func)) {}
 
 
-	void RungeKutta::simulation_step(double dt) {
+	void RungeKutta::simulation_step(const double dt) {
 		// Store original positions and velocities
 		std::vector<vec3> position0(particles.size());
 		std::vector<vec3> velocity0(particles.size());

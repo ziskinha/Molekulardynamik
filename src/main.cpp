@@ -29,9 +29,9 @@ int main(const int argc, char* argv[]) {
     particles.add_cuboid({0,0,0}, {40, 8, 1}, {0,0,0}, 0.1, 1.1225, 1, 2, 0);
     particles.add_cuboid({15,15,0}, {8, 8, 1}, {0,-10,0}, 0.1, 1.1225, 1, 2, 1);
 
-    const auto writer = md::io::createWriter(args->output_format.value());
+    auto writer = md::io::createWriter(args->output_format.value());
 
-    md::Integrator::StoermerVerlet simulator(particles, md::force::lennard_jones(5, 1), *writer);
+    md::Integrator::StoermerVerlet simulator(particles, md::force::lennard_jones(5, 1), std::move(writer));
     simulator.simulate(0, 5, 1, 10);
 
     // md::ParticleContainer particles(arguments->file);

@@ -9,8 +9,8 @@
 #include "utils/ArrayUtils.h"
 
 namespace md::Integrator {
-	StoermerVerlet::StoermerVerlet(ParticleContainer& particles, force::ForceFunc force_func, io::OutputWriter & writer):
-		IntegratorBase(particles, writer),
+	StoermerVerlet::StoermerVerlet(ParticleContainer& particles, force::ForceFunc force_func, std::unique_ptr<io::OutputWriter> writer):
+		IntegratorBase(particles, std::move(writer)),
 		force_func(std::move(force_func))
 	{}
 
