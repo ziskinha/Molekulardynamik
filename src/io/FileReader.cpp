@@ -13,16 +13,16 @@
 #include <sstream>
 
 namespace md::io {
-	std::vector<Particle> FileReader::read_file(char* filename) {
+	std::vector<Particle> read_file_txt(const std::string& file_name) {
 		std::vector<Particle> particles = {};
 		int num_particles = 0;
 		std::array<double, 3> x{};
 		std::array<double, 3> v{};
 		double m;
 
-		std::ifstream input_file(filename);
+		std::ifstream input_file(file_name);
 		if (!input_file.is_open()) {
-			std::cout << "Error: could not open file " << filename << std::endl;
+			std::cout << "Error: could not open file " << file_name << std::endl;
 			exit(-1);
 		}
 

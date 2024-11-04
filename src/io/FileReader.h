@@ -7,14 +7,9 @@
 
 #pragma once
 
+#include <string>
 #include "Particle.h"
 
 namespace md::io {
-	class FileReader final {
-	public:
-	    FileReader() = default;
-	    ~FileReader() = default;
-
-	    static std::vector<Particle> read_file(char* filename);
-	};
+	std::vector<Particle> read_file_txt(const std::string& file_name);
 }

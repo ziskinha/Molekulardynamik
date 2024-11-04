@@ -12,10 +12,9 @@
 
 
 namespace md::io {
-    bool checkFormat(const char* filename, const std::string& extension) {
-        std::string file_str(filename);
-        if(file_str.length() >= extension.length()) {
-            bool format_match = (0 == file_str.compare(file_str.length() - extension.length(), extension.length(), extension));
+    bool checkFormat(const std::string & filename, const std::string& extension) {
+        if(filename.length() >= extension.length()) {
+            bool format_match = (0 == filename.compare(filename.length() - extension.length(), extension.length(), extension));
             return format_match;
         }
         return false;
@@ -28,11 +27,11 @@ namespace md::io {
         return std::make_unique<XYZWriter>(XYZWriter("MD_xyz"));
     }
 
-    std::vector<Particle> read_file(char *filename) {
+    std::vector<Particle> read_file(const std::string & filename) {
         if (checkFormat(filename, ".txt")) {
-            return FileReader::read_file(filename);
+            return read_file_txt(filename);
         }
         // TODO: add XML FileReader in the future
-        return FileReader::read_file(filename);
+        throw std::invalid_argument("File format not supported");
     }
 }

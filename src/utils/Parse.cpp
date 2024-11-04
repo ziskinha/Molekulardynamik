@@ -8,14 +8,14 @@
 
 namespace  md::parse {
 
-	struct Parse_arguments {
-		std::vector<Particle> file;
-		std::optional<double> end_time;
-		std::optional<double> delta_t;
-		std::optional<bool> output_format;
-		bool show_help = false;
-		bool delete_output = false;
-	};
+	// struct Parse_arguments {
+	// 	std::vector<Particle> file;
+	// 	std::optional<double> end_time;
+	// 	std::optional<double> delta_t;
+	// 	std::optional<bool> output_format;
+	// 	bool show_help = false;
+	// 	bool delete_output = false;
+	// };
 
 	void Parse::displayHelp() {
 		std::cout << "Usage:\n"
@@ -107,7 +107,7 @@ namespace  md::parse {
 		return std::nullopt;
 	}
 		try {
-			arguments.file = io::FileReader::read_file(argv[1]);
+			arguments.file = argv[1];
 		}
 		catch (std::exception& e) {
 			std::cerr << "Error while reading filename argument! " << e.what() << std::endl <<

@@ -43,7 +43,7 @@ namespace md::io {
      * @param extension The file extension to check for, e.g., ".txt" or ".xml"
      * @return true if the filename ends with the specific extension, false otherwise.
      */
-    bool checkFormat(const char* filename, const std::string& extension);
+    bool checkFormat(const std::string & filename, const std::string& extension);
 
 	/**
 	 * @brief Factory function to create an output writer.
@@ -58,5 +58,5 @@ namespace md::io {
      * @param filename
      * @return A vector of Particle objects containing the data read from the file.
      */
-    std::vector<Particle> read_file(char *filename);
+    std::vector<Particle> read_file(const std::string & filename);
 }

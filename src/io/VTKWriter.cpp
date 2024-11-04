@@ -20,8 +20,8 @@ namespace md::io {
 		OutputWriter(std::move(file_base_name))
 	{}
 
-	void VTKWriter::plot_particles(const ParticleContainer& container, int iteration) {
-		initializeOutput(container.size());
+	void VTKWriter::plot_particles(const ParticleContainer& container, const int iteration) {
+		initializeOutput(static_cast<int>(container.size()));
 		for (auto& particle : container) {
 			plotParticle(particle);
 		}

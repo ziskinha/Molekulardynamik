@@ -15,7 +15,7 @@ namespace md::parse {
                * @brief Struct used to return arguments read from the terminal.
                */
         struct Parse_arguments {
-            std::vector<Particle> file;
+            std::string file;
             std::optional<double> end_time;
             std::optional<double> delta_t;
             std::optional<bool> output_format;
