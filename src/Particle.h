@@ -67,7 +67,10 @@ namespace md {
 		 * @brief Constructs a ParticleContainer with a specified collection of Particles.
 		 * @param particles The vector of Particle objects to initialize the container.
 		 */
-		explicit ParticleContainer(const std::vector<Particle>& particles = {});
+		ParticleContainer() = default;
+		explicit ParticleContainer(const std::vector<Particle>& particles);
+		explicit ParticleContainer(std::vector<Particle>&& particles);
+
 
 		void add_cuboid(const vec3& origin, const std::array<u_int32_t, 3>& num_particles, const vec3& init_v,
 		                double thermal_v, double width, double mass, int dimension,int type = 0);

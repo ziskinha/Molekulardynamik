@@ -35,7 +35,7 @@ int main(const int argc, char* argv[]) {
     auto writer = md::io::createWriter(args->output_format.value());
 
     md::Integrator::StoermerVerlet simulator(particles, md::force::lennard_jones(5, 1), std::move(writer));
-    simulator.simulate(0, 5, 0.001, 10000);
+    // simulator.simulate(0, 5, 0.01, 10000);
 
     // simulator.simulate(start_time, arguments->end_time.value(), arguments->delta_t.value(), 200);
 
