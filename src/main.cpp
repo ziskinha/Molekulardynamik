@@ -8,7 +8,7 @@
 
 int main(const int argc, char* argv[]) {
     md::parse::Parse parser;
-    auto args = parser.parse_args(argc, argv);
+    const auto args = parser.parse_args(argc, argv);
     if (!args) {
         return 1;
     }
@@ -22,8 +22,11 @@ int main(const int argc, char* argv[]) {
     }
     constexpr double start_time = 0;
 
-    int fps = 50;
-
+    const int fps = 50;
+    // const double num_frames = args->end_time.value() * fps;
+    // const double num_steps = args->end_time.value() / args->delta_t.value();
+    //
+    // int write_freq = num_steps / num_frames;
 
     md::ParticleContainer particles(md::io::read_file(args->file));
     particles.add_cuboid({0,0,0}, {40, 8, 1}, {0,0,0}, 0.1, 1.1225, 1, 2, 0);
@@ -32,9 +35,8 @@ int main(const int argc, char* argv[]) {
     auto writer = md::io::createWriter(args->output_format.value());
 
     md::Integrator::StoermerVerlet simulator(particles, md::force::lennard_jones(5, 1), std::move(writer));
-    simulator.simulate(0, 5, 1, 10);
+    simulator.simulate(0, 5, 0.001, 10000);
 
-    // md::ParticleContainer particles(arguments->file);
     // simulator.simulate(start_time, arguments->end_time.value(), arguments->delta_t.value(), 200);
 
     std::cout << "output written. Terminating..." << std::endl;
