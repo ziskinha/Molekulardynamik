@@ -21,10 +21,17 @@ int main(const int argc, char* argv[]) {
     }
     constexpr double start_time = 0;
 
-    md::ParticleContainer particles(arguments->file);
+    md::ParticleCuboid cuboid1 ({0,0,0}, {10,10,10}, 1, 1, 0, 0);
+    md::ParticleCuboid cuboid2 ({0,15,0}, {10,10,10}, 1, 1, 0, 1);
+
+    md::ParticleContainer particles = cuboid1 + cuboid2;
     const auto writer = md::io::createWriter(arguments->output_format.value(), particles.size());
+
     md::Integrator::StoermerVerlet simulator(particles, md::force::inverse_square(), *writer);
-    simulator.simulate(start_time, arguments->end_time.value(), arguments->delta_t.value(), 200);
+    simulator.simulate(0, 1, 1, 1);
+
+    // md::ParticleContainer particles(arguments->file);
+    // simulator.simulate(start_time, arguments->end_time.value(), arguments->delta_t.value(), 200);
 
     std::cout << "output written. Terminating..." << std::endl;
     return 0;

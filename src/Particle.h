@@ -67,13 +67,13 @@ namespace md {
 	 */
 	class ParticleContainer {
 	public:
-		ParticleContainer() = delete;
+		ParticleContainer() = default;
 
 		/**
 		 * @brief Constructs a ParticleContainer with a specified collection of Particles.
 		 * @param particles The vector of Particle objects to initialize the container.
 		 */
-		explicit ParticleContainer(const std::vector<Particle>& particles);
+		explicit ParticleContainer(const std::vector<Particle> & particles);
 
 
 		using iterator = std::vector<Particle>::iterator;
@@ -105,13 +105,22 @@ namespace md {
 		Particle& operator[](size_t index);
 		const Particle& operator[](size_t index) const;
 
+		ParticleContainer operator+(const ParticleContainer& other) const;
+
 		// making class non-copyable to avoid accidentally copying all the data
 		// may be changed in the future but currently there is no need to be able to copy it
-		ParticleContainer(const ParticleContainer&) = delete;
-		ParticleContainer& operator=(const ParticleContainer&) = delete;
+		// ParticleContainer(const ParticleContainer&) = delete;
+		// ParticleContainer& operator=(const ParticleContainer&) = delete;
 
-	private:
+	protected:
 		std::vector<Particle> particles = {};
+	};
+
+
+
+	class ParticleCuboid : public ParticleContainer {
+		public:
+		ParticleCuboid(const vec3& origin, std::array<u_int32_t, 3> num_particles, double width, double mass, double avg_velocity, int type=0);
 	};
 
 

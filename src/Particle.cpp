@@ -9,10 +9,15 @@
 
 #include <iostream>
 #include "utils/ArrayUtils.h"
+#include "utils/MaxwellBoltzmannDistribution.h"
 
 
 namespace md {
-	Particle::Particle(int type):
+
+	/// -----------------------------------------
+	/// \brief Particle Class Methods
+	/// -----------------------------------------
+	Particle::Particle(const int type):
 		position({}),
 		velocity({}),
 		force({}),
@@ -60,6 +65,9 @@ namespace md {
 	}
 
 
+	/// -----------------------------------------
+	/// \brief ParticleContainer Class Methods
+	/// -----------------------------------------
 	ParticleContainer::ParticleContainer(const std::vector<Particle>& particles):
 		particles(particles) {}
 
@@ -73,6 +81,37 @@ namespace md {
 
 	const Particle& ParticleContainer::operator[](const size_t index) const {
 		return particles[index];
+	}
+
+	ParticleContainer ParticleContainer::operator+(const ParticleContainer& other) const {
+		ParticleContainer result(*this);
+		result.particles.insert(result.particles.end(), other.particles.begin(), other.particles.end());
+		return result;
+	}
+
+
+	/// -----------------------------------------
+	/// \brief ParticleCuboid Class Methods
+	/// -----------------------------------------
+	ParticleCuboid::ParticleCuboid(const vec3& origin, const std::array<u_int32_t, 3> num_particles, const double width, double mass,
+	                               const double avg_velocity, int type): ParticleContainer()
+	{
+
+		particles.reserve(num_particles[0] * num_particles[1] * num_particles[2]);
+
+		for (int x = 0; x < num_particles[0]; ++x) {
+			for (int y = 0; y < num_particles[1]; ++y) {
+				for (int z = 0; z < num_particles[2]; ++z) {
+					vec3 pos = origin + vec3({
+						x*width,y*width,z*width
+					});
+
+					vec3 vel = maxwellBoltzmannDistributedVelocity(avg_velocity, 3);
+
+					particles.emplace_back(pos, vel, mass, type);
+				}
+			}
+		}
 	}
 }
 
