@@ -21,14 +21,15 @@ int main(const int argc, char* argv[]) {
     }
     constexpr double start_time = 0;
 
-    md::ParticleCuboid cuboid1 ({0,0,0}, {10,10,10}, 1, 1, 0, 0);
-    md::ParticleCuboid cuboid2 ({0,15,0}, {10,10,10}, 1, 1, 0, 1);
 
-    md::ParticleContainer particles = cuboid1 + cuboid2;
+    md::ParticleContainer particles {};
+    particles.add_cuboid({0,0,0}, {40, 8, 1}, {0,0,0}, 0.1, 1.1225, 1, 2, 0);
+    particles.add_cuboid({15,15,0}, {8, 8, 1}, {0,-10,0}, 0.1, 1.1225, 1, 2, 1);
+
     const auto writer = md::io::createWriter(arguments->output_format.value(), particles.size());
 
-    md::Integrator::StoermerVerlet simulator(particles, md::force::inverse_square(), *writer);
-    simulator.simulate(0, 1, 1, 1);
+    md::Integrator::StoermerVerlet simulator(particles, md::force::lennard_jones(5, 1), *writer);
+    simulator.simulate(0, 5, 0.0002, 50);
 
     // md::ParticleContainer particles(arguments->file);
     // simulator.simulate(start_time, arguments->end_time.value(), arguments->delta_t.value(), 200);

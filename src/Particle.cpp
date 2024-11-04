@@ -13,7 +13,6 @@
 
 
 namespace md {
-
 	/// -----------------------------------------
 	/// \brief Particle Class Methods
 	/// -----------------------------------------
@@ -71,6 +70,31 @@ namespace md {
 	ParticleContainer::ParticleContainer(const std::vector<Particle>& particles):
 		particles(particles) {}
 
+	void ParticleContainer::add_cuboid(const vec3& origin, const std::array<u_int32_t, 3>& num_particles,
+		const vec3& init_v, double thermal_v, double width, double mass, int dimension, int type)
+	{
+		particles.reserve(particles.size() + num_particles[0] * num_particles[1] * num_particles[2]);
+
+		for (int x = 0; x < num_particles[0]; ++x) {
+			for (int y = 0; y < num_particles[1]; ++y) {
+				for (int z = 0; z < num_particles[2]; ++z) {
+					vec3 pos = origin + vec3({
+						x * width, y * width, z * width
+					});
+
+					vec3 vel = init_v + maxwellBoltzmannDistributedVelocity(thermal_v, dimension);
+
+
+					particles.emplace_back(pos, vel, mass, type);
+				}
+			}
+		}
+	}
+
+	void ParticleContainer::add_particles(const std::vector<Particle>& particles) {
+		this->particles.insert(this->particles.end(), particles.begin(), particles.end());
+	}
+
 	size_t ParticleContainer::size() const {
 		return particles.size();
 	}
@@ -89,29 +113,5 @@ namespace md {
 		return result;
 	}
 
-
-	/// -----------------------------------------
-	/// \brief ParticleCuboid Class Methods
-	/// -----------------------------------------
-	ParticleCuboid::ParticleCuboid(const vec3& origin, const std::array<u_int32_t, 3> num_particles, const double width, double mass,
-	                               const double avg_velocity, int type): ParticleContainer()
-	{
-
-		particles.reserve(num_particles[0] * num_particles[1] * num_particles[2]);
-
-		for (int x = 0; x < num_particles[0]; ++x) {
-			for (int y = 0; y < num_particles[1]; ++y) {
-				for (int z = 0; z < num_particles[2]; ++z) {
-					vec3 pos = origin + vec3({
-						x*width,y*width,z*width
-					});
-
-					vec3 vel = maxwellBoltzmannDistributedVelocity(avg_velocity, 3);
-
-					particles.emplace_back(pos, vel, mass, type);
-				}
-			}
-		}
-	}
 }
 

@@ -17,8 +17,6 @@ namespace md {
 }
 
 namespace md {
-
-
 	/**
 	 * @brief Struct representing a particle.
 	 */
@@ -60,21 +58,20 @@ namespace md {
 	std::ostream& operator<<(std::ostream& stream, Particle& p);
 
 
-
-
 	/**
 	 * @brief Container class for managing a collection of Particle objects.
 	 */
 	class ParticleContainer {
 	public:
-		ParticleContainer() = default;
-
 		/**
 		 * @brief Constructs a ParticleContainer with a specified collection of Particles.
 		 * @param particles The vector of Particle objects to initialize the container.
 		 */
-		explicit ParticleContainer(const std::vector<Particle> & particles);
+		explicit ParticleContainer(const std::vector<Particle>& particles = {});
 
+		void add_cuboid(const vec3& origin, const std::array<u_int32_t, 3>& num_particles, const vec3& init_v,
+		                double thermal_v, double width, double mass, int dimension,int type = 0);
+		void add_particles(const std::vector<Particle>& particles);
 
 		using iterator = std::vector<Particle>::iterator;
 		using const_iterator = std::vector<Particle>::const_iterator;
@@ -115,15 +112,6 @@ namespace md {
 	protected:
 		std::vector<Particle> particles = {};
 	};
-
-
-
-	class ParticleCuboid : public ParticleContainer {
-		public:
-		ParticleCuboid(const vec3& origin, std::array<u_int32_t, 3> num_particles, double width, double mass, double avg_velocity, int type=0);
-	};
-
-
 }
 
 
