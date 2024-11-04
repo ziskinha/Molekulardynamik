@@ -16,13 +16,12 @@
 
 namespace md::io {
 
-	VTKWriter::VTKWriter(std::string file_name, size_t num_particles):
-		OutputWriter(std::move(file_name)),
-		num_particles(num_particles)
+	VTKWriter::VTKWriter(std::string file_base_name):
+		OutputWriter(std::move(file_base_name))
 	{}
 
 	void VTKWriter::plot_particles(const ParticleContainer& container, int iteration) {
-		initializeOutput(num_particles);
+		initializeOutput(container.size());
 		for (auto& particle : container) {
 			plotParticle(particle);
 		}

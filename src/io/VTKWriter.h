@@ -25,7 +25,7 @@ namespace md::io {
 		 *
 		 * @param filename the base name of the file to be written.
 		 */
-		explicit VTKWriter(std::string file_name, size_t numParticles);
+		explicit VTKWriter(std::string file_base_name);
 		~VTKWriter() override;
 
 		void plot_particles(const ParticleContainer& container, int iteration) override;
@@ -50,6 +50,5 @@ namespace md::io {
 		 */
 		void writeFile(unsigned int iteration) const;
 		VTKFile_t * vtkFile{};
-		size_t num_particles;
 	};
 } // namespace md::io
