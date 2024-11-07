@@ -28,8 +28,8 @@ namespace  md::parse {
 			<< "  end_time         End time for the simulation (e.g., 10.0)\n"
 			<< "  delta_t          Time step delta_t (e.g., 0.01)\n"
 			<< "  output_format    Defines output format: 0 for XYZ, 1 for VTK\n"
-			<< "  -h, --help       Show this help message and exit\n"
-			<<"   -f               Delete the ../cmake-build-debug/output directory with all its contents";
+			<< "  h, -help         Show this help message and exit\n"
+			<< "  f                Delete the ../cmake-build-debug/output directory with all its contents.\n";
 	}
 
     std::optional <Parse::Parse_arguments> Parse::parse_args(const int argc, char *argv[]) {
