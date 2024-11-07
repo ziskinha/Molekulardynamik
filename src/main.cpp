@@ -3,7 +3,7 @@
 #include "Particle.h"
 #include <iostream>
 #include "io/IOStrategy.h"
-#include "force.hpp"
+#include "force.h"
 #include "io/FileReader.h"
 
 int main(const int argc, char* argv[]) {

@@ -33,7 +33,7 @@ add_executable(MolSim ${MY_SRC}
         src/io/IOStrategy.h
         src/io/FileReader.h
         src/io/FileReader.cpp
-        src/force.hpp
+        src/force.h
         src/utils/Parse.cpp
         src/utils/Parse.h
         src/RungeKutta.h

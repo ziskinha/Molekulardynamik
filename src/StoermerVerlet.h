@@ -2,7 +2,7 @@
 
 
 #include "IntegratorBase.h"
-#include "force.hpp"
+#include "force.h"
 
 
 namespace md::Integrator {
