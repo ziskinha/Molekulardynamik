@@ -8,10 +8,17 @@
 #include <filesystem>
 
 
+# define OUTPUT_DIR "output"
+
 /**
  * @brief Namespace containing classes and functions for output writing.
  */
 namespace md::io {
+
+	enum OutputFormat {
+		VTK,
+		XYZ
+	};
 
 	/**
 	 * @brief Abstract base class for output writers.
@@ -22,8 +29,9 @@ namespace md::io {
 		/**
 		 * @brief Constructs an OutputWriter with a specified file name.
 		 * @param file_name The name of the output file.
+		 * @param allow_delete if output folder contains files, allow for deletion
 		 */
-		explicit OutputWriter(std::string file_name): file_name(std::move(file_name)) {};
+		explicit OutputWriter(std::string file_name, bool allow_delete);
 		virtual ~OutputWriter() = default;
 
 		/**
@@ -48,9 +56,10 @@ namespace md::io {
 	/**
 	 * @brief Factory function to create an output writer.
 	 * @param output_format A boolean flag indicating whether to use the VTK output format or XYZ.
+	 * @param allow_delete
 	 * @return A pointer to an OutputWriter object.
 	 */
-	std::unique_ptr<OutputWriter> createWriter(bool output_format);
+	std::unique_ptr<OutputWriter> createWriter(OutputFormat output_format, bool allow_delete);
 
     /**
      * @brief Reads a file.
