@@ -18,6 +18,9 @@ jobs:
       - name: Set up CMake
         run: sudo apt-get install -y cmake
 
+      - name: Install Xercescs
+        run: sudo apt-get install libxerces-c-dev
+
       - name: Build
         run: |
             mkdir build
