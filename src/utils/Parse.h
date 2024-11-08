@@ -42,7 +42,7 @@ namespace md::parse {
 				<< "  dt: " << args.dt << "\n"
 				<< "  num_frames: " << args.num_frames << "\n"
 				<< "  benchmark: " << args.benchmark << "\n"
-				<< "  -f: " << args.delete_output_folder_contents << "\n"
+				<< "  override: " << args.delete_output_folder_contents << "\n"
 				<< "  output_format: " << (args.output_format == io::OutputFormat::XYZ ? "XYZ" : "VTK") << "\n";
 			return os;
 		}

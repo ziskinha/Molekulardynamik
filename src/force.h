@@ -44,10 +44,6 @@ namespace md::force {
 	 */
 	inline ForceFunc lennard_jones(const double epsilon = 1.0, const double sigma = 1.0) {
 		return [=](const Particle& p1, const Particle& p2) {
-			// const double dist = ArrayUtils::L2Norm(p1.position - p2.position);
-			// const double f_mag = 4 * epsilon * (12 * pow(sigma, 12) / pow(dist, 13) - 6 * pow(sigma, 6) / pow(dist, 7));
-			// return f_mag * (p2.position - p1.position) / dist;
-
 			const double dist_squared = pow(p2.position[0] - p1.position[0], 2) +
 				pow(p2.position[1] - p1.position[1], 2) +
 				pow(p2.position[2] - p1.position[2], 2);
