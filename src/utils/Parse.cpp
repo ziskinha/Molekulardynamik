@@ -33,7 +33,7 @@ namespace md::parse {
 			<< "  input_file       Name of the file to read particle data from. Should end in .txt\n"
 			<< "  duration         Simulation duration (e.g., 10.0).\n"
 			<< "  delta_t          Time step delta_t (e.g., 0.01).\n"
-			<< "  fps              Frames per unit of time to save (e.g. 60).\n"
+			<< "  num_frames       Number of Frames saved (e.g. 500).\n"
 			<< "  output_format    Output format: either 'XYZ' or 'VTK'.\n\n"
 			<< "Flags:\n"
 			<< "  -h, --help       Show this help message and exit.\n"
@@ -91,7 +91,7 @@ namespace md::parse {
 			return OK;
 		}
 
-		PARSE_NUMBER(4, args.fps, std::stoi, "fps");
+		PARSE_NUMBER(4, args.num_frames, std::stoi, "num_frames");
 
 		if (parameters[5]!= "XYZ" && parameters[5] != "VTK") {
 			RETURN_PARSE_ERROR("Error: invalid file output format: " << args.file);

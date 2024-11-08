@@ -30,7 +30,7 @@ namespace md::parse {
 		std::string file;
 		double duration;
 		double dt;
-		int fps;
+		int num_frames;
 		bool benchmark;
 		bool delete_output_folder_contents;
 		io::OutputFormat output_format;
@@ -40,7 +40,7 @@ namespace md::parse {
 				<< "  file: " << args.file << "\n"
 				<< "  duration: " << args.duration << "\n"
 				<< "  dt: " << args.dt << "\n"
-				<< "  fps: " << args.fps << "\n"
+				<< "  num_frames: " << args.num_frames << "\n"
 				<< "  benchmark: " << args.benchmark << "\n"
 				<< "  -f: " << args.delete_output_folder_contents << "\n"
 				<< "  output_format: " << (args.output_format == io::OutputFormat::XYZ ? "XYZ" : "VTK") << "\n";
