@@ -43,6 +43,8 @@ add_executable(MolSim ${MY_SRC}
         src/utils/Parse.cpp
         src/utils/Parse.h
         src/RungeKutta.h
+        src/io/Logger.cpp
+        src/io/Logger.h
 )
 
 # set cxx standard. You may raise this if you want.
@@ -77,18 +79,5 @@ target_compile_options(MolSim
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
-#add Doxygen
-find_package(Doxygen)
-
-#option to disable creating the Doxygen target
-option(ENABLE_DOXYGEN "Creating Doxygen target" ON)
-
-if (ENABLE_DOXYGEN AND DOXYGEN_FOUND)
-    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
-
-    add_custom_target(doc_doxygen
-            ${DOXYGEN_EXECUTABLE} ${DOXYGEN_IN}
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            COMMENT "Generating Doxygen documentation"
-            VERBATIM)
-endif ()
+include(doxygen)
+include(spdlog)

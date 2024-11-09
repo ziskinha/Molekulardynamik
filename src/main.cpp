@@ -4,9 +4,11 @@
 #include <iostream>
 #include "io/IOStrategy.h"
 #include "force.h"
-#include "io/FileReader.h"
+#include "io/Logger.h"
 
 int main(const int argc, char* argv[]) {
+    md::io::Logger::initialize_logger(spdlog::level::debug);
+
     md::parse::Parse parser;
     const auto args = parser.parse_args(argc, argv);
     if (!args) {
@@ -39,6 +41,6 @@ int main(const int argc, char* argv[]) {
 
     // simulator.simulate(start_time, arguments->end_time.value(), arguments->delta_t.value(), 200);
 
-    std::cout << "output written. Terminating..." << std::endl;
+    spdlog::info("Output writte. Terminating...");
     return 0;
 }

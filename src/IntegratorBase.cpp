@@ -1,5 +1,6 @@
 
 #include "IntegratorBase.h"
+#include "io/Logger.h"
 
 #include <iostream>
 #include <iomanip>
@@ -32,6 +33,7 @@ namespace md::Integrator {
 	{
 		int i = 0;
 		const int total_steps = static_cast<int>((end_time - start_time) / dt);
+        spdlog::info("Simulation started");
 
 		for (double t = start_time; t < end_time; t += dt, i++ ) {
 			simulation_step(dt);
@@ -41,5 +43,7 @@ namespace md::Integrator {
 
 			show_progress(i, total_steps);
 		}
+
+        spdlog::info("Simulation ended");
 	}
 }

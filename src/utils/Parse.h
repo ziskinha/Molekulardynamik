@@ -12,8 +12,8 @@ namespace md::parse {
     public:
 
         /**
-               * @brief Struct used to return arguments read from the terminal.
-               */
+        * @brief Struct used to return arguments read from the terminal.
+        */
         struct Parse_arguments {
             std::string file;
             std::optional<double> end_time;
