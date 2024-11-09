@@ -65,7 +65,8 @@ namespace md::io {
      * @brief Reads a file.
      * Not used yet. Preparation for the XML files.
      * @param filename
+     * @param particles
      * @return A vector of Particle objects containing the data read from the file.
      */
-    std::vector<Particle> read_file(const std::string & filename);
+    void read_file(const std::string & filename, ParticleContainer & particles);
 }

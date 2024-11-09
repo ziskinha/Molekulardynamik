@@ -10,6 +10,7 @@
 #include <array>
 #include <string>
 #include <vector>
+#include <c++/13/cstdint>
 
 
 namespace md {
@@ -72,8 +73,8 @@ namespace md {
 		explicit ParticleContainer(std::vector<Particle>&& particles);
 
 
-		void add_cuboid(const vec3& origin, const std::array<u_int32_t, 3>& num_particles, const vec3& init_v,
-		                double thermal_v, double width, double mass, int dimension,int type = 0);
+		void add_cuboid(const vec3& origin, const vec3& init_v, const std::array<u_int32_t, 3>& num_particles,
+		                double thermal_v, double width, double mass, uint8_t dimension,int type = 0);
 		void add_particles(const std::vector<Particle>& particles);
 
 		using iterator = std::vector<Particle>::iterator;

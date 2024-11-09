@@ -30,6 +30,7 @@ namespace md::io {
         }
     };
 
+
     bool checkFormat(const std::string& filename, const std::string& extension) {
         if (filename.length() >= extension.length()) {
             bool format_match = (0 == filename.compare(filename.length() - extension.length(), extension.length(),
@@ -39,6 +40,7 @@ namespace md::io {
         return false;
     }
 
+
     std::unique_ptr<OutputWriter> createWriter(const OutputFormat output_format, bool allow_delete) {
         if (output_format == OutputFormat::VTK) {
             return std::make_unique<VTKWriter>(VTKWriter("MD_vtk", allow_delete));
@@ -46,9 +48,10 @@ namespace md::io {
         return std::make_unique<XYZWriter>(XYZWriter("MD_xyz", allow_delete));
     }
 
-    std::vector<Particle> read_file(const std::string& filename) {
+
+    void read_file(const std::string& filename, ParticleContainer & particles) {
         if (checkFormat(filename, ".txt")) {
-            return read_file_txt(filename);
+            return read_file_txt(filename, particles);
         }
         // TODO: add XML FileReader in the future
         throw std::invalid_argument("File format not supported");

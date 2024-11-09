@@ -33,8 +33,8 @@ namespace md::Integrator {
 				auto& p2 = particles[j];
 				vec3 new_F = force_func(p1, p2);
 
-				p2.force = p2.force - new_F;
-				p1.force = p1.force + new_F;
+				p2.force = p2.force + new_F;
+				p1.force = p1.force - new_F;
 			}
 		}
 
