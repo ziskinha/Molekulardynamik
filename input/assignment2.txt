@@ -1,0 +1,25 @@
+#
+# file format:
+# blank lines and lines beginning with # are ignored
+# key word particles indicates a block of individually specified particle data.
+# key word cuboids indicates a block of particle cuboid data.
+#
+# Particle data consists of
+# * xyz-coordinates (3 double values)
+# * velocities (3 double values)
+# * mass (1 double value)
+#
+# Cuboid data consists of
+# * xyz-coordinates of lower left corner (3 double values)
+# * velocities (3 double values)
+# * number of particles in each dimension (3 integer values)
+# * width between each adjacent particle
+# * mass (1 double value)
+# * average thermal velocity
+# * dimension (either 2 or 3)
+#
+#
+cuboids:
+# LL-cord       velocity        N           h           m       br_v    dim   type(optional)
+0.0 0.0 0.0     0.0 0.0 0.0     40 8 1      1.1225      1.0     0.1     2     0
+15.0 15.0 0.0   0.0 0.0 0.0   8 8 1       1.1225      1.0     0.1     2     1

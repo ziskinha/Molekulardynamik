@@ -69,16 +69,14 @@ namespace md {
 	/// \brief ParticleContainer Class Methods
 	/// -----------------------------------------
 	ParticleContainer::ParticleContainer(const std::vector<Particle>& particles):
-		particles(particles) {
-	}
+		particles(particles) {}
 
 	ParticleContainer::ParticleContainer(std::vector<Particle>&& particles):
-		particles(std::move(particles)) {
-	}
+		particles(std::move(particles)) {}
 
-	void ParticleContainer::add_cuboid(const vec3& origin, const std::array<u_int32_t, 3>& num_particles,
-	                                   const vec3& init_v, double thermal_v, double width, double mass, int dimension, int type)
-	{
+	void ParticleContainer::add_cuboid(const vec3& origin,
+	                                   const vec3& init_v, const std::array<u_int32_t, 3>& num_particles,
+	                                   double thermal_v, double width, double mass, uint8_t dimension, int type) {
 		particles.reserve(particles.size() + num_particles[0] * num_particles[1] * num_particles[2]);
 
 		for (unsigned int x = 0; x < num_particles[0]; ++x) {
@@ -117,6 +115,5 @@ namespace md {
 		result.particles.insert(result.particles.end(), other.particles.begin(), other.particles.end());
 		return result;
 	}
-
 }
 

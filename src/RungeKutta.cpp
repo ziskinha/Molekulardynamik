@@ -80,8 +80,8 @@ namespace md::Integrator {
 		for (size_t i = 0; i < particles.size(); i++) {
 			for (size_t j = i + 1; j < particles.size(); j++) {
 				vec3 force = force_func(particles[i], particles[j]);
-				particles[i].force = particles[i].force + force;
-				particles[j].force = particles[j].force - force;
+				particles[i].force = particles[i].force - force;
+				particles[j].force = particles[j].force + force;
 			}
 		}
 	}

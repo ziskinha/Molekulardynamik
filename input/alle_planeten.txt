@@ -11,7 +11,7 @@
 # * mass (1 double value)
 #
 # xyz-coord      velocity        mass
-9
+particles:
 0.0 0.0 0.0      0.0 0.0 0.0     1.0
 0.0 0.38 0.0     -1.59 0.0 0.0   1.7e-7
 0.0 0.72 0.0     -1.18 0.0 0.0   2.4e-6

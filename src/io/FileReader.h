@@ -11,6 +11,18 @@
 #include "Particle.h"
 
 namespace md::io {
-	// std::vector<Particle> read_file_txt(const std::string& file_name);
-	std::vector<Particle> read_file_txt(const std::string& file_name);
+
+	struct CuboidInfo {
+		using vec3 = std::array<double, 3>;
+		vec3 x; // LL-coordinate
+		vec3 v; // velocity
+		std::array<int, 3> N; // Number of particles in each dimension
+		double h; // width between each adjacent particle
+		double mass;
+		double thermal_v;
+		int type;
+	};
+
+
+	void read_file_txt(const std::string& file_name, ParticleContainer& particles);
 }

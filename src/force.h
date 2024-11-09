@@ -17,7 +17,7 @@ namespace md::force {
 		return [=](const Particle& p1, const Particle& p2) {
 			const double dist = ArrayUtils::L2Norm(p1.position - p2.position);
 			const double f_mag = p1.mass * p2.mass / pow(dist, 3);
-			return pre_factor * f_mag * (p2.position - p1.position);
+			return - pre_factor * f_mag * (p2.position - p1.position);
 		};
 	}
 
@@ -31,7 +31,7 @@ namespace md::force {
 		return [=](const Particle& p1, const Particle& p2) {
 			double dist = ArrayUtils::L2Norm(p1.position - p2.position);
 			double f_mag = k * (dist - rest_length) / dist;
-			return f_mag * (p2.position - p1.position);
+			return - f_mag * (p2.position - p1.position);
 		};
 	}
 
@@ -44,11 +44,22 @@ namespace md::force {
 	 */
 	inline ForceFunc lennard_jones(const double epsilon = 1.0, const double sigma = 1.0) {
 		return [=](const Particle& p1, const Particle& p2) {
-			const double dist_squared = pow(p2.position[0] - p1.position[0], 2) +
+			const double dist_squared =
+				pow(p2.position[0] - p1.position[0], 2) +
 				pow(p2.position[1] - p1.position[1], 2) +
 				pow(p2.position[2] - p1.position[2], 2);
-			return -24 * epsilon * ((pow(sigma, 6) / pow(dist_squared, 4)) - 2 * pow(sigma, 12) / pow(dist_squared, 7))
-				* (p2.position - p1.position);
+
+			if (dist_squared == 0.0) {
+				return vec3{0.0, 0.0, 0.0};
+			}
+
+			const double inv_dist_squared = 1.0 / dist_squared;
+			const double inv_dist_6 = pow(inv_dist_squared, 3);
+			const double inv_dist_12 = inv_dist_6 * inv_dist_6;
+
+			const double scalar = 24 * epsilon * inv_dist_squared * (2 * pow(sigma, 12) * inv_dist_12 - pow(sigma, 6) * inv_dist_6);
+
+			return scalar * (p2.position - p1.position);
 		};
 	}
 }
