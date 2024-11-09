@@ -11,15 +11,13 @@
 #include <utility>
 
 namespace md::io {
-	XYZWriter::XYZWriter(std::string file_name): OutputWriter(std::move(file_name)) {}
+	XYZWriter::XYZWriter(std::string fileName, const bool allow_delete): OutputWriter(std::move(fileName), allow_delete) {}
 	XYZWriter::~XYZWriter() = default;
 
 	void XYZWriter::plot_particles(const ParticleContainer& container, int iteration) {
 		std::ofstream file;
 		std::stringstream strstr;
-		if (!std::filesystem::exists("output")) {
-			std::filesystem::create_directories("output");
-		}
+
 		strstr << "output" << '/';
 		strstr << file_name << "_" << std::setfill('0') << std::setw(4) << iteration << ".xyz";
 

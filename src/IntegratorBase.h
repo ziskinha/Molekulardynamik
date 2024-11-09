@@ -23,8 +23,9 @@ namespace md::Integrator {
 		 * @param end_time
 		 * @param dt Δt The time increment for each simulation step.
 		 * @param write_freq The frequency with which the data is written to output.
+		 * @param benchmark
 		 */
-		 void simulate(const double start_time, const double end_time, const double dt, unsigned int write_freq = 10);
+		 void simulate(double start_time, double end_time, double dt, unsigned int write_freq = 10, bool benchmark = false);
 
 	protected:
 		/**

@@ -13,7 +13,7 @@
 namespace md::io {
 	class XYZWriter : public OutputWriter {
 	public:
-		explicit XYZWriter(std::string fileName);
+		explicit XYZWriter(std::string fileName, bool allow_delete);
 		~XYZWriter() override;
 
 		void plot_particles(const ParticleContainer & container, int iteration) override;

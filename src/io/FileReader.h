@@ -11,5 +11,6 @@
 #include "Particle.h"
 
 namespace md::io {
+	// std::vector<Particle> read_file_txt(const std::string& file_name);
 	std::vector<Particle> read_file_txt(const std::string& file_name);
 }
