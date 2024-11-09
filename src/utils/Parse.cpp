@@ -4,42 +4,46 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include "io/Logger.h"
 
 
 
 #define RETURN_PARSE_ERROR(err_msg) \
-std::cerr << err_msg << "\n" << std::endl; \
-std::cerr << "For help, run the program with ./MolSim -h or ./MolSim --help" << std::endl; \
+spdlog::error(err_msg); \
+spdlog::error("For help, run the program with ./MolSim -h or ./MolSim --help"); \
 return ERROR;
+
+
 
 #define PARSE_NUMBER(index, target, type, name) \
 try { \
 target = type(parameters[index]); \
 } catch (const std::invalid_argument& e) { \
-RETURN_PARSE_ERROR("Error while reading " << name << " argument! Caught an invalid_argument exception") \
+RETURN_PARSE_ERROR(fmt::format("Error while reading {} argument! Caught an invalid_argument exception", name)) \
 }
-
 
 
 
 namespace md::parse {
 	void displayHelp() {
-		std::cout << "Usage:\n"
-			<< "  ./MolSim <input_file> <end_time> <delta_t> <fps> <output_format>\n"
-			<< "  ./MolSim -h | --help\n"
-			<< "  ./MolSim -f\n"
-			<< "  ./MolSim -b\n\n"
-			<< "Arguments:\n"
-			<< "  input_file       Name of the file to read particle data from. Should end in .txt\n"
-			<< "  duration         Simulation duration (e.g., 10.0).\n"
-			<< "  delta_t          Time step delta_t (e.g., 0.01).\n"
-			<< "  num_frames       Number of Frames saved (e.g. 500).\n"
-			<< "  output_format    Output format: either 'XYZ' or 'VTK'.\n\n"
-			<< "Flags:\n"
-			<< "  -h, --help       Show this help message and exit.\n"
-			<< "  -f               Delete all contents of the output folder before writing.\n"
-			<< "  -b               Benchmark the simulation (output_format and output_folder optional).\n";
-	}
+        spdlog::info("Displaying help information");
+        spdlog::info("Usage:\n"
+                     "  ./MolSim <input_file> <end_time> <delta_t> <fps> <output_format>\n"
+                     "  ./MolSim -h | --help\n"
+                     "  ./MolSim -f\n"
+                     "  ./MolSim -b\n\n"
+                     "Arguments:\n"
+                     "  input_file       Name of the file to read particle data from. Should end in .txt\n"
+                     "  duration         Simulation duration (e.g., 10.0).\n"
+                     "  delta_t          Time step delta_t (e.g., 0.01).\n"
+                     "  num_frames       Number of Frames saved (e.g. 500).\n"
+                     "  output_format    Output format: either 'XYZ' or 'VTK'.\n\n"
+                     "Flags:\n"
+                     "  -h, --help       Show this help message and exit.\n"
+                     "  -f               Delete all contents of the output folder before writing.\n"
+                     "  -b               Benchmark the simulation (output_format and output_folder optional).");
+    }
+
 
 
 	ParseStatus parse_args(int argc, char** argv, ProgramArguments& args) {
@@ -71,7 +75,7 @@ namespace md::parse {
 		// if -b set, expecting at least 4 arguments (filename, start_time, end_time, delta_t)
 		// else expecting 6 arguments (filename, start_time, end_time, delta_t, fps, output_format)
 		if ((flag_exists("-b") && parameters.size() < 4) || parameters.size() < 6) {
-			RETURN_PARSE_ERROR("Error: Not enough arguments provided. Received" << parameters.size() << "arguments");
+			RETURN_PARSE_ERROR(fmt::format("Error: Not enough arguments provided. Received {} arguments.", parameters.size()));
 		}
 
 		// set options
@@ -81,7 +85,7 @@ namespace md::parse {
 		// parse arguments
 		args.file = arguments[1];
 		if (!std::filesystem::exists(args.file) || !std::filesystem::is_regular_file(args.file)) {
-			RETURN_PARSE_ERROR("Error: File " << args.file << " does not exist or is not a valid file.");
+			RETURN_PARSE_ERROR(fmt::format("Error: File does not exist or is not a valid file.", args.file));
 		}
 
 		PARSE_NUMBER(2, args.duration, std::stod, "duration");
@@ -94,7 +98,7 @@ namespace md::parse {
 		PARSE_NUMBER(4, args.num_frames, std::stoi, "num_frames");
 
 		if (parameters[5]!= "XYZ" && parameters[5] != "VTK") {
-			RETURN_PARSE_ERROR("Error: invalid file output format: " << args.file);
+			RETURN_PARSE_ERROR(fmt::format("Error: invalid file output format: {}", args.file));
 		}
 		args.output_format = parameters[5] == "XYZ" ? io::OutputFormat::XYZ : io::OutputFormat::VTK;
 

@@ -6,6 +6,7 @@
  */
 
 #include "VTKWriter.h"
+#include "Logger.h"
 
 #include <cstdlib>
 #include <fstream>
@@ -81,7 +82,7 @@ namespace md::io {
 			// std::cout << "UnstructuredGrid is present" << std::endl;
 		}
 		else {
-			std::cout << "ERROR: No UnstructuredGrid present" << std::endl;
+            spdlog::error("ERROR: No UnstructuredGrid present");
 		}
 
 		PointData::DataArray_sequence& pointDataSequence =

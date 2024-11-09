@@ -28,7 +28,7 @@ jobs:
             cmake -DCMAKE_BUILD_TYPE=Debug ..
             make
 
-      - name: Run Compiler Tests
+      - name: Run
         run: |
             cd build
             ./MolSim ../input/eingabe-sonne.txt 1000 0.014 1

@@ -5,9 +5,10 @@
 #include "Particle.h"
 #include "io/IOStrategy.h"
 #include "force.h"
-#include "io/FileReader.h"
+#include "io/Logger.h"
 
 int main(const int argc, char* argv[]) {
+    md::io::Logger::initialize_logger(spdlog::level::debug);
 
     md::parse::ProgramArguments args;
     switch (parse_args(argc, argv, args)) {
@@ -30,6 +31,6 @@ int main(const int argc, char* argv[]) {
     md::Integrator::StoermerVerlet simulator(particles, md::force::lennard_jones(5, 1), std::move(writer));
     simulator.simulate(0, args.duration, args.dt, write_freq, args.benchmark);
 
-    std::cout << "output written. Terminating..." << std::endl;
+    spdlog::info("Output writte. Terminating...");
     return 0;
 }

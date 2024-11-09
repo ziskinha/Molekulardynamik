@@ -53,7 +53,6 @@ namespace md::parse {
      */
 	void displayHelp();
 
-
      /**
       * @brief Parses the arguments and executes the program.
       * @param argc
