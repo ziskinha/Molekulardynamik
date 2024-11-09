@@ -27,7 +27,7 @@ namespace md::parse {
 	void displayHelp() {
         spdlog::info("Displaying help information.\n"
                      "Usage:\n"
-                     "  ./MolSim <input_file> <end_time> <delta_t> <fps> <output_format>\n"
+                     "  ./MolSim <input_file> <duration> <delta_t> <num_frames> <output_format>\n"
                      "  ./MolSim -h | --help\n"
                      "  ./MolSim -f\n"
                      "  ./MolSim -b\n\n"
