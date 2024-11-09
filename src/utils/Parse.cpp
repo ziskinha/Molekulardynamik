@@ -28,7 +28,8 @@ namespace md::parse {
 			<< "  ./MolSim <input_file> <end_time> <delta_t> <fps> <output_format>\n"
 			<< "  ./MolSim -h | --help\n"
 			<< "  ./MolSim -f\n"
-			<< "  ./MolSim -b\n\n"
+			<< "  ./MolSim -b\n"
+			<< "  ./MolSim -v\n\n"
 			<< "Arguments:\n"
 			<< "  input_file       Name of the file to read particle data from. Should end in .txt\n"
 			<< "  duration         Simulation duration (e.g., 10.0).\n"
@@ -37,8 +38,10 @@ namespace md::parse {
 			<< "  output_format    Output format: either 'XYZ' or 'VTK'.\n\n"
 			<< "Flags:\n"
 			<< "  -h, --help       Show this help message and exit.\n"
-			<< "  -f               Delete all contents of the output folder before writing.\n"
-			<< "  -b               Benchmark the simulation (output_format and output_folder optional).\n";
+			<< "  -f               Override: delete all contents of the output folder before writing.\n"
+			<< "  -b               Benchmark the simulation (output_format and output_folder optional).\n"
+			<< "  -v               Verbose: log additional information.\n";
+
 	}
 
 
@@ -76,7 +79,9 @@ namespace md::parse {
 
 		// set options
 		args.benchmark = flag_exists("-b");
-		args.delete_output_folder_contents = flag_exists("-f");
+		args.override = flag_exists("-f");
+		args.verbose = flag_exists("-v");
+
 
 		// parse arguments
 		args.file = arguments[1];

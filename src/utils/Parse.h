@@ -13,16 +13,6 @@ namespace md::parse {
 
 	using vec3 = std::array<double, 3>;
 
-	struct CuboidInfo {
-		vec3 x;
-		vec3 v;
-		vec3 N;
-		double h;
-		double thermal_v;
-		double mass;
-		int type;
-	};
-
 	/**
 	 * @brief Struct used to return arguments read from the terminal.
 	 */
@@ -32,7 +22,8 @@ namespace md::parse {
 		double dt;
 		int num_frames;
 		bool benchmark;
-		bool delete_output_folder_contents;
+		bool override;
+		bool verbose;
 		io::OutputFormat output_format;
 
 		friend std::ostream& operator<<(std::ostream& os, const ProgramArguments& args) {
@@ -42,7 +33,8 @@ namespace md::parse {
 				<< "  dt: " << args.dt << "\n"
 				<< "  num_frames: " << args.num_frames << "\n"
 				<< "  benchmark: " << args.benchmark << "\n"
-				<< "  override: " << args.delete_output_folder_contents << "\n"
+				<< "  override: " << args.override << "\n"
+				<< "  verbose: " << args.verbose << "\n"
 				<< "  output_format: " << (args.output_format == io::OutputFormat::XYZ ? "XYZ" : "VTK") << "\n";
 			return os;
 		}
