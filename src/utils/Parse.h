@@ -1,5 +1,6 @@
 #pragma once
 #include "io/IOStrategy.h"
+#include "io/Logger.h"
 
 
 namespace md::parse {
@@ -27,26 +28,33 @@ namespace md::parse {
 	 * @brief Struct used to return arguments read from the terminal.
 	 */
 	struct ProgramArguments {
-		std::string file;
-		double duration;
-		double dt;
-		int num_frames;
-		bool benchmark;
-		bool delete_output_folder_contents;
-		io::OutputFormat output_format;
+        std::string file;
+        double duration;
+        double dt;
+        int num_frames;
+        bool benchmark;
+        bool delete_output_folder_contents;
+        io::OutputFormat output_format;
+    };
 
-		friend std::ostream& operator<<(std::ostream& os, const ProgramArguments& args) {
-			os << "Parsed Arguments:\n"
-				<< "  file: " << args.file << "\n"
-				<< "  duration: " << args.duration << "\n"
-				<< "  dt: " << args.dt << "\n"
-				<< "  num_frames: " << args.num_frames << "\n"
-				<< "  benchmark: " << args.benchmark << "\n"
-				<< "  override: " << args.delete_output_folder_contents << "\n"
-				<< "  output_format: " << (args.output_format == io::OutputFormat::XYZ ? "XYZ" : "VTK") << "\n";
-			return os;
-		}
-	};
+    inline void log_arguments(const ProgramArguments& args) {
+        spdlog::info("Parsed Arguments:\n"
+                     "       file:          {}\n"
+                     "       duration:      {}\n"
+                     "       dt:            {}\n"
+                     "       num_frames:    {}\n"
+                     "       benchmark:     {}\n"
+                     "       override:      {}\n"
+                     "       output_format: {}",
+                     args.file,
+                     args.duration,
+                     args.dt,
+                     args.num_frames,
+                     args.benchmark ? "true" : "false",
+                     args.delete_output_folder_contents ? "true" : "false",
+                     args.output_format == io::OutputFormat::XYZ ? "XYZ" : "VTK");
+    }
+
 
      /**
      * @brief Displays a help message with information about the usage of the program and describes arguments.

@@ -1,11 +1,8 @@
-//
-// Created by ziskinha on 27.10.24.
-//
-
 #include "IOStrategy.h"
 #include "VTKWriter.h"
 #include "XYZWriter.h"
 #include "FileReader.h"
+#include "io/Logger.h"
 #include <iostream>
 #include <string>
 
@@ -24,8 +21,7 @@ namespace md::io {
             }
         }
         else if (!allow_delete && !std::filesystem::is_empty(OUTPUT_DIR)) {
-            std::cout <<
-                "Error: Output folder is not empty. Use -f to automatically override contents or empty the folder manually.";
+            spdlog::error("Output folder is not empty. Use -f to automatically override contents or empty the folder manually");
             exit(-1);
         }
     };

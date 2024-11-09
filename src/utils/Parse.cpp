@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "io/Logger.h"
 
 
 
@@ -26,8 +25,8 @@ RETURN_PARSE_ERROR(fmt::format("Error while reading {} argument! Caught an inval
 
 namespace md::parse {
 	void displayHelp() {
-        spdlog::info("Displaying help information");
-        spdlog::info("Usage:\n"
+        spdlog::info("Displaying help information.\n"
+                     "Usage:\n"
                      "  ./MolSim <input_file> <end_time> <delta_t> <fps> <output_format>\n"
                      "  ./MolSim -h | --help\n"
                      "  ./MolSim -f\n"
@@ -47,6 +46,7 @@ namespace md::parse {
 
 
 	ParseStatus parse_args(int argc, char** argv, ProgramArguments& args) {
+        spdlog::info("Start parsing arguments");
 		std::vector<std::string> arguments(argv, argv + argc);
 
 		// split arguments into flags & parameters
@@ -102,6 +102,7 @@ namespace md::parse {
 		}
 		args.output_format = parameters[5] == "XYZ" ? io::OutputFormat::XYZ : io::OutputFormat::VTK;
 
+        spdlog::info("Arguments parsed successfully");
 		return OK;
 	}
 }
