@@ -21,12 +21,14 @@ jobs:
       - name: Install Xercescs
         run: sudo apt-get install libxerces-c-dev
 
-      - name: Build
+      - name: Build and Run
         run: |
             mkdir build
             cd build
             cmake -DCMAKE_BUILD_TYPE=Debug ..
             make
+            ./MolSim ../input/eingabe-sonne.txt 100 0.1 10 VTK -f
+            ./MolSim ../input/assignment2.txt 100 0.1 10 VTK -f
 
 
   run-lint:

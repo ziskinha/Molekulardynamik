@@ -12,6 +12,9 @@
 
 namespace md::io {
 
+    /**
+     * @brief Contains the information of a Cuboid.
+     */
 	struct CuboidInfo {
 		using vec3 = std::array<double, 3>;
 		vec3 x; // LL-coordinate
@@ -23,6 +26,12 @@ namespace md::io {
 		int type;
 	};
 
-
+    /**
+     * @brief Reads the input file, distinguishes between "particles" and "cuboids" sections and
+     * parses the data in the ParticleContainer accordingly.
+     *
+     * @param file_name
+     * @param particles
+     */
 	void read_file_txt(const std::string& file_name, ParticleContainer& particles);
 }

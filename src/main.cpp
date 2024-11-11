@@ -23,9 +23,9 @@ int main(const int argc, char* argv[]) {
     spdlog::info("Write frequency: {}", write_freq);
 
     md::ParticleContainer particles;
-    // md::io::read_file(args.file, particles);
-    particles.add_cuboid({0,0,0}, {0,0,0}, {40, 8, 1}, 0.1, 1.1225, 1, 2, 0);
-    particles.add_cuboid({15,15,0}, {0,-10,0}, {8, 8, 1}, 0.1, 1.1225, 1, 2, 1);
+    md::io::read_file(args.file, particles);
+    //particles.add_cuboid({0,0,0}, {0,0,0}, {40, 8, 1}, 0.1, 1.1225, 1, 2, 0);
+    //particles.add_cuboid({15,15,0}, {0,-10,0}, {8, 8, 1}, 0.1, 1.1225, 1, 2, 1);
 
     auto writer = args.benchmark ? nullptr : createWriter(args.output_format, args.override);
     md::Integrator::StoermerVerlet simulator(particles, md::force::lennard_jones(5, 1), std::move(writer));

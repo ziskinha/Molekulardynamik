@@ -25,6 +25,7 @@ After building, you can run the simulation with the following command:
 ./MolSim -h | --help
 ./MolSim -f
 ./MolSim -b
+./MolSim -v
 ```
 ### Arguments:
 - **input_file** Name of the file to read particle data from. Should end in .txt
@@ -37,6 +38,7 @@ After building, you can run the simulation with the following command:
 - **-h, --help** Show this help message and exit
 - **-f** Delete all contents of the output folder before writing
 - **-b** Benchmark the simulation (output_format and output_folder optional)
+- **-v** Verbose: log additional information
 
 ## Doxygen Instructions
 To generate Doxygen documentation for this project, run in the build directory:

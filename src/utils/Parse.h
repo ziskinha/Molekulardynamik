@@ -28,6 +28,10 @@ namespace md::parse {
 		io::OutputFormat output_format;
 	};
 
+    /**
+     * @brief Logs the parsed program arguments
+     * @param args
+     */
     inline void log_arguments(const ProgramArguments& args) {
         spdlog::info("Parsed Arguments:\n"
                      "       file:          {}\n"
@@ -36,7 +40,7 @@ namespace md::parse {
                      "       num_frames:    {}\n"
                      "       benchmark:     {}\n"
                      "       override:      {}\n"
-                     "       verbose:      {}\n"
+                     "       verbose:       {}\n"
                      "       output_format: {}",
                      args.file,
                      args.duration,

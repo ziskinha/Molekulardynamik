@@ -9,11 +9,11 @@
 
 #include <cstdlib>
 #include <fstream>
-#include <iostream>
 #include <sstream>
 #include <algorithm>
 #include <cctype>
 #include <locale>
+#include "io/Logger.h"
 
 namespace md::io {
 	// code from https://stackoverflow.com/questions/216823/how-to-trim-a-stdstring
@@ -41,9 +41,11 @@ namespace md::io {
 	void read_file_txt(const std::string& file_name, ParticleContainer& particles) {
 		std::ifstream infile(file_name);
 		if (!infile.is_open()) {
-			std::cerr << "Error opening file " << file_name << std::endl;
+			spdlog::error("Failed opening file {}", file_name);
 			exit(-1);
 		}
+
+        spdlog::info("Started reading file {}", file_name);
 
 		std::string line;
 		std::vector<Particle> particle_list;
@@ -56,10 +58,12 @@ namespace md::io {
 				continue;
 			}
 			if (line.compare(0, 10, "particles:") == 0) {
+                spdlog::info("Reading particles");
 				section = PARTICLES;
 				continue;
 			}
 			if (line.compare(0, 8, "cuboids:") == 0) {
+                spdlog::info("Reading cuboids");
 				section = CUBOIDS;
 				continue;
 			}
@@ -68,7 +72,7 @@ namespace md::io {
 			double num;
 
 			if (section == PARTICLES) {
-				// std::cout << "Particles" << "    " << line << std::endl;
+				// spdlog::info("Particles    {}", line);
 				std::istringstream data_stream(line);
 
 				while (data_stream >> num) {
@@ -76,7 +80,7 @@ namespace md::io {
 				}
 
 				if (vals.size() < 7) {
-					std::cerr << "Error: Not enough numbers in line: " << line << std::endl;
+					spdlog::error("Not enough numbers in line: {}");
 					exit(-1);
 				}
 
@@ -92,7 +96,7 @@ namespace md::io {
 				particle_list.emplace_back(origin, init_v, mass, type);
 			}
 			else if (section == CUBOIDS) {
-				// std::cout << "cuboid" << "     " << line << std::endl;
+				// spdlog::info("cuboid     {}", line);
 
 				std::istringstream data_stream(line);
 
@@ -104,7 +108,7 @@ namespace md::io {
 				// Minimum required values: 3 (origin) + 3 (velocities) + 3 (num_particles) + 1 (width) +
 				// 1 (mass) + 1 (thermal_v) + 1 (dimension)
 				if (vals.size() < 13) {
-					std::cerr << "Error: Not enough numbers in line: " << line << std::endl;
+					spdlog::error("Not enough numbers in line: {}", line);
 					exit(-1);
 				}
 
@@ -122,7 +126,7 @@ namespace md::io {
 				double thermal_v = vals[11];
 				u_int32_t dimension = static_cast<u_int32_t>(vals[12]);
 				if (dimension != 2 && dimension != 3) {
-					std::cerr << "Error: invalid dimension parameter " << line << std::endl;
+					spdlog::error("Invalid dimension parameter {}", line);
 				}
 
 				int type = 0;
@@ -130,19 +134,28 @@ namespace md::io {
 					type = static_cast<int>(vals[13]);
 				}
 
-				std::cout << "Parsed Cuboid:" << std::endl;
-				std::cout << "  Origin: [" << origin[0] << ", " << origin[1] << ", " << origin[2] << "]" << std::endl;
-				std::cout << "  Initial Velocity: [" << init_v[0] << ", " << init_v[1] << ", " << init_v[2] << "]" << std::endl;
-				std::cout << "  Number of Particles: [" << num_particles[0] << ", " << num_particles[1] << ", " << num_particles[2] << "]" << std::endl;
-				std::cout << "  Width: " << width << std::endl;
-				std::cout << "  Mass: " << mass << std::endl;
-				std::cout << "  Thermal Velocity: " << thermal_v << std::endl;
-				std::cout << "  Dimension: " << dimension << std::endl;
-				std::cout << "  Type: " << type << std::endl;
+				spdlog::info("Parsed Cuboid:\n"
+                             "       Origin: [{}, {}, {}]\n"
+                             "       Initial Velocity: [{}, {}, {}]\n"
+                             "       Number of Particles: [{}, {}, {}]\n"
+                             "       Width: {}\n"
+                             "       Mass: {}\n"
+                             "       Thermal Velocity: {}\n"
+                             "       Dimension: {}\n"
+                             "       Type: {}",
+                             origin[0], origin[1], origin[2],
+                             init_v[0], init_v[1], init_v[2],
+                             num_particles[0], num_particles[1], num_particles[2],
+                             width,
+                             mass,
+                             thermal_v,
+                             dimension,
+                             type);
 
 				particles.add_cuboid(origin, init_v, num_particles, thermal_v, width, mass, dimension, type);
 			}
 		}
 		particles.add_particles(particle_list);
+        spdlog::info("File read successfully: {}", file_name);
 	}
 }
