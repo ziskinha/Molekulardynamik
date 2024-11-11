@@ -8,7 +8,7 @@
 #pragma once
 
 #include <string>
-#include "Particle.h"
+#include "../Particle.h"
 
 namespace md::io {
 

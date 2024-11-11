@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "Particle.h"
+#include "../Particle.h"
 #include <string>
 #include <utility>
 #include <filesystem>
@@ -44,6 +44,17 @@ namespace md::io {
 	protected:
 		const std::string file_name;
 	};
+
+/**
+     * @brief Dummy output writer for testing purposes.
+     * Does not perform any actual output.
+     */
+    class DummyOutputWriter : public OutputWriter {
+    public:
+        DummyOutputWriter();
+        void plot_particles(const ParticleContainer& container, int iteration) override;
+    };
+
 
     /**
      * @brief Checks if the filename ends with the specific extension.

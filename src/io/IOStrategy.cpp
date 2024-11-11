@@ -2,7 +2,7 @@
 #include "VTKWriter.h"
 #include "XYZWriter.h"
 #include "FileReader.h"
-#include "io/Logger.h"
+#include "Logger.h"
 #include <iostream>
 #include <string>
 
@@ -25,7 +25,15 @@ namespace md::io {
             exit(-1);
         }
     };
+    
+ DummyOutputWriter::DummyOutputWriter()
+        : OutputWriter("dummy", false) {
+        // No additional setup needed
+    }
 
+    void DummyOutputWriter::plot_particles(const ParticleContainer& container, int iteration) {
+        // Do nothing; this is a dummy implementation for testing purposes.
+    }
 
     bool checkFormat(const std::string& filename, const std::string& extension) {
         if (filename.length() >= extension.length()) {

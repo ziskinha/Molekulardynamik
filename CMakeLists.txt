@@ -79,6 +79,69 @@ target_compile_options(MolSim
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
+
+add_subdirectory(googletest-1.15.2)
+enable_testing()
+
+# Define the test executable
+add_executable(ParticleContainerTests
+        src/Particle.cpp
+        testing/ParticleContainerTests.cpp
+)
+
+# Define the test executable
+add_executable(ForceTests
+        src/force.h
+        src/Particle.cpp
+        testing/ForceTests.cpp
+)
+
+# Define the test executable
+#add_executable(StoermerVerletTests
+ #       src/force.h
+  #      src/Particle.cpp
+   #     src/utils/ArrayUtils.h
+    #    src/IntegratorBase.cpp
+     #   src/StoermerVerlet.cpp
+      #  src/io/IOStrategy.cpp
+       # testing/StoermerVerlet.cpp
+#)
+
+# Link GoogleTest to the test executable
+target_link_libraries(ParticleContainerTests
+        gtest
+        gtest_main
+)
+
+# Link GoogleTest to the test executable
+target_link_libraries(ForceTests
+        gtest
+        gtest_main
+)
+
+#target_include_directories(StoermerVerletTests PRIVATE ${CMAKE_SOURCE_DIR}/external/spdlog/include)
+#target_include_directories(StoermerVerletTests
+ #       PUBLIC
+  #      ${CMAKE_CURRENT_SOURCE_DIR}/libs/libxsd
+   #     PRIVATE
+    #    ${CMAKE_CURRENT_SOURCE_DIR}/src      
+#)
+
+
+
+
+add_dependencies(ParticleContainerTests gtest MolSim)
+
+# Register the tests
+add_test(NAME PartContTests COMMAND ParticleContainerTests)
+add_test(NAME ForceTests COMMAND ForceTests)
+
+target_include_directories(MolSim PRIVATE ${CMAKE_SOURCE_DIR}/external/spdlog/include)
+target_include_directories(ParticleContainerTests PRIVATE ${CMAKE_SOURCE_DIR}/external/spdlog/include)
+target_include_directories(ForceTests PRIVATE ${CMAKE_SOURCE_DIR}/external/spdlog/include)
+
+
+
 include(doxygen)
-include(spdlog)
-include(googletest)
+add_subdirectory(external/spdlog)
+target_link_libraries(MolSim PRIVATE spdlog::spdlog)

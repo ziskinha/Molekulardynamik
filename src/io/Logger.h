@@ -1,5 +1,5 @@
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
+#include <../../external/spdlog/include/spdlog/spdlog.h>
+#include <../../external/spdlog/include/spdlog/sinks/stdout_color_sinks.h>
 
 namespace md::io {
     class Logger {
