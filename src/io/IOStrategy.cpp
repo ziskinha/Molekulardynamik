@@ -45,9 +45,9 @@ namespace md::io {
     }
 
 
-    void read_file(const std::string& filename, ParticleContainer & container) {
+    void read_file(const std::string& filename, ParticleContainer & container, force::ForceFunc & force) {
         if (checkFormat(filename, ".txt")) {
-            return read_file_txt(filename, container);
+            return read_file_txt(filename, container, force);
         }
         // TODO: add XML FileReader in the future
         throw std::invalid_argument("File format not supported");

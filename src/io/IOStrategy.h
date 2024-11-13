@@ -7,6 +7,8 @@
 #include <utility>
 #include <filesystem>
 
+#include "force.h"
+
 
 # define OUTPUT_DIR "output"
 
@@ -64,7 +66,8 @@ namespace md::io {
     /**
      * @brief Reads an input file.
      * @param filename
-     * @param particles
+     * @param container
+     * @param force
      */
-    void read_file(const std::string & filename, ParticleContainer & particles);
+    void read_file(const std::string & filename, ParticleContainer & container, force::ForceFunc & force);
 }

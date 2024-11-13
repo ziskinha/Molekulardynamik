@@ -19,7 +19,6 @@ int main(const int argc, char* argv[]) {
     log_arguments(args);
     if (args.verbose) spdlog::set_level(spdlog::level::debug);
 
-
     const double num_steps = args.duration / args.dt;
     const int write_freq = std::max(static_cast<int> (round(num_steps / args.num_frames)), 1);
     spdlog::debug("Write frequency: {}", write_freq);
@@ -29,11 +28,12 @@ int main(const int argc, char* argv[]) {
         spdlog::set_level(spdlog::level::off);
     }
 
+    md::force::ForceFunc force;
     md::ParticleContainer particles;
-    md::io::read_file(args.file, particles);
+    md::io::read_file(args.file, particles, force);
 
     auto writer = args.benchmark ? nullptr : create_writer(args.output_format, args.override);
-    md::Integrator::StoermerVerlet simulator(particles, md::force::lennard_jones(5, 1), std::move(writer));
+    md::Integrator::StoermerVerlet simulator(particles, force, std::move(writer));
     simulator.simulate(0, args.duration, args.dt, write_freq, args.benchmark);
 
     spdlog::set_level(spdlog::level::info);
