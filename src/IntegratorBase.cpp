@@ -38,10 +38,10 @@ namespace md::Integrator {
 
 		if (benchmark) {
             long duration_sum = 0;
-            int repetitions = 1;
-            SPDLOG_INFO("benchmarking enabled. Subsequent logging messages during simulation are disabled");
+            int repetitions = 10;
+            SPDLOG_INFO("Benchmarking enabled. Subsequent logging messages during simulation are disabled");
 
-            for (int k = 0; k <= repetitions; k++) {
+            for (int k = 0; k < repetitions; k++) {
                 spdlog::set_level(spdlog::level::off);
                 auto start = std::chrono::high_resolution_clock::now();
 
