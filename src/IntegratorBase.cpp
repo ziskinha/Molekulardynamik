@@ -52,7 +52,10 @@ namespace md::Integrator {
 			for (double t = start_time; t < end_time; t += dt, i++ ) {
 				simulation_step(dt);
 				if (i % write_freq == 0) {
-					if (writer != nullptr) writer->plot_particles(particles, i);
+					if (writer != nullptr) {
+						spdlog::debug("Plotting particles @ iteration {}, time {}", i, t);
+						writer->plot_particles(particles, i);
+					}
 				}
 
 				show_progress(i, total_steps);
