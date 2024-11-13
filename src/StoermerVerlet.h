@@ -20,7 +20,7 @@ namespace md::Integrator {
 		 */
 		StoermerVerlet(ParticleContainer& particles, force::ForceFunc force_func, std::unique_ptr<io::OutputWriterBase> writer);
 
-	private:
+	public:
 		/**
 		 * @brief Performs a single step of the Stoermer-Verlet.
 		 * @param dt Δt The time increment for each simulation step.
