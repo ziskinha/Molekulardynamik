@@ -62,7 +62,8 @@ namespace md::parse {
       * @brief Parses the arguments and executes the program.
       * @param argc
       * @param argv
-      * @param args
+      * @param args argument
+      * @return ParseStatus indicating if there was an error or if the program should proceed
       */
 	ParseStatus parse_args(int argc, char** argv, ProgramArguments& args);
 }

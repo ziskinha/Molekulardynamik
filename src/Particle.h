@@ -8,6 +8,7 @@
 #pragma once
 
 #include <array>
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -62,22 +63,40 @@ namespace md {
 	 * @brief Container class for managing a collection of Particle objects.
 	 */
 	class ParticleContainer {
+		using iterator = std::vector<Particle>::iterator;
+		using const_iterator = std::vector<Particle>::const_iterator;
 	public:
+		/**
+		 * @brief Create an empty particle container
+		 */
+		ParticleContainer() = default;
+
 		/**
 		 * @brief Constructs a ParticleContainer with a specified collection of Particles.
 		 * @param particles The vector of Particle objects to initialize the container.
 		 */
-		ParticleContainer() = default;
 		explicit ParticleContainer(const std::vector<Particle>& particles);
 		explicit ParticleContainer(std::vector<Particle>&& particles);
 
-
+		/**
+		 * @brief add a set of equidistant particles in form of a cuboid
+		 * @param origin coordinate of the lower left corner
+		 * @param init_v initial velocity. is applied to all particles
+		 * @param num_particles number of particles along the x,y,z axis
+		 * @param thermal_v mean-value of the velocity of the Brownian Motion
+		 * @param width distance between each particle
+		 * @param mass mass of all the particles
+		 * @param dimension either 2 or 3. controls whether the brownian motion is in 2d or 3d.
+		 * @param type type of the particle (optional)
+		 */
 		void add_cuboid(const vec3& origin, const vec3& init_v, const std::array<uint32_t, 3>& num_particles,
 		                double thermal_v, double width, double mass, uint8_t dimension,int type = 0);
-		void add_particles(const std::vector<Particle>& particles);
 
-		using iterator = std::vector<Particle>::iterator;
-		using const_iterator = std::vector<Particle>::const_iterator;
+		/**
+		 * @brief adds a vector of particles to the particle container
+		 * @param particles
+		 */
+		void add_particles(const std::vector<Particle>& particles);
 
 		/**
 		 * @brief Returns an iterator pointing to the beginning of the container.

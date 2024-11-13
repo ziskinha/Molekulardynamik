@@ -7,7 +7,6 @@
 
 #include "Particle.h"
 
-#include <iostream>
 #include "utils/ArrayUtils.h"
 #include "utils/MaxwellBoltzmannDistribution.h"
 #include "io/Logger.h"
@@ -75,7 +74,7 @@ namespace md {
 		particles(std::move(particles)) {}
 
 	void ParticleContainer::add_cuboid(const vec3& origin,
-	                                   const vec3& init_v, const std::array<u_int32_t, 3>& num_particles,
+	                                   const vec3& init_v, const std::array<uint32_t, 3>& num_particles,
 	                                   double thermal_v, double width, double mass, uint8_t dimension, int type) {
 		particles.reserve(particles.size() + num_particles[0] * num_particles[1] * num_particles[2]);
 

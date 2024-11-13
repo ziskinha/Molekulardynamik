@@ -25,7 +25,7 @@ void show_progress(const int current, const int total) {
 }
 
 namespace md::Integrator {
-	IntegratorBase::IntegratorBase(ParticleContainer& particles, std::unique_ptr<io::OutputWriter> writer):
+	IntegratorBase::IntegratorBase(ParticleContainer& particles, std::unique_ptr<io::OutputWriterBase> writer):
 		particles(particles), writer(std::move(writer))
 	{}
 

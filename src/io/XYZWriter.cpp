@@ -11,7 +11,7 @@
 #include <utility>
 
 namespace md::io {
-	XYZWriter::XYZWriter(std::string fileName, const bool allow_delete): OutputWriter(std::move(fileName), allow_delete) {}
+	XYZWriter::XYZWriter(std::string fileName, const bool allow_delete): OutputWriterBase(std::move(fileName), allow_delete) {}
 	XYZWriter::~XYZWriter() = default;
 
 	void XYZWriter::plot_particles(const ParticleContainer& container, int iteration) {

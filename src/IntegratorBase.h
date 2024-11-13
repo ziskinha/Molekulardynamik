@@ -14,7 +14,7 @@ namespace md::Integrator {
 		 * @param particles
 		 * @param writer
 		 */
-		IntegratorBase(ParticleContainer & particles, std::unique_ptr<io::OutputWriter> writer);
+		IntegratorBase(ParticleContainer & particles, std::unique_ptr<io::OutputWriterBase> writer);
 		virtual ~IntegratorBase() = default;
 
 		/**
@@ -25,7 +25,7 @@ namespace md::Integrator {
 		 * @param write_freq The frequency with which the data is written to output.
 		 * @param benchmark
 		 */
-		 void simulate(double start_time, double end_time, double dt, unsigned int write_freq = 10, bool benchmark = false);
+		 void simulate(double start_time, double end_time, double dt, unsigned int write_freq, bool benchmark = false);
 
 	protected:
 		/**
@@ -35,7 +35,7 @@ namespace md::Integrator {
 		virtual void simulation_step(double dt) = 0;
 		ParticleContainer & particles;
 	private:
-		std::unique_ptr<io::OutputWriter> writer;
+		std::unique_ptr<io::OutputWriterBase> writer;
 	};
 }
 

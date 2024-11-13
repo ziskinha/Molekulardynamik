@@ -11,7 +11,7 @@
 #include "IOStrategy.h"
 
 namespace md::io {
-	class XYZWriter : public OutputWriter {
+	class XYZWriter : public OutputWriterBase {
 	public:
 		explicit XYZWriter(std::string fileName, bool allow_delete);
 		~XYZWriter() override;

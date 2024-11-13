@@ -8,7 +8,7 @@
 
 
 namespace md::io {
-    OutputWriter::OutputWriter(std::string file_name, const bool allow_delete): file_name(std::move(file_name)) {
+    OutputWriterBase::OutputWriterBase(std::string file_name, const bool allow_delete): file_name(std::move(file_name)) {
         if (!std::filesystem::exists(OUTPUT_DIR)) {
             std::filesystem::create_directories(OUTPUT_DIR);
         }
@@ -37,7 +37,7 @@ namespace md::io {
     }
 
 
-    std::unique_ptr<OutputWriter> createWriter(const OutputFormat output_format, bool allow_delete) {
+    std::unique_ptr<OutputWriterBase> create_writer(const OutputFormat output_format, bool allow_delete) {
         if (output_format == OutputFormat::VTK) {
             return std::make_unique<VTKWriter>(VTKWriter("MD_vtk", allow_delete));
         }
@@ -45,9 +45,9 @@ namespace md::io {
     }
 
 
-    void read_file(const std::string& filename, ParticleContainer & particles) {
+    void read_file(const std::string& filename, ParticleContainer & container) {
         if (checkFormat(filename, ".txt")) {
-            return read_file_txt(filename, particles);
+            return read_file_txt(filename, container);
         }
         // TODO: add XML FileReader in the future
         throw std::invalid_argument("File format not supported");

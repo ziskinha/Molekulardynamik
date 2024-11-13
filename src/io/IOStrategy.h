@@ -24,15 +24,15 @@ namespace md::io {
 	 * @brief Abstract base class for output writers.
 	 * OutputWriter is the superclass for VTKWriter and XYZWriter.
 	 */
-	class OutputWriter {
+	class OutputWriterBase {
 	public:
 		/**
 		 * @brief Constructs an OutputWriter with a specified file name.
 		 * @param file_name The name of the output file.
 		 * @param allow_delete if output folder contains files, allow for deletion
 		 */
-		explicit OutputWriter(std::string file_name, bool allow_delete);
-		virtual ~OutputWriter() = default;
+		explicit OutputWriterBase(std::string file_name, bool allow_delete);
+		virtual ~OutputWriterBase() = default;
 
 		/**
 		 * @brief Outputs particle data at a given iteration.
@@ -51,7 +51,7 @@ namespace md::io {
      * @param extension The file extension to check for, e.g., ".txt" or ".xml"
      * @return true if the filename ends with the specific extension, false otherwise.
      */
-    bool checkFormat(const std::string & filename, const std::string& extension);
+    bool check_format(const std::string & filename, const std::string& extension);
 
 	/**
 	 * @brief Factory function to create an output writer.
@@ -59,14 +59,12 @@ namespace md::io {
 	 * @param allow_delete
 	 * @return A pointer to an OutputWriter object.
 	 */
-	std::unique_ptr<OutputWriter> createWriter(OutputFormat output_format, bool allow_delete);
+	std::unique_ptr<OutputWriterBase> create_writer(OutputFormat output_format, bool allow_delete);
 
     /**
-     * @brief Reads a file.
-     * Not used yet. Preparation for the XML files.
+     * @brief Reads an input file.
      * @param filename
      * @param particles
-     * @return A vector of Particle objects containing the data read from the file.
      */
     void read_file(const std::string & filename, ParticleContainer & particles);
 }

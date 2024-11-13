@@ -17,7 +17,7 @@ namespace md::Integrator {
 		 * @param force_func Defines the force function which is being used.
 		 * @param writer writes the output to disk
 		 */
-		RungeKutta(ParticleContainer& particles, force::ForceFunc force_func, std::unique_ptr<io::OutputWriter> writer);
+		RungeKutta(ParticleContainer& particles, force::ForceFunc force_func, std::unique_ptr<io::OutputWriterBase> writer);
 
 	private:
 		/**
@@ -25,7 +25,6 @@ namespace md::Integrator {
 		 * @param dt Δt The time increment for each simulation step.
 		 */
 		void simulation_step(double dt) override;
-		[[nodiscard]] vec3 total_force(size_t particle_idx, const vec3 & position) const;
 		void compute_forces() const;
 		force::ForceFunc force_func;
 	};

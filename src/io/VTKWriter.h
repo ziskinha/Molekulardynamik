@@ -19,7 +19,7 @@ namespace md::io {
 	 * This class implements the functionality to generate vtk output from
 	 * particles.
 	 */
-	class VTKWriter : public OutputWriter{
+	class VTKWriter : public OutputWriterBase{
 	public:
 		/*
 		 *

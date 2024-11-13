@@ -18,7 +18,7 @@
 namespace md::io {
 
 	VTKWriter::VTKWriter(std::string file_base_name, const bool allow_delete):
-		OutputWriter(std::move(file_base_name), allow_delete)
+		OutputWriterBase(std::move(file_base_name), allow_delete)
 	{}
 
 	void VTKWriter::plot_particles(const ParticleContainer& container, const int iteration) {
