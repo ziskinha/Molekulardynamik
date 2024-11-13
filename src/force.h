@@ -16,6 +16,9 @@ namespace md::force {
 	inline ForceFunc inverse_square(const double pre_factor = 1.0) {
 		return [=](const Particle& p1, const Particle& p2) {
 			const double dist = ArrayUtils::L2Norm(p1.position - p2.position);
+			if (dist == 0.0) {
+				return vec3{0.0, 0.0, 0.0};
+			}
 			const double f_mag = p1.mass * p2.mass / pow(dist, 3);
 			return - pre_factor * f_mag * (p2.position - p1.position);
 		};
@@ -30,6 +33,9 @@ namespace md::force {
 	inline ForceFunc hookes_law(const double k = 0.1, const double rest_length = 0.0) {
 		return [=](const Particle& p1, const Particle& p2) {
 			double dist = ArrayUtils::L2Norm(p1.position - p2.position);
+			if (dist == 0.0) {
+				return vec3{0.0, 0.0, 0.0};
+			}
 			double f_mag = k * (dist - rest_length) / dist;
 			return - f_mag * (p2.position - p1.position);
 		};

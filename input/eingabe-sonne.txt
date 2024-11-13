@@ -18,4 +18,4 @@ particles:
 34.75 0.0 0.0    0.0 0.0296 0.0  1.0e-14
 
 force:
-inverse square 1
+inverse_square 1

@@ -4,7 +4,7 @@
 # key word particles indicates a block of individually specified particle data.
 # key word cuboids indicates a block of particle cuboid data.
 # key word force indicates next line contains the force name as well as the parameters
-# when parsing force name will be converted to lower case and "_" and "-" are converted to " "
+# use either "-" or "_" to separate words in multi-word force names
 #
 # Particle data consists of
 # * xyz-coordinates (3 double values)

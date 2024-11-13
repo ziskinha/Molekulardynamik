@@ -126,6 +126,7 @@ namespace md::io {
 
 
 	void parse_force(const std::string& line, force::ForceFunc& force) {
+		spdlog::debug("Reading Force:     {}", line);
 		std::istringstream data_stream(line);
 		std::vector<double> vals;
 		double num;
@@ -139,6 +140,7 @@ namespace md::io {
 		               [](unsigned char c) { return std::tolower(c); });
 		std::replace(force_name.begin(), force_name.end(), '-', ' ');
 		std::replace(force_name.begin(), force_name.end(), '_', ' ');
+		trim(force_name);
 
 		while (data_stream >> num) {
 			vals.push_back(num);
@@ -200,6 +202,12 @@ namespace md::io {
 			else if (section == FORCE) parse_force(line, force);
 		}
 		container.add_particles(particle_list);
+
+		if (!force) {
+			spdlog::error("No force specified in {}", file_name);
+			exit(-1);
+		}
+
 		spdlog::info("File read successfully: {}", file_name);
 	}
 }
