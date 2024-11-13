@@ -37,16 +37,26 @@ namespace md::Integrator {
         SPDLOG_INFO("Simulation started");
 
 		if (benchmark) {
-			auto start = std::chrono::high_resolution_clock::now();
+            long duration_sum = 0;
+            int repetitions = 1;
+            SPDLOG_INFO("benchmarking enabled. Subsequent logging messages during simulation are disabled");
 
-			for (double t = start_time; t < end_time; t += dt) {
-				simulation_step(dt);
-			}
-			auto end = std::chrono::high_resolution_clock::now();
-			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-			SPDLOG_INFO("Execution time: {} milliseconds", duration);
-			SPDLOG_INFO("Number of particles: {}", particles.size());
-			SPDLOG_INFO("Number of steps: {}", total_steps);
+            for (int k = 0; k <= repetitions; k++) {
+                spdlog::set_level(spdlog::level::off);
+                auto start = std::chrono::high_resolution_clock::now();
+
+                for (double t = start_time; t < end_time; t += dt) {
+                    simulation_step(dt);
+                }
+                auto end = std::chrono::high_resolution_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+                spdlog::set_level(spdlog::level::info);
+                SPDLOG_INFO("Execution time: {} milliseconds", duration);
+                SPDLOG_INFO("Number of particles: {}", particles.size());
+                SPDLOG_INFO("Number of steps: {}", total_steps);
+                duration_sum += duration;
+            }
+            SPDLOG_INFO("Average execution time: {} milliseconds", duration_sum/repetitions);
 
 		} else {
 			for (double t = start_time; t < end_time; t += dt, i++ ) {

@@ -20,11 +20,6 @@ int main(const int argc, char* argv[]) {
     const int write_freq = std::max(static_cast<int> (round(num_steps / args.num_frames)), 1);
     SPDLOG_DEBUG("Write frequency: {}", write_freq);
 
-    if (args.benchmark) {
-        SPDLOG_INFO("benchmarking enabled. Subsequent logging messages during simulation are disabled");
-        spdlog::set_level(spdlog::level::off);
-    }
-
     md::force::ForceFunc force;
     md::ParticleContainer particles;
     md::io::read_file(args.file, particles, force);
@@ -33,7 +28,6 @@ int main(const int argc, char* argv[]) {
     md::Integrator::StoermerVerlet simulator(particles, force, std::move(writer));
     simulator.simulate(0, args.duration, args.dt, write_freq, args.benchmark);
 
-    spdlog::set_level(spdlog::level::info);
     SPDLOG_INFO("Output written. Terminating...");
     return 0;
 }
