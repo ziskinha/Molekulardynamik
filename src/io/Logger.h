@@ -9,18 +9,9 @@ namespace md::io {
     class Logger {
     public:
         /**
-         * @brief Default constructor for Logger class
-         */
-        Logger() = default;
-        /**
-         * @brief Default destructor for Logger class
-         */
-        ~Logger() = default;
-
-        /**
          * @brief Initializes the logger with the specific log level and sets the pattern
          * @param log_lvl
          */
-        static void initialize_logger(spdlog::level::level_enum log_lvl);
+        static void initialize_logger();
     };
 }

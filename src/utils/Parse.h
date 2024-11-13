@@ -33,7 +33,7 @@ namespace md::parse {
      * @param args
      */
     inline void log_arguments(const ProgramArguments& args) {
-        spdlog::info("Parsed Arguments:\n"
+        SPDLOG_INFO("Parsed Arguments:\n"
                      "       file:          {}\n"
                      "       duration:      {}\n"
                      "       dt:            {}\n"

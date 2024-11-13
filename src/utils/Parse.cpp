@@ -8,8 +8,8 @@
 
 
 #define RETURN_PARSE_ERROR(err_msg) \
-spdlog::error(err_msg); \
-spdlog::error("For help, run the program with ./MolSim -h or ./MolSim --help"); \
+SPDLOG_ERROR(err_msg); \
+SPDLOG_ERROR("For help, run the program with ./MolSim -h or ./MolSim --help"); \
 return ERROR;
 
 
@@ -25,7 +25,7 @@ RETURN_PARSE_ERROR(fmt::format("Error while reading {} argument! Caught an inval
 
 namespace md::parse {
 	void displayHelp() {
-        spdlog::info("Displaying help information.\n"
+        SPDLOG_INFO("Displaying help information.\n"
                      "Usage:\n"
                      "  ./MolSim <input_file> <duration> <delta_t> <num_frames> <output_format>\n"
                      "  ./MolSim -h | --help\n"
@@ -48,7 +48,7 @@ namespace md::parse {
 
 
 	ParseStatus parse_args(int argc, char** argv, ProgramArguments& args) {
-        spdlog::info("Start parsing arguments");
+        SPDLOG_INFO("Start parsing arguments");
 		std::vector<std::string> arguments(argv, argv + argc);
 
 		// split arguments into flags & parameters
@@ -106,7 +106,7 @@ namespace md::parse {
 		}
 		args.output_format = parameters[5] == "XYZ" ? io::OutputFormat::XYZ : io::OutputFormat::VTK;
 
-        spdlog::info("Arguments parsed successfully");
+        SPDLOG_INFO("Arguments parsed successfully");
 		return OK;
 	}
 }

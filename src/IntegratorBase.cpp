@@ -34,7 +34,7 @@ namespace md::Integrator {
 	{
 		int i = 0;
 		const int total_steps = static_cast<int>((end_time - start_time) / dt);
-        spdlog::info("Simulation started");
+        SPDLOG_INFO("Simulation started");
 
 		if (benchmark) {
 			auto start = std::chrono::high_resolution_clock::now();
@@ -44,9 +44,9 @@ namespace md::Integrator {
 			}
 			auto end = std::chrono::high_resolution_clock::now();
 			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-			spdlog::info("Execution time: {} milliseconds", duration);
-			spdlog::info("Number of particles: {}", particles.size());
-			spdlog::info("Number of steps: {}", total_steps);
+			SPDLOG_INFO("Execution time: {} milliseconds", duration);
+			SPDLOG_INFO("Number of particles: {}", particles.size());
+			SPDLOG_INFO("Number of steps: {}", total_steps);
 
 		} else {
 			for (double t = start_time; t < end_time; t += dt, i++ ) {
@@ -60,6 +60,6 @@ namespace md::Integrator {
 		}
 
         std::cout << "" << std::endl;
-        spdlog::info("Simulation ended");
+        SPDLOG_INFO("Simulation ended");
 	}
 }

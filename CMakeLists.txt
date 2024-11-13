@@ -31,21 +31,7 @@ file(GLOB_RECURSE MY_SRC
 )
 
 # create make target
-add_executable(MolSim ${MY_SRC}
-        src/IntegratorBase.cpp
-        src/IntegratorBase.h
-        src/StoermerVerlet.cpp
-        src/StoermerVerlet.h
-        src/io/IOStrategy.h
-        src/io/FileReader.h
-        src/io/FileReader.cpp
-        src/force.h
-        src/utils/Parse.cpp
-        src/utils/Parse.h
-        src/RungeKutta.h
-        src/io/Logger.cpp
-        src/io/Logger.h
-)
+add_executable(MolSim ${MY_SRC})
 
 # set cxx standard. You may raise this if you want.
 target_compile_features(MolSim
@@ -83,6 +69,6 @@ include(doxygen)
 include(spdlog)
 include(googletest)
 
-#seperate directory with CMakeLists.txt in testing
+# Enable testing and a separate testing directory with its own CMakeLists.txt
 enable_testing()
 add_subdirectory(testing)

@@ -82,7 +82,7 @@ namespace md::io {
 			// std::cout << "UnstructuredGrid is present" << std::endl;
 		}
 		else {
-            spdlog::error("ERROR: No UnstructuredGrid present");
+            SPDLOG_ERROR("ERROR: No UnstructuredGrid present");
 		}
 
 		PointData::DataArray_sequence& pointDataSequence =
