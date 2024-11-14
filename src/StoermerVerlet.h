@@ -20,7 +20,10 @@ namespace md::Integrator {
 		 */
 		StoermerVerlet(ParticleContainer& particles, force::ForceFunc force_func, std::unique_ptr<io::OutputWriterBase> writer);
 
-	public:
+		  // Friend function declaration, granting access to private members
+    	friend void dummy_run_simulation(StoermerVerlet& obj, double dt);
+
+	private:
 		/**
 		 * @brief Performs a single step of the Stoermer-Verlet.
 		 * @param dt Δt The time increment for each simulation step.
@@ -28,6 +31,9 @@ namespace md::Integrator {
 		void simulation_step(double dt) override;
 		force::ForceFunc force_func;
 	};
+
+   void dummy_run_simulation(StoermerVerlet& obj, double dt);
+
 }
 
 

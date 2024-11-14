@@ -11,6 +11,7 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include "utils/MaxwellBoltzmannDistribution.h"
 
 
 namespace md {

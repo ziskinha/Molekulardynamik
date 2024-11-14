@@ -7,12 +7,11 @@
 
 //Check correctness of updated values after performing a single simulation step 
 TEST(StoermerVerletTest, test){
-    
 auto particle1= md::Particle({1,5,4},{3,3,3},5,0);
 auto particle2= md::Particle({3,2,1},{0,0,0},5,0);
 auto particleContainer = md::ParticleContainer ({particle1,particle2});
 md::Integrator::StoermerVerlet verlet (particleContainer, md::force::inverse_square(1.0),nullptr);
-verlet.simulation_step(1);
+md::Integrator::dummy_run_simulation(verlet, 1.0);
 
 const auto& afterSimParticle1 = particleContainer[0];
 const auto& afterSimParticle2 = particleContainer[1];

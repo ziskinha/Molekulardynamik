@@ -14,6 +14,9 @@ namespace md::Integrator {
 		force_func(std::move(force_func))
 	{}
 
+	void dummy_run_simulation(StoermerVerlet& obj, double dt) {
+    	obj.simulation_step(dt); 
+	 }
 
 	void StoermerVerlet::simulation_step(const double dt) {
 

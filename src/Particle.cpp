@@ -8,7 +8,6 @@
 #include "Particle.h"
 
 #include "utils/ArrayUtils.h"
-#include "utils/MaxwellBoltzmannDistribution.h"
 #include "io/Logger.h"
 
 

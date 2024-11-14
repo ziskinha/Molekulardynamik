@@ -16,7 +16,7 @@ add_executable(StoermerVerletTests
         ${CMAKE_SOURCE_DIR}/src/force.h
         ${CMAKE_SOURCE_DIR}/src/Particle.cpp
         ${CMAKE_SOURCE_DIR}/src/StoermerVerlet.cpp
-        ${CMAKE_SOURCE_DIR}/testing/StoermerVerlet.cpp
+        ${CMAKE_SOURCE_DIR}/testing/StoermerVerletTests.cpp
         ${CMAKE_SOURCE_DIR}/src/IntegratorBase.cpp
 )
 
@@ -62,6 +62,7 @@ target_link_libraries(ForceTests
         PRIVATE
         spdlog::spdlog
 )
+
 target_link_libraries(StoermerVerletTests
         PUBLIC
         xerces-c
