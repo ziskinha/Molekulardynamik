@@ -41,8 +41,7 @@ namespace md::parse {
                      "Flags:\n"
                      "  -h, --help       Show this help message and exit.\n"
                      "  -f               Delete all contents of the output folder before writing.\n"
-                     "  -b               Benchmark the simulation (output_format and output_folder optional).\n"
-                     "  -v               Verbose: log additional information.");
+                     "  -b               Benchmark the simulation (output_format and output_folder optional).");
     }
 
 
@@ -83,7 +82,6 @@ namespace md::parse {
 		// set options
 		args.benchmark = flag_exists("-b");
 		args.override = flag_exists("-f");
-		args.verbose = flag_exists("-v");
 
 
 		// parse arguments

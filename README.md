@@ -19,13 +19,12 @@ make
 The build target is called `MolSim`.
 
 ## Usage
-After building, you can run the simulation with the following command:
+After building, you can run the simulation with the following commands:
 ```bash
 ./MolSim <input_file> <duration> <delta_t> <num_frames> <output_format>
 ./MolSim -h | --help
 ./MolSim -f
 ./MolSim -b
-./MolSim -v
 ```
 ### Arguments:
 - **input_file** Name of the file to read particle data from. Should end in .txt
@@ -38,7 +37,21 @@ After building, you can run the simulation with the following command:
 - **-h, --help** Show this help message and exit
 - **-f** Delete all contents of the output folder before writing
 - **-b** Benchmark the simulation (output_format and output_folder optional)
-- **-v** Verbose: log additional information
+
+## Logging Instructions
+If no log level is set, the default log level used is info.  
+The log level must be configured before compiling the code. To set the desired log level, run in the build directory:
+```bash
+cmake -DSPDLOG_LEVEL=<desired level>
+```
+Available log levels are:
+- **trace** Extreamly fine grained information
+- **debug** Debug information
+- **info** General information 
+- **warn** Potential issues
+- **error** Occuring errors
+- **critical** Servere issues
+- **off** Disables logging
 
 ## Doxygen Instructions
 To generate Doxygen documentation for this project, run in the build directory:

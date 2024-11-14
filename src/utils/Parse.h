@@ -24,7 +24,6 @@ namespace md::parse {
 		int num_frames;
 		bool benchmark;
 		bool override;
-		bool verbose;
 		io::OutputFormat output_format;
 	};
 
@@ -40,7 +39,6 @@ namespace md::parse {
                      "       num_frames:    {}\n"
                      "       benchmark:     {}\n"
                      "       override:      {}\n"
-                     "       verbose:       {}\n"
                      "       output_format: {}",
                      args.file,
                      args.duration,
@@ -48,7 +46,6 @@ namespace md::parse {
                      args.num_frames,
                      args.benchmark ? "true" : "false",
                      args.override ? "true" : "false",
-                     args.verbose ? "true" : "false",
                      args.output_format == io::OutputFormat::XYZ ? "XYZ" : "VTK");
     }
 
