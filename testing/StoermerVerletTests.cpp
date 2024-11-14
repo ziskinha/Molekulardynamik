@@ -7,6 +7,7 @@
 
 //Check correctness of updated values after performing a single simulation step 
 TEST(StoermerVerletTest, test){
+
 auto particle1= md::Particle({1,5,4},{3,3,3},5,0);
 auto particle2= md::Particle({3,2,1},{0,0,0},5,0);
 auto particleContainer = md::ParticleContainer ({particle1,particle2});
@@ -39,5 +40,6 @@ EXPECT_NEAR(afterSimParticle2.force.operator[](2), 0.240495507937254583445439528
 EXPECT_NEAR(afterSimParticle2.velocity.operator[](0),0.00400825846562090972409065881321059600046652999133668710917088161,1e-5);
 EXPECT_NEAR(afterSimParticle2.velocity.operator[](1),0.02404955079372545834454395287926357600279917994802012265502528966,1e-5);
 EXPECT_NEAR(afterSimParticle2.velocity.operator[](2),0.02404955079372545834454395287926357600279917994802012265502528966,1e-5);
+
 }
 
