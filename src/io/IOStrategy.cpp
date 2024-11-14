@@ -1,14 +1,16 @@
 #include "IOStrategy.h"
-#include "VTKWriter.h"
-#include "XYZWriter.h"
-#include "FileReader.h"
-#include "io/Logger.h"
+
 #include <iostream>
 #include <string>
 
+#include "FileReader.h"
+#include "VTKWriter.h"
+#include "XYZWriter.h"
+#include "io/Logger.h"
 
 namespace md::io {
-    OutputWriterBase::OutputWriterBase(std::string file_name, const bool allow_delete): file_name(std::move(file_name)) {
+    OutputWriterBase::OutputWriterBase(std::string file_name, const bool allow_delete)
+        : file_name(std::move(file_name)) {
         if (!std::filesystem::exists(OUTPUT_DIR)) {
             std::filesystem::create_directories(OUTPUT_DIR);
         }
@@ -19,23 +21,21 @@ namespace md::io {
                     std::filesystem::remove(entry.path());
                 }
             }
-        }
-        else if (!allow_delete && !std::filesystem::is_empty(OUTPUT_DIR)) {
-            spdlog::error("Output folder is not empty. Use -f to automatically override contents or empty the folder manually");
+        } else if (!allow_delete && !std::filesystem::is_empty(OUTPUT_DIR)) {
+            spdlog::error(
+                "Output folder is not empty. Use -f to automatically override contents or empty the folder manually");
             exit(-1);
         }
     };
 
-
     bool checkFormat(const std::string& filename, const std::string& extension) {
         if (filename.length() >= extension.length()) {
-            bool format_match = (0 == filename.compare(filename.length() - extension.length(), extension.length(),
-                                                       extension));
+            bool format_match =
+                (0 == filename.compare(filename.length() - extension.length(), extension.length(), extension));
             return format_match;
         }
         return false;
     }
-
 
     std::unique_ptr<OutputWriterBase> create_writer(const OutputFormat output_format, bool allow_delete) {
         if (output_format == OutputFormat::VTK) {
@@ -44,12 +44,11 @@ namespace md::io {
         return std::make_unique<XYZWriter>(XYZWriter("MD_xyz", allow_delete));
     }
 
-
-    void read_file(const std::string& filename, ParticleContainer & container, force::ForceFunc & force) {
+    void read_file(const std::string& filename, ParticleContainer& container, force::ForceFunc& force) {
         if (checkFormat(filename, ".txt")) {
             return read_file_txt(filename, container, force);
         }
         // TODO: add XML FileReader in the future
         throw std::invalid_argument("File format not supported");
     }
-}
+}  // namespace md::io
