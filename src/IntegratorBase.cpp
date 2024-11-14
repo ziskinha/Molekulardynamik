@@ -38,10 +38,10 @@ namespace md::Integrator {
 
 		if (benchmark) {
             long duration_sum = 0;
-            int repetitions = 10;
-            SPDLOG_INFO("Benchmarking enabled. Subsequent logging messages during simulation are disabled");
+            int repetitions = 150;
+            SPDLOG_INFO("Benchmarking enabled. Subsequent logging messages during simulation are disabled.");
 
-            for (int k = 0; k < repetitions; k++) {
+            for (int k = 1; k <= repetitions; k++) {
                 spdlog::set_level(spdlog::level::off);
                 auto start = std::chrono::high_resolution_clock::now();
 
@@ -51,6 +51,7 @@ namespace md::Integrator {
                 auto end = std::chrono::high_resolution_clock::now();
                 auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
                 spdlog::set_level(spdlog::level::info);
+                SPDLOG_INFO("Finished {}. benchmark simulation, out of {}", k, repetitions);
                 SPDLOG_INFO("Execution time: {} milliseconds", duration);
                 SPDLOG_INFO("Number of particles: {}", particles.size());
                 SPDLOG_INFO("Number of steps: {}", total_steps);
@@ -58,12 +59,13 @@ namespace md::Integrator {
             }
             SPDLOG_INFO("Average execution time: {} milliseconds", duration_sum/repetitions);
 
-		} else {
+		}
+        else {
 			for (double t = start_time; t < end_time; t += dt, i++ ) {
 				simulation_step(dt);
 				if (i % write_freq == 0) {
 					if (writer != nullptr) {
-						spdlog::debug("Plotting particles @ iteration {}, time {}", i, t);
+						SPDLOG_DEBUG("Plotting particles @ iteration {}, time {}", i, t);
 						writer->plot_particles(particles, i);
 					}
 				}

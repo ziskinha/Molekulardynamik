@@ -4,6 +4,7 @@
 
 #include "RungeKutta.h"
 #include "utils/ArrayUtils.h"
+#include "io/Logger.h"
 
 namespace md::Integrator {
 	RungeKutta::RungeKutta(ParticleContainer& particles, force::ForceFunc force_func,
@@ -68,6 +69,9 @@ namespace md::Integrator {
 		for (size_t i = 0; i < particles.size(); i++) {
 			particles[i].position = position0[i] + 1.0 / 6 * (k1[i] + 2.0 * k2[i] + 2.0 * k3[i] + k4[i]);
 			particles[i].velocity = velocity0[i] + 1.0 / 6 * (l1[i] + 2.0 * l2[i] + 2.0 * l3[i] + l4[i]);
+            SPDLOG_TRACE("Updated position: [{},{},{}]", particles[i].position[0], particles[i].position[1], particles[i].position[2]);
+            SPDLOG_TRACE("Updated velocity: [{},{},{}]", particles[i].velocity[0], particles[i].velocity[1], particles[i].velocity[2]);
+            SPDLOG_TRACE("Updated force: [{},{},{}]", particles[i].force[0], particles[i].force[1], particles[i].force[2]);
 		}
 	}
 

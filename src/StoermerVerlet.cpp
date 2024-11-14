@@ -7,6 +7,7 @@
 
 #include "StoermerVerlet.h"
 #include "utils/ArrayUtils.h"
+#include "io/Logger.h"
 
 namespace md::Integrator {
 	StoermerVerlet::StoermerVerlet(ParticleContainer& particles, force::ForceFunc force_func, std::unique_ptr<io::OutputWriterBase> writer):
@@ -23,6 +24,7 @@ namespace md::Integrator {
 		// update position
 		for (auto &p : particles) {
 			p.position = p.position + (dt * p.velocity) + (pow(dt, 2)/(2*p.mass) *  p.old_force);
+            SPDLOG_TRACE("Updated position: [{},{},{}]", p.position[0], p.position[1], p.position[2]);
 		}
 
 		// calculate forces
@@ -39,12 +41,14 @@ namespace md::Integrator {
 				p2.force = p2.force + new_F;
 				p1.force = p1.force - new_F;
 			}
+            SPDLOG_TRACE("Updated force: [{}, {}, {}]", p1.force[0], p1.force[1], p1.force[2]);
 		}
 
 
 		// update velocities
 		for (auto &p : particles) {
 			p.velocity = p.velocity + dt/2/p.mass * (p.force + p.old_force) ;
+            SPDLOG_TRACE("Updated Velocity: [{}, {}, {}]", p.velocity[0], p.velocity[1], p.velocity[2]);
 		}
 	}
 }

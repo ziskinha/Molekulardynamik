@@ -1,9 +1,11 @@
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
+#include <spdlog/sinks/basic_file_sink.h>
 #include <memory>
 
 /**
- * @brief A Logger class to handle logging functionalities
+ * @brief A Logger class to handle logging functionalities. It initializes a file and console sink. Like that
+ * log information is printed on the console and in a file.
  */
 namespace md::io {
     class Logger {
