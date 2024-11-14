@@ -2,47 +2,48 @@
 // Created by jdyma on 26/10/2024.
 //
 
+#include "StoermerVerlet.h"
+
 #include <utility>
 
-
-#include "StoermerVerlet.h"
+#include "io/Logger.h"
 #include "utils/ArrayUtils.h"
 
 namespace md::Integrator {
-	StoermerVerlet::StoermerVerlet(ParticleContainer& particles, force::ForceFunc force_func, io::OutputWriter & writer):
-		IntegratorBase(particles, writer),
-		force_func(std::move(force_func))
-	{}
+    StoermerVerlet::StoermerVerlet(ParticleContainer& particles, force::ForceFunc force_func,
+                                   std::unique_ptr<io::OutputWriterBase> writer)
+        : IntegratorBase(particles, std::move(writer)), force_func(std::move(force_func)) {}
 
+    void dummy_run_simulation(StoermerVerlet& obj, double dt) { obj.simulation_step(dt); }
 
-	void StoermerVerlet::simulation_step(const double dt) {
+    void StoermerVerlet::simulation_step(const double dt) {
+        // update position
+        for (auto& p : particles) {
+            p.position = p.position + (dt * p.velocity) + (pow(dt, 2) / (2 * p.mass) * p.old_force);
+            SPDLOG_TRACE("Updated position: [{},{},{}]", p.position[0], p.position[1], p.position[2]);
+        }
 
-		// calculate forces
-		for (auto &p : particles) {
-			p.old_force = p.force;
-			p.force = {0,0,0};
-		}
+        // calculate forces
+        for (auto& p : particles) {
+            p.old_force = p.force;
+            p.force = {0, 0, 0};
+        }
+        for (size_t i = 0; i < particles.size(); ++i) {
+            auto& p1 = particles[i];
+            for (size_t j = i + 1; j < particles.size(); ++j) {
+                auto& p2 = particles[j];
+                vec3 new_F = force_func(p1, p2);
 
-		for (size_t i = 0; i < particles.size(); ++i) {
-			auto& p1 = particles[i];
-			for (size_t j = i + 1; j < particles.size(); ++j) {
-				auto& p2 = particles[j];
-				vec3 new_F = force_func(p1, p2);
+                p2.force = p2.force + new_F;
+                p1.force = p1.force - new_F;
+            }
+            SPDLOG_TRACE("Updated force: [{}, {}, {}]", p1.force[0], p1.force[1], p1.force[2]);
+        }
 
-				p2.force = p2.force - new_F;
-				p1.force = p1.force + new_F;
-			}
-		}
-
-
-		// update position
-		for (auto &p : particles) {
-			p.position = p.position + (dt * p.velocity) + (pow(dt, 2)/(2*p.mass) *  p.old_force);
-		}
-
-		// update velocities
-		for (auto &p : particles) {
-			p.velocity = p.velocity + dt/2/p.mass * (p.force + p.old_force) ;
-		}
-	}
-}
+        // update velocities
+        for (auto& p : particles) {
+            p.velocity = p.velocity + dt / 2 / p.mass * (p.force + p.old_force);
+            SPDLOG_TRACE("Updated Velocity: [{}, {}, {}]", p.velocity[0], p.velocity[1], p.velocity[2]);
+        }
+    }
+}  // namespace md::Integrator

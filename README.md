@@ -19,15 +19,39 @@ make
 The build target is called `MolSim`.
 
 ## Usage
-After building, you can run the simulation with the following command:
+After building, you can run the simulation with the following commands:
 ```bash
-./MolSim filename end_time delta_time output_format
+./MolSim <input_file> <duration> <delta_t> <num_frames> <output_format>
+./MolSim -h | --help
+./MolSim -f
+./MolSim -b
 ```
 ### Arguments:
-- **filename** Name of the file from which the particle data is read
-- **end_time** End time for the simulation (e.g., 10.0)
-- **delta_time** Time step Δt (e.g., 0.01)
-- **output_format** Defines output format: 0 for XYZ, 1 for VTK
+- **input_file** Name of the file to read particle data from. Should end in .txt
+- **duration** Simulation duration (e.g., 10.0)
+- **delta_t** Time step delta_t (e.g., 0.01)
+- **num_frames** Number of Frames saved (e.g. 500)
+- **output_format** Output format: either 'XYZ' or 'VTK'
+
+### Flags
+- **-h, --help** Show this help message and exit
+- **-f** Delete all contents of the output folder before writing
+- **-b** Benchmark the simulation (output_format and output_folder optional)
+
+## Logging Instructions
+If no log level is set, the default log level used is info.  
+The log level must be configured before compiling the code. To set the desired log level, run in the build directory:
+```bash
+cmake -DSPDLOG_LEVEL=<desired level>
+```
+Available log levels are:
+- **trace** Extreamly fine grained information
+- **debug** Debug information
+- **info** General information 
+- **warn** Potential issues
+- **error** Occuring errors
+- **critical** Servere issues
+- **off** Disables logging
 
 ## Doxygen Instructions
 To generate Doxygen documentation for this project, run in the build directory:

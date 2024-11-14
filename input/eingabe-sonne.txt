@@ -11,8 +11,11 @@
 # * mass (1 double value)
 #
 # xyz-coord      velocity        mass
-4
+particles:
 0.0 0.0 0.0      0.0 0.0 0.0     1.0
 0.0 1.0 0.0     -1.0 0.0 0.0     3.0e-6
 0.0 5.36 0.0    -0.425 0.0 0.0   9.55e-4
 34.75 0.0 0.0    0.0 0.0296 0.0  1.0e-14
+
+force:
+inverse_square 1

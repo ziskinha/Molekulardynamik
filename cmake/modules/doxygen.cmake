@@ -1,5 +1,15 @@
-# make doc_doxygen optional if someone does not have / like doxygen
+# add Doxygen
+find_package(Doxygen)
 
-# TODO: create CMake build option for the target.
+# option to disable creating the Doxygen target
+option(ENABLE_DOXYGEN "Creating Doxygen target" ON)
 
-# TODO: Add a custom target for building the documentation.
+if (ENABLE_DOXYGEN AND DOXYGEN_FOUND)
+    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+
+    add_custom_target(doc_doxygen
+            ${DOXYGEN_EXECUTABLE} ${DOXYGEN_IN}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            COMMENT "Generating Doxygen documentation"
+            VERBATIM)
+endif ()
