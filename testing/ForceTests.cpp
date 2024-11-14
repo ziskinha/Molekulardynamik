@@ -25,7 +25,6 @@ TEST(HookesLawTest,test ) {
 TEST(Lennard_jones,test ) {
     auto function = md::force::lennard_jones();
     auto result =function(particle1,particle2);
-std::cout << "Vector: " << result.operator[](0) << result.operator[](1)   << result.operator[](2)  << std::endl;
     EXPECT_NEAR(result.operator[](0),2*-0.000102432774875326952280554216925586582064682451855120479006419,1e-5);
     EXPECT_NEAR(result.operator[](1),3 * 0.000102432774875326952280554216925586582064682451855120479006419,1e-5);
     EXPECT_NEAR(result.operator[](2),3 * 0.000102432774875326952280554216925586582064682451855120479006419,1e-5);
