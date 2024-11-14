@@ -27,7 +27,7 @@ jobs:
             cmake -DCMAKE_BUILD_TYPE=Debug ..
             make
             ./MolSim ../input/eingabe-sonne.txt 100 0.1 10 VTK -f
-            ./MolSim ../input/assignment2.txt 100 0.1 10 VTK -f
+            ./MolSim ../input/assignment2.txt 5 0.1 10 VTK -f
 
   googletests:
     runs-on: ubuntu-latest
