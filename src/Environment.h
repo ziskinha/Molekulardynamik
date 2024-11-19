@@ -24,7 +24,7 @@ namespace md {
     using vec3 = std::array<double, 3>;
     using uint3 = std::array<UINT_T, 3>;
     using int3 = std::array<INT_T, 3>;
-    using ForceFunc = std::function<vec3(const Particle&, const Particle&)>;
+    using Force = std::function<vec3(const Particle&, const Particle&)>;
 
     struct ParticleCreateInfo {
         ParticleCreateInfo(const vec3& position, const vec3& velocity, double mass, int type = 0);
@@ -93,6 +93,8 @@ namespace md {
         enum Face { LEFT, RIGHT, TOP, BOTTOM, FRONT, BACK };
         enum Extent { WIDTH, HEIGHT, DEPTH };
 
+        // TODO maybe change to -1 and add if to grid::build to skip for loops
+        // -1 would then indicate no grid
         vec3 extent {MAX_EXTENT, MAX_EXTENT, MAX_EXTENT}; // [width, height, depth]
         std::array<Type, 6> types {};    // [left, right, top, bottom, front, back]
     };
@@ -116,7 +118,6 @@ namespace md {
     private:
         static int count;
     };
-
 
     class Grid {
     public:
@@ -173,7 +174,8 @@ namespace md {
 
         void build();
         void set_grid_constant(double g);
-        void set_force(const ForceFunc& force);
+        void set_force(const Force& force);
+        void set_force_cutoff(double cutoff_radius);
         void set_boundary(const Boundary& boundary);
         void add_particle(const vec3& position, const vec3& velocity, double mass, int type = 0);
         void add_particles(const std::vector<ParticleCreateInfo>& particles);
@@ -189,28 +191,29 @@ namespace md {
                 return filter_particles(particle, state, type);
             });
         }
-        auto particles(Particle::State state = Particle::ALIVE, GridCell::Type type = GridCell::ALL) const {
+        [[nodiscard]] auto particles(Particle::State state = Particle::ALIVE, GridCell::Type type = GridCell::ALL) const {
             return particle_storage | std::ranges::views::filter([this, state, type](const Particle& particle) {
                 return filter_particles(particle, state, type);
             });
         }
 
         Particle & operator[] (size_t id);
-        const Particle & operator[] (size_t id) const
-        ;
+        const Particle & operator[] (size_t id) const;
 
-        // making class non-copyable to avoid accidentally copying all the data
+        // making class non-copyable
         Environment(const Environment&) = delete;
         Environment& operator=(const Environment&) = delete;
 
     private:
-        bool filter_particles(const Particle& particle, Particle::State state, GridCell::Type type) const;
+        [[nodiscard]] bool filter_particles(const Particle& particle, Particle::State state, GridCell::Type type) const;
+
         std::vector<Particle> particle_storage; // TODO replace vector with a vector wrapper that emulates a vector of fixed size
+        Boundary boundary;
         Grid grid;
 
-        ForceFunc force_func;
-        Boundary boundary;
+        Force force_func;
         double grid_constant;
+        double force_cutoff;
         bool initialized;
     };
 }

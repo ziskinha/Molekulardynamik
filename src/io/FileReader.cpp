@@ -134,20 +134,20 @@ namespace md::io {
         std::ranges::replace(force_name, '-', ' ');
         std::ranges::replace(force_name, '_', ' ');
         trim(force_name);
-        ForceFunc force;
+        Force force;
 
         while (data_stream >> num) {
             vals.push_back(num);
         }
         try {
             if (force_name == "lennard jones") {
-                force = force::lennard_jones(vals[0], vals[1]);
+                force = force::LennardJones(vals[0], vals[1]);
                 SPDLOG_INFO("Using Lennard Jones with parameters: epsilon={}, sigma={}", vals[0], vals[1]);
             } else if (force_name == "Hookes law") {
-                force = force::hookes_law(vals[0], vals[1]);
+                force = force::HookesLaw(vals[0], vals[1]);
                 SPDLOG_INFO("Using Hookes Law with parameters: k={}, l={}", vals[0], vals[1]);
             } else if (force_name == "inverse square") {
-                force = force::inverse_square(vals[0]);
+                force = force::InverseSquare(vals[0]);
                 SPDLOG_INFO("Using inverse square force with parameter: pre_factor={}", vals[0]);
             }
         } catch (std::out_of_range& e) {

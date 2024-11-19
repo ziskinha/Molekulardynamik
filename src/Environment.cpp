@@ -220,9 +220,13 @@ namespace md {
     Environment::Environment()
         : grid(boundary), grid_constant(std::numeric_limits<double>::max()), initialized(false) {}
 
-    void Environment::set_force(const ForceFunc& force) {
+    void Environment::set_force(const Force& force) {
         WARN_IF_INIT("set the force");
         this->force_func = force;
+    }
+
+    void Environment::set_force_cutoff(double cutoff_radius) {
+
     }
 
     void Environment::set_grid_constant(const double g) {
