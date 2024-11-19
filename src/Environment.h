@@ -195,6 +195,10 @@ namespace md {
             });
         }
 
+        Particle & operator[] (size_t id);
+        const Particle & operator[] (size_t id) const
+        ;
+
         // making class non-copyable to avoid accidentally copying all the data
         Environment(const Environment&) = delete;
         Environment& operator=(const Environment&) = delete;

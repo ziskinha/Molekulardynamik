@@ -283,6 +283,14 @@ namespace md {
         return particle_storage.size();
     }
 
+    Particle& Environment::operator[](const size_t id) {
+        return particle_storage[id];
+    }
+
+    const Particle& Environment::operator[](const size_t id) const {
+        return particle_storage[id];
+    }
+
     bool Environment::filter_particles(const Particle& particle, const Particle::State state,
                                        const GridCell::Type type) const {
         const bool state_ok = (particle.type == PARTICLE_TYPE_DEAD && state & Particle::DEAD) ||
