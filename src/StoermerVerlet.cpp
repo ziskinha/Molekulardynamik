@@ -18,17 +18,16 @@ namespace md::Integrator {
 
         // update position
         for (auto& p : system.particles(Particle::ALIVE)) {
-            p.update_position(dt * p.velocity + pow(dt, 2) / (2 * p.mass) * p.old_force);
+            p.position = p.position + dt * p.velocity + pow(dt, 2) / (2 * p.mass) * p.old_force;
+            p.update_grid();
+            p.reset_force();
+
         }
 
-        for (auto& p : system.particles(Particle::ALIVE)) {
-            p.reset_force();
-        }
         // calculate forces
         for (auto& p1 : system.particles(Particle::ALIVE)) {
             for (auto& p2 : system.particles(Particle::ALIVE)) {
                 vec3 new_F = system.force(p1, p2);
-
                 p2.force = p2.force + new_F;
             }
         }
@@ -49,7 +48,7 @@ namespace md::Integrator {
 
         // update velocities
         for (auto& p : system.particles(Particle::ALIVE)) {
-            p.update_velocity(dt / 2 / p.mass * (p.force + p.old_force));
+            p.velocity = p.velocity + dt / 2 / p.mass * (p.force + p.old_force);
         }
     }
 }  // namespace md::Integrator

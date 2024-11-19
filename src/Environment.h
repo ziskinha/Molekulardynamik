@@ -57,26 +57,25 @@ namespace md {
             STATIONARY = 0x4,
         };
 
-        Particle(Grid& grid, const vec3& position, const vec3& velocity, double mass, int type);
+        Particle(size_t id, Grid& grid, const vec3& position, const vec3& velocity, double mass, int type);
         Particle(const Particle& other);
 
         void reset_force();
-        void update_position(const vec3& dx);
-        void update_velocity(const vec3& dv);
+        void update_grid();
 
-        [[nodiscard]] std::string to_string() const;
         bool operator==(const Particle& other) const;
+        [[nodiscard]] std::string to_string() const;
 
         vec3 position;
         vec3 velocity;
         vec3 force;
         vec3 old_force;
         int3 cell;
+
         double mass;
         int type;  // < 0: stationary; == PARTICLE_TYPE_DEAD: dead; else: alive
         const size_t id;
     private:
-        static size_t count;
         Grid & grid;
     };
 

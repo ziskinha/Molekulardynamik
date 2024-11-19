@@ -21,7 +21,6 @@
 # define OUTSIDE_CELL int3{-1,-1,-1}
 
 namespace md {
-    size_t Particle::count = 0;
     int GridCell::count = 0;
 
 
@@ -49,8 +48,8 @@ namespace md {
     /// -----------------------------------------
     /// \brief Particle Class Methods
     /// -----------------------------------------
-    Particle::Particle(Grid& grid, const vec3& position, const vec3& velocity, const double mass, const int type)
-        : position(position), velocity(velocity), force(), old_force(), cell(), mass(mass), type(type), id(0),
+    Particle::Particle(const size_t id, Grid& grid, const vec3& position, const vec3& velocity, const double mass, const int type)
+        : position(position), velocity(velocity), force(), old_force(), cell(), mass(mass), type(type), id(id),
           grid(grid) {
         SPDLOG_TRACE("Particle generated!");
     }
@@ -73,14 +72,9 @@ namespace md {
         force = {0, 0, 0};
     }
 
-    void Particle::update_position(const vec3& dx) {
-        position = position + dx;
+    void Particle::update_grid() {
         grid.update_cells(this, cell, grid.what_cell(position));
         cell = grid.what_cell(position);
-    }
-
-    void Particle::update_velocity(const vec3& dv) {
-        velocity = velocity + dv;
     }
 
     std::string Particle::to_string() const {
@@ -243,7 +237,7 @@ namespace md {
 
     void Environment::add_particle(const vec3& position, const vec3& velocity, double mass, int type) {
         WARN_IF_INIT("add particles");
-        particle_storage.emplace_back(grid, position, velocity, mass, type);
+        particle_storage.emplace_back(particle_storage.size(), grid, position, velocity, mass, type);
     }
 
     void Environment::add_particles(const std::vector<ParticleCreateInfo>& particles) {
