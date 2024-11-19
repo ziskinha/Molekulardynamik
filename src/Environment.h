@@ -61,10 +61,10 @@ namespace md {
         Particle(const Particle& other);
 
         void reset_force();
-        void update_position(const vec3& pos);
-        void update_velocity(const vec3& vel);
+        void update_position(const vec3& dx);
+        void update_velocity(const vec3& dv);
 
-        std::string to_string() const;
+        [[nodiscard]] std::string to_string() const;
         bool operator==(const Particle& other) const;
 
         vec3 position;
@@ -104,6 +104,7 @@ namespace md {
             OUTER = 0x2,
             BOUNDARY = 0x4,
             INSIDE = INNER | BOUNDARY,
+            ALL = INNER | BOUNDARY | OUTER
         };
         GridCell(const vec3& coord, const vec3& size, Type type);
         std::string to_string() const;
@@ -171,6 +172,7 @@ namespace md {
     public:
         Environment();
 
+        void build();
         void set_grid_constant(double g);
         void set_force(const ForceFunc& force);
         void set_boundary(const Boundary& boundary);
@@ -180,25 +182,26 @@ namespace md {
         void add_cuboid(const vec3& origin, const vec3& initial_v, const uint3& num_particles, double thermal_v,
                          double width, double mass, uint8_t dimension, int type = 0);
 
-        void build();
-
         [[nodiscard]] vec3 force(const Particle& p1, const Particle& p2) const;
         [[nodiscard]] size_t size(Particle::State state = Particle::ALIVE) const;
 
-        auto particles(Particle::State state = Particle::ALIVE, GridCell::Type type = GridCell::INSIDE) {
+        auto particles(Particle::State state = Particle::ALIVE, GridCell::Type type = GridCell::ALL) {
             return particle_storage | std::ranges::views::filter([this, state, type](const Particle& particle) {
                 return filter_particles(particle, state, type);
             });
         }
-        [[nodiscard]] auto particles(Particle::State state = Particle::ALIVE, GridCell::Type type = GridCell::INSIDE) const {
+        auto particles(Particle::State state = Particle::ALIVE, GridCell::Type type = GridCell::ALL) const {
             return particle_storage | std::ranges::views::filter([this, state, type](const Particle& particle) {
                 return filter_particles(particle, state, type);
             });
         }
-        Environment(const Environment&) = delete; // making class non-copyable to avoid accidentally copying all the data
+
+        // making class non-copyable to avoid accidentally copying all the data
+        Environment(const Environment&) = delete;
         Environment& operator=(const Environment&) = delete;
+
     private:
-        static bool filter_particles(const Particle& particle, Particle::State state, GridCell::Type type);
+        bool filter_particles(const Particle& particle, Particle::State state, GridCell::Type type) const;
         std::vector<Particle> particle_storage; // TODO replace vector with a vector wrapper that emulates a vector of fixed size
         Grid grid;
 

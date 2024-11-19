@@ -18,28 +18,27 @@ int main(const int argc, char* argv[]) {
 
     log_arguments(args);
 
-    args.duration = 8;
-    args.dt = 0.005;
-    args.num_frames = 100;
+    args.duration = 1000;
+    args.dt = 0.014;
+    args.num_frames = 1000;
     const double num_steps = args.duration / args.dt;
     const int write_freq = std::max(static_cast<int> (round(num_steps / args.num_frames)), 1);
     SPDLOG_DEBUG("Write frequency: {}", write_freq);                            
 
     md::Environment env;
-    // md::io::read_file(args.file, env);
+    md::io::read_file(args.file, env);
     // env.add_particle({-1,0,0}, {1,0,0}, 1, 1);
     // env.add_particle({0,1,0}, {0,0,0}, 1, 2);
     // env.add_particle({1,0,0}, {0,0,0}, 1, 3);
     // env.add_particle({1,1,0}, {0,0,0}, 1, 4);
     // env.add_particle({2,2,0}, {0,0,0}, 1, 5);
-    env.add_cuboid({-2,-2,0}, {1,1,0}, {40,40,1}, 0, 0.1, 1, 2);
+    // env.add_cuboid({-2,-2,0}, {1,1,0}, {40,40,1}, 0, 0.1, 1, 2);
 
-    md::Boundary boundary;
-    boundary.extent = {2,2,1};
-    env.set_boundary(boundary);
-    env.set_grid_constant(1.0);
-    env.set_force(md::force::no_force());
-
+    // md::Boundary boundary;
+    // boundary.extent = {2,2,1};
+    // env.set_boundary(boundary);
+    // env.set_grid_constant(1.0);
+    // env.set_force(md::force::inverse_square());
     env.build();
 
     // for (auto & p : env.particles()) {

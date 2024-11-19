@@ -46,8 +46,6 @@ namespace md {
           type(type) {}
 
 
-
-
     /// -----------------------------------------
     /// \brief Particle Class Methods
     /// -----------------------------------------
@@ -75,14 +73,14 @@ namespace md {
         force = {0, 0, 0};
     }
 
-    void Particle::update_position(const vec3& pos) {
-        position = pos;
+    void Particle::update_position(const vec3& dx) {
+        position = position + dx;
         grid.update_cells(this, cell, grid.what_cell(position));
-        cell = grid.what_cell(pos);
+        cell = grid.what_cell(position);
     }
 
-    void Particle::update_velocity(const vec3& vel) {
-        velocity = vel;
+    void Particle::update_velocity(const vec3& dv) {
+        velocity = velocity + dv;
     }
 
     std::string Particle::to_string() const {
@@ -97,9 +95,6 @@ namespace md {
         return position == other.position && velocity == other.velocity && force == other.force &&
                old_force == other.old_force && mass == other.mass && type == other.type;
     }
-
-
-
 
 
     /// -----------------------------------------
@@ -144,7 +139,12 @@ namespace md {
                         size[2] = std::fmod(extent[2], grid_constant);
                     if (x == 0 || y == 0 || z == 0 || x == num_x - 1 || y == num_y - 1 || z == num_z - 1)
                         type = GridCell::BOUNDARY;
-                    GridCell cell = {{g * x, g * y, g * z}, size, type};
+
+                    GridCell cell = {{g * static_cast<double>(x),
+                                      g * static_cast<double>(y),
+                                      g * static_cast<double>(z)},
+                                     size, type};
+
                     int3 idx = {static_cast<int64_t>(x), static_cast<int64_t>(y), static_cast<int64_t>(z)};
                     cells.emplace(idx, cell);
 
@@ -213,7 +213,7 @@ namespace md {
             old.particles.erase(particle);
             current.particles.insert(particle);
 
-            particle->type = current.id;
+            // particle->type = current.id;
 
             SPDLOG_TRACE("Particle at {} changed cells from {} to {}", particle->position, old_cell, new_cell);
         }
@@ -285,17 +285,16 @@ namespace md {
         return force_func(p1, p2);
     }
 
-    size_t Environment::size(Particle::State state) const {
+    size_t Environment::size(Particle::State) const {
         return particle_storage.size();
     }
 
-    bool Environment::filter_particles(const Particle& particle, const Particle::State state, GridCell::Type type) {
+    bool Environment::filter_particles(const Particle& particle, const Particle::State state,
+                                       const GridCell::Type type) const {
         const bool state_ok = (particle.type == PARTICLE_TYPE_DEAD && state & Particle::DEAD) ||
                               (particle.type < 0 && state & Particle::STATIONARY) ||
                               (particle.type >= 0 && particle.type != PARTICLE_TYPE_DEAD && state & Particle::ALIVE);
-
-        // const bool location_ok = grid.get_cell(particle).type & type;
-        // return true;
-        return state_ok; //&& location_ok;
+        const bool location_ok = grid.get_cell(particle).type & type;
+        return state_ok && location_ok;
     }
 } // namespace md

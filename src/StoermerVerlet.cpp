@@ -18,23 +18,26 @@ namespace md::Integrator {
 
         // update position
         for (auto& p : system.particles(Particle::ALIVE)) {
-            p.update_position(p.position + dt * p.velocity + pow(dt, 2) / (2 * p.mass) * p.old_force);
-            p.reset_force();
+            p.update_position(dt * p.velocity + pow(dt, 2) / (2 * p.mass) * p.old_force);
         }
 
+        for (auto& p : system.particles(Particle::ALIVE)) {
+            p.reset_force();
+        }
         // calculate forces
+        for (auto& p1 : system.particles(Particle::ALIVE)) {
+            for (auto& p2 : system.particles(Particle::ALIVE)) {
+                vec3 new_F = system.force(p1, p2);
+
+                p2.force = p2.force + new_F;
+            }
+        }
+
         // for (auto& cell_pair : system.linked_cells) {
         //     for (auto& [p1, p2] : system.particles(cell_pair)) {
         //         vec3 new_F = system.force(p1, p2);
         //
         //         p2.force = p2.force + new_F;
-        //         p1.force = p1.force - new_F;
-        //     }
-        // }
-
-        // for (auto& p1 : system.particles()) {
-        //     for (auto& p2 : system.particles()) {
-        //         vec3 new_F = system.force(p1, p2);
         //         p1.force = p1.force - new_F;
         //     }
         // }
@@ -46,7 +49,7 @@ namespace md::Integrator {
 
         // update velocities
         for (auto& p : system.particles(Particle::ALIVE)) {
-            p.update_velocity(p.velocity + dt / 2 / p.mass * (p.force + p.old_force));
+            p.update_velocity(dt / 2 / p.mass * (p.force + p.old_force));
         }
     }
 }  // namespace md::Integrator
