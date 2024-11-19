@@ -21,9 +21,9 @@ namespace md::io {
     VTKWriter::VTKWriter(std::string file_base_name, const bool allow_delete)
         : OutputWriterBase(std::move(file_base_name), allow_delete) {}
 
-    void VTKWriter::plot_particles(const ParticleContainer& container, const int iteration) {
-        initializeOutput(static_cast<int>(container.size()));
-        for (auto& particle : container) {
+    void VTKWriter::plot_particles(const Environment& environment, const int iteration) {
+        initializeOutput(static_cast<int>(environment.size()));
+        for (auto& particle : environment.particles(Particle::ALIVE|Particle::DEAD|Particle::STATIONARY, GridCell::INSIDE|GridCell::OUTER)) {
             plotParticle(particle);
         }
         writeFile(iteration);
@@ -88,19 +88,19 @@ namespace md::io {
         dataIterator->push_back(p.mass);
         // cout << "Appended mass data in: " << dataIterator->Name();
 
-        dataIterator++;
+        ++dataIterator;
         dataIterator->push_back(p.velocity[0]);
         dataIterator->push_back(p.velocity[1]);
         dataIterator->push_back(p.velocity[2]);
         // cout << "Appended velocity data in: " << dataIterator->Name();
 
-        dataIterator++;
+        ++dataIterator;
         dataIterator->push_back(p.old_force[0]);
         dataIterator->push_back(p.old_force[1]);
         dataIterator->push_back(p.old_force[2]);
         // cout << "Appended force data in: " << dataIterator->Name();
 
-        dataIterator++;
+        ++dataIterator;
         dataIterator->push_back(p.type);
 
         Points::DataArray_sequence& pointsSequence = vtkFile->UnstructuredGrid()->Piece().Points().DataArray();

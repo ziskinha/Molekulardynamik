@@ -2,11 +2,18 @@
 #include <cmath>
 #include <functional>
 
-#include "Particle.h"
+
 #include "utils/ArrayUtils.h"
 
+
 namespace md::force {
-    using ForceFunc = std::function<vec3(const Particle&, const Particle&)>;
+
+    inline ForceFunc no_force() {
+        return [=](const Particle&, const Particle&) {
+            return vec3 {0,0,0};
+        };
+    }
+
 
     /**
      * @brief Returns a function that calculates inverse-square force between two particles.
@@ -28,6 +35,7 @@ namespace md::force {
     /**
      * @brief Returns a function that calculates the spring force using Hookes law between two particles.
      * @param k spring constant
+     * @param rest_length
      * @return The function that calculates the force vector acting on p1 due to p2.
      */
     inline ForceFunc hookes_law(const double k = 0.1, const double rest_length = 0.0) {

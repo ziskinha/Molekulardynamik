@@ -10,7 +10,7 @@
 #include <list>
 
 #include "IOStrategy.h"
-#include "Particle.h"
+#include "Environment.h"
 #include "io/vtk-unstructured.h"
 
 namespace md::io {
@@ -27,7 +27,7 @@ namespace md::io {
         explicit VTKWriter(std::string file_base_name, bool allow_delete);
         ~VTKWriter() override;
 
-        void plot_particles(const ParticleContainer& container, int iteration) override;
+        void plot_particles(const Environment& environment, int iteration) override;
 
        private:
         /**

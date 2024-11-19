@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "../src/StoermerVerlet.h"
-#include "../src/Particle.h"
-#include "../src/force.h"
+#include "../src/Environment.h"
+#include "../src/Force.h"
 #include "../src/IntegratorBase.h"
 
 
