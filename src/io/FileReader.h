@@ -1,20 +1,20 @@
-/*
- * FileReader.h
- *
- *  Created on: 23.02.2010
- *      Author: eckhardw
- */
 
 #pragma once
 
+#include <string>
+
 #include "Particle.h"
+#include "force.h"
 
 namespace md::io {
-	class FileReader final {
-	public:
-	    FileReader() = default;
-	    ~FileReader() = default;
 
-	    static std::vector<Particle> read_file(char* filename);
-	};
-}
+    /**
+     * @brief reads a txt file with particle and particle cuboid information
+     * @param file_name
+     * @param container
+     * @param force
+     */
+    void read_file_txt(const std::string& file_name, ParticleContainer& container, force::ForceFunc& force);
+
+    // void read_file_xml(const std::string& file_name, ParticleContainer& particles);
+}  // namespace md::io

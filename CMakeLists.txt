@@ -12,6 +12,21 @@ if (NOT CMAKE_BUILD_TYPE)
             "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
 
+# set optimization flags for release build
+if (CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(CMAKE_CXX_FLAGS_RELEASE "-O2" CACHE STRING "Release build optimization level" FORCE)
+endif ()
+
+# Enable AdressSanitizer for Debug builds (Continuous Integration)
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fsanitize=undefined")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+endif ()
+
+if (CMAKE_BUILD_TYPE STREQUAL "Benchmark")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+endif ()
+
 # collect all cpp files
 file(GLOB_RECURSE MY_SRC
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
@@ -20,19 +35,7 @@ file(GLOB_RECURSE MY_SRC
 )
 
 # create make target
-add_executable(MolSim ${MY_SRC}
-        src/IntegratorBase.cpp
-        src/IntegratorBase.h
-        src/StoermerVerlet.cpp
-        src/StoermerVerlet.h
-        src/io/IOStrategy.h
-        src/io/FileReader.h
-        src/io/FileReader.cpp
-        src/force.hpp
-        src/utils/Parse.cpp
-        src/utils/Parse.h
-        src/RungeKutta.h
-)
+add_executable(MolSim ${MY_SRC})
 
 # set cxx standard. You may raise this if you want.
 target_compile_features(MolSim
@@ -66,18 +69,10 @@ target_compile_options(MolSim
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
-#add Doxygen
-find_package(Doxygen)
+include(doxygen)
+include(spdlog)
+include(googletest)
 
-#option to disable creating the Doxygen target
-option(ENABLE_DOXYGEN "Creating Doxygen target" ON)
-
-if (ENABLE_DOXYGEN AND DOXYGEN_FOUND)
-    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
-
-    add_custom_target(doc_doxygen
-            ${DOXYGEN_EXECUTABLE} ${DOXYGEN_IN}
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            COMMENT "Generating Doxygen documentation"
-            VERBATIM)
-endif ()
+# Enable testing and a separate testing directory with its own CMakeLists.txt
+enable_testing()
+add_subdirectory(testing)
