@@ -93,8 +93,7 @@ namespace md {
         enum Face { LEFT, RIGHT, TOP, BOTTOM, FRONT, BACK };
         enum Extent { WIDTH, HEIGHT, DEPTH };
 
-        // TODO maybe change to -1 and add if to grid::build to skip for loops
-        // -1 would then indicate no grid
+        // TODO maybe change to -1 and add if to grid::build to skip for loops. -1 would then indicate no grid
         vec3 extent {MAX_EXTENT, MAX_EXTENT, MAX_EXTENT}; // [width, height, depth]
         std::array<Type, 6> types {};    // [left, right, top, bottom, front, back]
     };
@@ -117,6 +116,14 @@ namespace md {
         const int id;
     private:
         static int count;
+    };
+
+    struct GridCellPair {
+
+
+    private:
+        GridCell & cell1;
+        GridCell & cell2;
     };
 
     class Grid {

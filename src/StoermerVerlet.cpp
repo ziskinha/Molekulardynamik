@@ -17,7 +17,7 @@ namespace md::Integrator {
     void StoermerVerlet::simulation_step(const double dt) {
 
         // update position
-        for (auto& p : system.particles(Particle::ALIVE)) {
+        for (auto& p : system.particles()) {
             p.position = p.position + dt * p.velocity + pow(dt, 2) / (2 * p.mass) * p.old_force;
             p.update_grid();
             p.reset_force();
@@ -25,8 +25,8 @@ namespace md::Integrator {
         }
 
         // calculate forces
-        for (auto& p1 : system.particles(Particle::ALIVE)) {
-            for (auto& p2 : system.particles(Particle::ALIVE)) {
+        for (auto& p1 : system.particles()) {
+            for (auto& p2 : system.particles()) {
                 vec3 new_F = system.force(p1, p2);
                 p2.force = p2.force + new_F;
             }
@@ -47,7 +47,7 @@ namespace md::Integrator {
         // }
 
         // update velocities
-        for (auto& p : system.particles(Particle::ALIVE)) {
+        for (auto& p : system.particles()) {
             p.velocity = p.velocity + dt / 2 / p.mass * (p.force + p.old_force);
         }
     }
