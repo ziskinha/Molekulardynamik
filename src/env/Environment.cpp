@@ -48,7 +48,7 @@ namespace md {
     /// -----------------------------------------
     /// \brief Particle Class Methods
     /// -----------------------------------------
-    Particle::Particle(const size_t id, Grid& grid, const vec3& position, const vec3& velocity, const double mass, const int type)
+    Particle::Particle(const size_t id, ParticleGrid& grid, const vec3& position, const vec3& velocity, const double mass, const int type)
         : position(position), velocity(velocity), force(), old_force(), cell(), mass(mass), type(type), id(id),
           grid(grid) {
         SPDLOG_TRACE("Particle generated!");
@@ -105,12 +105,17 @@ namespace md {
         return stream.str();
     }
 
-    Grid::Grid(const Boundary& boundary)
-        : boundary(boundary) {}
 
-    void Grid::build(const vec3& extent, const double g, std::vector<Particle>& particles) {
+    void ParticleGrid::build(const vec3 & extent, const double grid_const, std::vector<Particle>& particles) {
         // TODO parameter checking
-        this->grid_constant = g;
+
+        build_cells(extent, grid_const, particles);
+        build_cell_pairs();
+
+    }
+
+    void ParticleGrid::build_cells(const vec3 & extent, const double grid_const, std::vector<Particle>& particles) {
+        grid_constant = grid_const;
 
         // number of cells along each axis
         const auto num_x = static_cast<UINT_T>(ceil(extent[0] / grid_constant));
@@ -118,12 +123,14 @@ namespace md {
         const auto num_z = static_cast<UINT_T>(ceil(extent[2] / grid_constant));
         cell_count = uint3{num_x, num_y, num_z};
 
+        // create cells
         for (size_t x = 0; x < num_x; x++) {
             for (size_t y = 0; y < num_y; y++) {
                 for (size_t z = 0; z < num_z; z++) {
                     auto type = GridCell::INNER;
-                    vec3 size = {g, g, g};
+                    vec3 size = {grid_constant, grid_constant, grid_constant};
 
+                    // TODO rather extend or shrink cell size to have uniform size
                     // cells at the boundaries my need to be truncated
                     if (x == num_x - 1 && std::fmod(extent[0], grid_constant) != 0)
                         size[0] = std::fmod(extent[0], grid_constant);
@@ -134,9 +141,9 @@ namespace md {
                     if (x == 0 || y == 0 || z == 0 || x == num_x - 1 || y == num_y - 1 || z == num_z - 1)
                         type = GridCell::BOUNDARY;
 
-                    GridCell cell = {{g * static_cast<double>(x),
-                                      g * static_cast<double>(y),
-                                      g * static_cast<double>(z)},
+                    GridCell cell = {{grid_constant * static_cast<double>(x),
+                                      grid_constant * static_cast<double>(y),
+                                      grid_constant * static_cast<double>(z)},
                                      size, type};
 
                     int3 idx = {static_cast<int64_t>(x), static_cast<int64_t>(y), static_cast<int64_t>(z)};
@@ -147,34 +154,39 @@ namespace md {
             }
         }
 
+        // create a cell representing the "outside"
         GridCell outside = {MIN_VEC3, MAX_VEC3, GridCell::OUTER};
         cells.emplace(OUTSIDE_CELL, outside);
         SPDLOG_TRACE("Grid Cell created. index: {} Cell: {}", OUTSIDE_CELL, outside.to_string());
 
+        // fill cells with particles
         for (auto& p : particles) {
             int3 idx = what_cell(p.position);
             cells.at(idx).particles.emplace(&p);
             SPDLOG_TRACE("Particle of type {} at position {} added to Cell {}", p.type, p.position, idx);
         }
     }
+    void ParticleGrid::build_cell_pairs() {
 
-    const GridCell& Grid::get_cell(const int3& idx) const {
+    }
+
+    const GridCell& ParticleGrid::get_cell(const int3& idx) const {
         return cells.at(idx);
     }
 
-    const GridCell& Grid::get_cell(const Particle& particle) const {
+    const GridCell& ParticleGrid::get_cell(const Particle& particle) const {
         return cells.at(what_cell(particle.position));
     }
 
-    GridCell& Grid::get_cell(const int3& idx) {
+    GridCell& ParticleGrid::get_cell(const int3& idx) {
         return cells.at(idx);
     }
 
-    GridCell& Grid::get_cell(const Particle& particle) {
+    GridCell& ParticleGrid::get_cell(const Particle& particle) {
         return cells.at(what_cell(particle.position));
     }
 
-    int3 Grid::what_cell(const vec3& pos) const {
+    int3 ParticleGrid::what_cell(const vec3& pos) const {
         // boundary is axis aligned
         if (pos[0] < 0 || pos[1] < 0 || pos[2] < 0) {
             return OUTSIDE_CELL;
@@ -191,7 +203,7 @@ namespace md {
         return int3{x, y, z};
     }
 
-    std::vector<int3> Grid::get_cell_indices() const {
+    std::vector<int3> ParticleGrid::get_cell_indices() const {
         std::vector<int3> keys;
         for (const auto& key : cells | std::views::keys) {
             keys.push_back(key);
@@ -199,7 +211,7 @@ namespace md {
         return keys;
     }
 
-    void Grid::update_cells(Particle* particle, const int3& old_cell, const int3& new_cell) {
+    void ParticleGrid::update_cells(Particle* particle, const int3& old_cell, const int3& new_cell) {
         if (old_cell != new_cell) {
             auto& old = cells.at(old_cell);
             auto& current = cells.at(new_cell);
@@ -218,7 +230,7 @@ namespace md {
     /// \brief System Class Methods
     /// -----------------------------------------
     Environment::Environment()
-        : grid(boundary), grid_constant(std::numeric_limits<double>::max()), initialized(false) {}
+        : grid_constant(std::numeric_limits<double>::max()), initialized(false) {}
 
     void Environment::set_force(const Force& force) {
         WARN_IF_INIT("set the force");

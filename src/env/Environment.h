@@ -18,7 +18,7 @@
 #define MAX_EXTENT std::numeric_limits<double>::max()
 
 namespace md {
-    class Grid;
+    class ParticleGrid;
     struct Particle;
 
     using vec3 = std::array<double, 3>;
@@ -57,7 +57,7 @@ namespace md {
             STATIONARY = 0x4,
         };
 
-        Particle(size_t id, Grid& grid, const vec3& position, const vec3& velocity, double mass, int type);
+        Particle(size_t id, ParticleGrid& grid, const vec3& position, const vec3& velocity, double mass, int type);
         Particle(const Particle& other);
 
         void reset_force();
@@ -76,7 +76,7 @@ namespace md {
         int type;  // < 0: stationary; == PARTICLE_TYPE_DEAD: dead; else: alive
         const size_t id;
     private:
-        Grid & grid;
+        ParticleGrid & grid;
     };
 
 
@@ -97,6 +97,8 @@ namespace md {
         vec3 extent {MAX_EXTENT, MAX_EXTENT, MAX_EXTENT}; // [width, height, depth]
         std::array<Type, 6> types {};    // [left, right, top, bottom, front, back]
     };
+
+
 
     struct GridCell {
         enum Type {
@@ -119,17 +121,17 @@ namespace md {
     };
 
     struct GridCellPair {
-
+        GridCellPair(GridCell & cell1, GridCell & cell2);
 
     private:
         GridCell & cell1;
         GridCell & cell2;
     };
 
-    class Grid {
+    class ParticleGrid {
     public:
-        explicit Grid(const Boundary & boundary);
-        void build(const vec3& extent, double grid_constant, std::vector<Particle>& particles);
+        ParticleGrid() = default;
+        void build(const vec3 & extent, double grid_const, std::vector<Particle>& particles);
         void update_cells(Particle* particle, const int3& old_cell, const int3& new_cell);
 
         GridCell& get_cell(const int3& idx);
@@ -141,8 +143,10 @@ namespace md {
         [[nodiscard]] std::vector<int3> get_cell_indices() const;
 
     private:
-        const Boundary & boundary;
+        void build_cells(const vec3 & extent, double grid_const, std::vector<Particle>& particles);
+        void build_cell_pairs();
         std::map<int3, GridCell> cells{};
+        std::vector<GridCellPair> cell_pairs{};
         uint3 cell_count {};
         double grid_constant = 0;
     };
@@ -216,7 +220,7 @@ namespace md {
 
         std::vector<Particle> particle_storage; // TODO replace vector with a vector wrapper that emulates a vector of fixed size
         Boundary boundary;
-        Grid grid;
+        ParticleGrid grid;
 
         Force force_func;
         double grid_constant;
