@@ -2,7 +2,7 @@
 #include "StoermerVerlet.h"
 #include "env/Environment.h"
 #include "io/IOStrategy.h"
-#include "Force.h"
+#include "env/Force.h"
 
 #include <iostream>
 
@@ -25,7 +25,7 @@ int main(const int argc, char* argv[]) {
     const int write_freq = std::max(static_cast<int> (round(num_steps / args.num_frames)), 1);
     SPDLOG_DEBUG("Write frequency: {}", write_freq);                            
 
-    md::Environment env;
+    md::env::Environment env;
     md::io::read_file(args.file, env);
     // env.add_particle({-1,0,0}, {1,0,0}, 1, 1);
     // env.add_particle({0,1,0}, {0,0,0}, 1, 2);

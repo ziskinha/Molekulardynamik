@@ -37,7 +37,7 @@ namespace md::io {
          * @param environment
          * @param iteration The current simulation iteration.
          */
-        virtual void plot_particles(const Environment& environment, int iteration) = 0;
+        virtual void plot_particles(const env::Environment& environment, int iteration) = 0;
 
        protected:
         const std::string file_name;
@@ -66,5 +66,5 @@ namespace md::io {
      * @param filename
      * @param environment
      */
-    void read_file(const std::string& filename, Environment& environment);
+    void read_file(const std::string& filename, env::Environment& environment);
 }  // namespace md::io

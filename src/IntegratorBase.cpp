@@ -29,7 +29,7 @@ void show_progress(const int current, const int total) {
 }
 
 namespace md::Integrator {
-    IntegratorBase::IntegratorBase(Environment& system, std::unique_ptr<io::OutputWriterBase> writer)
+    IntegratorBase::IntegratorBase(env::Environment& system, std::unique_ptr<io::OutputWriterBase> writer)
         : system(system), writer(std::move(writer)) {}
 
     void IntegratorBase::simulate(const double start_time, const double end_time, const double dt,

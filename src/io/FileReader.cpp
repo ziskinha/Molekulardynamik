@@ -1,10 +1,3 @@
-/*
- * FileReader.cpp
- *
- *  Created on: 23.02.2010
- *      Author: eckhardw
- */
-
 #include "io/FileReader.h"
 
 #include <algorithm>
@@ -15,9 +8,11 @@
 #include <sstream>
 
 #include "io/Logger.h"
-#include "Force.h"
+#include "env/Force.h"
+#include "env/Environment.h"
 
 namespace md::io {
+    using namespace env;
     // code from https://stackoverflow.com/questions/216823/how-to-trim-a-stdstring
     // trim from start (in place)
     void ltrim(std::string& s) {
@@ -141,13 +136,13 @@ namespace md::io {
         }
         try {
             if (force_name == "lennard jones") {
-                force = force::LennardJones(vals[0], vals[1]);
+                force = LennardJones(vals[0], vals[1]);
                 SPDLOG_INFO("Using Lennard Jones with parameters: epsilon={}, sigma={}", vals[0], vals[1]);
             } else if (force_name == "Hookes law") {
-                force = force::HookesLaw(vals[0], vals[1]);
+                force = HookesLaw(vals[0], vals[1]);
                 SPDLOG_INFO("Using Hookes Law with parameters: k={}, l={}", vals[0], vals[1]);
             } else if (force_name == "inverse square") {
-                force = force::InverseSquare(vals[0]);
+                force = InverseSquare(vals[0]);
                 SPDLOG_INFO("Using inverse square force with parameter: pre_factor={}", vals[0]);
             }
         } catch (std::out_of_range& e) {

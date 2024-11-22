@@ -44,7 +44,7 @@ namespace md::io {
         return std::make_unique<XYZWriter>(XYZWriter("MD_xyz", allow_delete));
     }
 
-    void read_file(const std::string& filename, Environment& environment) {
+    void read_file(const std::string& filename, env::Environment& environment) {
         if (checkFormat(filename, ".txt")) {
             return read_file_txt(filename, environment);
         }

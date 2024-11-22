@@ -25,7 +25,7 @@ namespace md::io {
         explicit VTKWriter(std::string file_base_name, bool allow_delete);
         ~VTKWriter() override;
 
-        void plot_particles(const Environment& environment, int iteration) override;
+        void plot_particles(const env::Environment& environment, int iteration) override;
 
        private:
         /**
@@ -38,7 +38,7 @@ namespace md::io {
          *
          * @note: initializeOutput() must have been called before.
          */
-        void plotParticle(const Particle& p) const;
+        void plotParticle(const env::Particle& p) const;
 
         /**
          * writes the final output file.

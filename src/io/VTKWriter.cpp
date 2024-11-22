@@ -17,6 +17,7 @@
 #include "Logger.h"
 
 namespace md::io {
+    using namespace env;
 
     VTKWriter::VTKWriter(std::string file_base_name, const bool allow_delete)
         : OutputWriterBase(std::move(file_base_name), allow_delete) {}

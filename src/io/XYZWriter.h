@@ -17,6 +17,6 @@ namespace md::io {
         explicit XYZWriter(std::string fileName, bool allow_delete);
         ~XYZWriter() override;
 
-        void plot_particles(const Environment & env, int iteration) override;
+        void plot_particles(const env::Environment & env, int iteration) override;
     };
 }  // namespace md::io

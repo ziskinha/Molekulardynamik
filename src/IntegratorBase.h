@@ -14,7 +14,7 @@ namespace md::Integrator {
          * @param environment physical system to be simulated
          * @param writer used to log/plot particle data
          */
-        IntegratorBase(Environment& environment, std::unique_ptr<io::OutputWriterBase> writer);
+        IntegratorBase(env::Environment& environment, std::unique_ptr<io::OutputWriterBase> writer);
         virtual ~IntegratorBase() = default;
 
         /**
@@ -33,7 +33,7 @@ namespace md::Integrator {
          * @param dt Δt The time increment for each simulation step.
          */
         virtual void simulation_step(double dt) = 0;
-        Environment& system;
+        env::Environment& system;
 
     private:
         std::unique_ptr<io::OutputWriterBase> writer;

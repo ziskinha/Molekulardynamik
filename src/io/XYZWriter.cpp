@@ -16,7 +16,7 @@ namespace md::io {
         : OutputWriterBase(std::move(fileName), allow_delete) {}
     XYZWriter::~XYZWriter() = default;
 
-    void XYZWriter::plot_particles(const Environment& env, int iteration) {
+    void XYZWriter::plot_particles(const env::Environment& env, int iteration) {
         std::ofstream file;
         std::stringstream strstr;
 

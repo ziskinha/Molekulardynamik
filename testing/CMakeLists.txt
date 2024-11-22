@@ -7,7 +7,7 @@ add_executable(ParticleContainerTests
 
 # Define the test executable
 add_executable(ForceTests
-        ${CMAKE_SOURCE_DIR}/src/force.h
+        ${CMAKE_SOURCE_DIR}/src/env/force.h
         ${CMAKE_SOURCE_DIR}/src/env/Environment.cpp
         ${CMAKE_SOURCE_DIR}/testing/ForceTests.cpp
         ../src/env/Environment.h
@@ -15,7 +15,7 @@ add_executable(ForceTests
 
 # Define the test executable
 add_executable(StoermerVerletTests
-        ${CMAKE_SOURCE_DIR}/src/force.h
+        ${CMAKE_SOURCE_DIR}/src/env/force.h
         ${CMAKE_SOURCE_DIR}/src/env/Environment.cpp
         ${CMAKE_SOURCE_DIR}/src/StoermerVerlet.cpp
         ${CMAKE_SOURCE_DIR}/testing/StoermerVerletTests.cpp
