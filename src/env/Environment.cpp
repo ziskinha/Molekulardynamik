@@ -43,7 +43,7 @@ namespace md::env {
     /// \brief Environment Class Methods
     /// -----------------------------------------
     Environment::Environment()
-        : grid(), grid_constant(std::numeric_limits<double>::max()), force_cutoff(0),
+        : grid_constant(std::numeric_limits<double>::max()), force_cutoff(0),
           initialized(false) {}
 
     void Environment::set_force(const Force& force) {

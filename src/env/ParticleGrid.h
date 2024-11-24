@@ -7,12 +7,10 @@
 
 #include "env/Common.h"
 #include "env/Particle.h"
+#include "utils/ContainerUtils.h"
 
 
 namespace md::env {
-
-    struct Particle;
-
     struct GridCell {
         enum Type {
             INNER = 0x1,
@@ -21,12 +19,10 @@ namespace md::env {
             INSIDE = INNER | BOUNDARY,
             ALL = INNER | BOUNDARY | OUTER
         };
-        // GridCell()
-        // : coordinate{0.0, 0.0, 0.0}, size{0.0, 0.0, 0.0}, type(ALL), id(count++) {}
 
         GridCell(const vec3& coord, const vec3& size, Type type);
         [[nodiscard]] std::string to_string() const;
-
+        bool operator==(const GridCell& other) const;
         const vec3 coordinate;
         const vec3 size;
         const Type type;
@@ -51,13 +47,17 @@ namespace md::env {
 
 
 
-    struct GridCellPair {
+    struct GridCellPair{
+        using PairIterator = utils::PairIterator<std::unordered_set<Particle*>>;
         GridCellPair(GridCell & cell1, GridCell & cell2);
 
+        PairIterator particles();
     private:
         GridCell & cell1;
         GridCell & cell2;
     };
+
+
 
     class ParticleGrid {
     public:
@@ -79,6 +79,7 @@ namespace md::env {
         std::unordered_map<int3, GridCell, Int3Hasher> cells {};
         std::vector<GridCellPair> cell_pairs{};
         uint3 cell_count {};
+        vec3 cell_size {};
         double grid_constant = 0;
     };
 }

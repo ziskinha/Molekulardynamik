@@ -66,6 +66,8 @@ namespace md::env {
             });
         }
 
+        std::vector<GridCellPair> linked_cells();
+
         Particle & operator[] (size_t id);
         const Particle & operator[] (size_t id) const;
 
