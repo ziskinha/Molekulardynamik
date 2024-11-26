@@ -18,162 +18,128 @@ namespace md::utils {
 
 
     template <typename Container>
-    class PairIterator {
-        using ContainerIt = typename Container::iterator;
-
+    class PairIterator final {
     public:
-        class Iterator {
-        public:
-            using value_type = std::pair<typename Container::value_type, typename Container::value_type>;
-            using reference = std::pair<const typename Container::value_type&, const typename Container::value_type&>;
-            using iterator_category = std::forward_iterator_tag;
+        using ContainerIt = typename Container::iterator;
+        using ResetFunction = std::function<void(Container&, Container&, ContainerIt&, ContainerIt&)>;
+        using value_type = std::pair<typename Container::value_type, typename Container::value_type>;
+        using reference = std::pair<const typename Container::value_type&, const typename Container::value_type&>;
+        using iterator_category = std::forward_iterator_tag;
 
-            Iterator(Container& inner_container, Container& outer_container, std::function<void(Iterator*)> reset)
-                : reset_inner([this, reset] { reset(this); }),
-                  inner_container(inner_container), outer_container(outer_container),
-                  inner(inner_container.begin()), outer(outer_container.begin()) {}
+        PairIterator& operator++() {
+            ++inner;
+            if (inner == inner_container.end()) {
+                increment_outer(inner_container, outer_container, inner, outer);
+            }
+            return *this;
+        }
 
-            Iterator& operator++() {
-                ++inner;
-                if (inner == inner_container.end()) {
-                    ++outer;
-                    if (outer != outer_container.end()) {
-                        reset_inner();
-                    }
+        PairIterator operator++(int) {
+            PairIterator temp = *this;
+            ++(*this);
+            return temp;
+        }
+
+        bool operator==(const PairIterator& other) const {
+            return inner == other.inner && outer == other.outer;
+        }
+
+        bool operator!=(const PairIterator& other) const {
+            return !(*this == other);
+        }
+
+        reference operator*() const {
+            return {*outer, *inner};
+        }
+
+        reference operator*() {
+            return {*outer, *inner};
+        }
+
+
+        static PairIterator CrossPairIterator(Container& inner_cont, Container& outer_cont) {
+            using iter = typename Container::iterator;
+            auto func = [](Container&cont1, Container&cont2, iter &inner, iter&outer) {
+                ++outer;
+                if (outer != cont2.end()) {
+                    inner = cont1.begin();
                 }
-                return *this;
+            };
+
+            PairIterator it (inner_cont, outer_cont, func);
+            if (inner_cont.empty() || outer_cont.empty()) {
+                it.inner = inner_cont.end();
+                it.outer = outer_cont.end();
             }
 
-            Iterator operator++(int) {
-                Iterator temp = *this;
-                ++(*this);
-                return temp;
-            }
-
-            bool operator==(const Iterator& other) const {
-                return inner == other.inner && outer == other.outer;
-            }
-
-            bool operator!=(const Iterator& other) const {
-                return !(*this == other);
-            }
-
-            reference operator*() const {
-                return {*inner, *outer};
-            }
-
-            reference operator*() {
-                return {*inner, *outer};
-            }
-
-        protected:
-            std::function<void()> reset_inner;
-            Container& inner_container;
-            Container& outer_container;
-            ContainerIt inner;
-            ContainerIt outer;
-        };
-
-        PairIterator(Container& container1, Container & container2, std::function<void(Iterator*)> reset):
-            reset_inner(reset), inner_container(container1), outer_container(container2) {}
-
-        Iterator begin() {
-            return Iterator(inner_container, outer_container, reset_inner);
-        }
-
-        Iterator end() {
-            Iterator it(inner_container, outer_container, reset_inner);
-            it.outer = outer_container.end();
-            it.inner = inner_container.end();
             return it;
         }
 
-        Iterator begin() const {
-            return Iterator(inner_container, outer_container, reset_inner);
-        }
 
-        Iterator end() const {
-            Iterator it(inner_container, outer_container, reset_inner);
-            it.outer = outer_container.end();
-            it.inner = inner_container.end();
+        static PairIterator UniquePairIterator(Container& container) {
+            using iter = typename Container::iterator;
+            auto func = [](Container&cont1, Container&cont2, iter&inner, iter&outer) {
+                ++outer;
+                if (std::next(outer) == cont2.end()) {
+                    inner = cont1.end();
+                    outer = cont2.end();
+                } else {
+                    inner = std::next(outer);
+                }
+            };
+
+
+            PairIterator it (container, container, func);
+            if (container.size() <= 1) {
+                it.inner = container.end();
+                it.outer = container.end();
+            } else {
+                ++it.inner;
+            }
+
             return it;
         }
+
+
+        static PairIterator end(Container& inner_cont, Container& outer_cont) {
+            PairIterator it (inner_cont, outer_cont, {});
+            it.inner = inner_cont.end();
+            it.outer = outer_cont.end();
+            return it;
+        }
+
 
     private:
-        std::function<void(Iterator*)> reset_inner;
+        PairIterator(Container& inner_container, Container& outer_container, ResetFunction increment_outer)
+            : inner(inner_container.begin()), outer(outer_container.begin()),
+              inner_container(inner_container), outer_container(outer_container), increment_outer(increment_outer) {}
+
+        ContainerIt inner;
+        ContainerIt outer;
+        Container& inner_container;
+        Container& outer_container;
+
+        ResetFunction increment_outer{};
+    };
+
+    template <typename Container>
+    class DualPairIterator final {
+    public:
+        DualPairIterator(Container& inner_container, Container& outer_container):
+        inner_container(inner_container), outer_container(outer_container) {}
+
+        PairIterator<Container> begin() {
+            if (inner_container == outer_container) {
+                return PairIterator<Container>::UniquePairIterator(inner_container);
+            } else {
+                return PairIterator<Container>::CrossPairIterator(inner_container, outer_container);
+            }
+        }
+        PairIterator<Container> end() {
+            return PairIterator<Container>::end(inner_container, outer_container);
+        }
+    private:
         Container& inner_container;
         Container& outer_container;
     };
-
-
-    // template <typename Container>
-    // class CrossPairIterator {
-    // public:
-    //     class Iterator final : public PairIteratorBase<Container> {
-    //     public:
-    //         using PairIteratorBase<Container>::PairIteratorBase;
-    //
-    //     protected:
-    //         void reset_inner() override {
-    //             this->inner = this->inner_container.begin();
-    //         }
-    //     };
-    //
-    //     CrossPairIterator(Container& inner_container, Container& outer_container)
-    //         : inner_container(inner_container), outer_container(outer_container) {}
-    //
-    //     Iterator begin() {
-    //         return Iterator(inner_container, outer_container);
-    //     }
-    //
-    //     Iterator end() {
-    //         Iterator it(inner_container, outer_container);
-    //         it.outer = outer_container.end();
-    //         it.inner = inner_container.end();
-    //         return it;
-    //     }
-    //
-    // private:
-    //     Container& inner_container;
-    //     Container& outer_container;
-    // };
-    //
-    //
-    // template <typename Container>
-    // class UniquePairIterator {
-    // public:
-    //     class Iterator final : public PairIteratorBase<Container> {
-    //     public:
-    //         using PairIteratorBase<Container>::PairIteratorBase;
-    //
-    //     protected:
-    //         void reset_inner() override {
-    //             this->inner = std::next(this->outer);
-    //         }
-    //     };
-    //
-    //     explicit UniquePairIterator(Container& container)
-    //         : container(container) {}
-    //
-    //     Iterator begin() {
-    //         Iterator it(container, container);
-    //         if (it.outer != container.end()) {
-    //             it.inner = std::next(it.outer); // make sure first begin is not a pair with two identical elements
-    //             if (it.inner == container.end() && ++it.outer != container.end()) {
-    //                 it.inner = std::next(it.outer);
-    //             }
-    //         }
-    //         return it;
-    //     }
-    //
-    //     Iterator end() {
-    //         Iterator it(container, container);
-    //         it.outer = container.end();
-    //         it.inner = container.end();
-    //         return it;
-    //     }
-    //
-    // private:
-    //     Container& container;
-    // };
 }

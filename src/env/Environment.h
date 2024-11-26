@@ -13,6 +13,9 @@
 #include "Boundary.h"
 
 
+#define GRID_CONSTANT_AUTO (-1)
+
+
 namespace md::env {
     struct ParticleCreateInfo {
         ParticleCreateInfo(const vec3& position, const vec3& velocity, double mass, int type = 0);
@@ -44,7 +47,6 @@ namespace md::env {
         void build();
         void set_grid_constant(double g);
         void set_force(const Force& force);
-        void set_force_cutoff(double cutoff_radius);
         void set_boundary(const Boundary& boundary);
         void add_particle(const vec3& position, const vec3& velocity, double mass, int type = 0);
         void add_particles(const std::vector<ParticleCreateInfo>& particles);
@@ -66,7 +68,9 @@ namespace md::env {
             });
         }
 
-        std::vector<GridCellPair> linked_cells();
+        std::vector<GridCellPair> & linked_cells();
+        std::vector<GridCell> cells();
+
 
         Particle & operator[] (size_t id);
         const Particle & operator[] (size_t id) const;
@@ -84,7 +88,6 @@ namespace md::env {
 
         Force force_func;
         double grid_constant;
-        double force_cutoff;
         bool initialized;
     };
 }

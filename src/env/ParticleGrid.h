@@ -48,10 +48,12 @@ namespace md::env {
 
 
     struct GridCellPair{
-        using PairIterator = utils::PairIterator<std::unordered_set<Particle*>>;
-        GridCellPair(GridCell & cell1, GridCell & cell2);
+        using ParticlePairIterator = utils::DualPairIterator<std::unordered_set<Particle*>>;
 
-        PairIterator particles();
+        GridCellPair(GridCell & cell1, GridCell & cell2);
+        [[nodiscard]] bool empty() const;
+        [[nodiscard]] ParticlePairIterator particles() const;
+        [[nodiscard]] std::string to_string() const;
     private:
         GridCell & cell1;
         GridCell & cell2;
@@ -62,24 +64,31 @@ namespace md::env {
     class ParticleGrid {
     public:
         ParticleGrid() = default;
-        void build(const vec3 & extent, double grid_const, std::vector<Particle>& particles, double force_cutoff);
-        void update_cells(Particle* particle, const int3& old_cell, const int3& new_cell);
+        void build(const vec3 & extent, double grid_const, std::vector<Particle>& particles,
+            double force_cutoff, const vec3 & origin);
 
         GridCell& get_cell(const int3& idx);
         GridCell& get_cell(const Particle & particle);
 
         [[nodiscard]] const GridCell& get_cell(const int3& idx) const;
         [[nodiscard]] const GridCell& get_cell(const Particle & particle) const;
-        [[nodiscard]] int3 what_cell(const vec3& pos) const;
+        [[nodiscard]] int3 what_cell(const vec3& position) const;
         [[nodiscard]] std::vector<int3> get_cell_indices() const;
 
+        std::vector<GridCellPair> & linked_cells();
+        std::vector<GridCell> grid_cells();
+
+        void update_cells(Particle* particle, const int3& old_cell, const int3& new_cell);
+
     private:
-        void build_cells(const vec3 & extent, double grid_const, std::vector<Particle>& particles);
+        void build_cells(const vec3 & extent, double grid_constant, std::vector<Particle>& particles);
         void build_cell_pairs(double force_cutoff);
+
         std::unordered_map<int3, GridCell, Int3Hasher> cells {};
         std::vector<GridCellPair> cell_pairs{};
+
         uint3 cell_count {};
         vec3 cell_size {};
-        double grid_constant = 0;
+        vec3 boundary_origin = {};
     };
 }

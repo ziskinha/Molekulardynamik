@@ -21,25 +21,23 @@ namespace md::Integrator {
             p.position = p.position + dt * p.velocity + pow(dt, 2) / (2 * p.mass) * p.old_force;
             p.update_grid();
             p.reset_force();
-
         }
 
-        // calculate forces
-        for (auto& p1 : system.particles()) {
-            for (auto& p2 : system.particles()) {
-                vec3 new_F = system.force(p1, p2);
-                p2.force = p2.force + new_F;
-            }
-        }
-
-        // for (auto& cell_pair : system.linked_cells()) {
-        //     for (auto& [p1, p2] : cell_pair.particles()) {
+        // for (auto& p1 : system.particles()) {
+        //     for (auto& p2 : system.particles()) {
         //         vec3 new_F = system.force(p1, p2);
-        //
         //         p2.force = p2.force + new_F;
-        //         p1.force = p1.force - new_F;
         //     }
         // }
+
+        // calculate forces
+        for (auto& cell_pair : system.linked_cells()) {
+            for (auto [p1, p2] : cell_pair.particles()) {
+                vec3 new_F = system.force(*p1, *p2);
+                p2->force = p2->force + new_F;
+                p1->force = p1->force - new_F;
+            }
+        }
 
         // boundary conditions
         // for (auto & particle : system.particles(Particle::ALIVE, GridCell::BOUNDARY)) {

@@ -43,16 +43,16 @@ namespace md::env {
     /// \brief Environment Class Methods
     /// -----------------------------------------
     Environment::Environment()
-        : grid_constant(std::numeric_limits<double>::max()), force_cutoff(0),
+        : force_func(NoForce()),grid_constant(GRID_CONSTANT_AUTO),
           initialized(false) {}
 
+
+    /// -----------------------------------------
+    /// \brief Methods for environment setup
+    /// -----------------------------------------
     void Environment::set_force(const Force& force) {
         WARN_IF_INIT("set the force");
         this->force_func = force;
-    }
-
-    void Environment::set_force_cutoff(const double cutoff_radius) {
-        force_cutoff = cutoff_radius;
     }
 
     void Environment::set_grid_constant(const double g) {
@@ -101,16 +101,44 @@ namespace md::env {
 
     void Environment::build() {
         // TODO check parameters
-        grid.build(boundary.extent, grid_constant, particle_storage, force_func.cutoff());
+        if (initialized) {
+            SPDLOG_WARN("Environment is already initialized!");
+            return;
+        }
+
+        if (grid_constant > 0 && grid_constant <= force_func.cutoff()) {
+            SPDLOG_WARN("Grid constant is smaller than force cutoff, which will result in potentially worse run times and simulation errors if boundary is chosen as open. "
+                        "Are you sure you setup the environment correctly?");
+        }
+        if (grid_constant < 0 && grid_constant != GRID_CONSTANT_AUTO) {
+            SPDLOG_WARN("Grid constant is negative. Will default to use GRID_CONSTANT_AUTO. "
+                        "Are you sure you setup the environment correctly?");
+        }
+
+        if (grid_constant == GRID_CONSTANT_AUTO) grid_constant = force_func.cutoff();
+        grid.build(boundary.extent, grid_constant, particle_storage, force_func.cutoff(), boundary.origin);
         initialized = true;
     }
 
+
+    /// -----------------------------------------
+    /// \brief Methods for interacting with the environment
+    /// -----------------------------------------
     vec3 Environment::force(const Particle& p1, const Particle& p2) const {
         return force_func(p1, p2);
     }
 
     size_t Environment::size(Particle::State) const {
+        // todo: query number of particles in a given state
         return particle_storage.size();
+    }
+
+    std::vector<GridCellPair>& Environment::linked_cells() {
+        return grid.linked_cells();
+    }
+
+    std::vector<GridCell> Environment::cells() {
+        return grid.grid_cells();
     }
 
     Particle& Environment::operator[](const size_t id) {
