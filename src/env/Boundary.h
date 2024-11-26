@@ -4,6 +4,7 @@
 #include "Common.h"
 
 #define MAX_EXTENT std::numeric_limits<double>::max()
+#define CENTER_BOUNDARY_ORIGIN std::numeric_limits<double>::max()
 
 namespace md::env {
     struct Boundary {
@@ -21,6 +22,6 @@ namespace md::env {
 
         vec3 extent {MAX_EXTENT, MAX_EXTENT, MAX_EXTENT}; // [width, height, depth]
         Types types {OUTFLOW, OUTFLOW, OUTFLOW, OUTFLOW, OUTFLOW, OUTFLOW}; // [left, right, top, bottom, front, back]
-        vec3 origin {-MAX_EXTENT/2, -MAX_EXTENT/2, -MAX_EXTENT/2};
+        vec3 origin {CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN};
     };
 }

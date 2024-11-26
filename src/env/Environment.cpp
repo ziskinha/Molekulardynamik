@@ -129,6 +129,13 @@ namespace md::env {
                 SPDLOG_DEBUG("Using GRID_CONSTANT_AUTO. Grid constant set to force cutoff: {}", grid_constant);
             }
         }
+
+        for (int i = 0; i < 3; i++) {
+            if (boundary.origin[i] == CENTER_BOUNDARY_ORIGIN) {
+                boundary.extent[i] = - boundary.extent[i]/2;
+            }
+        }
+
         grid.build(boundary.extent, grid_constant, particle_storage, boundary.origin);
         initialized = true;
     }

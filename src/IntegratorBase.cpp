@@ -30,7 +30,7 @@ void show_progress(const int current, const int total) {
 
 namespace md::Integrator {
     IntegratorBase::IntegratorBase(env::Environment& system, std::unique_ptr<io::OutputWriterBase> writer)
-        : system(system), writer(std::move(writer)) {}
+        : environment(system), writer(std::move(writer)) {}
 
     void IntegratorBase::simulate(const double start_time, const double end_time, const double dt,
                                   const unsigned int write_freq, const bool benchmark) {
@@ -55,7 +55,7 @@ namespace md::Integrator {
                 spdlog::set_level(spdlog::level::info);
                 SPDLOG_INFO("Finished {}. benchmark simulation, out of {}", k, repetitions);
                 SPDLOG_INFO("Execution time: {} milliseconds", duration);
-                SPDLOG_INFO("Number of particles: {}", system.size());
+                SPDLOG_INFO("Number of particles: {}", environment.size());
                 SPDLOG_INFO("Number of steps: {}", total_steps);
                 duration_sum += duration;
             }
@@ -67,7 +67,7 @@ namespace md::Integrator {
                 if (i % write_freq == 0) {
                     if (writer != nullptr) {
                         SPDLOG_DEBUG("Plotting particles @ iteration {}, time {}", i, t);
-                        writer->plot_particles(system, i);
+                        writer->plot_particles(environment, i);
                     }
                 }
 

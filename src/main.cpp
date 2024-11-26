@@ -7,7 +7,6 @@
 #include "env/Force.h"
 
 
-
 using namespace md;
 int main(const int argc, char* argv[]) {
     io::Logger::initialize_logger();
