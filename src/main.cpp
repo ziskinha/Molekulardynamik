@@ -2,7 +2,7 @@
 
 #include "io/IOStrategy.h"
 #include "utils/Parse.h"
-#include "StoermerVerlet.h"
+#include "core/StoermerVerlet.h"
 #include "env/Environment.h"
 #include "env/Force.h"
 

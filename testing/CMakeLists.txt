@@ -17,9 +17,9 @@ add_executable(ForceTests
 add_executable(StoermerVerletTests
         ${CMAKE_SOURCE_DIR}/src/env/force.h
         ${CMAKE_SOURCE_DIR}/src/env/Environment.cpp
-        ${CMAKE_SOURCE_DIR}/src/StoermerVerlet.cpp
+        ${CMAKE_SOURCE_DIR}/src/core/StoermerVerlet.cpp
         ${CMAKE_SOURCE_DIR}/testing/StoermerVerletTests.cpp
-        ${CMAKE_SOURCE_DIR}/src/IntegratorBase.cpp
+        ${CMAKE_SOURCE_DIR}/src/core/IntegratorBase.cpp
         ../src/env/Environment.h
 )
 

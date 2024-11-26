@@ -73,7 +73,7 @@ namespace md::Integrator {
                 }
 
                 // TODO: decide how to handle
-                //show_progress(i, total_steps);
+                show_progress(i, total_steps);
             }
         }
 
