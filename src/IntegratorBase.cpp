@@ -4,6 +4,7 @@
 #include <chrono>
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 
 #include "io/Logger.h"
 
@@ -71,11 +72,11 @@ namespace md::Integrator {
                     }
                 }
 
-                show_progress(i, total_steps);
+                // TODO: decide how to handle
+                //show_progress(i, total_steps);
             }
         }
 
-        std::cout << "" << std::endl;
         SPDLOG_INFO("Simulation ended");
     }
 }  // namespace md::Integrator
