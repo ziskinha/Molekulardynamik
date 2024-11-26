@@ -1,23 +1,26 @@
 # Define the test executable
 add_executable(ParticleContainerTests
-        ${CMAKE_SOURCE_DIR}/src/Particle.cpp
+        ${CMAKE_SOURCE_DIR}/src/env/Environment.cpp
         ${CMAKE_SOURCE_DIR}/testing/ParticleContainerTests.cpp
+        ../src/env/Environment.h
 )
 
 # Define the test executable
 add_executable(ForceTests
-        ${CMAKE_SOURCE_DIR}/src/force.h
-        ${CMAKE_SOURCE_DIR}/src/Particle.cpp
+        ${CMAKE_SOURCE_DIR}/src/env/force.h
+        ${CMAKE_SOURCE_DIR}/src/env/Environment.cpp
         ${CMAKE_SOURCE_DIR}/testing/ForceTests.cpp
+        ../src/env/Environment.h
 )
 
 # Define the test executable
 add_executable(StoermerVerletTests
-        ${CMAKE_SOURCE_DIR}/src/force.h
-        ${CMAKE_SOURCE_DIR}/src/Particle.cpp
+        ${CMAKE_SOURCE_DIR}/src/env/force.h
+        ${CMAKE_SOURCE_DIR}/src/env/Environment.cpp
         ${CMAKE_SOURCE_DIR}/src/StoermerVerlet.cpp
         ${CMAKE_SOURCE_DIR}/testing/StoermerVerletTests.cpp
         ${CMAKE_SOURCE_DIR}/src/IntegratorBase.cpp
+        ../src/env/Environment.h
 )
 
 #include directories to test executables
