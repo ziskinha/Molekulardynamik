@@ -1,12 +1,9 @@
 #pragma once
 
+#include <limits>
 #include "Common.h"
 
-// #define BOUNDARY_OUTFLOW 1
-// #define BOUNDARY_REFLECTIVE_SYMMETRIC 2
-// #define BOUNDARY_REFLECTIVE_VECTOR 3
-// #define BOUNDARY_REFLECTIVE_REPULSIVE 4
-
+#define MAX_EXTENT std::numeric_limits<double>::max()
 
 namespace md::env {
     struct Boundary {
@@ -14,7 +11,8 @@ namespace md::env {
             OUTFLOW,
             REFLECTIVE_SYMMETRIC,
             REFLECTIVE_VECTOR,
-            REFLECTIVE_REPULSIVE
+            REFLECTIVE_REPULSIVE,
+            PERIODIC
         };
         using Types = std::array<Type, 6>;
 
@@ -22,7 +20,7 @@ namespace md::env {
         enum Extent { WIDTH, HEIGHT, DEPTH };
 
         vec3 extent {MAX_EXTENT, MAX_EXTENT, MAX_EXTENT}; // [width, height, depth]
-        Types types {};    // [left, right, top, bottom, front, back]
-        vec3 origin {0,0};
+        Types types {OUTFLOW, OUTFLOW, OUTFLOW, OUTFLOW, OUTFLOW, OUTFLOW}; // [left, right, top, bottom, front, back]
+        vec3 origin {-MAX_EXTENT/2, -MAX_EXTENT/2, -MAX_EXTENT/2};
     };
 }

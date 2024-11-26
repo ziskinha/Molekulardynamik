@@ -10,7 +10,6 @@ namespace md::env {
         enum State {
             ALIVE = 0x1,
             DEAD = 0x2,
-            STATIONARY = 0x4,
         };
 
         Particle(size_t id, ParticleGrid& grid, const vec3& position, const vec3& velocity, double mass, int type);
@@ -29,8 +28,9 @@ namespace md::env {
         int3 cell;
 
         double mass;
-        int type;  // < 0: stationary; == PARTICLE_TYPE_DEAD: dead; else: alive
+        int type;
         const size_t id;
+        State state;
     private:
         ParticleGrid & grid;
     };

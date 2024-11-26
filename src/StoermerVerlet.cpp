@@ -4,6 +4,7 @@
 
 #include "StoermerVerlet.h"
 
+#include <iostream>
 #include <utility>
 
 #include "io/Logger.h"
@@ -27,6 +28,7 @@ namespace md::Integrator {
         for (auto& cell_pair : system.linked_cells()) {
             for (auto [p1, p2] : cell_pair.particles()) {
                 vec3 new_F = system.force(*p1, *p2);
+
                 p2->force = p2->force + new_F;
                 p1->force = p1->force - new_F;
             }

@@ -105,20 +105,29 @@ namespace md::env {
             SPDLOG_WARN("Environment is already initialized!");
             return;
         }
+        // check if boundary is ok
+        if (boundary.extent[0] < 0 || boundary.extent[1] < 0 || boundary.extent[2] < 0) {
+            SPDLOG_ERROR("Boundary extents must be non-negative.");
+            throw std::invalid_argument("Boundary extents must be non-negative.");
+        }
 
+        // check if grid constant is ok
         if (grid_constant > 0 && grid_constant <= force_func.cutoff()) {
             SPDLOG_WARN("Grid constant is smaller than force cutoff. Will default to use GRID_CONSTANT_AUTO."
                         "Are you sure you setup the environment correctly?");
             grid_constant = force_func.cutoff();
         }
-        if (grid_constant < 0 && grid_constant != GRID_CONSTANT_AUTO) {
-            SPDLOG_WARN("Grid constant is negative. Will default to use GRID_CONSTANT_AUTO. "
-                        "Are you sure you setup the environment correctly?");
+        if (grid_constant < 0) {
+            SPDLOG_ERROR("Grid constant is negative. Will default to use GRID_CONSTANT_AUTO.");
+            throw std::invalid_argument("Grid constant is negative.");
         }
-
         if (grid_constant == GRID_CONSTANT_AUTO) {
-            grid_constant = force_func.cutoff();
-            SPDLOG_DEBUG("Using GRID_CONSTANT_AUTO. Grid constant set to force cutoff: {}", grid_constant);
+            if (boundary.extent[0] == MAX_EXTENT && boundary.extent[1] == MAX_EXTENT && boundary.extent[2] == MAX_EXTENT) {
+                grid_constant = MAX_EXTENT;
+            } else {
+                grid_constant = force_func.cutoff();
+                SPDLOG_DEBUG("Using GRID_CONSTANT_AUTO. Grid constant set to force cutoff: {}", grid_constant);
+            }
         }
         grid.build(boundary.extent, grid_constant, particle_storage, boundary.origin);
         initialized = true;
@@ -153,11 +162,8 @@ namespace md::env {
         return particle_storage[id];
     }
 
-    bool Environment::filter_particles(const Particle& particle, const Particle::State state,
-                                       const GridCell::Type type) const {
-        const bool state_ok = (particle.type == PARTICLE_TYPE_DEAD && state & Particle::DEAD) ||
-                              (particle.type < 0 && state & Particle::STATIONARY) ||
-                              (particle.type >= 0 && particle.type != PARTICLE_TYPE_DEAD && state & Particle::ALIVE);
+    bool Environment::filter_particles(const Particle& particle, const Particle::State state, const GridCell::Type type) const {
+        const bool state_ok = particle.state & state;
         const bool location_ok = grid.get_cell(particle).type & type;
         return state_ok && location_ok;
     }

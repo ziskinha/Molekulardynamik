@@ -22,8 +22,8 @@ namespace md::env {
     /// -----------------------------------------
     /// \brief Gridcell methods
     /// -----------------------------------------
-    GridCell::GridCell(const vec3& coord, const vec3& size, const Type type)
-        : coordinate(coord), size(size), type(type), id(count++) {}
+    GridCell::GridCell(const vec3& coord, const vec3& size, const Type type, const int3& idx)
+        : coordinate(coord), size(size), type(type), id(count++), idx(idx) {}
 
     std::string GridCell::to_string() const {
         std::stringstream stream;
@@ -61,17 +61,16 @@ namespace md::env {
         return stream.str();
     }
 
-
+    std::pair<int, int> GridCellPair::id() const {
+        return {cell1.id, cell2.id};
+    }
 
 
     /// -----------------------------------------
     /// \brief ParticleGrid initilization methods
     /// -----------------------------------------
     void ParticleGrid::build(const vec3 & extent, const double grid_const, std::vector<Particle>& particles, const vec3 & origin) {
-        // TODO parameter checking
-
         this->boundary_origin = origin;
-
         build_cells(extent, grid_const, particles);
         build_cell_pairs();
     }
@@ -94,12 +93,12 @@ namespace md::env {
                         type = GridCell::BOUNDARY;
                     }
 
+                    int3 idx = {static_cast<INT_T>(x),static_cast<INT_T>(y),static_cast<INT_T>(z)};
                     GridCell cell = {{cell_size[0] * static_cast<double>(x),
                                       cell_size[1] * static_cast<double>(y),
                                       cell_size[2] * static_cast<double>(z)},
-                                     cell_size, type};
+                                     cell_size, type, idx};
 
-                    int3 idx = {static_cast<INT_T>(x),static_cast<INT_T>(y),static_cast<INT_T>(z)};
                     cells.emplace(idx, cell);
 
                     SPDLOG_TRACE("Grid Cell created. index: {} Cell: {}", idx, cell.to_string());
@@ -108,7 +107,7 @@ namespace md::env {
         }
 
         // create a cell representing the "outside"
-        GridCell outside = {MIN_VEC3, MAX_VEC3, GridCell::OUTER};
+        GridCell outside = {MIN_VEC3, MAX_VEC3, GridCell::OUTER, OUTSIDE_CELL};
         cells.emplace(OUTSIDE_CELL, outside);
         SPDLOG_TRACE("Grid Cell created. index: {} Cell: {}", OUTSIDE_CELL, outside.to_string());
 
@@ -116,6 +115,7 @@ namespace md::env {
         for (auto& p : particles) {
             int3 idx = what_cell(p.position);
             cells.at(idx).particles.emplace(&p);
+            p.cell = idx;
             SPDLOG_TRACE("Particle of type {} at position {} added to Cell {}", p.type, p.position, idx);
         }
     }
@@ -223,10 +223,6 @@ namespace md::env {
 
             old.particles.erase(particle);
             current.particles.insert(particle);
-
-            if (current.type == GridCell::OUTER) {
-                //TODO set particle state dead
-            }
 
             SPDLOG_TRACE("Particle at {} changed cells from {} to {}", particle->position, old_cell, new_cell);
         }

@@ -20,7 +20,7 @@ namespace md::env {
             ALL = INNER | BOUNDARY | OUTER
         };
 
-        GridCell(const vec3& coord, const vec3& size, Type type);
+        GridCell(const vec3& coord, const vec3& size, Type type, const int3& idx);
         [[nodiscard]] std::string to_string() const;
         bool operator==(const GridCell& other) const;
         const vec3 coordinate;
@@ -28,6 +28,7 @@ namespace md::env {
         const Type type;
         std::unordered_set<Particle*> particles{};
         int id;
+        int3 idx; // for debugging purposes
     private:
         static int count;
     };
@@ -52,6 +53,8 @@ namespace md::env {
         [[nodiscard]] bool empty() const;
         [[nodiscard]] ParticlePairIterator particles() const;
         [[nodiscard]] std::string to_string() const;
+        [[nodiscard]] std::pair<int, int> id() const;
+
     private:
         GridCell & cell1;
         GridCell & cell2;

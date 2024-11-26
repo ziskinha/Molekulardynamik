@@ -13,7 +13,7 @@
 #include "Boundary.h"
 
 
-#define GRID_CONSTANT_AUTO (-1)
+#define GRID_CONSTANT_AUTO 0
 
 
 namespace md::env {

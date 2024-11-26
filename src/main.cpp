@@ -21,9 +21,9 @@ int main(const int argc, char* argv[]) {
 
     log_arguments(args);
 
-    args.duration = 100;
-    args.dt = 0.001;
-    args.num_frames = 1000;
+    // args.duration = 100;
+    // args.dt = 0.001;
+    // args.num_frames = 1000;
     const double num_steps = args.duration / args.dt;
     const int write_freq = std::max(static_cast<int> (round(num_steps / args.num_frames)), 1);
     SPDLOG_DEBUG("Write frequency: {}", write_freq);                            
@@ -31,28 +31,29 @@ int main(const int argc, char* argv[]) {
 
     env::Environment env;
     // io::read_file(args.file, env);
-    env.add_particle({0,1,0}, {-1,0,0}, 3.0e-6, 1);
-    env.add_particle({0,0,0}, {0,0,0}, 1, 2);
-    // env.add_particle({1,0,0}, {0,0,0}, 1, 3);
-    // env.add_particle({1,1,0}, {0,0,0}, 1, 4);
-    // env.add_particle({2,2,0}, {0,0,0}, 1, 5);
-    // env.add_cuboid({-2,-2,0}, {1,1,0}, {40,40,1}, 0, 0.1, 1, 2);
+    // env.add_particle({0,1,0}, {-1,0,0}, 3.0e-6, 1);
+    // env.add_particle({0,0,0}, {0,0,0}, 1, 2);
+
+
+    // env.add_particle({-9,0,0}, {5,0,0}, 1, 1);
+    // env.add_particle({9,0,0}, {-5,0,0}, 1, 2);
+    // env::Boundary boundary;
+    // boundary.extent = {20, 20, 1};
+    // boundary.origin = {-10, -10, 0};
+    // env.set_boundary(boundary);
+    // env.set_force(env::LennardJones(5, 1, 3));
+
+
+
+    env.add_cuboid({0,0,0}, {0,0,0}, {40,8,1}, 0.1, 1.1225, 1, 2, 0);
+    env.add_cuboid({15,15,0}, {0,-10,0}, {8,8,1}, 0.1, 1.1225, 1, 2, 1);
 
     env::Boundary boundary;
-    boundary.extent = {6,6,1};
-    boundary.types = {
-        env::Boundary::OUTFLOW,
-        env::Boundary::OUTFLOW,
-        env::Boundary::OUTFLOW,
-        env::Boundary::OUTFLOW,
-        env::Boundary::OUTFLOW,
-        env::Boundary::OUTFLOW
-    };
-    boundary.origin = {-2,-2, 0};
+    boundary.extent = {100, 100, 1};
+    boundary.origin = {-10, -10, 0};
     env.set_boundary(boundary);
-
-    // env.set_grid_constant();
-    env.set_force(env::InverseSquare(1, 1.5));
+    env.set_grid_constant(10);
+    env.set_force(env::LennardJones(5, 1, 5));
 
     env.build();
 
@@ -64,20 +65,20 @@ int main(const int argc, char* argv[]) {
         std::cout << "Cell: " << x.to_string() << std::endl;
     }
 
-    for (const auto & cell_pair : env.linked_cells()) {
-        std::cout << "Cell pair: " << cell_pair.to_string() << std::endl;
-    }
+    // for (const auto & cell_pair : env.linked_cells()) {
+    //     std::cout << "Cell pair: " << cell_pair.to_string() << std::endl;
+    // }
 
     std::cout << "build done" << std::endl;
 
-    for (auto& cell_pair : env.linked_cells()) {
-
-        for (auto it = cell_pair.particles().begin(); it != cell_pair.particles().end(); ++it) {
-            auto [p1, p2] = *it;
-             std::cout << "particle pair ids: " << p1->id << ", " << p2->id << " Positions: " << p1->position << ", " << p2->position << std::endl;
-
-        }
-    }
+    // for (auto& cell_pair : env.linked_cells()) {
+    //
+    //     for (auto it = cell_pair.particles().begin(); it != cell_pair.particles().end(); ++it) {
+    //         auto [p1, p2] = *it;
+    //          std::cout << "particle pair ids: " << p1->id << ", " << p2->id << " Positions: " << p1->position << ", " << p2->position << std::endl;
+    //
+    //     }
+    // }
 
     Integrator::StoermerVerlet simulator(env, create_writer(args.output_format, args.override));
     simulator.simulate(0, args.duration, args.dt, write_freq, args.benchmark);

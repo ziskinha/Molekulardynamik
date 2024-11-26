@@ -8,7 +8,6 @@
 #define UINT_T uint32_t
 #define INT_T int32_t
 #define PARTICLE_TYPE_DEAD std::numeric_limits<int>::max()
-#define MAX_EXTENT std::numeric_limits<double>::max()
 
 namespace md {
     using vec3 = std::array<double, 3>;
