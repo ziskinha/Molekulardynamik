@@ -21,24 +21,25 @@ int main(const int argc, char* argv[]) {
 
     log_arguments(args);
 
-    args.duration = 1000;
-    args.dt = 0.014;
+    args.duration = 100;
+    args.dt = 0.001;
     args.num_frames = 1000;
     const double num_steps = args.duration / args.dt;
     const int write_freq = std::max(static_cast<int> (round(num_steps / args.num_frames)), 1);
     SPDLOG_DEBUG("Write frequency: {}", write_freq);                            
 
+
     env::Environment env;
-    io::read_file(args.file, env);
-    // env.add_particle({-1,0,0}, {1,0,0}, 1, 1);
-    // env.add_particle({0,1,0}, {0,0,0}, 1, 2);
+    // io::read_file(args.file, env);
+    env.add_particle({0,1,0}, {-1,0,0}, 3.0e-6, 1);
+    env.add_particle({0,0,0}, {0,0,0}, 1, 2);
     // env.add_particle({1,0,0}, {0,0,0}, 1, 3);
     // env.add_particle({1,1,0}, {0,0,0}, 1, 4);
     // env.add_particle({2,2,0}, {0,0,0}, 1, 5);
     // env.add_cuboid({-2,-2,0}, {1,1,0}, {40,40,1}, 0, 0.1, 1, 2);
 
     env::Boundary boundary;
-    boundary.extent = {80,80,1};
+    boundary.extent = {6,6,1};
     boundary.types = {
         env::Boundary::OUTFLOW,
         env::Boundary::OUTFLOW,
@@ -47,10 +48,11 @@ int main(const int argc, char* argv[]) {
         env::Boundary::OUTFLOW,
         env::Boundary::OUTFLOW
     };
-    boundary.origin = {-10,-10, 0};
+    boundary.origin = {-2,-2, 0};
     env.set_boundary(boundary);
 
-    env.set_force(env::InverseSquare(1, 40));
+    // env.set_grid_constant();
+    env.set_force(env::InverseSquare(1, 1.5));
 
     env.build();
 
@@ -69,10 +71,8 @@ int main(const int argc, char* argv[]) {
     std::cout << "build done" << std::endl;
 
     for (auto& cell_pair : env.linked_cells()) {
-        // bool show = false;
 
-        auto it = cell_pair.particles().begin();
-        for (; it != cell_pair.particles().end(); ++it) {
+        for (auto it = cell_pair.particles().begin(); it != cell_pair.particles().end(); ++it) {
             auto [p1, p2] = *it;
              std::cout << "particle pair ids: " << p1->id << ", " << p2->id << " Positions: " << p1->position << ", " << p2->position << std::endl;
 

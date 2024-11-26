@@ -32,8 +32,6 @@ namespace md::env {
         static int count;
     };
 
-
-
     // Enable bitwise operations for GridCell::Type
     constexpr GridCell::Type operator|(const GridCell::Type lhs, const GridCell::Type rhs) {
         using T = std::underlying_type_t<GridCell::Type>;
@@ -64,8 +62,7 @@ namespace md::env {
     class ParticleGrid {
     public:
         ParticleGrid() = default;
-        void build(const vec3 & extent, double grid_const, std::vector<Particle>& particles,
-            double force_cutoff, const vec3 & origin);
+        void build(const vec3 & extent, double grid_const, std::vector<Particle>& particles, const vec3 & origin);
 
         GridCell& get_cell(const int3& idx);
         GridCell& get_cell(const Particle & particle);
@@ -82,7 +79,7 @@ namespace md::env {
 
     private:
         void build_cells(const vec3 & extent, double grid_constant, std::vector<Particle>& particles);
-        void build_cell_pairs(double force_cutoff);
+        void build_cell_pairs();
 
         std::unordered_map<int3, GridCell, Int3Hasher> cells {};
         std::vector<GridCellPair> cell_pairs{};

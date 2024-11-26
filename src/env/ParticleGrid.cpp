@@ -41,8 +41,6 @@ namespace md::env {
     /// -----------------------------------------
     /// \brief Gridcellpair methods
     /// -----------------------------------------
-
-
     GridCellPair::GridCellPair(GridCell & cell1, GridCell & cell2):cell1(cell1), cell2(cell2) {
 
     }
@@ -66,17 +64,16 @@ namespace md::env {
 
 
 
-
     /// -----------------------------------------
     /// \brief ParticleGrid initilization methods
     /// -----------------------------------------
-    void ParticleGrid::build(const vec3 & extent, const double grid_const, std::vector<Particle>& particles, const double force_cutoff, const vec3 & origin) {
+    void ParticleGrid::build(const vec3 & extent, const double grid_const, std::vector<Particle>& particles, const vec3 & origin) {
         // TODO parameter checking
 
         this->boundary_origin = origin;
 
         build_cells(extent, grid_const, particles);
-        build_cell_pairs(force_cutoff);
+        build_cell_pairs();
     }
 
     void ParticleGrid::build_cells(const vec3 & extent, const double grid_constant, std::vector<Particle>& particles) {
@@ -123,32 +120,35 @@ namespace md::env {
         }
     }
 
-    void ParticleGrid::build_cell_pairs(const double force_cutoff) {
-        const UINT_T cutoff_x = std::min(cell_count[0], static_cast<UINT_T>(floor(force_cutoff / cell_size[0])));
-        const UINT_T cutoff_y = std::min(cell_count[1], static_cast<UINT_T>(floor(force_cutoff / cell_size[1])));
-        const UINT_T cutoff_z = std::min(cell_count[2], static_cast<UINT_T>(floor(force_cutoff / cell_size[2])));
-
-        std::vector<int3> indices;
-        indices.reserve(cell_count[0] * cell_count[1] * cell_count[2]);
-        // not a particularly fast method but since this is precomputed prior to simulation it doesnt matter that much
-        // although it should probably be improved
-        // TODO optimize cell pair generation
-        for (UINT_T x = 0; x < cell_count[0]; x++) {
-            for (UINT_T y = 0; y < cell_count[1]; y++) {
-                for (UINT_T z = 0; z < cell_count[2]; z++) {
-                    indices.push_back({static_cast<INT_T>(x),static_cast<INT_T>(y),static_cast<INT_T>(z)});
+    void ParticleGrid::build_cell_pairs() {
+        std::vector<int3> displacements;
+        for (INT_T dx = -1; dx <= 1; dx++) {
+            for (INT_T dy = -1; dy <= 1; dy++) {
+                for (INT_T dz = -1; dz <= 1; dz++) {
+                    if (dx == 0 && dy == 0 && dz == 0) continue;
+                    displacements.push_back({dx, dy, dz});
                 }
             }
         }
 
-        for (size_t i = 0; i < indices.size(); i++) {
-            for (size_t j = i; j < indices.size(); j++) {
-                const int3 idx1 = indices[i];
-                const int3 idx2 = indices[j];
-                if (abs(idx1[0] - idx2[0]) <=  static_cast<INT_T>(cutoff_x) &&
-                    abs(idx1[1] - idx2[1]) <=  static_cast<INT_T>(cutoff_y) &&
-                    abs(idx1[2] - idx2[2]) <=  static_cast<INT_T>(cutoff_z)) {
-                    cell_pairs.emplace_back(cells.at(idx1), cells.at(idx2));
+        for (UINT_T x = 0; x < cell_count[0]; x++) {
+            for (UINT_T y = 0; y < cell_count[1]; y++) {
+                for (UINT_T z = 0; z < cell_count[2]; z++) {
+                    int3 idx1 = {static_cast<INT_T>(x),static_cast<INT_T>(y),static_cast<INT_T>(z)};
+                    cell_pairs.emplace_back(cells.at(idx1), cells.at(idx1));
+
+                    for (const auto d : displacements) {
+                        int3 idx2 = idx1 + d;
+                        if (idx1 >= idx2 // ensure only unique pairs are added
+                            || idx2[0] < 0 || idx2[1] < 0 || idx2[2] < 0
+                            || static_cast<UINT_T>(idx2[0]) >= cell_count[0]
+                            || static_cast<UINT_T>(idx2[1]) >= cell_count[1]
+                            || static_cast<UINT_T>(idx2[2]) >= cell_count[2]) {
+                            continue;
+                        }
+
+                        cell_pairs.emplace_back(cells.at(idx1), cells.at(idx2));
+                    }
                 }
             }
         }

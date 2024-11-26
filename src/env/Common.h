@@ -23,7 +23,7 @@ inline size_t hash_combine(const size_t lhs, const size_t rhs ) {
     return lhs ^ (rhs + 0x9e3779b9 + (lhs << 6) + (lhs >> 2));
 }
 
-// TODO maybe move to ArrayUtils.h?
+// maybe move to ArrayUtils.h?
 struct Int3Hasher {
     size_t operator()(const std::array<INT_T, 3>& arr) const {
         std::size_t seed = 0x123456789; // initial value

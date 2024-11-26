@@ -107,16 +107,20 @@ namespace md::env {
         }
 
         if (grid_constant > 0 && grid_constant <= force_func.cutoff()) {
-            SPDLOG_WARN("Grid constant is smaller than force cutoff, which will result in potentially worse run times and simulation errors if boundary is chosen as open. "
+            SPDLOG_WARN("Grid constant is smaller than force cutoff. Will default to use GRID_CONSTANT_AUTO."
                         "Are you sure you setup the environment correctly?");
+            grid_constant = force_func.cutoff();
         }
         if (grid_constant < 0 && grid_constant != GRID_CONSTANT_AUTO) {
             SPDLOG_WARN("Grid constant is negative. Will default to use GRID_CONSTANT_AUTO. "
                         "Are you sure you setup the environment correctly?");
         }
 
-        if (grid_constant == GRID_CONSTANT_AUTO) grid_constant = force_func.cutoff();
-        grid.build(boundary.extent, grid_constant, particle_storage, force_func.cutoff(), boundary.origin);
+        if (grid_constant == GRID_CONSTANT_AUTO) {
+            grid_constant = force_func.cutoff();
+            SPDLOG_DEBUG("Using GRID_CONSTANT_AUTO. Grid constant set to force cutoff: {}", grid_constant);
+        }
+        grid.build(boundary.extent, grid_constant, particle_storage, boundary.origin);
         initialized = true;
     }
 

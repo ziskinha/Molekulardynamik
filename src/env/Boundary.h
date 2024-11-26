@@ -21,9 +21,8 @@ namespace md::env {
         enum Face { LEFT, RIGHT, TOP, BOTTOM, FRONT, BACK };
         enum Extent { WIDTH, HEIGHT, DEPTH };
 
-        // TODO maybe change to -1 and add if to grid::build to skip for loops. -1 would then indicate no grid
         vec3 extent {MAX_EXTENT, MAX_EXTENT, MAX_EXTENT}; // [width, height, depth]
         Types types {};    // [left, right, top, bottom, front, back]
-        vec3 origin {};
+        vec3 origin {0,0};
     };
 }
