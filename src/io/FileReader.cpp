@@ -7,9 +7,9 @@
 #include <locale>
 #include <sstream>
 
-#include "io/Logger.h"
-#include "env/Force.h"
 #include "env/Environment.h"
+#include "env/Force.h"
+#include "io/Logger.h"
 
 namespace md::io {
     using namespace env;
@@ -83,7 +83,7 @@ namespace md::io {
         const vec3 origin = {vals[0], vals[1], vals[2]};
         const vec3 init_v = {vals[3], vals[4], vals[5]};
         const uint3 num_particles = {static_cast<uint32_t>(vals[6]), static_cast<uint32_t>(vals[7]),
-                                                  static_cast<uint32_t>(vals[8])};
+                                     static_cast<uint32_t>(vals[8])};
 
         const double width = vals[9];
         const double mass = vals[10];
@@ -114,7 +114,7 @@ namespace md::io {
         environment.add_cuboid(origin, init_v, num_particles, thermal_v, width, mass, dimension, type);
     }
 
-    void parse_force(const std::string& line, Environment & env) {
+    void parse_force(const std::string& line, Environment& env) {
         SPDLOG_DEBUG("Reading Force:     {}", line);
         std::istringstream data_stream(line);
         std::vector<double> vals;
@@ -125,7 +125,7 @@ namespace md::io {
             SPDLOG_ERROR("Could not read force name", line);
             exit(-1);
         }
-        std::ranges::transform(force_name, force_name.begin(),[](const unsigned char c) { return std::tolower(c); });
+        std::ranges::transform(force_name, force_name.begin(), [](const unsigned char c) { return std::tolower(c); });
         std::ranges::replace(force_name, '-', ' ');
         std::ranges::replace(force_name, '_', ' ');
         trim(force_name);
@@ -192,7 +192,6 @@ namespace md::io {
                 parse_force(line, env);
         }
         env.add_particles(particle_list);
-
 
         SPDLOG_INFO("File read successfully: {}", file_name);
     }

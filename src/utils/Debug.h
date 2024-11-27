@@ -1,10 +1,8 @@
 #pragma once
 
-
-//namespace md::debug{
+// namespace md::debug{
 //
-//}
-
+// }
 
 #ifndef NDEBUG
 

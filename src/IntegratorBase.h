@@ -8,7 +8,7 @@ namespace md::Integrator {
      * @brief Manages the main simulation loop.
      */
     class IntegratorBase {
-    public:
+       public:
         /**
          * @brief Constructs a SimulationAlgorithm object with a reference to a ParticleContainer and OutputWriter.
          * @param environment physical system to be simulated
@@ -27,15 +27,15 @@ namespace md::Integrator {
          */
         void simulate(double start_time, double end_time, double dt, unsigned int write_freq, bool benchmark = false);
 
-    protected:
+       protected:
         /**
          * @brief Abstract method for performing a single simulation step.
          * @param dt Δt The time increment for each simulation step.
          */
         virtual void simulation_step(double dt) = 0;
-        env::Environment& environment;
+        env::Environment& environment;  ///< Reference to the environment.
 
-    private:
+       private:
         std::unique_ptr<io::OutputWriterBase> writer;
     };
-} // namespace md::Integrator
+}  // namespace md::Integrator

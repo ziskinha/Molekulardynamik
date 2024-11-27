@@ -1,11 +1,10 @@
 #include <iostream>
 
-#include "io/IOStrategy.h"
-#include "utils/Parse.h"
 #include "StoermerVerlet.h"
 #include "env/Environment.h"
 #include "env/Force.h"
-
+#include "io/IOStrategy.h"
+#include "utils/Parse.h"
 
 using namespace md;
 int main(const int argc, char* argv[]) {
@@ -13,9 +12,11 @@ int main(const int argc, char* argv[]) {
 
     parse::ProgramArguments args;
     switch (parse_args(argc, argv, args)) {
-    case parse::EXIT: return 0;
-    case parse::ERROR: return -1;
-    default: ;
+        case parse::EXIT:
+            return 0;
+        case parse::ERROR:
+            return -1;
+        default:;
     };
 
     log_arguments(args);
@@ -24,15 +25,13 @@ int main(const int argc, char* argv[]) {
     // args.dt = 0.001;
     // args.num_frames = 1000;
     const double num_steps = args.duration / args.dt;
-    const int write_freq = std::max(static_cast<int> (round(num_steps / args.num_frames)), 1);
-    SPDLOG_DEBUG("Write frequency: {}", write_freq);                            
-
+    const int write_freq = std::max(static_cast<int>(round(num_steps / args.num_frames)), 1);
+    SPDLOG_DEBUG("Write frequency: {}", write_freq);
 
     env::Environment env;
     // io::read_file(args.file, env);
     // env.add_particle({0,1,0}, {-1,0,0}, 3.0e-6, 1);
     // env.add_particle({0,0,0}, {0,0,0}, 1, 2);
-
 
     // env.add_particle({-9,0,0}, {5,0,0}, 1, 1);
     // env.add_particle({9,0,0}, {-5,0,0}, 1, 2);
@@ -42,10 +41,8 @@ int main(const int argc, char* argv[]) {
     // env.set_boundary(boundary);
     // env.set_force(env::LennardJones(5, 1, 3));
 
-
-
-    env.add_cuboid({0,0,0}, {0,0,0}, {40,8,1}, 0.1, 1.1225, 1, 2, 0);
-    env.add_cuboid({15,15,0}, {0,-10,0}, {8,8,1}, 0.1, 1.1225, 1, 2, 1);
+    env.add_cuboid({0, 0, 0}, {0, 0, 0}, {40, 8, 1}, 0.1, 1.1225, 1, 2, 0);
+    env.add_cuboid({15, 15, 0}, {0, -10, 0}, {8, 8, 1}, 0.1, 1.1225, 1, 2, 1);
 
     env::Boundary boundary;
     boundary.extent = {100, 100, 1};
@@ -56,11 +53,11 @@ int main(const int argc, char* argv[]) {
 
     env.build();
 
-    for (auto &p : env.particles()) {
+    for (auto& p : env.particles()) {
         std::cout << "Particle: " << p.to_string() << std::endl;
     }
 
-    for (auto & x : env.cells()) {
+    for (auto& x : env.cells()) {
         std::cout << "Cell: " << x.to_string() << std::endl;
     }
 
@@ -74,15 +71,14 @@ int main(const int argc, char* argv[]) {
     //
     //     for (auto it = cell_pair.particles().begin(); it != cell_pair.particles().end(); ++it) {
     //         auto [p1, p2] = *it;
-    //          std::cout << "particle pair ids: " << p1->id << ", " << p2->id << " Positions: " << p1->position << ", " << p2->position << std::endl;
+    //          std::cout << "particle pair ids: " << p1->id << ", " << p2->id << " Positions: " << p1->position << ", "
+    //          << p2->position << std::endl;
     //
     //     }
     // }
 
     Integrator::StoermerVerlet simulator(env, create_writer(args.output_format, args.override));
     simulator.simulate(0, args.duration, args.dt, write_freq, args.benchmark);
-
-
 
     // auto writer = args.benchmark ? nullptr : create_writer(args.output_format, args.override);
     // md::Integrator::StoermerVerlet simulator(env, std::move(writer));

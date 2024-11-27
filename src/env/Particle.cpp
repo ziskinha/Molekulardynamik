@@ -1,17 +1,26 @@
 #include "Particle.h"
 
 #include <sstream>
-#include "utils/ArrayUtils.h"
-#include "io/Logger.h"
-#include "ParticleGrid.h"
 
+#include "ParticleGrid.h"
+#include "io/Logger.h"
+#include "utils/ArrayUtils.h"
 
 namespace md::env {
     /// -----------------------------------------
     /// \brief Particle Class Methods
     /// -----------------------------------------
-    Particle::Particle(const size_t id, ParticleGrid& grid, const vec3& position, const vec3& velocity, const double mass, const int type)
-        : position(position), velocity(velocity), force(), old_force(), cell(), mass(mass), type(type), id(id), state(ALIVE),
+    Particle::Particle(const size_t id, ParticleGrid& grid, const vec3& position, const vec3& velocity,
+                       const double mass, const int type)
+        : position(position),
+          velocity(velocity),
+          force(),
+          old_force(),
+          cell(),
+          mass(mass),
+          type(type),
+          id(id),
+          state(ALIVE),
           grid(grid) {
         SPDLOG_TRACE("Particle generated!");
     }
@@ -44,7 +53,7 @@ namespace md::env {
         std::stringstream stream;
         using ::operator<<;
         stream << "Particle: X:" << position << " v: " << velocity << " f: " << force << " old_f: " << old_force
-            << " type: " << type << " id: " << id;
+               << " type: " << type << " id: " << id;
         return stream.str();
     }
 
@@ -52,4 +61,4 @@ namespace md::env {
         return position == other.position && velocity == other.velocity && force == other.force &&
                old_force == other.old_force && mass == other.mass && type == other.type && state == other.state;
     }
-}
+}  // namespace md::env

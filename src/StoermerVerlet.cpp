@@ -12,11 +12,9 @@
 
 namespace md::Integrator {
 
-
     void dummy_run_simulation(StoermerVerlet& obj, double dt) { obj.simulation_step(dt); }
 
     void StoermerVerlet::simulation_step(const double dt) {
-
         // update position
         for (auto& p : environment.particles()) {
             p.position = p.position + dt * p.velocity + pow(dt, 2) / (2 * p.mass) * p.old_force;

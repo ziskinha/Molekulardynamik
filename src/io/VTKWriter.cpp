@@ -24,7 +24,8 @@ namespace md::io {
 
     void VTKWriter::plot_particles(const Environment& environment, const int iteration) {
         initializeOutput(static_cast<int>(environment.size()));
-        for (auto& particle : environment.particles(Particle::ALIVE|Particle::DEAD, GridCell::INSIDE|GridCell::OUTER)) {
+        for (auto& particle :
+             environment.particles(Particle::ALIVE | Particle::DEAD, GridCell::INSIDE | GridCell::OUTER)) {
             plotParticle(particle);
         }
         writeFile(iteration);

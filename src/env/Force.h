@@ -1,40 +1,63 @@
 #pragma once
 #include <cmath>
-#include <limits>
 #include <functional>
+#include <limits>
 
 #include "utils/ArrayUtils.h"
-
 
 #define NO_FORCE_CUTOFF std::numeric_limits<double>::max()
 #define FORCE_CUTOFF_AUTO std::numeric_limits<double>::min()
 
+/**
+ * @brief Contains classes and structures for managing the environment of the simulation.
+ */
 namespace md::env {
     using ForceFunc = std::function<vec3(const Particle&, const Particle&)>;
 
+    /**
+     * @brief Structure representing a force function with an optional cutoff distance.
+     */
     struct Force {
+        /**
+         * @brief Constructs a Force object with a specified force function and cutoff.
+         * @param force_func
+         * @param cutoff
+         */
         explicit Force(const ForceFunc& force_func = {}, const double cutoff = NO_FORCE_CUTOFF)
             : cutoff_radius(cutoff), force_func(force_func) {}
 
+        /**
+         * @brief Calculates the force between two particles.
+         * @param p1 The first particle.
+         * @param p2 The second particle.
+         * @return The force between the two particles.
+         */
         vec3 operator()(const Particle& p1, const Particle& p2) const { return force_func(p1, p2); }
 
-        [[nodiscard]] double cutoff() const {return cutoff_radius; }
-    private:
+        /**
+         * @brief Retrieves the cutoff radius.
+         * @return The cutoff radius.
+         */
+        [[nodiscard]] double cutoff() const { return cutoff_radius; }
+
+       private:
         double cutoff_radius;
         ForceFunc force_func{};
     };
 
-
-
+    /**
+     * @brief Returns a Force object that represents no interaction between particles.
+     * @param cutoff The cutoff distance.
+     * @return A Force object representing no interaction.
+     */
     inline Force NoForce(const double cutoff = NO_FORCE_CUTOFF) {
         return Force([](const Particle&, const Particle&) { return vec3{0, 0, 0}; }, cutoff);
     }
 
-
     /**
      * @brief Returns a Force object that represents the inverse-square force between two particles.
      * @param pre_factor scaling factor for the magnitude of the force. can be used to implement newtons gravity or
-     * coulombs law
+     * coulombs law.
      * @param cutoff_radius
      * @return The function that calculates the force vector acting on p1 due to p2.
      */
@@ -56,7 +79,7 @@ namespace md::env {
     /**
      * @brief Returns a function that calculates the spring force using Hookes law between two particles.
      * @param k spring constant
-     * @param rest_length
+     * @param rest_length The rest length (default: 0.0).
      * @return The function that calculates the force vector acting on p1 due to p2.
      */
     inline Force HookesLaw(const double k = 0.1, const double rest_length = 0.0) {
@@ -69,12 +92,11 @@ namespace md::env {
         return Force(force_func, NO_FORCE_CUTOFF);
     }
 
-
     /**
      * @brief Returns a function that calculates the forces in a lennard jones potential between two particles.
-     * @param cutoff_radius
      * @param epsilon
      * @param sigma
+     * @param cutoff_radius
      * @return The function that calculates the force vector acting on p1 due to p2.
      */
     inline Force LennardJones(const double epsilon = 1.0, const double sigma = 1.0,
@@ -102,4 +124,4 @@ namespace md::env {
 
         return Force(force_func, cutoff_radius);
     }
-} // namespace md::force
+}  // namespace md::env
