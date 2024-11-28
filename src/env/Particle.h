@@ -15,6 +15,7 @@ namespace md::env {
         Particle(size_t id, ParticleGrid& grid, const vec3& position, const vec3& velocity, double mass, int type);
         Particle(const Particle& other);
 
+        void update_position(const vec3 & dx);
         void reset_force();
         void update_grid();
 
@@ -22,6 +23,7 @@ namespace md::env {
         [[nodiscard]] std::string to_string() const;
 
         vec3 position;
+        vec3 old_position;
         vec3 velocity;
         vec3 force;
         vec3 old_force;
