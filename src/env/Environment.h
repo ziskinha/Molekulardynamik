@@ -57,12 +57,12 @@ namespace md::env {
         [[nodiscard]] vec3 force(const Particle& p1, const Particle& p2) const;
         [[nodiscard]] size_t size(Particle::State state = Particle::ALIVE) const;
 
-        auto particles(Particle::State state = Particle::ALIVE, GridCell::Type type = GridCell::ALL) {
+        auto particles( GridCell::Type type = GridCell::INSIDE, Particle::State state = Particle::ALIVE) {
             return particle_storage | std::ranges::views::filter([this, state, type](const Particle& particle) {
                 return filter_particles(particle, state, type);
             });
         }
-        [[nodiscard]] auto particles(Particle::State state = Particle::ALIVE, GridCell::Type type = GridCell::ALL) const {
+        [[nodiscard]] auto particles(GridCell::Type type = GridCell::INSIDE, Particle::State state = Particle::ALIVE) const {
             return particle_storage | std::ranges::views::filter([this, state, type](const Particle& particle) {
                 return filter_particles(particle, state, type);
             });
@@ -71,6 +71,7 @@ namespace md::env {
         std::vector<GridCellPair> & linked_cells();
         std::vector<GridCell> cells();
 
+        void apply_boundary(Particle & particle);
 
         Particle & operator[] (size_t id);
         const Particle & operator[] (size_t id) const;

@@ -33,7 +33,7 @@ namespace md::Integrator {
          * @param dt Δt The time increment for each simulation step.
          */
         virtual void simulation_step(double dt) = 0;
-        env::Environment& environment;
+        env::Environment& env;
 
     private:
         std::unique_ptr<io::OutputWriterBase> writer;

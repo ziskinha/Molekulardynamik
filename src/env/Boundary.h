@@ -7,7 +7,8 @@
 #define CENTER_BOUNDARY_ORIGIN std::numeric_limits<double>::max()
 
 namespace md::env {
-    struct Boundary {
+    class  Boundary {
+    public:
         enum Type {
             OUTFLOW,
             REFLECTIVE_SYMMETRIC,
@@ -20,8 +21,18 @@ namespace md::env {
         enum Face { LEFT, RIGHT, TOP, BOTTOM, FRONT, BACK };
         enum Extent { WIDTH, HEIGHT, DEPTH };
 
+        Boundary();
+
+
         vec3 extent {MAX_EXTENT, MAX_EXTENT, MAX_EXTENT}; // [width, height, depth]
-        Types types {OUTFLOW, OUTFLOW, OUTFLOW, OUTFLOW, OUTFLOW, OUTFLOW}; // [left, right, top, bottom, front, back]
         vec3 origin {CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN};
+
+
+        Types types {OUTFLOW, OUTFLOW, OUTFLOW, OUTFLOW, OUTFLOW, OUTFLOW}; // [left, right, top, bottom, front, back]
+
+
+        void apply_boundary(Particle * particle, const GridCell & cell) {
+            
+        }
     };
 }

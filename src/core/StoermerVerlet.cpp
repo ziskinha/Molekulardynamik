@@ -18,29 +18,27 @@ namespace md::Integrator {
     void StoermerVerlet::simulation_step(const double dt) {
 
         // update position
-        for (auto& p : environment.particles()) {
+        for (auto& p : env.particles()) {
             p.position = p.position + dt * p.velocity + pow(dt, 2) / (2 * p.mass) * p.old_force;
             p.update_grid();
             p.reset_force();
         }
+        for (auto & particle : env.particles(env::GridCell::BOUNDARY)) {
+            env.apply_boundary(particle);
+        }
 
         // calculate forces
-        for (auto& cell_pair : environment.linked_cells()) {
+        for (auto& cell_pair : env.linked_cells()) {
             for (auto [p1, p2] : cell_pair.particles()) {
-                vec3 new_F = environment.force(*p1, *p2);
+                vec3 new_F = env.force(*p1, *p2);
 
                 p2->force = p2->force + new_F;
                 p1->force = p1->force - new_F;
             }
         }
 
-        // boundary conditions
-        // for (auto & particle : system.particles(Particle::ALIVE, GridCell::BOUNDARY)) {
-        //
-        // }
-
         // update velocities
-        for (auto& p : environment.particles()) {
+        for (auto& p : env.particles()) {
             p.velocity = p.velocity + dt / 2 / p.mass * (p.force + p.old_force);
         }
     }

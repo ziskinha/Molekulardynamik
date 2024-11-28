@@ -161,6 +161,15 @@ namespace md::env {
         return grid.grid_cells();
     }
 
+    void Environment::apply_boundary(Particle& particle) {
+        // assert particle.face
+        int3 face_normal = grid.get_cell(particle).face_normal;
+        vec3 rel_pos = grid.position_in_cell(particle.position);
+
+
+
+    }
+
     Particle& Environment::operator[](const size_t id) {
         return particle_storage[id];
     }

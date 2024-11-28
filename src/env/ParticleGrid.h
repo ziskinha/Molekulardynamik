@@ -9,26 +9,29 @@
 #include "env/Particle.h"
 #include "utils/ContainerUtils.h"
 
+// #define BOUNDARY_GRID_TYPE(DIR) BOUNDARY_##DIR = BOUNDARY | Boundary::DIR
 
 namespace md::env {
     struct GridCell {
         enum Type {
-            INNER = 0x1,
-            OUTER = 0x2,
-            BOUNDARY = 0x4,
+            INNER = 0x100000,
+            BOUNDARY = 0x200000,
+            OUTSIDE = 0x400000,
             INSIDE = INNER | BOUNDARY,
-            ALL = INNER | BOUNDARY | OUTER
         };
 
-        GridCell(const vec3& coord, const vec3& size, Type type, const int3& idx);
+        GridCell(const vec3& coord, const vec3& size, Type type, const int3& idx, const int3& face_normal);
         [[nodiscard]] std::string to_string() const;
         bool operator==(const GridCell& other) const;
-        const vec3 coordinate;
-        const vec3 size;
+
         const Type type;
-        std::unordered_set<Particle*> particles{};
+        const vec3 origin;
+        const vec3 size;
+        const int3 face_normal;
+        const int3 idx;
         int id;
-        int3 idx; // for debugging purposes
+
+        std::unordered_set<Particle*> particles{};
     private:
         static int count;
     };
@@ -79,6 +82,9 @@ namespace md::env {
         std::vector<GridCell> grid_cells();
 
         void update_cells(Particle* particle, const int3& old_cell, const int3& new_cell);
+
+        vec3 position_in_grid(const vec3& abs_position) const;
+        vec3 position_in_cell(const vec3& abs_position) const;
 
     private:
         void build_cells(const vec3 & extent, double grid_constant, std::vector<Particle>& particles);
