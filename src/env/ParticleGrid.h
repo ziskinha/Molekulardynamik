@@ -78,8 +78,8 @@ namespace md::env {
         [[nodiscard]] int3 what_cell(const vec3& position) const;
         [[nodiscard]] std::vector<int3> get_cell_indices() const;
 
-        std::vector<GridCellPair> & linked_cells();
-        std::vector<GridCell> grid_cells();
+        const std::vector<GridCellPair> & linked_cells();
+        const std::vector<GridCell*> & boundary_cells();
 
         void update_cells(Particle* particle, const int3& old_cell, const int3& new_cell);
 
@@ -92,6 +92,7 @@ namespace md::env {
 
         std::unordered_map<int3, GridCell, Int3Hasher> cells {};
         std::vector<GridCellPair> cell_pairs{};
+        std::vector<GridCell*> border_cells;
 
         uint3 cell_count {};
         vec3 cell_size {};

@@ -96,10 +96,7 @@ namespace md::env {
                     if (x==num_x-1) face[0] = 1;
                     if (y==num_y-1) face[0] = 1;
                     if (z==num_z-1) face[0] = 1;
-
-                    if (face != int3{0,0,0}) {
-                        type = GridCell::BOUNDARY;
-                    }
+                    if (face != int3{0,0,0}) type = GridCell::BOUNDARY;
 
                     int3 idx = {static_cast<INT_T>(x),static_cast<INT_T>(y),static_cast<INT_T>(z)};
                     GridCell cell = {{cell_size[0] * static_cast<double>(x),
@@ -108,6 +105,8 @@ namespace md::env {
                                      cell_size, type, idx, face};
 
                     cells.emplace(idx, cell);
+
+                    if (type == GridCell::BOUNDARY) border_cells.push_back(&cells.at(idx));
 
                     SPDLOG_TRACE("Grid Cell created. index: {} Cell: {}", idx, cell.to_string());
                 }
@@ -209,21 +208,25 @@ namespace md::env {
         return keys;
     }
 
-    std::vector<GridCellPair>& ParticleGrid::linked_cells() {
+    const std::vector<GridCellPair>& ParticleGrid::linked_cells() {
         return cell_pairs;
     }
 
-    std::vector<GridCell> ParticleGrid::grid_cells() {
-        // not the best design but this function is intended for debugging purposes so its ok
-        std::vector<GridCell> cells;
-        cells.reserve(this->cells.size());
-
-        for (auto& snd : this->cells | std::views::values) {
-            cells.push_back(snd);
-        }
-
-        return cells;
+    const std::vector<GridCell*> & ParticleGrid::boundary_cells() {
+        return border_cells;
     }
+
+    // std::vector<GridCell> ParticleGrid::grid_cells() {
+    //     // not the best design but this function is intended for debugging purposes so its ok
+    //     std::vector<GridCell> cells;
+    //     cells.reserve(this->cells.size());
+    //
+    //     for (auto& snd : this->cells | std::views::values) {
+    //         cells.push_back(snd);
+    //     }
+    //
+    //     return cells;
+    // }
 
     void ParticleGrid::update_cells(Particle* particle, const int3& old_cell, const int3& new_cell) {
         if (old_cell != new_cell) {
