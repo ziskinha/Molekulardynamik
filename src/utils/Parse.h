@@ -6,8 +6,6 @@ namespace md::parse {
 
     enum ParseStatus { OK, EXIT, ERROR };
 
-    using vec3 = std::array<double, 3>;
-
     /**
      * @brief Struct used to return arguments read from the terminal.
      */

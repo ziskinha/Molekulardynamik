@@ -1,10 +1,3 @@
-/*
- * FileReader.cpp
- *
- *  Created on: 23.02.2010
- *      Author: eckhardw
- */
-
 #include "io/FileReader.h"
 
 #include <algorithm>
@@ -15,8 +8,11 @@
 #include <sstream>
 
 #include "io/Logger.h"
+#include "env/Force.h"
+#include "env/Environment.h"
 
 namespace md::io {
+    using namespace env;
     // code from https://stackoverflow.com/questions/216823/how-to-trim-a-stdstring
     // trim from start (in place)
     void ltrim(std::string& s) {
@@ -33,7 +29,7 @@ namespace md::io {
         ltrim(s);
     }
 
-    void parse_particle(const std::string& line, std::vector<Particle>& particle_list) {
+    void parse_particle(const std::string& line, std::vector<ParticleCreateInfo>& particle_list) {
         SPDLOG_DEBUG("Reading Particle:    {}", line);
         std::istringstream data_stream(line);
         std::vector<double> vals;
@@ -67,7 +63,7 @@ namespace md::io {
         particle_list.emplace_back(origin, init_v, mass, type);
     }
 
-    void parse_cuboid(const std::string& line, ParticleContainer& container) {
+    void parse_cuboid(const std::string& line, Environment& environment) {
         SPDLOG_DEBUG("Reading Cuboid:     {}", line);
 
         std::istringstream data_stream(line);
@@ -78,22 +74,21 @@ namespace md::io {
             vals.push_back(num);
         }
 
-        // Minimum required values: 3 (origin) + 3 (velocities) + 3 (num_particles) + 1 (width) + 1 (mass) + 1
-        // (thermal_v) + 1 (dimension)
+        // Minimum required values: 3 (x) + 3 (v) + 3 (#particles) + 1 (width) + 1 (mass) + 1 (thermal_v) + 1 (dim)
         if (vals.size() < 13) {
             SPDLOG_ERROR("Not enough numbers in line: {}", line);
             exit(-1);
         }
 
-        vec3 origin = {vals[0], vals[1], vals[2]};
-        vec3 init_v = {vals[3], vals[4], vals[5]};
-        std::array<uint32_t, 3> num_particles = {static_cast<uint32_t>(vals[6]), static_cast<uint32_t>(vals[7]),
-                                                 static_cast<uint32_t>(vals[8])};
+        const vec3 origin = {vals[0], vals[1], vals[2]};
+        const vec3 init_v = {vals[3], vals[4], vals[5]};
+        const uint3 num_particles = {static_cast<uint32_t>(vals[6]), static_cast<uint32_t>(vals[7]),
+                                                  static_cast<uint32_t>(vals[8])};
 
-        double width = vals[9];
-        double mass = vals[10];
-        double thermal_v = vals[11];
-        uint32_t dimension = static_cast<uint32_t>(vals[12]);
+        const double width = vals[9];
+        const double mass = vals[10];
+        const double thermal_v = vals[11];
+        const auto dimension = static_cast<uint32_t>(vals[12]);
         if (dimension != 2 && dimension != 3) {
             SPDLOG_ERROR("Invalid dimension parameter {}", line);
         }
@@ -116,10 +111,10 @@ namespace md::io {
             origin[0], origin[1], origin[2], init_v[0], init_v[1], init_v[2], num_particles[0], num_particles[1],
             num_particles[2], width, mass, thermal_v, dimension, type);
 
-        container.add_cuboid(origin, init_v, num_particles, thermal_v, width, mass, dimension, type);
+        environment.add_cuboid(origin, init_v, num_particles, thermal_v, width, mass, dimension, type);
     }
 
-    void parse_force(const std::string& line, force::ForceFunc& force) {
+    void parse_force(const std::string& line, Environment & env) {
         SPDLOG_DEBUG("Reading Force:     {}", line);
         std::istringstream data_stream(line);
         std::vector<double> vals;
@@ -130,33 +125,34 @@ namespace md::io {
             SPDLOG_ERROR("Could not read force name", line);
             exit(-1);
         }
-        std::transform(force_name.begin(), force_name.end(), force_name.begin(),
-                       [](unsigned char c) { return std::tolower(c); });
-        std::replace(force_name.begin(), force_name.end(), '-', ' ');
-        std::replace(force_name.begin(), force_name.end(), '_', ' ');
+        std::ranges::transform(force_name, force_name.begin(),[](const unsigned char c) { return std::tolower(c); });
+        std::ranges::replace(force_name, '-', ' ');
+        std::ranges::replace(force_name, '_', ' ');
         trim(force_name);
+        Force force;
 
         while (data_stream >> num) {
             vals.push_back(num);
         }
         try {
             if (force_name == "lennard jones") {
-                force = force::lennard_jones(vals[0], vals[1]);
+                force = LennardJones(vals[0], vals[1]);
                 SPDLOG_INFO("Using Lennard Jones with parameters: epsilon={}, sigma={}", vals[0], vals[1]);
-            } else if (force_name == "hookes law") {
-                force = force::hookes_law(vals[0], vals[1]);
+            } else if (force_name == "Hookes law") {
+                force = HookesLaw(vals[0], vals[1]);
                 SPDLOG_INFO("Using Hookes Law with parameters: k={}, l={}", vals[0], vals[1]);
             } else if (force_name == "inverse square") {
-                force = force::inverse_square(vals[0]);
+                force = InverseSquare(vals[0]);
                 SPDLOG_INFO("Using inverse square force with parameter: pre_factor={}", vals[0]);
             }
         } catch (std::out_of_range& e) {
             SPDLOG_ERROR("Parameter error in force parsing: {}. Line: {}", e.what(), line);
             exit(-1);
         }
+        env.set_force(force);
     }
 
-    void read_file_txt(const std::string& file_name, ParticleContainer& container, force::ForceFunc& force) {
+    void read_file_txt(const std::string& file_name, Environment& env) {
         std::ifstream infile(file_name);
         if (!infile.is_open()) {
             SPDLOG_ERROR("Failed opening file {}", file_name);
@@ -166,7 +162,7 @@ namespace md::io {
         SPDLOG_INFO("Started reading file {}", file_name);
 
         std::string line;
-        std::vector<Particle> particle_list;
+        std::vector<ParticleCreateInfo> particle_list;
         enum Section { NONE, PARTICLES, CUBOIDS, FORCE } section = NONE;
 
         while (std::getline(infile, line)) {
@@ -191,16 +187,12 @@ namespace md::io {
             if (section == PARTICLES)
                 parse_particle(line, particle_list);
             else if (section == CUBOIDS)
-                parse_cuboid(line, container);
+                parse_cuboid(line, env);
             else if (section == FORCE)
-                parse_force(line, force);
+                parse_force(line, env);
         }
-        container.add_particles(particle_list);
+        env.add_particles(particle_list);
 
-        if (!force) {
-            SPDLOG_ERROR("No force specified in {}", file_name);
-            exit(-1);
-        }
 
         SPDLOG_INFO("File read successfully: {}", file_name);
     }

@@ -3,7 +3,8 @@
 #pragma once
 
 #include "IntegratorBase.h"
-#include "force.h"
+#include "Force.h"
+#include "Environment.h"
 
 namespace md::Integrator {
     /**
@@ -13,12 +14,10 @@ namespace md::Integrator {
        public:
         /**
          * @brief Constructs a RungeKutta object with specified force calculation.
-         * @param particles contains the to-be-simulated particles
-         * @param force_func Defines the force function which is being used.
+         * @param environemt
          * @param writer writes the output to disk
          */
-        RungeKutta(ParticleContainer& particles, force::ForceFunc force_func,
-                   std::unique_ptr<io::OutputWriterBase> writer);
+        RungeKutta(Environment & environemt, std::unique_ptr<io::OutputWriterBase> writer);
 
        private:
         /**
@@ -27,6 +26,5 @@ namespace md::Integrator {
          */
         void simulation_step(double dt) override;
         void compute_forces() const;
-        force::ForceFunc force_func;
     };
 }  // namespace md::Integrator

@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/Particle.h"
+#include "../src/Environment.h"
 
 auto particle1= md::Particle({1,5,4},{3,3,3},5,0);
 auto particle2= md::Particle({3,2,1},{0,0,0},5,0);

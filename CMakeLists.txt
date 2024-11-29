@@ -38,9 +38,12 @@ file(GLOB_RECURSE MY_SRC
 add_executable(MolSim ${MY_SRC})
 
 # set cxx standard. You may raise this if you want.
+#set(CMAKE_C_STANDARD 23)
+#set(CMAKE_C_STANDARD_REQUIRED ON)
+#set(CMAKE_C_EXTENSIONS OFF) # Disable compiler-specific extensions
 target_compile_features(MolSim
         PRIVATE
-        cxx_std_17
+        cxx_std_23
 )
 
 target_include_directories(MolSim
