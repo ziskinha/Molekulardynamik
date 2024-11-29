@@ -8,26 +8,33 @@
 
 #include "io/Logger.h"
 
-void show_progress(const int current, const int total) {
-    constexpr int bar_width = 50;
-    const float progress = static_cast<float>(current) / total;
-
-    std::cout << "\r[";
-    int pos = bar_width * progress;
-    for (int i = 0; i < bar_width; ++i) {
-        if (i < pos)
-            std::cout << "=";
-        else if (i == pos)
-            std::cout << ">";
-        else
-            std::cout << " ";
-    }
-    std::cout << "] " << std::fixed << std::setprecision(2) << (progress * 100.0) << "%";
-    std::cout.flush();
-    if (current == total) {
-        std::cout << std::endl;
-    }
-}
+#if SPDLOG_ACTIVE_LEVEL != SPDLOG_LEVEL_OFF
+#define SHOW_PROGRESS(current, total)                                                         \
+    do {                                                                                      \
+        constexpr int bar_width = 50;                                                         \
+        const float progress = static_cast<float>(current) / (total);                         \
+                                                                                              \
+        std::cout << "\r[";                                                                   \
+        int pos = bar_width * progress;                                                       \
+        for (int i = 0; i < bar_width; ++i) {                                                 \
+            if (i < pos)                                                                      \
+                std::cout << "=";                                                             \
+            else if (i == pos)                                                                \
+                std::cout << ">";                                                             \
+            else                                                                              \
+                std::cout << " ";                                                             \
+        }                                                                                     \
+        std::cout << "] " << std::fixed << std::setprecision(2) << (progress * 100.0) << "%"; \
+        std::cout.flush();                                                                    \
+        if ((current) == (total)) {                                                               \
+            std::cout << std::endl;                                                           \
+        }                                                                                     \
+    } while (0)
+#else
+#define SHOW_PROGRESS(current, total) \
+    do {                              \
+    } while (0)
+#endif
 
 namespace md::Integrator {
     IntegratorBase::IntegratorBase(ParticleContainer& particles, std::unique_ptr<io::OutputWriterBase> writer)
@@ -72,8 +79,7 @@ namespace md::Integrator {
                     }
                 }
 
-                // TODO: decide how to handle
-                //show_progress(i, total_steps);
+                SHOW_PROGRESS(i, total_steps);
             }
         }
 
