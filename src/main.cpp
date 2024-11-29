@@ -20,9 +20,9 @@ int main(const int argc, char* argv[]) {
 
     log_arguments(args);
 
-    // args.duration = 100;
-    // args.dt = 0.001;
-    // args.num_frames = 1000;
+    args.duration = 10;
+    args.dt = 0.00001;
+    args.num_frames = 600;
     const double num_steps = args.duration / args.dt;
     const int write_freq = std::max(static_cast<int> (round(num_steps / args.num_frames)), 1);
     SPDLOG_DEBUG("Write frequency: {}", write_freq);                            
@@ -44,25 +44,64 @@ int main(const int argc, char* argv[]) {
 
 
 
-    env.add_cuboid({0,0,0}, {0,0,0}, {40,8,1}, 0.1, 1.1225, 1, 2, 0);
-    env.add_cuboid({15,15,0}, {0,-10,0}, {8,8,1}, 0.1, 1.1225, 1, 2, 1);
+    // env.add_cuboid({0,0,0}, {0,0,0}, {40,8,1}, 0.1, 1.1225, 1, 2, 0);
+    // env.add_cuboid({15,15,0}, {0,-10,0}, {8,8,1}, 0.1, 1.1225, 1, 2, 1);
+
+
+    env.add_particle({2.8,2.9,0}, {0,0,0}, 1, 1);
+    env.add_particle({0.1,0.15,0}, {0,0,0}, 1, 1);
+    env.add_particle({2.5,0.1,0}, {0,0,0}, 1, 1);
+    env.add_particle({0.2,2.6,0}, {0,0,0}, 1, 1);
+
+    // env.add_particle({9,0,0}, {-5,0,0}, 1, 2);
 
     env::Boundary boundary;
-    boundary.extent = {100, 100, 1};
-    boundary.origin = {-10, -10, 0};
+    boundary.extent = {3, 3, 1};
+    boundary.origin = {0, 0, 0};
+    boundary.set_boundary_rule(env::Boundary::UniformRepulsiveForce());
+    boundary.set_boundary_rule(env::Boundary::Outflow(), env::Boundary::FRONT);
+    boundary.set_boundary_rule(env::Boundary::Outflow(), env::Boundary::BACK);
+
+    // std::array<int3, 6> faces = {
+    //     env::Boundary::LEFT,
+    //     env::Boundary::RIGHT,
+    //     env::Boundary::TOP,
+    //     env::Boundary::BOTTOM,
+    //     env::Boundary::FRONT,
+    //     env::Boundary::BACK,
+    // };
+
+    // for (int i = 0; i < faces.size(); i++) {
+    //     boundary.set_boundary_rule([faces, i](env::Particle&p, const env::GridCell& ) {
+    //         std::cout << "face: " << faces[i][0] << ", " << faces[i][1] << ", " << faces[i][2] <<  std::endl ;
+    //     }, faces[i]) ;
+    // }
+
     env.set_boundary(boundary);
-    env.set_grid_constant(10);
-    env.set_force(env::LennardJones(5, 1, 5));
+    env.set_force(env::LennardJones(5, 0.1));
+    env.set_grid_constant(1);
+
+    // env.set_force(env::LennardJones(5, 1, 5));
 
     env.build();
 
-    for (auto &p : env.particles()) {
-        std::cout << "Particle: " << p.to_string() << std::endl;
-    }
+    env::Particle & particle = env[0];
 
-    for (auto & x : env.cells()) {
-        std::cout << "Cell: " << x.to_string() << std::endl;
-    }
+    // particle.update_position({0,-1,0});
+    particle.update_grid();
+    // env.apply_boundary(particle);
+
+    // for (auto &p : env.particles()) {
+    //     std::cout << "Particle: " << p.to_string() << std::endl;
+    // }
+    //
+    // for (auto &p : env.particles()) {
+    //     std::cout << "Particle: " << p.to_string() << std::endl;
+    // }
+
+    // for (auto & x : env.cells()) {
+    //     std::cout << "Cell: " << x.to_string() << std::endl;
+    // }
 
     // for (const auto & cell_pair : env.linked_cells()) {
     //     std::cout << "Cell pair: " << cell_pair.to_string() << std::endl;

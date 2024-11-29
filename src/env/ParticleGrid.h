@@ -9,7 +9,6 @@
 #include "env/Particle.h"
 #include "utils/ContainerUtils.h"
 
-// #define BOUNDARY_GRID_TYPE(DIR) BOUNDARY_##DIR = BOUNDARY | Boundary::DIR
 
 namespace md::env {
     struct GridCell {

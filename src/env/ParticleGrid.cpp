@@ -77,6 +77,7 @@ namespace md::env {
 
     void ParticleGrid::build_cells(const vec3 & extent, const double grid_constant, std::vector<Particle>& particles) {
         // number of cells along each axis
+        // TODO shouldnt this be max(floor, 1)? otherwise resulting cell size may be smaller than force cutoff!
         const auto num_x = static_cast<UINT_T>(ceil(extent[0] / grid_constant));
         const auto num_y = static_cast<UINT_T>(ceil(extent[1] / grid_constant));
         const auto num_z = static_cast<UINT_T>(ceil(extent[2] / grid_constant));
@@ -94,11 +95,12 @@ namespace md::env {
                     if (y==0) face[1] = -1;
                     if (z==0) face[2] = -1;
                     if (x==num_x-1) face[0] = 1;
-                    if (y==num_y-1) face[0] = 1;
-                    if (z==num_z-1) face[0] = 1;
+                    if (y==num_y-1) face[1] = 1;
+                    if (z==num_z-1) face[2] = 1;
                     if (face != int3{0,0,0}) type = GridCell::BOUNDARY;
 
                     int3 idx = {static_cast<INT_T>(x),static_cast<INT_T>(y),static_cast<INT_T>(z)};
+
                     GridCell cell = {{cell_size[0] * static_cast<double>(x),
                                       cell_size[1] * static_cast<double>(y),
                                       cell_size[2] * static_cast<double>(z)},

@@ -4,7 +4,7 @@
 #include <functional>
 
 #include "utils/ArrayUtils.h"
-
+#include "Particle.h"
 
 #define NO_FORCE_CUTOFF std::numeric_limits<double>::max()
 #define FORCE_CUTOFF_AUTO std::numeric_limits<double>::min()
@@ -26,7 +26,7 @@ namespace md::env {
 
 
 
-    inline Force NoForce(const double cutoff = NO_FORCE_CUTOFF) {
+    inline Force NoForce(const double cutoff = 0) {
         return Force([](const Particle&, const Particle&) { return vec3{0, 0, 0}; }, cutoff);
     }
 

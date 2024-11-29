@@ -68,8 +68,8 @@ namespace md::env {
             });
         }
 
-        std::vector<GridCellPair> & linked_cells();
-        std::vector<GridCell> cells();
+        const std::vector<GridCellPair> & linked_cells();
+        // std::vector<GridCell> cells();
 
         void apply_boundary(Particle & particle);
 

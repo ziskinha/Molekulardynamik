@@ -19,13 +19,16 @@ namespace md::Integrator {
 
         // update position
         for (auto& p : env.particles()) {
-            p.old_position = p.position;
             p.update_position(dt * p.velocity + pow(dt, 2) / (2 * p.mass) * p.old_force);
             p.update_grid();
             p.reset_force();
         }
+
         for (auto & particle : env.particles(env::GridCell::BOUNDARY)) {
             env.apply_boundary(particle);
+            if (particle.force == vec3{}) {
+                int i = 0;
+            }
         }
 
         // calculate forces

@@ -16,6 +16,7 @@ namespace md::env {
         SPDLOG_TRACE("Particle generated! id: {}, position: {}", id, position);
     }
 
+
     Particle::Particle(const Particle& other)
         : position(other.position),
           old_position(other.old_position),

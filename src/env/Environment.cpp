@@ -153,21 +153,20 @@ namespace md::env {
         return particle_storage.size();
     }
 
-    std::vector<GridCellPair>& Environment::linked_cells() {
+    const std::vector<GridCellPair> & Environment::linked_cells() {
         return grid.linked_cells();
     }
 
-    std::vector<GridCell> Environment::cells() {
-        return grid.grid_cells();
-    }
+    // std::vector<GridCell> Environment::cells() {
+    //     return grid.grid_cells();
+    // }
 
     void Environment::apply_boundary(Particle& particle) {
         // assert particle.face
-        int3 face_normal = grid.get_cell(particle).face_normal;
-        vec3 rel_pos = grid.position_in_cell(particle.position);
+        GridCell & current = grid.get_cell(particle.cell);
+        GridCell & previous = grid.get_cell(grid.what_cell(particle.old_position));
 
-
-
+        boundary.apply_boundary(particle, current, previous);
     }
 
     Particle& Environment::operator[](const size_t id) {

@@ -2,41 +2,48 @@
 
 #include <limits>
 #include "Common.h"
+#include "Force.h"
+// #include "ParticleGrid.h"
 
 #define MAX_EXTENT std::numeric_limits<double>::max()
 #define CENTER_BOUNDARY_ORIGIN std::numeric_limits<double>::max()
 
 namespace md::env {
 
-    // enum BoundaryType {
-    //     OUTFLOW,
-    //     REFLECTIVE_SYMMETRIC,
-    //     REFLECTIVE_VECTOR,
-    //     REFLECTIVE_REPULSIVE,
-    //     PERIODIC
-    // };
+    struct Particle;
+    struct GridCell;
+
 
     class  Boundary {
     public:
-        // using Types = std::array<Type, 6>;
+        static const int3 LEFT;
+        static const int3 RIGHT;
+        static const int3 TOP;
+        static const int3 BOTTOM;
+        static const int3 FRONT;
+        static const int3 BACK;
 
-        using BoundaryRule = std::function<void(Particle*, const GridCell&)>;
+        using BoundaryRule = std::function<void(Particle&, const int3 &, const GridCell&, const GridCell&)>;
 
-        enum Face { LEFT, RIGHT, TOP, BOTTOM, FRONT, BACK };
         enum Extent { WIDTH, HEIGHT, DEPTH };
 
         Boundary();
-
+        void set_boundary_rule(BoundaryRule rule);
+        void set_boundary_rule(BoundaryRule rule, const int3 & face_normal);
 
         vec3 extent {MAX_EXTENT, MAX_EXTENT, MAX_EXTENT}; // [width, height, depth]
         vec3 origin {CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN};
 
 
-        // Types types {OUTFLOW, OUTFLOW, OUTFLOW, OUTFLOW, OUTFLOW, OUTFLOW}; // [left, right, top, bottom, front, back]
-        std::array<BoundaryRule, 6> types; // [left, right, top, bottom, front, back]
+        void apply_boundary(Particle & particle, const GridCell& current_cell, const GridCell& previous_cell) const;
 
-        void apply_boundary(Particle * particle, const GridCell & cell) {
+        static BoundaryRule Outflow();
+        static BoundaryRule VirtualParticleRepulsion();
+        static BoundaryRule VectorReflection();
+        static BoundaryRule UniformRepulsiveForce();
+        static BoundaryRule Periodic();
 
-        }
+    private:
+        std::array<BoundaryRule, 6> rules; // [left, right, top, bottom, front, back]
     };
 }
