@@ -25,7 +25,36 @@ namespace md::Integrator {
          * @param write_freq The frequency with which the data is written to output.
          * @param benchmark
          */
-        void simulate(double start_time, double end_time, double dt, unsigned int write_freq, bool benchmark = false);
+        void simulate(double start_time, double end_time, double dt, unsigned int write_freq);
+
+        /**
+         * @brief Runs the simulation in benchmark mode. Benchmarking the overall runtime of the simulation.
+         * @param start_time
+         * @param end_time
+         * @param dt
+         * @param file_name
+         * @param repititions
+         */
+        void benchmark_overall(const double start_time, const double end_time, const double dt, const std::string& file_name, int repetitions);
+
+        /**
+         * @brief Runs the simulation in benchmark mode. Benchmarking the runtime per iteration.
+         * @param start_time
+         * @param end_time
+         * @param dt
+         * @param file_name
+         * @param repetitions
+         */
+        void benchmark_iterations(const double start_time, const double end_time, const double dt, const std::string& file_name, int repetitions);
+
+        /**
+         * @brief Runs the simulation in benchmark mode,
+         * @param start_time
+         * @param end_time
+         * @param dt
+         * @param file_name
+         */
+        void benchmark_simulate(const double start_time, const double end_time, const double dt, const std::string &file_name);
 
        protected:
         /**

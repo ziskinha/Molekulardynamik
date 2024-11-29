@@ -30,52 +30,95 @@ void show_progress(const int current, const int total) {
 
 namespace md::Integrator {
     IntegratorBase::IntegratorBase(env::Environment& system, std::unique_ptr<io::OutputWriterBase> writer)
-        : environment(system), writer(std::move(writer)) {}
+        : environment(system), writer(std::move(writer)){}
 
     void IntegratorBase::simulate(const double start_time, const double end_time, const double dt,
-                                  const unsigned int write_freq, const bool benchmark) {
+                                  const unsigned int write_freq) {
         int i = 0;
         const int total_steps = static_cast<int>((end_time - start_time) / dt);
         SPDLOG_INFO("Simulation started");
 
-        if (benchmark) {
-            long duration_sum = 0;
-            int repetitions = 150;
-            SPDLOG_INFO("Benchmarking enabled. Subsequent logging messages during simulation are disabled.");
-
-            for (int k = 1; k <= repetitions; k++) {
-                spdlog::set_level(spdlog::level::off);
-                auto start = std::chrono::high_resolution_clock::now();
-
-                for (double t = start_time; t < end_time; t += dt) {
-                    simulation_step(dt);
+        for (double t = start_time; t < end_time; t += dt, i++) {
+            simulation_step(dt);
+            if (i % write_freq == 0) {
+                if (writer != nullptr) {
+                    SPDLOG_DEBUG("Plotting particles @ iteration {}, time {}", i, t);
+                    writer->plot_particles(environment, i);
                 }
-                auto end = std::chrono::high_resolution_clock::now();
-                auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-                spdlog::set_level(spdlog::level::info);
-                SPDLOG_INFO("Finished {}. benchmark simulation, out of {}", k, repetitions);
-                SPDLOG_INFO("Execution time: {} milliseconds", duration);
-                SPDLOG_INFO("Number of particles: {}", environment.size());
-                SPDLOG_INFO("Number of steps: {}", total_steps);
-                duration_sum += duration;
             }
-            SPDLOG_INFO("Average execution time: {} milliseconds", duration_sum / repetitions);
 
-        } else {
-            for (double t = start_time; t < end_time; t += dt, i++) {
-                simulation_step(dt);
-                if (i % write_freq == 0) {
-                    if (writer != nullptr) {
-                        SPDLOG_DEBUG("Plotting particles @ iteration {}, time {}", i, t);
-                        writer->plot_particles(environment, i);
-                    }
-                }
-
-                show_progress(i, total_steps);
-            }
+            show_progress(i, total_steps);
         }
 
         std::cout << "" << std::endl;
         SPDLOG_INFO("Simulation ended");
     }
+
+
+    /// -----------------------------------------
+    /// \brief Benchmark functions
+    /// -----------------------------------------
+    void IntegratorBase::benchmark_overall(const double start_time, const double end_time, const double dt,
+                                           const std::string &file_name, int repetitions) {
+        long duration_sum = 0;
+
+        for (int k = 1; k <= repetitions; k++) {
+            spdlog::set_level(spdlog::level::off);
+            env::Environment env;
+            md::io::read_file(file_name, env);
+            env.build();
+
+            auto start = std::chrono::high_resolution_clock::now();
+
+            for (double t = start_time; t < end_time; t += dt) {
+                simulation_step(dt);
+            }
+            auto end = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+            spdlog::set_level(spdlog::level::info);
+            SPDLOG_INFO("Finished {}. benchmark simulation, out of {}", k, repetitions);
+            SPDLOG_INFO("Execution time: {} ms", duration);
+            SPDLOG_INFO("Number of particles: {}", environment.size());
+            duration_sum += duration;
+        }
+        SPDLOG_INFO("Average execution time: {} ms", duration_sum / repetitions);
+    }
+
+    void IntegratorBase::benchmark_iterations(const double start_time, const double end_time, const double dt,
+                                              const std::string &file_name, int repetitions) {
+        double avg_duration_sum = 0.0;
+
+        for (int k = 1; k <= repetitions; k++) {
+            spdlog::set_level(spdlog::level::off);
+            auto duration_sum = 0.0;
+
+            env::Environment new_env;
+            md::io::read_file(file_name, new_env);
+            new_env.build();
+
+            for (double t = start_time; t < end_time; t += dt) {
+                auto start = std::chrono::high_resolution_clock::now();
+                simulation_step(dt);
+                auto end = std::chrono::high_resolution_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+                duration_sum += duration;
+            }
+
+            spdlog::set_level(spdlog::level::info);
+
+            double avg_time = duration_sum / (end_time / dt);
+            avg_duration_sum += avg_time;
+            SPDLOG_INFO("Average loop time of the {}. repetition: {} ms", k, avg_time);
+        }
+
+        SPDLOG_INFO("Average loop time of {} repetitions: {} ms", repetitions, avg_duration_sum /repetitions);
+    }
+
+    void IntegratorBase::benchmark_simulate(const double start_time, const double end_time, const double dt,
+                                            const std::string &file_name) {
+        SPDLOG_INFO("Benchmarking enabled. Subsequent logging messages during simulation are disabled.");
+        int repetitions = 10;
+        //benchmark_overall(start_time, end_time, dt, repetitions);
+        benchmark_iterations(start_time, end_time, dt, file_name, repetitions);
+    };
 }  // namespace md::Integrator
