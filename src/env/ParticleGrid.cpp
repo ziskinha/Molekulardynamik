@@ -22,8 +22,8 @@ namespace md::env {
     /// -----------------------------------------
     /// \brief Grid cell methods
     /// -----------------------------------------
-    GridCell::GridCell(const vec3& coord, const vec3& size, Type type, const int3& idx, const int3& face_normal)
-        : type(type), origin(coord), size(size), face_normal(face_normal), idx(idx), id(count++) {}
+    GridCell::GridCell(const vec3& coord, const vec3& size, Type type, const int3& idx)
+        : type(type), origin(coord), size(size), idx(idx), id(count++) {}
 
     std::string GridCell::to_string() const {
         std::stringstream stream;
@@ -89,22 +89,20 @@ namespace md::env {
             for (size_t y = 0; y < num_y; y++) {
                 for (size_t z = 0; z < num_z; z++) {
                     auto type = GridCell::INNER;
-                    int3 face = {};
 
-                    if (x==0) face[0] = -1;
-                    if (y==0) face[1] = -1;
-                    if (z==0) face[2] = -1;
-                    if (x==num_x-1) face[0] = 1;
-                    if (y==num_y-1) face[1] = 1;
-                    if (z==num_z-1) face[2] = 1;
-                    if (face != int3{0,0,0}) type = GridCell::BOUNDARY;
+                    if (x==0) type |= GridCell::BOUNDARY_LEFT;
+                    if (y==0) type |= GridCell::BOUNDARY_BOTTOM;
+                    if (z==0) type |= GridCell::BOUNDARY_BACK;
+                    if (x==num_x-1) type |= GridCell::BOUNDARY_RIGHT;
+                    if (y==num_y-1) type |= GridCell::BOUNDARY_TOP;
+                    if (z==num_z-1) type |= GridCell::BOUNDARY_FRONT;
 
                     int3 idx = {static_cast<INT_T>(x),static_cast<INT_T>(y),static_cast<INT_T>(z)};
 
                     GridCell cell = {{cell_size[0] * static_cast<double>(x),
                                       cell_size[1] * static_cast<double>(y),
                                       cell_size[2] * static_cast<double>(z)},
-                                     cell_size, type, idx, face};
+                                     cell_size, type, idx};
 
                     cells.emplace(idx, cell);
 
@@ -116,7 +114,7 @@ namespace md::env {
         }
 
         // create a cell representing the "outside"
-        GridCell outside = {MIN_VEC3, MAX_VEC3, GridCell::OUTSIDE, OUTSIDE_CELL, {0,0,0}};
+        GridCell outside = {MIN_VEC3, MAX_VEC3, GridCell::OUTSIDE, OUTSIDE_CELL};
         cells.emplace(OUTSIDE_CELL, outside);
         SPDLOG_TRACE("Grid Cell created. index: {} Cell: {}", OUTSIDE_CELL, outside.to_string());
 

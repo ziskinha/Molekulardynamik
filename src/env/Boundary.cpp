@@ -8,36 +8,29 @@
 
 namespace md::env {
 
-    const int3 Boundary::LEFT = {-1, 0, 0};
-    const int3 Boundary::RIGHT = {1, 0, 0};
-    const int3 Boundary::TOP = {0, 1, 0};
-    const int3 Boundary::BOTTOM = {0, -1, 0};
-    const int3 Boundary::FRONT = {0, 0, 1};
-    const int3 Boundary::BACK = {0, 0, -1};
+    const int3 BoundaryNormal::LEFT = {-1, 0, 0};
+    const int3 BoundaryNormal::RIGHT = {1, 0, 0};
+    const int3 BoundaryNormal::TOP = {0, 1, 0};
+    const int3 BoundaryNormal::BOTTOM = {0, -1, 0};
+    const int3 BoundaryNormal::FRONT = {0, 0, 1};
+    const int3 BoundaryNormal::BACK = {0, 0, -1};
 
     /// -----------------------------------------
     /// \brief Helper methods
     /// -----------------------------------------
-
-    double scalar_product(const std::array<int, 3>& face_normal, const std::array<double, 3>& pos) {
-        return face_normal[0] * pos[0] + face_normal[1] * pos[1] + face_normal[2] * pos[2];
-    }
-
-    std::vector<int3> decompose_normal(const int3 & normal) {
-        // TODO assert components are either 1 or -1
+    std::vector<int3> type_to_normals(const GridCell::Type type) {
+        // Assert type & GridCell::Boundary
         std::vector<int3> ret;
-        ret.reserve(3);
+        ret.reserve(6);
 
-        if (normal[0] != 0) ret.push_back({normal[0], 0, 0});
-        if (normal[1] != 0) ret.push_back({0, normal[1], 0});
-        if (normal[2] != 0) ret.push_back({0, 0, normal[2]});
+        if (type & GridCell::BOUNDARY_LEFT) ret.push_back(BoundaryNormal::LEFT);
+        if (type & GridCell::BOUNDARY_RIGHT) ret.push_back(BoundaryNormal::RIGHT);
+        if (type & GridCell::BOUNDARY_TOP) ret.push_back(BoundaryNormal::TOP);
+        if (type & GridCell::BOUNDARY_BOTTOM) ret.push_back(BoundaryNormal::BOTTOM);
+        if (type & GridCell::BOUNDARY_FRONT) ret.push_back(BoundaryNormal::FRONT);
+        if (type & GridCell::BOUNDARY_BACK) ret.push_back(BoundaryNormal::BACK);
 
         return ret;
-    }
-
-    int num_boundary_faces(const int3 & normal) {
-        // TODO assert components are either 1 or -1
-        return (normal[0] != 0) + (normal[1] != 0) + (normal[2] != 0);
     }
 
     int axis_from_normal(const int3 & normal) {
@@ -56,7 +49,6 @@ namespace md::env {
         return {-1, -1};
     }
 
-
     size_t face_normal_to_idx(const int3 & face_normal){
         // TODO Assert whether face_normal[i] = 1 or = -1 for all i in [0,2]
         // TODO Assert that only one component has magnitude 1
@@ -70,15 +62,12 @@ namespace md::env {
         throw std::invalid_argument("Invalid face normal");
     }
 
-    double distance_to_boundary(const Particle & particle, const int3 & normal, const GridCell & cell) {
-        const int axis = axis_from_normal(normal);
-        const double coord = particle.position[axis] - cell.origin[axis];
-        if ( normal[axis] == 1) return cell.size[axis] - coord;
-        if ( normal[axis] == -1) return coord;
-        throw std::invalid_argument("???");
-    }
 
 
+
+    /// -----------------------------------------
+    /// \brief Boundary class methods
+    /// -----------------------------------------
     Boundary::Boundary() {
         set_boundary_rule(Outflow());
     };
@@ -96,17 +85,19 @@ namespace md::env {
     void Boundary::apply_boundary(Particle & particle, const GridCell& current_cell, const GridCell& previous_cell) const {
         // TODO handle case when the system consists of only a single cell (this cell has 6 boundary faces)
 
+        const std::vector<int3> normals = type_to_normals(current_cell.type);
+
+        // if particle is outside, we need to find out which boundary interface it passed through to apply the correct rule
         if (current_cell.type == GridCell::OUTSIDE) {
-            int3 face_normal = previous_cell.face_normal;
             // calculate which face particle traveled through if the cell has more than one face
-            if (num_boundary_faces(face_normal) > 1) {
+            if (normals.size() > 1) {
                 const vec3 diff = particle.position - particle.old_position;
                 const vec3 rel_pos = particle.old_position - origin;
 
                 const vec3 y = {
-                    face_normal[0] == -1 ? 0 /*left*/ : extent[0] /*right*/,
-                    face_normal[1] == -1 ? 0 /*bottom*/ : extent[1] /*top*/,
-                    face_normal[2] == -1 ? 0 /*back*/ : extent[2] /*front*/,
+                    diff[0] > 0 ? 0 /*left*/ : extent[0] /*right*/,
+                    diff[1] > 0 ? 0 /*bottom*/ : extent[1] /*top*/,
+                    diff[2] > 0 ? 0 /*back*/ : extent[2] /*front*/,
                 };
 
                 const vec3 t = {
@@ -115,32 +106,59 @@ namespace md::env {
                     (y[2] - rel_pos[2]) / diff[2],
                 };
 
-                auto normals = decompose_normal(face_normal);
+                const std::array possible_normals = {
+                    diff[0] > 0 ? BoundaryNormal::RIGHT : BoundaryNormal::LEFT,
+                    diff[1] > 0 ? BoundaryNormal::TOP : BoundaryNormal::BOTTOM,
+                    diff[2] > 0 ? BoundaryNormal::FRONT : BoundaryNormal::BACK
+                };
 
-                for (int3 normal : normals) {
+                for (const auto& normal : possible_normals) {
                     const int axis = axis_from_normal(normal);
                     const auto non_axis = non_axis_indices(axis);
                     const vec3 intersection = t[axis] * diff + rel_pos; // intersection of the particles path with the boundary
 
+                    // check if intersection point is valid. if so apply rule
                     if (intersection[non_axis[0]] >= 0 && intersection[non_axis[0]] <= extent[non_axis[0]] &&
                         intersection[non_axis[1]] >= 0 && intersection[non_axis[1]] <= extent[non_axis[1]]) {
-                        face_normal = normal;
-                        break;
+                        apply_rule(normal, particle, current_cell, previous_cell);
+                        return;
                     }
                 }
-            }
 
-            rules[face_normal_to_idx(face_normal)](particle, face_normal, current_cell, previous_cell);
-        } else {
+            } else { // only one normal for the current cell i.e. only one boundary interface
+                apply_rule(normals[0], particle, current_cell, previous_cell);
+            }
+        }else {
             // apply boundary conditions for each boundary of the cell
-            for (const auto &normal :  decompose_normal(current_cell.face_normal)) {
-                rules[face_normal_to_idx(normal)](particle, normal, current_cell, previous_cell);
+            for (const auto &normal :  normals) {
+                apply_rule(normal, particle, current_cell, previous_cell);
             }
         }
     }
 
+
+    void Boundary::apply_rule(const int3& normal, Particle& particle, const GridCell& current_cell,
+           const GridCell& previous_cell) const {
+        rules[face_normal_to_idx(normal)](particle, normal, current_cell, previous_cell);
+    }
+
+
+
+
+    /// -----------------------------------------
+    /// \brief Boundary Rules
+    /// -----------------------------------------
+
+    double distance_to_boundary(const Particle & particle, const int3 & normal, const GridCell & cell) {
+        const int axis = axis_from_normal(normal);
+        const double coord = particle.position[axis] - cell.origin[axis];
+        if ( normal[axis] == 1) return cell.size[axis] - coord;
+        if ( normal[axis] == -1) return coord;
+        throw std::invalid_argument("???");
+    }
+
     Boundary::BoundaryRule Boundary::Outflow() {
-        return [](Particle & particle, const int3 &, const GridCell& current_cell, const GridCell& previous_cell) {
+        return [](Particle & particle, const int3 &, const GridCell& current_cell, const GridCell&) {
             if (current_cell.type == GridCell::OUTSIDE) {
                 particle.state = Particle::DEAD;
                 particle.update_grid();
@@ -161,5 +179,9 @@ namespace md::env {
             }
         };
     }
-    Boundary::BoundaryRule Boundary::Periodic() {}
+    Boundary::BoundaryRule Boundary::Periodic() {
+
+    }
+
 }
+

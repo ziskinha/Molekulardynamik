@@ -59,8 +59,8 @@ int main(const int argc, char* argv[]) {
     boundary.extent = {3, 3, 1};
     boundary.origin = {0, 0, 0};
     boundary.set_boundary_rule(env::Boundary::UniformRepulsiveForce());
-    boundary.set_boundary_rule(env::Boundary::Outflow(), env::Boundary::FRONT);
-    boundary.set_boundary_rule(env::Boundary::Outflow(), env::Boundary::BACK);
+    boundary.set_boundary_rule(env::Boundary::Outflow(), env::BoundaryNormal::FRONT);
+    boundary.set_boundary_rule(env::Boundary::Outflow(), env::BoundaryNormal::BACK);
 
     // std::array<int3, 6> faces = {
     //     env::Boundary::LEFT,
@@ -79,7 +79,7 @@ int main(const int argc, char* argv[]) {
 
     env.set_boundary(boundary);
     env.set_force(env::LennardJones(5, 0.1));
-    env.set_grid_constant(1);
+    // env.set_grid_constant(1);
 
     // env.set_force(env::LennardJones(5, 1, 5));
 

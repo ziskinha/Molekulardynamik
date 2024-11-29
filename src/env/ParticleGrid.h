@@ -13,20 +13,25 @@
 namespace md::env {
     struct GridCell {
         enum Type {
-            INNER = 0x100000,
-            BOUNDARY = 0x200000,
-            OUTSIDE = 0x400000,
+            INNER               = 0x001,
+            BOUNDARY            = 0xFF0,
+            BOUNDARY_RIGHT      = 0x010,
+            BOUNDARY_LEFT       = 0x020,
+            BOUNDARY_TOP        = 0x040,
+            BOUNDARY_BOTTOM     = 0x080,
+            BOUNDARY_FRONT      = 0x100,
+            BOUNDARY_BACK       = 0x200,
+            OUTSIDE             = 0x002,
             INSIDE = INNER | BOUNDARY,
         };
 
-        GridCell(const vec3& coord, const vec3& size, Type type, const int3& idx, const int3& face_normal);
+        GridCell(const vec3& coord, const vec3& size, Type type, const int3& idx);
         [[nodiscard]] std::string to_string() const;
         bool operator==(const GridCell& other) const;
 
         const Type type;
         const vec3 origin;
         const vec3 size;
-        const int3 face_normal;
         const int3 idx;
         int id;
 
@@ -46,6 +51,11 @@ namespace md::env {
         return static_cast<T>(lhs) & static_cast<T>(rhs);
     }
 
+    constexpr GridCell::Type& operator|=(GridCell::Type& lhs, const GridCell::Type rhs) {
+        using T = std::underlying_type_t<GridCell::Type>;
+        lhs = static_cast<GridCell::Type>(static_cast<T>(lhs) | static_cast<T>(rhs));
+        return lhs;
+    }
 
 
     struct GridCellPair{
