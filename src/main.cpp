@@ -6,7 +6,7 @@
 // #include "env/Environment.h"
 // #include "env/Force.h"
 
-#include "tests.h"
+#include "TestScenarios.h"
 
 using namespace md;
 int main(const int argc, char* argv[]) {
@@ -21,7 +21,7 @@ int main(const int argc, char* argv[]) {
 
     log_arguments(args);
 
-    four_particle_periodic_conditions_test();
+    four_particle_reflective_velocity_test();
 
 
     // args.duration = 10;

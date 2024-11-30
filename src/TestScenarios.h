@@ -118,3 +118,38 @@ inline void four_particle_periodic_conditions_test() {
     Integrator::StoermerVerlet simulator(env, create_writer(args.output_format, args.override));
     simulator.simulate(0, args.duration, args.dt, write_freq, args.benchmark);
 }
+
+inline void four_particle_reflective_velocity_test() {
+    parse::ProgramArguments args;
+    args.output_format = io::OutputFormat::VTK;
+    args.benchmark = false;
+    args.override = true;
+
+    args.duration = 10;
+    args.dt = 0.0001;
+    args.num_frames = 600;
+    const double num_steps = args.duration / args.dt;
+    const int write_freq = std::max(static_cast<int> (round(num_steps / args.num_frames)), 1);
+
+    env::Environment env;
+    env.add_particle({2.8,2.9,0}, {4,2,0}, 1, 1);
+    env.add_particle({0.1,0.15,0}, {-6,1,0}, 1, 1);
+    env.add_particle({2.5,0.1,0}, {-1,1,0}, 1, 1);
+    env.add_particle({0.2,2.6,0}, {6,2,0}, 1, 1);
+
+    env::Boundary boundary;
+    boundary.extent = {3, 3, 1};
+    boundary.origin = {0, 0, 0};
+    boundary.set_boundary_rule(env::BoundaryRule::VELOCITY_REFLECTION);
+    boundary.set_boundary_rule(env::BoundaryRule::OUTFLOW, env::BoundaryNormal::FRONT);
+    boundary.set_boundary_rule(env::BoundaryRule::OUTFLOW, env::BoundaryNormal::BACK);
+
+    env.set_boundary(boundary);
+    env.set_force(env::LennardJones(5, 0.1));
+    env.set_grid_constant(0.5);
+
+    env.build();
+
+    Integrator::StoermerVerlet simulator(env, create_writer(args.output_format, args.override));
+    simulator.simulate(0, args.duration, args.dt, write_freq, args.benchmark);
+}

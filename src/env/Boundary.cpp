@@ -78,10 +78,6 @@ namespace md::env {
     /// -----------------------------------------
     Boundary::Boundary() {
         set_boundary_rule(OUTFLOW);
-        // force = [](const double dist) {
-        //     if (dist < 0.5) return 0.3/pow(dist, 2);
-        //     return 0.0;
-        // };
     };
 
     void Boundary::set_boundary_rule(const BoundaryRule rule) {
@@ -176,7 +172,7 @@ namespace md::env {
 
 
     void Boundary::apply_rule(const int3& normal, Particle& particle, const GridCell& current_cell) const {
-        switch (BoundaryRule rule = rules[face_normal_to_idx(normal)]) {
+        switch (rules[face_normal_to_idx(normal)]) {
             case OUTFLOW: outflow_rule(particle, current_cell); break;
             case PERIODIC: periodic_rule(particle, normal, current_cell); break;
             case REPULSIVE_FORCE: repulsive_force_rule(particle, normal, current_cell); break;
@@ -185,10 +181,10 @@ namespace md::env {
     }
 
 
-    void Boundary::outflow_rule(Particle& particle, const GridCell& current_cell) const {
+    void Boundary::outflow_rule(Particle& particle, const GridCell& previous_cell) const {
         // this rule may be called when applying all boundary conditions of a cell, hence we need a check if
         // the particle is outside or inside
-        if (current_cell.type == GridCell::OUTSIDE) {
+        if (previous_cell.type == GridCell::OUTSIDE) {
             particle.state = Particle::DEAD;
             particle.update_grid();
         }
@@ -214,16 +210,25 @@ namespace md::env {
             df[axis] = force(dist) * normal[axis];
             particle.force = particle.force - df;
         }
-
-        // if (dist != 0) {
-        //     const double force_mag = 1/dist/dist;
-        //     particle.force = particle.force - vec3{force_mag * normal[0], force_mag * normal[1], force_mag * normal[2]};
-        // }
     }
 
     void Boundary::velocity_reflection_rule(Particle& particle, const int3 & normal, const GridCell& cell) const {
-        const double dist = distance_to_boundary(particle, normal, cell);
+        if (cell.type != GridCell::OUTSIDE) return;
 
+        const vec3 pos = particle.old_position - origin;
+        const vec3 diff = particle.position - particle.old_position;
+        const int axis = axis_from_normal(normal);
+
+        const double y = normal[axis] < 0 ? 0 : extent[axis];
+        const double t = (y - pos[axis]) / diff[axis];
+
+        const vec3 intersection = t * diff + pos;
+        vec3 reflected = particle.position - intersection;
+        reflected[axis] = - reflected[axis];
+
+        particle.velocity[axis] = - particle.velocity[axis];
+        particle.position = reflected + intersection;
+        particle.update_grid();
     }
 }
 
