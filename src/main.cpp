@@ -21,7 +21,7 @@ int main(const int argc, char* argv[]) {
 
     log_arguments(args);
 
-    periodic_boundary_conditions_test();
+    four_particle_periodic_conditions_test();
 
 
     // args.duration = 10;

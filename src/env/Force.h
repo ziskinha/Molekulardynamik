@@ -2,6 +2,7 @@
 #include <cmath>
 #include <limits>
 #include <functional>
+#include <utility>
 
 #include "utils/ArrayUtils.h"
 #include "Particle.h"
@@ -13,8 +14,8 @@ namespace md::env {
     using ForceFunc = std::function<vec3(const Particle&, const Particle&)>;
 
     struct Force {
-        explicit Force(const ForceFunc& force_func = {}, const double cutoff = NO_FORCE_CUTOFF)
-            : cutoff_radius(cutoff), force_func(force_func) {}
+        explicit Force(ForceFunc  force_func = {}, const double cutoff = NO_FORCE_CUTOFF)
+            : cutoff_radius(cutoff), force_func(std::move(force_func)) {}
 
         vec3 operator()(const Particle& p1, const Particle& p2) const { return force_func(p1, p2); }
 
@@ -102,4 +103,5 @@ namespace md::env {
 
         return Force(force_func, cutoff_radius);
     }
+
 } // namespace md::force

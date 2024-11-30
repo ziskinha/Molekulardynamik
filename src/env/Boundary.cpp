@@ -73,12 +73,15 @@ namespace md::env {
 
 
 
-
     /// -----------------------------------------
     /// \brief Boundary class methods
     /// -----------------------------------------
     Boundary::Boundary() {
         set_boundary_rule(OUTFLOW);
+        // force = [](const double dist) {
+        //     if (dist < 0.5) return 0.3/pow(dist, 2);
+        //     return 0.0;
+        // };
     };
 
     void Boundary::set_boundary_rule(const BoundaryRule rule) {
@@ -89,6 +92,10 @@ namespace md::env {
 
     void Boundary::set_boundary_rule(const BoundaryRule rule, const int3 & face_normal) {
         rules[face_normal_to_idx(face_normal)] = rule;
+    }
+
+    void Boundary::set_boundary_force(const BoundaryForce& force) {
+        this->force = force;
     }
 
     void Boundary::apply_boundary(Particle & particle, const GridCell& current_cell, const GridCell& previous_cell) const {
@@ -145,12 +152,35 @@ namespace md::env {
     }
 
 
+    BoundaryForce Boundary::LennardJonesForce(const double epsilon, const double sigma) {
+        return [sigma, epsilon](const double dist) {
+            if (dist < 1.1225 * sigma) {
+
+                const double inv_dist = sigma / dist;
+                const double inv_dist_2 = inv_dist * inv_dist;       // (sigma / dist)^2
+                const double inv_dist_6 = inv_dist_2 * inv_dist_2 * inv_dist_2; // (sigma / dist)^6
+                const double inv_dist_12 = inv_dist_6 * inv_dist_6; // (sigma / dist)^12
+
+                return - 24 * epsilon * (inv_dist_6 - 2 * inv_dist_12) / dist;
+            }
+            return 0.0;
+        };
+    }
+
+    BoundaryForce Boundary::InverseDistanceForce(const double cutoff, const double pre_factor, const int exponent) {
+        return [=](const double dist) {
+            if (dist < cutoff) return pre_factor/pow(dist, exponent);
+            return 0.0;
+        };
+    }
+
+
     void Boundary::apply_rule(const int3& normal, Particle& particle, const GridCell& current_cell) const {
         switch (BoundaryRule rule = rules[face_normal_to_idx(normal)]) {
             case OUTFLOW: outflow_rule(particle, current_cell); break;
             case PERIODIC: periodic_rule(particle, normal, current_cell); break;
             case REPULSIVE_FORCE: repulsive_force_rule(particle, normal, current_cell); break;
-            case VELOCITY_REFLECTION: velocity_reflection_rule(particle); break;
+            case VELOCITY_REFLECTION: velocity_reflection_rule(particle, normal, current_cell); break;
         }
     }
 
@@ -178,49 +208,22 @@ namespace md::env {
     void Boundary::repulsive_force_rule(Particle& particle, const int3 & normal, const GridCell& cell) const {
         const double dist = distance_to_boundary(particle, normal, cell);
 
-        if (dist != 0) {
-            const double force_mag = 1/dist/dist;
-            particle.force = particle.force - vec3{force_mag * normal[0], force_mag * normal[1], force_mag * normal[2]};
+        if (dist != 0) { // particles may be initialized at the boundary
+            vec3 df = {};
+            int axis = axis_from_normal(normal);
+            df[axis] = force(dist) * normal[axis];
+            particle.force = particle.force - df;
         }
+
+        // if (dist != 0) {
+        //     const double force_mag = 1/dist/dist;
+        //     particle.force = particle.force - vec3{force_mag * normal[0], force_mag * normal[1], force_mag * normal[2]};
+        // }
     }
 
-    void Boundary::velocity_reflection_rule(Particle& particle) const {
+    void Boundary::velocity_reflection_rule(Particle& particle, const int3 & normal, const GridCell& cell) const {
+        const double dist = distance_to_boundary(particle, normal, cell);
 
     }
-
-    /// -----------------------------------------
-    /// \brief Boundary Rules
-    /// -----------------------------------------
-
-    // Boundary::BoundaryRule Boundary::Outflow() {
-    //     return [](Particle & particle, const int3 &, const GridCell& current_cell, const GridCell&) {
-    //         if (current_cell.type == GridCell::OUTSIDE) {
-    //             particle.state = Particle::DEAD;
-    //             particle.update_grid();
-    //         }
-    //     };
-    // }
-    //
-    // Boundary::BoundaryRule Boundary::VirtualParticleRepulsion() {}
-    // Boundary::BoundaryRule Boundary::VectorReflection() {}
-    //
-    // Boundary::BoundaryRule Boundary::UniformRepulsiveForce() {
-    //     return [](Particle & particle, const int3 & normal ,const GridCell& current_cell, const GridCell&) {
-    //         const double dist = distance_to_boundary(particle, normal, current_cell);
-    //
-    //         if (dist != 0) {
-    //             const double force_mag = 1/dist/dist;
-    //             particle.force = particle.force - vec3{force_mag * normal[0], force_mag * normal[1], force_mag * normal[2]};
-    //         }
-    //     };
-    // }
-    // Boundary::BoundaryRule Boundary::Periodic() {
-    //     return [](Particle & particle, const int3 & normal ,const GridCell&, const GridCell&) {
-    //         int axis = axis_from_normal(normal);
-    //         vec3 dx = {0,0,0};
-    //         if (normal[axis] == 1) dx[axis] = extent[axis];
-    //     };
-    // }
-
 }
 
