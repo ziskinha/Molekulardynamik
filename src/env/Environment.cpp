@@ -162,10 +162,9 @@ namespace md::env {
     // }
 
     void Environment::apply_boundary(Particle& particle) {
-        // assert particle.face
-        GridCell & current = grid.get_cell(particle.cell);
-        GridCell & previous = grid.get_cell(grid.what_cell(particle.old_position));
 
+        auto & current = grid.get_cell(particle.cell);
+        auto & previous = grid.get_cell(grid.what_cell(particle.old_position));
         boundary.apply_boundary(particle, current, previous);
     }
 

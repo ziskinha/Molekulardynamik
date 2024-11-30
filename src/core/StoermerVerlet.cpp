@@ -24,11 +24,8 @@ namespace md::Integrator {
             p.reset_force();
         }
 
-        for (auto & particle : env.particles(env::GridCell::BOUNDARY)) {
+        for (auto & particle : env.particles(env::GridCell::BOUNDARY | env::GridCell::OUTSIDE)) {
             env.apply_boundary(particle);
-            if (particle.force == vec3{}) {
-                int i = 0;
-            }
         }
 
         // calculate forces
