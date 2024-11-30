@@ -2,7 +2,8 @@
 
 #include <stdexcept>
 
-#include <utils/ArrayUtils.h>
+#include "utils/ArrayUtils.h"
+#include "utils/Debug.h"
 #include "ParticleGrid.h"
 #include "Particle.h"
 
@@ -35,7 +36,14 @@ namespace md::env {
     }
 
     int axis_from_normal(const int3 & normal) {
-        // TODO assert only one component is either 1 or -1. The rest is 0
+        ASSERT(
+            (normal[0] == 0 || normal[0] == 1 || normal[0] == -1) &&
+            (normal[1] == 0 || normal[1] == 1 || normal[1] == -1) &&
+            (normal[2] == 0 || normal[2] == 1 || normal[2] == -1) &&
+            (normal[0] != 0) + (normal[1] != 0) + (normal[2] != 0) == 1,
+            "The normal vector must have exactly one non-zero component that is either 1 or -1."
+        );
+
         for (int i = 0; i < 3; i++) {
             if (normal[i] != 0) return i;
         }
@@ -43,7 +51,7 @@ namespace md::env {
     }
 
     std::array<int, 2> non_axis_indices(const int axis) {
-        // TODO assert axis = 0,1,2
+        ASSERT(axis >= 0 && axis <= 2, "Axis must be 0, 1, or 2.");
         if (axis == 0) return {1, 2};
         if (axis == 1) return {0, 2};
         if (axis == 2) return {1, 2};
@@ -51,8 +59,19 @@ namespace md::env {
     }
 
     size_t face_normal_to_idx(const int3 & face_normal){
-        // TODO Assert whether face_normal[i] = 1 or = -1 for all i in [0,2]
-        // TODO Assert that only one component has magnitude 1
+        // Assert whether face_normal[i] is either 1, -1, or 0 for all i = 0,1,2
+        ASSERT(
+            (face_normal[0] == 0 || face_normal[0] == 1 || face_normal[0] == -1) &&
+            (face_normal[1] == 0 || face_normal[1] == 1 || face_normal[1] == -1) &&
+            (face_normal[2] == 0 || face_normal[2] == 1 || face_normal[2] == -1),
+            "Each component of face_normal must be 0, 1, or -1."
+        );
+
+        // Assert that exactly one component has magnitude 1
+        ASSERT(
+            (std::abs(face_normal[0]) + std::abs(face_normal[1]) + std::abs(face_normal[2]) == 1),
+            "Exactly one component of face_normal must have magnitude 1."
+        );
 
         if (face_normal[0] == -1) return 0;
         if (face_normal[0] == 1) return 1;
