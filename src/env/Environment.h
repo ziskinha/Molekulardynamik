@@ -11,7 +11,7 @@
 #include "ParticleGrid.h"
 #include "Force.h"
 #include "Boundary.h"
-
+#include <ranges>
 
 #define GRID_CONSTANT_AUTO 0
 
@@ -62,6 +62,7 @@ namespace md::env {
                 return filter_particles(particle, state, type);
             });
         }
+        
         [[nodiscard]] auto particles(Particle::State state = Particle::ALIVE, GridCell::Type type = GridCell::ALL) const {
             return particle_storage | std::ranges::views::filter([this, state, type](const Particle& particle) {
                 return filter_particles(particle, state, type);

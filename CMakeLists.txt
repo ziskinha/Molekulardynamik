@@ -30,14 +30,18 @@ endif ()
 # collect all cpp files
 file(GLOB_RECURSE MY_SRC
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/io/*.cxx" 
         # header don't need to be included but this might be necessary for some IDEs
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/io/*.hxx" 
 )
 
 # create make target
 add_executable(MolSim ${MY_SRC})
 
 # set cxx standard. You may raise this if you want.
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #set(CMAKE_C_STANDARD 23)
 #set(CMAKE_C_STANDARD_REQUIRED ON)
 #set(CMAKE_C_EXTENSIONS OFF) # Disable compiler-specific extensions
@@ -49,6 +53,7 @@ target_compile_features(MolSim
 target_include_directories(MolSim
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/libxsd
+        ${CMAKE_CURRENT_SOURCE_DIR}/xsd-4.0.0-x86_64-linux-gnu/libxsd
         PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )

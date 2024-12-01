@@ -37,11 +37,11 @@ namespace md::io {
         return false;
     }
 
-    std::unique_ptr<OutputWriterBase> create_writer(const OutputFormat output_format, bool allow_delete) {
+    std::unique_ptr<OutputWriterBase> create_writer(const std::string& outputFileBaseName,const OutputFormat output_format, bool allow_delete) {
         if (output_format == OutputFormat::VTK) {
-            return std::make_unique<VTKWriter>(VTKWriter("MD_vtk", allow_delete));
+            return std::make_unique<VTKWriter>(VTKWriter(outputFileBaseName + "_vtk", allow_delete));
         }
-        return std::make_unique<XYZWriter>(XYZWriter("MD_xyz", allow_delete));
+        return std::make_unique<XYZWriter>(XYZWriter(outputFileBaseName + "_xyz", allow_delete));
     }
 
     void read_file(const std::string& filename, env::Environment& environment) {

@@ -5,7 +5,7 @@
 #include "core/StoermerVerlet.h"
 #include "env/Environment.h"
 #include "env/Force.h"
-
+#include "io/Logger.h"
 
 using namespace md;
 int main(const int argc, char* argv[]) {
@@ -20,15 +20,11 @@ int main(const int argc, char* argv[]) {
 
     log_arguments(args);
 
-    // args.duration = 100;
-    // args.dt = 0.001;
-    // args.num_frames = 1000;
-    const double num_steps = args.duration / args.dt;
-    const int write_freq = std::max(static_cast<int> (round(num_steps / args.num_frames)), 1);
+   
+    const int write_freq = args.write_freq;
     SPDLOG_DEBUG("Write frequency: {}", write_freq);                            
 
 
-    env::Environment env;
     // io::read_file(args.file, env);
     // env.add_particle({0,1,0}, {-1,0,0}, 3.0e-6, 1);
     // env.add_particle({0,0,0}, {0,0,0}, 1, 2);
@@ -44,23 +40,21 @@ int main(const int argc, char* argv[]) {
 
 
 
-    env.add_cuboid({0,0,0}, {0,0,0}, {40,8,1}, 0.1, 1.1225, 1, 2, 0);
-    env.add_cuboid({15,15,0}, {0,-10,0}, {8,8,1}, 0.1, 1.1225, 1, 2, 1);
 
     env::Boundary boundary;
     boundary.extent = {100, 100, 1};
     boundary.origin = {-10, -10, 0};
-    env.set_boundary(boundary);
-    env.set_grid_constant(10);
-    env.set_force(env::LennardJones(5, 1, 5));
+    args.env.set_boundary(boundary);
+    args.env.set_grid_constant(10);
+   // args.env.set_force(env::LennardJones(5, 1, 5));
 
-    env.build();
+    args.env.build();
 
-    for (auto &p : env.particles()) {
+    for (auto &p : args.env.particles()) {
         std::cout << "Particle: " << p.to_string() << std::endl;
     }
 
-    for (auto & x : env.cells()) {
+    for (auto & x : args.env.cells()) {
         std::cout << "Cell: " << x.to_string() << std::endl;
     }
 
@@ -79,7 +73,7 @@ int main(const int argc, char* argv[]) {
     //     }
     // }
 
-    Integrator::StoermerVerlet simulator(env, create_writer(args.output_format, args.override));
+    Integrator::StoermerVerlet simulator(args.env, create_writer(args.output_baseName,args.output_format, args.override));
     simulator.simulate(0, args.duration, args.dt, write_freq, args.benchmark);
 
 
