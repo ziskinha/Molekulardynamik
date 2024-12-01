@@ -13,10 +13,10 @@
 
     <Boundary
         typeLEFT="PERIODIC"
-        typeRIGHT="REFLECTIVE_VECTOR"
+        typeRIGHT="REPULSIVE_FORCE"
         typeTOP="OUTFLOW"
         typeBOTTOM="OUTFLOW"
-        typeFRONT="REFLECTIVE_REPULSIVE"
+        typeFRONT="REPULSIVE_FORCE"
         typeBACK="OUTFLOW"
         CENTER_BOUNDARY_ORIGINX="0.0"
         CENTER_BOUNDARY_ORIGINY="0.0"

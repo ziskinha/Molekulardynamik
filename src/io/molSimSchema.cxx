@@ -1608,11 +1608,11 @@ _xsd_BoundaryType_convert () const
   ::xsd::cxx::tree::enum_comparator< char > c (_xsd_BoundaryType_literals_);
   const value* i (::std::lower_bound (
                     _xsd_BoundaryType_indexes_,
-                    _xsd_BoundaryType_indexes_ + 5,
+                    _xsd_BoundaryType_indexes_ + 4,
                     *this,
                     c));
 
-  if (i == _xsd_BoundaryType_indexes_ + 5 || _xsd_BoundaryType_literals_[*i] != *this)
+  if (i == _xsd_BoundaryType_indexes_ + 4 || _xsd_BoundaryType_literals_[*i] != *this)
   {
     throw ::xsd::cxx::tree::unexpected_enumerator < char > (*this);
   }
@@ -1621,23 +1621,21 @@ _xsd_BoundaryType_convert () const
 }
 
 const char* const BoundaryType::
-_xsd_BoundaryType_literals_[5] =
+_xsd_BoundaryType_literals_[4] =
 {
   "OUTFLOW",
-  "REFLECTIVE_SYMMETRIC",
-  "REFLECTIVE_VECTOR",
-  "REFLECTIVE_REPULSIVE",
+  "VELOCITY_REFLECTION",
+  "REPULSIVE_FORCE",
   "PERIODIC"
 };
 
 const BoundaryType::value BoundaryType::
-_xsd_BoundaryType_indexes_[5] =
+_xsd_BoundaryType_indexes_[4] =
 {
   ::BoundaryType::OUTFLOW,
   ::BoundaryType::PERIODIC,
-  ::BoundaryType::REFLECTIVE_REPULSIVE,
-  ::BoundaryType::REFLECTIVE_SYMMETRIC,
-  ::BoundaryType::REFLECTIVE_VECTOR
+  ::BoundaryType::REPULSIVE_FORCE,
+  ::BoundaryType::VELOCITY_REFLECTION
 };
 
 // Boundary

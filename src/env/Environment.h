@@ -224,7 +224,7 @@ namespace md::env {
          * @return A const reference to the vector of the linked cell pairs.
          */
         const std::vector<GridCellPair> & linked_cells();
-        // std::vector<GridCell> cells();
+         std::vector<GridCell> cells();
 
         /**
          * @brief Applies the boundary conditions to a particle.

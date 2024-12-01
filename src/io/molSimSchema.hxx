@@ -455,9 +455,8 @@ class BoundaryType: public ::xml_schema::string
   enum value
   {
     OUTFLOW,
-    REFLECTIVE_SYMMETRIC,
-    REFLECTIVE_VECTOR,
-    REFLECTIVE_REPULSIVE,
+    VELOCITY_REFLECTION,
+    REPULSIVE_FORCE,
     PERIODIC
   };
 
@@ -504,8 +503,8 @@ class BoundaryType: public ::xml_schema::string
   _xsd_BoundaryType_convert () const;
 
   public:
-  static const char* const _xsd_BoundaryType_literals_[5];
-  static const value _xsd_BoundaryType_indexes_[5];
+  static const char* const _xsd_BoundaryType_literals_[4];
+  static const value _xsd_BoundaryType_indexes_[4];
 };
 
 class Boundary: public ::xml_schema::type
