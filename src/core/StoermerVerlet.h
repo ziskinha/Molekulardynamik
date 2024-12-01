@@ -8,10 +8,10 @@ namespace md::Integrator {
      * @brief Implements the calculation of Stoermer-Verlet.
      */
     class StoermerVerlet final : public IntegratorBase {
-    public:
+       public:
         using IntegratorBase::IntegratorBase;
 
-    private:
+       private:
         /**
          * @brief Performs a single step of the Stoermer-Verlet.
          * @param dt Δt The time increment for each simulation step.

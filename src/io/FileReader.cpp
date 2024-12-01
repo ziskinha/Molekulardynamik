@@ -7,9 +7,9 @@
 #include <locale>
 #include <sstream>
 
-#include "io/Logger.h"
-#include "env/Force.h"
 #include "env/Environment.h"
+#include "env/Force.h"
+#include "io/Logger.h"
 
 namespace md::io {
     using namespace env;
@@ -29,6 +29,9 @@ namespace md::io {
         ltrim(s);
     }
 
+    /// -----------------------------------------
+    /// \brief Parse article information
+    /// -----------------------------------------
     void parse_particle(const std::string& line, std::vector<ParticleCreateInfo>& particle_list) {
         SPDLOG_DEBUG("Reading Particle:    {}", line);
         std::istringstream data_stream(line);
@@ -63,6 +66,9 @@ namespace md::io {
         particle_list.emplace_back(origin, init_v, mass, type);
     }
 
+    /// -----------------------------------------
+    /// \brief Parse cuboid information
+    /// -----------------------------------------
     void parse_cuboid(const std::string& line, Environment& environment) {
         SPDLOG_DEBUG("Reading Cuboid:     {}", line);
 
@@ -83,7 +89,7 @@ namespace md::io {
         const vec3 origin = {vals[0], vals[1], vals[2]};
         const vec3 init_v = {vals[3], vals[4], vals[5]};
         const uint3 num_particles = {static_cast<uint32_t>(vals[6]), static_cast<uint32_t>(vals[7]),
-                                                  static_cast<uint32_t>(vals[8])};
+                                     static_cast<uint32_t>(vals[8])};
 
         const double width = vals[9];
         const double mass = vals[10];
@@ -114,7 +120,10 @@ namespace md::io {
         environment.add_cuboid(origin, init_v, num_particles, thermal_v, width, mass, dimension, type);
     }
 
-    void parse_force(const std::string& line, Environment & env) {
+    /// -----------------------------------------
+    /// \brief Parse force information
+    /// -----------------------------------------
+    void parse_force(const std::string& line, Environment& env) {
         SPDLOG_DEBUG("Reading Force:     {}", line);
         std::istringstream data_stream(line);
         std::vector<double> vals;
@@ -125,7 +134,7 @@ namespace md::io {
             SPDLOG_ERROR("Could not read force name", line);
             exit(-1);
         }
-        std::ranges::transform(force_name, force_name.begin(),[](const unsigned char c) { return std::tolower(c); });
+        std::ranges::transform(force_name, force_name.begin(), [](const unsigned char c) { return std::tolower(c); });
         std::ranges::replace(force_name, '-', ' ');
         std::ranges::replace(force_name, '_', ' ');
         trim(force_name);
@@ -136,8 +145,8 @@ namespace md::io {
         }
         try {
             if (force_name == "lennard jones") {
-                force = LennardJones(vals[0], vals[1]);
-                SPDLOG_INFO("Using Lennard Jones with parameters: epsilon={}, sigma={}", vals[0], vals[1]);
+                force = LennardJones(vals[0], vals[1], vals[2]);
+                SPDLOG_INFO("Using Lennard Jones with parameters: epsilon={}, sigma={}, cutoff_radius={}", vals[0], vals[1], vals[2]);
             } else if (force_name == "Hookes law") {
                 force = HookesLaw(vals[0], vals[1]);
                 SPDLOG_INFO("Using Hookes Law with parameters: k={}, l={}", vals[0], vals[1]);
@@ -152,6 +161,36 @@ namespace md::io {
         env.set_force(force);
     }
 
+    /// -----------------------------------------
+    /// \brief Parse environment information
+    /// -----------------------------------------
+    void parse_environment(const std::string& line, Environment& env) {
+        SPDLOG_DEBUG("Reading Boundary:     {}", line);
+
+        std::istringstream data_stream(line);
+        std::vector<double> vals;
+        double num;
+
+        while (data_stream >> num) {
+            vals.push_back(num);
+        }
+
+        // Minimum required values: 3 (origin) + 3 (extent) + 1 (grid_constant)
+        if (vals.size() < 7) {
+            SPDLOG_ERROR("Not enough numbers in line: {}");
+            exit(-1);
+        }
+
+        env::Boundary boundary;
+        boundary.origin = {vals[0], vals[1], vals[2]};
+        boundary.extent = {vals[3], vals[4], vals[5]};
+        env.set_boundary(boundary);
+        env.set_grid_constant(vals[6]);
+        SPDLOG_INFO("Boundary origin set at: [{}, {}, {}]", vals[0], vals[1], vals[2]);
+        SPDLOG_INFO("Boundary extent set to: [{}, {}, {}]", vals[3], vals[4], vals[5]);
+        SPDLOG_INFO("Grid constant set to: {}", vals[6]);
+    }
+
     void read_file_txt(const std::string& file_name, Environment& env) {
         std::ifstream infile(file_name);
         if (!infile.is_open()) {
@@ -163,7 +202,7 @@ namespace md::io {
 
         std::string line;
         std::vector<ParticleCreateInfo> particle_list;
-        enum Section { NONE, PARTICLES, CUBOIDS, FORCE } section = NONE;
+        enum Section { NONE, PARTICLES, CUBOIDS, FORCE, ENVIRONMENT } section = NONE;
 
         while (std::getline(infile, line)) {
             trim(line);
@@ -183,6 +222,10 @@ namespace md::io {
                 section = FORCE;
                 continue;
             }
+            if (line.compare(0, 12, "environment:") == 0) {
+                section = ENVIRONMENT;
+                continue;
+            }
 
             if (section == PARTICLES)
                 parse_particle(line, particle_list);
@@ -190,9 +233,10 @@ namespace md::io {
                 parse_cuboid(line, env);
             else if (section == FORCE)
                 parse_force(line, env);
+            else if (section == ENVIRONMENT)
+                parse_environment(line, env);
         }
         env.add_particles(particle_list);
-
 
         SPDLOG_INFO("File read successfully: {}", file_name);
     }

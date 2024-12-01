@@ -15,9 +15,6 @@ namespace md::io {
 
     enum class OutputFormat { VTK, XYZ };
 
-
-
-
     /**
      * @brief Abstract base class for output writers.
      * OutputWriter is the superclass for VTKWriter and XYZWriter.
@@ -42,8 +39,6 @@ namespace md::io {
        protected:
         const std::string file_name;
     };
-
-
 
     /**
      * @brief Checks if the filename ends with the specific extension.

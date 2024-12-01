@@ -1,20 +1,19 @@
 
+#include "Environment.h"
+
 #include <ranges>
 
-#include "Environment.h"
 #include "io/Logger.h"
 #include "utils/ArrayUtils.h"
 #include "utils/MaxwellBoltzmannDistribution.h"
 
-#define WARN_IF_INIT(msg) \
-    do { \
-        if (initialized) { \
-        SPDLOG_WARN("You are trying to {} in an initialized environment. Request will be ignored",  msg);\
-        return; \
-        } \
-    }while (0)
-
-
+#define WARN_IF_INIT(msg)                                                                                    \
+    do {                                                                                                     \
+        if (initialized) {                                                                                   \
+            SPDLOG_WARN("You are trying to {} in an initialized environment. Request will be ignored", msg); \
+            return;                                                                                          \
+        }                                                                                                    \
+    } while (0)
 
 namespace md::env {
 
@@ -25,10 +24,9 @@ namespace md::env {
                                            const int type)
         : position(position), velocity(velocity), mass(mass), type(type) {}
 
-
     CuboidCreateInfo::CuboidCreateInfo(const vec3& origin, const vec3& initial_v, const uint3& num_particles,
-                                       const double thermal_v,
-                                       const double width, const double mass, const uint8_t dimension, const int type)
+                                       const double thermal_v, const double width, const double mass,
+                                       const uint8_t dimension, const int type)
         : origin(origin),
           initial_v(initial_v),
           num_particles(num_particles),
@@ -38,14 +36,10 @@ namespace md::env {
           dimension(dimension),
           type(type) {}
 
-
     /// -----------------------------------------
     /// \brief Environment Class Methods
     /// -----------------------------------------
-    Environment::Environment()
-        : force_func(NoForce()),grid_constant(GRID_CONSTANT_AUTO),
-          initialized(false) {}
-
+    Environment::Environment() : force_func(NoForce()), grid_constant(GRID_CONSTANT_AUTO), initialized(false) {}
 
     /// -----------------------------------------
     /// \brief Methods for environment setup
@@ -113,8 +107,9 @@ namespace md::env {
 
         // check if grid constant is ok
         if (grid_constant > 0 && grid_constant <= force_func.cutoff()) {
-            SPDLOG_WARN("Grid constant is smaller than force cutoff. Will default to use GRID_CONSTANT_AUTO."
-                        "Are you sure you setup the environment correctly?");
+            SPDLOG_WARN(
+                "Grid constant is smaller than force cutoff. Will default to use GRID_CONSTANT_AUTO."
+                "Are you sure you setup the environment correctly?");
             grid_constant = force_func.cutoff();
         }
         if (grid_constant < 0) {
@@ -122,7 +117,8 @@ namespace md::env {
             throw std::invalid_argument("Grid constant is negative.");
         }
         if (grid_constant == GRID_CONSTANT_AUTO) {
-            if (boundary.extent[0] == MAX_EXTENT && boundary.extent[1] == MAX_EXTENT && boundary.extent[2] == MAX_EXTENT) {
+            if (boundary.extent[0] == MAX_EXTENT && boundary.extent[1] == MAX_EXTENT &&
+                boundary.extent[2] == MAX_EXTENT) {
                 grid_constant = MAX_EXTENT;
             } else {
                 grid_constant = force_func.cutoff();
@@ -132,7 +128,7 @@ namespace md::env {
 
         for (int i = 0; i < 3; i++) {
             if (boundary.origin[i] == CENTER_BOUNDARY_ORIGIN) {
-                boundary.extent[i] = - boundary.extent[i]/2;
+                boundary.extent[i] = -boundary.extent[i] / 2;
             }
         }
 
@@ -140,38 +136,38 @@ namespace md::env {
         initialized = true;
     }
 
-
     /// -----------------------------------------
     /// \brief Methods for interacting with the environment
     /// -----------------------------------------
-    vec3 Environment::force(const Particle& p1, const Particle& p2) const {
-        return force_func(p1, p2);
-    }
+    vec3 Environment::force(const Particle& p1, const Particle& p2) const { return force_func(p1, p2); }
 
     size_t Environment::size(Particle::State) const {
         // todo: query number of particles in a given state
         return particle_storage.size();
     }
 
-    std::vector<GridCellPair>& Environment::linked_cells() {
+    const std::vector<GridCellPair> & Environment::linked_cells() {
         return grid.linked_cells();
     }
 
-    std::vector<GridCell> Environment::cells() {
-        return grid.grid_cells();
+    // std::vector<GridCell> Environment::cells() {
+    //     return grid.grid_cells();
+    // }
+
+    void Environment::apply_boundary(Particle& particle) {
+        auto & current = grid.get_cell(particle.cell);
+        auto & previous = grid.get_cell(grid.what_cell(particle.old_position));
+        boundary.apply_boundary(particle, current, previous);
     }
 
-    Particle& Environment::operator[](const size_t id) {
-        return particle_storage[id];
-    }
+    Particle& Environment::operator[](const size_t id) { return particle_storage[id]; }
 
-    const Particle& Environment::operator[](const size_t id) const {
-        return particle_storage[id];
-    }
+    const Particle& Environment::operator[](const size_t id) const { return particle_storage[id]; }
 
-    bool Environment::filter_particles(const Particle& particle, const Particle::State state, const GridCell::Type type) const {
+    bool Environment::filter_particles(const Particle& particle, const Particle::State state,
+                                       const GridCell::Type type) const {
         const bool state_ok = particle.state & state;
         const bool location_ok = grid.get_cell(particle).type & type;
         return state_ok && location_ok;
     }
-} // namespace md
+}  // namespace md::env

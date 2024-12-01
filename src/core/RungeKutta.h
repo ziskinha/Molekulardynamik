@@ -1,23 +1,21 @@
-
-
 #pragma once
 
-#include "IntegratorBase.h"
-#include "Force.h"
 #include "Environment.h"
+#include "Force.h"
+#include "IntegratorBase.h"
 
 namespace md::Integrator {
     /**
-     * @brief Implements the calculation of Runge-Kutta
+     * @brief Implements the calculation of Runge-Kutta.
      */
     class RungeKutta : public IntegratorBase {
        public:
         /**
          * @brief Constructs a RungeKutta object with specified force calculation.
          * @param environemt
-         * @param writer writes the output to disk
+         * @param writer writes the output to disk.
          */
-        RungeKutta(Environment & environemt, std::unique_ptr<io::OutputWriterBase> writer);
+        RungeKutta(Environment& environemt, std::unique_ptr<io::OutputWriterBase> writer);
 
        private:
         /**

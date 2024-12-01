@@ -1,0 +1,38 @@
+#
+# file format:
+# blank lines and lines beginning with # are ignored
+# key word particles indicates a block of individually specified particle data.
+# key word cuboids indicates a block of particle cuboid data.
+# key word force indicates next line contains the force name as well as the parameters
+# use either "-" or "_" to separate words in multi-word force names
+#
+# Particle data consists of
+# * xyz-coordinates (3 double values)
+# * velocities (3 double values)
+# * mass (1 double value)
+#
+# Cuboid data consists of
+# * xyz-coordinates of lower left corner (3 double values)
+# * velocities (3 double values)
+# * number of particles in each dimension (3 integer values)
+# * width between each adjacent particle
+# * mass (1 double value)
+# * average thermal velocity
+# * dimension (either 2 or 3)
+#
+# Environment data consist of
+# * xyz-coordinates of lower left corner (3 double values)
+# * boundary extent (3 double values)
+# * grid_constant (1 double value)
+#
+cuboids:
+# LL-cord       velocity        N           h           m       br_v    dim   type(optional)
+20 20 0.0     0.0 0.0 0.0   64 64 1      1.1225         1.0       0.1     2       0
+
+force:
+# name      parameters
+lennard_jones 5 1 3
+
+environment:
+# boundary_origin     boundary_extent     grid_constant
+0 0 0                   110 110 1               150
