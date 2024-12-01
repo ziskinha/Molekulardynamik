@@ -54,7 +54,7 @@ namespace md::io {
      * @param allow_delete
      * @return A pointer to an OutputWriter object.
      */
-    std::unique_ptr<OutputWriterBase> create_writer(OutputFormat output_format, bool allow_delete);
+    std::unique_ptr<OutputWriterBase> create_writer(const std::string& outputFileBaseName, OutputFormat output_format, bool allow_delete);
 
     /**
      * @brief Reads an input file.

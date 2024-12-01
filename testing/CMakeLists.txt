@@ -2,31 +2,42 @@
 add_executable(ParticleContainerTests
         ${CMAKE_SOURCE_DIR}/src/env/Environment.cpp
         ${CMAKE_SOURCE_DIR}/testing/ParticleContainerTests.cpp
-        ../src/env/Environment.h
+        ${CMAKE_SOURCE_DIR}/src/env/Environment.h
+        ${CMAKE_SOURCE_DIR}/src/env/Particle.cpp
+        ${CMAKE_SOURCE_DIR}/src/env/ParticleGrid.cpp
 )
 
 # Define the test executable
 add_executable(ForceTests
-        ${CMAKE_SOURCE_DIR}/src/env/force.h
+        ${CMAKE_SOURCE_DIR}/src/env/Force.h
         ${CMAKE_SOURCE_DIR}/src/env/Environment.cpp
         ${CMAKE_SOURCE_DIR}/testing/ForceTests.cpp
-        ../src/env/Environment.h
+        ${CMAKE_SOURCE_DIR}/src/env/Environment.h
+        ${CMAKE_SOURCE_DIR}/src/env/Common.h
+        ${CMAKE_SOURCE_DIR}/src/env/ParticleGrid.cpp
+        ${CMAKE_SOURCE_DIR}/src/env/Particle.cpp
+
 )
 
 # Define the test executable
 add_executable(StoermerVerletTests
-        ${CMAKE_SOURCE_DIR}/src/env/force.h
+        ${CMAKE_SOURCE_DIR}/src/env/Force.h
         ${CMAKE_SOURCE_DIR}/src/env/Environment.cpp
         ${CMAKE_SOURCE_DIR}/src/core/StoermerVerlet.cpp
         ${CMAKE_SOURCE_DIR}/testing/StoermerVerletTests.cpp
         ${CMAKE_SOURCE_DIR}/src/core/IntegratorBase.cpp
-        ../src/env/Environment.h
+        ${CMAKE_SOURCE_DIR}/src/env/Environment.h
+        ${CMAKE_SOURCE_DIR}/src/env/ParticleGrid.cpp
+        ${CMAKE_SOURCE_DIR}/src/env/Particle.cpp
+
 )
 
 #include directories to test executables
 target_include_directories(ParticleContainerTests
         PUBLIC
         ${CMAKE_SOURCE_DIR}/libs/libxsd
+        ${CMAKE_CURRENT_SOURCE_DIR}/xsd-4.0.0-x86_64-linux-gnu/libxsd
+
         PRIVATE
         ${CMAKE_SOURCE_DIR}/src
 )
@@ -34,6 +45,8 @@ target_include_directories(ParticleContainerTests
 target_include_directories(ForceTests
         PUBLIC
         ${CMAKE_SOURCE_DIR}/libs/libxsd
+        ${CMAKE_CURRENT_SOURCE_DIR}/xsd-4.0.0-x86_64-linux-gnu/libxsd
+
         PRIVATE
         ${CMAKE_SOURCE_DIR}/src
 )
@@ -43,12 +56,14 @@ target_include_directories(StoermerVerletTests
         ${CMAKE_SOURCE_DIR}/external/spdlog/include
         PUBLIC
         ${CMAKE_SOURCE_DIR}/libs/libxsd
+        ${CMAKE_CURRENT_SOURCE_DIR}/xsd-4.0.0-x86_64-linux-gnu/libxsd
+
         PRIVATE
         ${CMAKE_SOURCE_DIR}/src
 )
 
 #link liblaries to test executables
-target_link_libraries(ParticleContainerTests
+target_link_libraries( ParticleContainerTests
         PUBLIC
         xerces-c
         gtest
