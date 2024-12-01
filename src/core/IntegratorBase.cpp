@@ -53,6 +53,7 @@ namespace md::Integrator {
                     writer->plot_particles(env, i);
                 }
             }
+            SHOW_PROGRESS(i, total_steps);
         }
 
         SPDLOG_INFO("Simulation ended");

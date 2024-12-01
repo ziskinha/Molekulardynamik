@@ -2,6 +2,7 @@
 #include "Environment.h"
 
 #include <ranges>
+#include <cmath>
 
 #include "io/Logger/Logger.h"
 #include "utils/ArrayUtils.h"
@@ -35,6 +36,17 @@ namespace md::env {
           mass(mass),
           dimension(dimension),
           type(type) {}
+
+    SphereCreateInfo::SphereCreateInfo(const md::vec3 &origin, const md::vec3 &initial_v, const double thermal_v,
+                                       int radius, double width, double mass, const uint8_t dimension, int type)
+        : origin(origin),
+          initial_v(initial_v),
+          thermal_v(thermal_v),
+          radius(radius),
+          width(width),
+          mass(mass),
+          dimension(dimension),
+          type(type){}
 
     /// -----------------------------------------
     /// \brief Environment Class Methods
@@ -95,6 +107,46 @@ namespace md::env {
                    cuboid.dimension, cuboid.type);
     }
 
+    void Environment::add_sphere(const vec3& origin, const vec3& initial_v, const double thermal_v, int radius,
+                                 double width, double mass, uint8_t dimension, int type) {
+        WARN_IF_INIT("add particles (sphere)");
+        int num_particles = 0;
+
+        //calculate the number of particles to be added
+        if (dimension == 3) {
+            num_particles = static_cast<int>(std::ceil((4.0 / 3.0) * M_PI * std::pow(radius / width, 3)));
+        } else if (dimension == 2) {
+            num_particles = static_cast<int>(std::ceil(M_PI * std::pow(radius / width, 2)));
+        }
+
+        particle_storage.reserve(particle_storage.size() + num_particles);
+
+        for (int x = -radius; x <= radius; ++x) {
+            for (int y = -radius; y <= radius; ++y) {
+                for (int z = - radius; z <= radius; ++z) {
+                    if (dimension == 2 && z != 0) {
+                        continue;
+                    }
+
+                    vec3 current_pos = vec3({x * width, y * width, z * width});
+                    double distance_to_origin = ArrayUtils::L2Norm(current_pos);
+
+                    if (distance_to_origin <= radius * width) {
+                        vec3 pos = origin + current_pos;
+                        vec3 vel = initial_v + maxwellBoltzmannDistributedVelocity(thermal_v, dimension);
+                        add_particle(pos, vel, mass, type);
+                    }
+                }
+            }
+        }
+
+    }
+
+    void Environment::add_sphere(const SphereCreateInfo& sphere) {
+        add_sphere(sphere.origin, sphere.initial_v, sphere.thermal_v, sphere.radius, sphere.width, sphere.mass,
+                   sphere.dimension, sphere.type);
+    }
+
     void Environment::build() {
         // TODO check parameters
         if (initialized) {
@@ -102,7 +154,7 @@ namespace md::env {
             return;
         }
 
-        SPDLOG_INFO("Start building the environment...");
+        SPDLOG_INFO("Start building the environment");
 
         // check if boundary is ok
         if (boundary.extent[0] < 0 || boundary.extent[1] < 0 || boundary.extent[2] < 0) {

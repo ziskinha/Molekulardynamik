@@ -42,11 +42,11 @@ namespace md::env {
     struct CuboidCreateInfo {
         /**
          * @brief Constructs a CuboidCreateInfo instance.
-         * @param origin Coordinate of the lower left front-side corner.
+         * @param origin Coordinates of the lower left front-side corner.
          * @param initial_v Initial velocity for all particles.
          * @param num_particles Number of particles along each dimension: N1 x N2 x N3.
          * @param thermal_v Thermal velocity of the particles.
-         * @param width TODO: Distance of the particles?
+         * @param width Distance between the particles.
          * @param mass Mass of each particle.
          * @param dimension Dimension of the cuboid.
          * @param type Type of each particle (default: 0).
@@ -61,6 +61,31 @@ namespace md::env {
         double mass{};
         uint8_t dimension{};
         int type = 0;
+    };
+
+    /**
+     * @brief Structure containing information required to create a sphere of particles.
+     */
+    struct SphereCreateInfo {
+        /**
+         * @brief Constructs a SphereCreateInfo.
+         * @param origin Coordinates of the center.
+         * @param initial_v Initial velocity of all particles.
+         * @param radius The radius in terms of the number of molecules along the radius.
+         * @param width Distance between the particles.
+         * @param mass The mass of the particles.
+         * @param type The type of each particles (dafault: 0).
+         */
+        SphereCreateInfo(const vec3& origin, const vec3& initial_v, const double thermal_v, int radius, double width,
+                         double mass, const uint8_t dimension, int type = 0);
+        vec3 origin;
+        vec3 initial_v;
+        double thermal_v;
+        int radius;
+        double width;
+        double mass;
+        uint8_t dimension{};
+        int type;
     };
 
     /**
@@ -124,13 +149,33 @@ namespace md::env {
          * @param initial_v Initial velocity for all particles.
          * @param num_particles Number of particles along each dimension: N1 x N2 x N3.
          * @param thermal_v Thermal velocity of the particles.
-         * @param width TODO: Distance of the particles?
+         * @param width Distance between the particles.
          * @param mass Mass of each particle.
          * @param dimension Dimension of the cuboid.
          * @param type Type of each particle (default: 0).
          */
         void add_cuboid(const vec3& origin, const vec3& initial_v, const uint3& num_particles, double thermal_v,
                         double width, double mass, uint8_t dimension, int type = 0);
+
+        /**
+         * @brief Adds a sphere to the environment.
+         * @param sphere
+         */
+        void add_sphere(const SphereCreateInfo& sphere);
+
+        /**
+         * @brief Adds a sphere to the environment.
+         * @param origin Coordinates of the center.
+         * @param initial_v Initial velocity of all particles.
+         * @param thermal_v Thermal velocity of the particles.
+         * @param radius The radius in terms of the number of molecules along the radius.
+         * @param width Distance between the particles.
+         * @param mass The mass of the particles.
+         * @param dimension Dimension of the sphere.
+         * @param type The type of each particles (dafault: 0).
+         */
+        void add_sphere(const vec3& origin, const vec3& initial_v,  double thermal_v, int radius, double width,
+                        double mass, uint8_t dimension, int type = 0);
 
         /**
          * @brief Computes the force between two particles.

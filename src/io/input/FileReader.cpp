@@ -121,6 +121,58 @@ namespace md::io {
     }
 
     /// -----------------------------------------
+    /// \brief Parse sphere information
+    /// -----------------------------------------
+    void parse_sphere(const std::string& line, Environment& environment) {
+        SPDLOG_DEBUG("Reading Sphere:     {}", line);
+
+        std::istringstream data_stream(line);
+        std::vector<double> vals;
+        double num;
+
+        while (data_stream >> num) {
+            vals.push_back(num);
+        }
+
+        // Minimum required values: 3 (x) + 3 (v) + 1 (radius) + 1 (width) + 1 (mass) + 1 (thermal_v) + 1 (dim)
+        if (vals.size() < 11) {
+            SPDLOG_ERROR("Not enough numbers in line: {}", line);
+            exit(-1);
+        }
+
+        const vec3 origin = {vals[0], vals[1], vals[2]};
+        const vec3 init_v = {vals[3], vals[4], vals[5]};
+        const uint radius = vals[6];
+
+        const double width = vals[7];
+        const double mass = vals[8];
+        const double thermal_v = vals[9];
+        const auto dimension = static_cast<uint32_t>(vals[10]);
+        if (dimension != 2 && dimension != 3) {
+            SPDLOG_ERROR("Invalid dimension parameter {}", line);
+        }
+
+        int type = 0;
+        if (vals.size() == 12) {
+            type = static_cast<int>(vals[11]);
+        }
+
+        SPDLOG_DEBUG(
+                "Parsed Sphere:\n"
+                "       Origin:              [{}, {}, {}]\n"
+                "       Initial Velocity:    [{}, {}, {}]\n"
+                "       Radius:              {}\n"
+                "       Width:               {}\n"
+                "       Mass:                {}\n"
+                "       Thermal Velocity:    {}\n"
+                "       Dimension:           {}\n"
+                "       Type:                {}",
+                origin[0], origin[1], origin[2], init_v[0], init_v[1], init_v[2], radius, width, mass, thermal_v, dimension, type);
+
+        environment.add_sphere(origin, init_v, thermal_v, (int) radius, width, mass, dimension, type);
+    }
+
+    /// -----------------------------------------
     /// \brief Parse force information
     /// -----------------------------------------
     void parse_force(const std::string& line, Environment& env) {
@@ -202,7 +254,7 @@ namespace md::io {
 
         std::string line;
         std::vector<ParticleCreateInfo> particle_list;
-        enum Section { NONE, PARTICLES, CUBOIDS, FORCE, ENVIRONMENT } section = NONE;
+        enum Section { NONE, PARTICLES, CUBOIDS, SPHERES, FORCE, ENVIRONMENT } section = NONE;
 
         while (std::getline(infile, line)) {
             trim(line);
@@ -218,6 +270,10 @@ namespace md::io {
                 section = CUBOIDS;
                 continue;
             }
+            if (line.compare(0, 8, "spheres:") == 0) {
+                section = SPHERES;
+                continue;
+            }
             if (line.compare(0, 8, "force:") == 0) {
                 section = FORCE;
                 continue;
@@ -231,6 +287,8 @@ namespace md::io {
                 parse_particle(line, particle_list);
             else if (section == CUBOIDS)
                 parse_cuboid(line, env);
+            else if (section == SPHERES)
+                parse_sphere(line, env);
             else if (section == FORCE)
                 parse_force(line, env);
             else if (section == ENVIRONMENT)
