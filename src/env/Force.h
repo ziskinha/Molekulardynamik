@@ -3,9 +3,9 @@
 #include <functional>
 #include <limits>
 #include <utility>
-
+#include "Common.h"
 #include "utils/ArrayUtils.h"
-#include "Particle.h"
+#include "Particle.h"#include "Particle.h"
 
 #define NO_FORCE_CUTOFF std::numeric_limits<double>::max()
 #define FORCE_CUTOFF_AUTO std::numeric_limits<double>::min()

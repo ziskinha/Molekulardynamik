@@ -11,6 +11,9 @@
 #include "Force.h"
 #include "Particle.h"
 #include "ParticleGrid.h"
+#include "Force.h"
+#include "Boundary.h"
+#include <ranges>
 
 #define GRID_CONSTANT_AUTO 0
 
@@ -203,6 +206,7 @@ namespace md::env {
                 return filter_particles(particle, state, type);
             });
         }
+        
         /**
         * @brief Provides access to particles filtered by grid cell type and state (const version).
         * @param type The type to filter (default: GridCell::Inside).
