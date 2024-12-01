@@ -30,7 +30,7 @@ void show_progress(const int current, const int total) {
 
 namespace md::Integrator {
     IntegratorBase::IntegratorBase(env::Environment& system, std::unique_ptr<io::OutputWriterBase> writer)
-        : environment(system), writer(std::move(writer)){}
+        : env(system), writer(std::move(writer)){}
 
     void IntegratorBase::simulate(const double start_time, const double end_time, const double dt,
                                   const unsigned int write_freq) {
@@ -43,14 +43,13 @@ namespace md::Integrator {
             if (i % write_freq == 0) {
                 if (writer != nullptr) {
                     SPDLOG_DEBUG("Plotting particles @ iteration {}, time {}", i, t);
-                    writer->plot_particles(environment, i);
+                    writer->plot_particles(env, i);
                 }
             }
 
             show_progress(i, total_steps);
         }
 
-        std::cout << "" << std::endl;
         SPDLOG_INFO("Simulation ended");
     }
 
@@ -64,9 +63,9 @@ namespace md::Integrator {
 
         for (int k = 1; k <= repetitions; k++) {
             spdlog::set_level(spdlog::level::off);
-            env::Environment env;
-            md::io::read_file(file_name, env);
-            env.build();
+            env::Environment new_env;
+            md::io::read_file(file_name, new_env);
+            new_env.build();
 
             auto start = std::chrono::high_resolution_clock::now();
 
@@ -78,7 +77,7 @@ namespace md::Integrator {
             spdlog::set_level(spdlog::level::info);
             SPDLOG_INFO("Finished {}. benchmark simulation, out of {}", k, repetitions);
             SPDLOG_INFO("Execution time: {} ms", duration);
-            SPDLOG_INFO("Number of particles: {}", environment.size());
+            SPDLOG_INFO("Number of particles: {}", new_env.size());
             duration_sum += duration;
         }
         SPDLOG_INFO("Average execution time: {} ms", duration_sum / repetitions);

@@ -21,11 +21,16 @@ namespace md::env {
          * @brief Enumeration of the type of the grid cell
          */
         enum Type {
-            INNER = 0x1,                    ///< Represents an inner grid cell
-            OUTER = 0x2,                    ///< Represents an outer grid cell
-            BOUNDARY = 0x4,                 ///< Represents a boundary grid cell
-            INSIDE = INNER | BOUNDARY,      ///< Cells considered inside the boundary
-            ALL = INNER | BOUNDARY | OUTER  ///< All types
+            INNER               = 0x001,
+            BOUNDARY            = 0xFF0,
+            BOUNDARY_RIGHT      = 0x010,
+            BOUNDARY_LEFT       = 0x020,
+            BOUNDARY_TOP        = 0x040,
+            BOUNDARY_BOTTOM     = 0x080,
+            BOUNDARY_FRONT      = 0x100,
+            BOUNDARY_BACK       = 0x200,
+            OUTSIDE             = 0x002,
+            INSIDE = INNER | BOUNDARY,    ///< Cells considered inside the boundary
         };
 
         /**
@@ -50,13 +55,14 @@ namespace md::env {
          */
         bool operator==(const GridCell& other) const;
 
-        const vec3 coordinate;                      ///< The coordinates of the grid cell.
-        const vec3 size;                            ///< The size of the grid cell.
-        const Type type;                            ///< The type of the grid cell.
-        std::unordered_set<Particle*> particles{};  ///< The set of particles inside the grid cell.
-        int id;                                     ///< The id of the grid cell.
-        int3 idx;                                   ///< The index of the grid cell (used for debugging).
-       private:
+        const Type type;   ///< The type of the grid cell.
+        const vec3 origin; ///< The coordinates of the origin of the grid cell.
+        const vec3 size;   ///< The size of the grid cell.
+        const int3 idx;    ///< The index of the grid cell
+        int id;            ///< The id of the grid cell.
+
+        std::unordered_set<Particle*> particles{};   ///< The set of particles inside the grid cell.
+    private:
         static int count;  ///< A counter for generating unique ids for grid cells.
     };
 
@@ -82,10 +88,16 @@ namespace md::env {
         return static_cast<T>(lhs) & static_cast<T>(rhs);
     }
 
+    constexpr GridCell::Type& operator|=(GridCell::Type& lhs, const GridCell::Type rhs) {
+        using T = std::underlying_type_t<GridCell::Type>;
+        lhs = static_cast<GridCell::Type>(static_cast<T>(lhs) | static_cast<T>(rhs));
+        return lhs;
+    }
+
     /**
      * @brief Structure representing a pair of grid cells which are neighbors.
      */
-    struct GridCellPair {
+    struct GridCellPair{
         using ParticlePairIterator = utils::DualPairIterator<std::unordered_set<Particle*>>;
 
         /**
@@ -181,17 +193,8 @@ namespace md::env {
          */
         [[nodiscard]] std::vector<int3> get_cell_indices() const;
 
-        /**
-         * @brief Returns a reference to the vector of linked cell pairs.
-         * @return A reference to a vector of linked GridCellPair objects.
-         */
-        std::vector<GridCellPair>& linked_cells();
-
-        /**
-         * @brief Returns a vector of all the grid cells of the simulation.
-         * @return A vector of GridCell objects representing all cells in the grid.
-         */
-        std::vector<GridCell> grid_cells();
+        const std::vector<GridCellPair> & linked_cells();
+        const std::vector<GridCell*> & boundary_cells();
 
         /**
          * @brief Updates the grid cells when a particle moves from one cell to another.
@@ -201,22 +204,26 @@ namespace md::env {
          */
         void update_cells(Particle* particle, const int3& old_cell, const int3& new_cell);
 
-       private:
+        vec3 position_in_grid(const vec3& abs_position) const;
+        vec3 position_in_cell(const vec3& abs_position) const;
+
+    private:
         /**
-         * @brief Builds the grid cells based on the given extent and grid constant.
-         * @param extent The size of the simulation space.
-         * @param grid_const The constant used to define grid cell size.
-         * @param particles The particles that fill the cells.
-         */
-        void build_cells(const vec3& extent, double grid_constant, std::vector<Particle>& particles);
+        * @brief Builds the grid cells based on the given extent and grid constant.
+        * @param extent The size of the simulation space.
+        * @param grid_const The constant used to define grid cell size.
+        * @param particles The particles that fill the cells.
+        */
+        void build_cells(const vec3 & extent, double grid_constant, std::vector<Particle>& particles);
 
         /**
-         * @brief Builds pairs of neighboring cells.
-         */
+        * @brief Builds pairs of neighboring cells.
+        */
         void build_cell_pairs();
 
-        std::unordered_map<int3, GridCell, Int3Hasher> cells{};  ///< A hash map storing the cells in the grid.
+        std::unordered_map<int3, GridCell, Int3Hasher> cells {}; ///< A hash map storing the cells in the grid.
         std::vector<GridCellPair> cell_pairs{};                  ///< A vector of linked cell pairs.
+        std::vector<GridCell*> border_cells;
 
         uint3 cell_count{};         ///< The number of cells in the grid along each dimension.
         vec3 cell_size{};           ///< The size of each grid cell.

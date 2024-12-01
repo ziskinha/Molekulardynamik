@@ -146,9 +146,19 @@ namespace md::env {
         return particle_storage.size();
     }
 
-    std::vector<GridCellPair>& Environment::linked_cells() { return grid.linked_cells(); }
+    const std::vector<GridCellPair> & Environment::linked_cells() {
+        return grid.linked_cells();
+    }
 
-    std::vector<GridCell> Environment::cells() { return grid.grid_cells(); }
+    // std::vector<GridCell> Environment::cells() {
+    //     return grid.grid_cells();
+    // }
+
+    void Environment::apply_boundary(Particle& particle) {
+        auto & current = grid.get_cell(particle.cell);
+        auto & previous = grid.get_cell(grid.what_cell(particle.old_position));
+        boundary.apply_boundary(particle, current, previous);
+    }
 
     Particle& Environment::operator[](const size_t id) { return particle_storage[id]; }
 

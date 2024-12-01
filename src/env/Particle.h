@@ -43,6 +43,12 @@ namespace md::env {
         Particle(const Particle& other);
 
         /**
+         * @brief Updates the position of the particle.
+         * @param dx
+         */
+        void update_position(const vec3 & dx);
+
+        /**
          * @brief Resets the force to zero.
          */
         void reset_force();
@@ -65,11 +71,12 @@ namespace md::env {
          */
         [[nodiscard]] std::string to_string() const;
 
-        vec3 position;   ///< The current position of the particle.
-        vec3 velocity;   ///< The current velocity of the particle.
-        vec3 force;      ///< The current force acting on the particle.
-        vec3 old_force;  ///< The previous force acting on the particle.
-        int3 cell;       ///< The current cell of the particle.
+        vec3 position;      ///< The current position of the particle.
+        vec3 old_position;  ///< The previous position of the particle.
+        vec3 velocity;      ///< The current velocity of the particle.
+        vec3 force;         ///< The current force acting on the particle.
+        vec3 old_force;     ///< The previous force acting on the particle.
+        int3 cell;          ///< The current cell of the particle.
 
         double mass;      ///< The mass of the particle.
         int type;         ///< The type of the particle.

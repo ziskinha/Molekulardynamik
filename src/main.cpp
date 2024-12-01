@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "StoermerVerlet.h"
+#include "core/StoermerVerlet.h"
 #include "env/Environment.h"
 #include "env/Force.h"
 #include "io/IOStrategy.h"

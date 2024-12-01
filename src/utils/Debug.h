@@ -1,20 +1,27 @@
 #pragma once
 
-// namespace md::debug{
-//
-// }
-
 #ifndef NDEBUG
 
-#define assert(Expr, Msg) _assert(#Expr, (Expr), __FILE__, __LINE__, (Msg))
-#define w_assert(Expr, Msg) _wassert(#Expr, (Expr), __FILE__, __LINE__, (Msg))
+#define ASSERT(Expr, Msg) _md_Assert_(#Expr, (Expr), __FILE__, __LINE__, (Msg))
+#include <iostream>
+#include <stdexcept>
 
-void _wassert(const char* expr_str, bool expr, const char* file, int line, const char* msg);
-void _assert(const char* expr_str, bool expr, const char* file, int line, const char* msg);
+
+static void _md_Assert_(const char* expr_str, const bool expr, const char* file, const int line, const char* msg)
+{
+    if (!expr) {
+        std::cerr << "Assert failed:\t" << msg << "\n"
+                << "Expected:\t" << expr_str << "\n"
+                << "Source:\t\t" << file << ", line " << line << "\n";
+        throw std::runtime_error(nullptr);
+    }
+}
+
+
 
 #else
 
-#define assert(Expr, Msg)
-#define w_assert(Expr, Msg)
+#define ASSERT(Expr, Msg)
+#define W_ASSERT(Expr, Msg)
 
 #endif

@@ -148,42 +148,21 @@ namespace md::env {
          */
         [[nodiscard]] size_t size(Particle::State state = Particle::ALIVE) const;
 
-        /**
-         * @brief Returns a filtered view of the particles based on their state and type.
-         * @param state The state of the particles to include (default: Particle::ALIVE).
-         * @param type The type of particles to include (default: Grid::ALL).
-         * @return A view of the filtered particles.
-         */
-        auto particles(Particle::State state = Particle::ALIVE, GridCell::Type type = GridCell::ALL) {
+        auto particles( GridCell::Type type = GridCell::INSIDE, Particle::State state = Particle::ALIVE) {
             return particle_storage | std::ranges::views::filter([this, state, type](const Particle& particle) {
-                       return filter_particles(particle, state, type);
-                   });
+                return filter_particles(particle, state, type);
+            });
+        }
+        [[nodiscard]] auto particles(GridCell::Type type = GridCell::INSIDE, Particle::State state = Particle::ALIVE) const {
+            return particle_storage | std::ranges::views::filter([this, state, type](const Particle& particle) {
+                return filter_particles(particle, state, type);
+            });
         }
 
-        /**
-         * @brief Returns a constant filtered view of the particles based on their state and type.
-         * @param state The state of the particles to include (default: Particle::ALIVE).
-         * @param type The type of particles to include (default: Grid::ALL).
-         * @return A view of the filtered particles.
-         */
-        [[nodiscard]] auto particles(Particle::State state = Particle::ALIVE,
-                                     GridCell::Type type = GridCell::ALL) const {
-            return particle_storage | std::ranges::views::filter([this, state, type](const Particle& particle) {
-                       return filter_particles(particle, state, type);
-                   });
-        }
+        const std::vector<GridCellPair> & linked_cells();
+        // std::vector<GridCell> cells();
 
-        /**
-         * @brief Retrieves the linked cells in the grid.
-         * @return A reference to a vector of GridCellPair.
-         */
-        std::vector<GridCellPair>& linked_cells();
-
-        /**
-         * @brief Retrieves the cells of the grid.
-         * @return A vector of GridCell objects.
-         */
-        std::vector<GridCell> cells();
+        void apply_boundary(Particle & particle);
 
         /**
          * @brief Accesses particle by its ID.

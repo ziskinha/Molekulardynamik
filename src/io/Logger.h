@@ -66,7 +66,8 @@ namespace md::io {
     class Logger {
        public:
         /**
-         * @brief Initializes the logger with the specific log level and sets the pattern
+         * @brief Initializes the logger for the simulation with a file and console sink. So log messages are displayed
+         * on the console and are written to a log file. The log level is set at compile time with SPDLOG_LEVEL.
          */
         static void initialize_logger();
     };

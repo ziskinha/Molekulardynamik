@@ -2,6 +2,7 @@
 #include <cmath>
 #include <functional>
 #include <limits>
+#include <utility>
 
 #include "utils/ArrayUtils.h"
 #include "Particle.h"
@@ -24,8 +25,8 @@ namespace md::env {
          * @param force_func
          * @param cutoff
          */
-        explicit Force(const ForceFunc& force_func = {}, const double cutoff = NO_FORCE_CUTOFF)
-            : cutoff_radius(cutoff), force_func(force_func) {}
+        explicit Force(ForceFunc  force_func = {}, const double cutoff = NO_FORCE_CUTOFF)
+            : cutoff_radius(cutoff), force_func(std::move(force_func)) {}
 
         /**
          * @brief Calculates the force between two particles.
@@ -51,7 +52,7 @@ namespace md::env {
      * @param cutoff The cutoff distance.
      * @return A Force object representing no interaction.
      */
-    inline Force NoForce(const double cutoff = NO_FORCE_CUTOFF) {
+    inline Force NoForce(const double cutoff = 0) {
         return Force([](const Particle&, const Particle&) { return vec3{0, 0, 0}; }, cutoff);
     }
 
