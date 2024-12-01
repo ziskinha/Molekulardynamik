@@ -21,8 +21,7 @@ int main(const int argc, char* argv[]) {
     log_arguments(args);
 
    
-    const int write_freq = args.write_freq;
-    SPDLOG_DEBUG("Write frequency: {}", write_freq);                            
+    SPDLOG_DEBUG("Write frequency: {}", args.write_freq);                            
 
 
     // io::read_file(args.file, env);
@@ -32,29 +31,23 @@ int main(const int argc, char* argv[]) {
 
     // env.add_particle({-9,0,0}, {5,0,0}, 1, 1);
     // env.add_particle({9,0,0}, {-5,0,0}, 1, 2);
-    // env::Boundary boundary;
-    // boundary.extent = {20, 20, 1};
-    // boundary.origin = {-10, -10, 0};
-    // env.set_boundary(boundary);
-    // env.set_force(env::LennardJones(5, 1, 3));
+     env::Boundary boundary;
+     boundary.extent = {20, 20, 1};
+     boundary.origin = {-10, -10, 0};
+     //args.env.set_boundary(boundary);
+   
 
-
-
-
-    
     args.env.set_grid_constant(10);
-   // args.env.set_force(env::LennardJones(5, 1, 5));
-
     args.env.build();
 
     for (auto &p : args.env.particles()) {
         std::cout << "Particle: " << p.to_string() << std::endl;
     }
 
-   // for (auto & x : args.env.cells()) {
-   //     std::cout << "Cell: " << x.to_string() << std::endl;
-   // }
-//
+    // for (auto & x : args.env.cells()) {
+    //     std::cout << "Cell: " << x.to_string() << std::endl;
+    // }
+    //
     // for (const auto & cell_pair : env.linked_cells()) {
     //     std::cout << "Cell pair: " << cell_pair.to_string() << std::endl;
     // }
@@ -69,9 +62,8 @@ int main(const int argc, char* argv[]) {
     //
     //     }
     // }
-
     Integrator::StoermerVerlet simulator(args.env, create_writer(args.output_baseName,args.output_format, args.override));
-    simulator.simulate(0, args.duration, args.dt, write_freq);
+    simulator.simulate(0, args.duration, args.dt, args.write_freq);
 
 
 

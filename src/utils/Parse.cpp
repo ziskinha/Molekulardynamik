@@ -97,25 +97,12 @@ std::ifstream file(arguments[1]);
         args.duration = simulation.get()->parameters().tEnd();
         args.dt = simulation.get()->parameters().deltaT();
 
-        if(simulation.get()->Forces().Force().get().type()=="lennardJones"){
-            args.env.set_force(env::LennardJones(simulation.get()->Forces().Force().get().arg1().get(),simulation.get()->Forces().Force().get().arg2().get()));
-            args.force="lennardJones";
-        }
-        else if(simulation.get()->Forces().Force().get().type()=="inverseSquare"){
-        args.env.set_force(env::InverseSquare(simulation.get()->Forces().Force().get().arg1().get()));
-        args.force="inverseSquare";
-        }
-        else if(simulation.get()->Forces().Force().get().type()=="HooksLaw"){
-        args.env.set_force(env::HookesLaw(simulation.get()->Forces().Force().get().arg1().get(), simulation.get()->Forces().Force().get().arg2().get()));
-        args.force="HooksLaw";
-        }
-        else{
-            args.force="no force applied";
-        }
-
+      
         
 
         env::Boundary boundary;
+        boundary.extent = {simulation.get()->Boundary().EXTENT_WIDTH().get(), simulation.get()->Boundary().EXTENT_HEIGHT().get(), simulation.get()->Boundary().EXTENT_DEPTH().get()};
+        boundary.origin = {simulation.get()->Boundary().CENTER_BOUNDARY_ORIGINX().get(), simulation.get()->Boundary().CENTER_BOUNDARY_ORIGINY().get(), simulation.get()->Boundary().CENTER_BOUNDARY_ORIGINZ().get()};
         if(simulation.get()->Boundary().typeFRONT()=="OUTFLOW"){
         boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW);
 
@@ -127,11 +114,27 @@ std::ifstream file(arguments[1]);
 
         }else{
         boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC);
+        }
+       
+          if(simulation.get()->Forces().Force().get().type()=="lennardJones"){
+            args.env.set_force(env::LennardJones(simulation.get()->Forces().Force().get().arg1().get(),simulation.get()->Forces().Force().get().arg2().get()));
+            args.force="lennardJones";
+            boundary.set_boundary_force(env::Boundary::LennardJonesForce(simulation.get()->Forces().Force().get().arg1().get(),simulation.get()->Forces().Force().get().arg2().get()));
 
         }
+        else if(simulation.get()->Forces().Force().get().type()=="inverseSquare"){
+        args.env.set_force(env::InverseSquare(simulation.get()->Forces().Force().get().arg1().get()));
+        args.force="inverseSquare";
+        boundary.set_boundary_force(env::Boundary::InverseDistanceForce(simulation.get()->parameters().cutoff_radius(),simulation.get()->Forces().Force().get().arg1().get()));
+        }
+        else if(simulation.get()->Forces().Force().get().type()=="HooksLaw"){
+        args.env.set_force(env::HookesLaw(simulation.get()->Forces().Force().get().arg1().get(), simulation.get()->Forces().Force().get().arg2().get()));
+        args.force="HooksLaw";
+        }
+        else{
+            args.force="no force applied";
+        }
 
-        boundary.extent = {simulation.get()->Boundary().EXTENT_WIDTH().get(), simulation.get()->Boundary().EXTENT_HEIGHT().get(), simulation.get()->Boundary().EXTENT_DEPTH().get()};
-        boundary.origin = {simulation.get()->Boundary().CENTER_BOUNDARY_ORIGINX().get(), simulation.get()->Boundary().CENTER_BOUNDARY_ORIGINY().get(), simulation.get()->Boundary().CENTER_BOUNDARY_ORIGINZ().get()};
         args.env.set_boundary(boundary);
 
         args.cutoff_radius= simulation.get()->parameters().cutoff_radius();
