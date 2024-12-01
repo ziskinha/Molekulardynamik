@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <iostream>
 
-#include "io/Logger.h"
+#include "io/Logger/Logger.h"
 
 #if SPDLOG_ACTIVE_LEVEL != SPDLOG_LEVEL_OFF
 #define SHOW_PROGRESS(current, total)                                                         \

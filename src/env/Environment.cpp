@@ -3,7 +3,7 @@
 
 #include <ranges>
 
-#include "io/Logger.h"
+#include "io/Logger/Logger.h"
 #include "utils/ArrayUtils.h"
 #include "utils/MaxwellBoltzmannDistribution.h"
 

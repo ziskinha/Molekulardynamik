@@ -5,7 +5,7 @@
 #include <sstream>
 #include <string>
 
-#include "io/Logger.h"
+#include "io/Logger/Logger.h"
 #include "utils/ArrayUtils.h"
 
 #define DOUBLE_MIN std::numeric_limits<double>::min()

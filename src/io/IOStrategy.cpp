@@ -3,10 +3,10 @@
 #include <iostream>
 #include <string>
 
-#include "FileReader.h"
-#include "VTKWriter.h"
-#include "XYZWriter.h"
-#include "io/Logger.h"
+#include "io/Reader/FileReader.h"
+#include "io/Output/VTKWriter.h"
+#include "io/Output/XYZWriter.h"
+#include "io/Logger/Logger.h"
 
 namespace md::io {
     OutputWriterBase::OutputWriterBase(std::string file_name, const bool allow_delete)

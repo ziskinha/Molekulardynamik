@@ -3,7 +3,7 @@
 #include <iostream>
 #include <utility>
 
-#include "io/Logger.h"
+#include "io/Logger/Logger.h"
 #include "utils/ArrayUtils.h"
 
 namespace md::Integrator {

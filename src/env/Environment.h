@@ -16,7 +16,6 @@
 
 /**
  * @brief Contains classes and structures for managing the environment of the simulation.
- * TODO: ausführlicher?
  */
 namespace md::env {
     /**
@@ -148,20 +147,40 @@ namespace md::env {
          */
         [[nodiscard]] size_t size(Particle::State state = Particle::ALIVE) const;
 
+        /**
+         * @brief Provides access to particles filtered by grid cell type and state.
+         * @param type The type to filter (default: GridCell::Inside).
+         * @param state The state to filter (default: (GridCell::ALIVE).
+         * @return A range of particles matching the specified type and state.
+         */
         auto particles( GridCell::Type type = GridCell::INSIDE, Particle::State state = Particle::ALIVE) {
             return particle_storage | std::ranges::views::filter([this, state, type](const Particle& particle) {
                 return filter_particles(particle, state, type);
             });
         }
+        /**
+        * @brief Provides access to particles filtered by grid cell type and state (const version).
+        * @param type The type to filter (default: GridCell::Inside).
+        * @param state The state to filter (default: (GridCell::ALIVE).
+        * @return A const range of particles matching the specified type and state.
+        */
         [[nodiscard]] auto particles(GridCell::Type type = GridCell::INSIDE, Particle::State state = Particle::ALIVE) const {
             return particle_storage | std::ranges::views::filter([this, state, type](const Particle& particle) {
                 return filter_particles(particle, state, type);
             });
         }
 
+        /**
+         * @brief Retrieves the linked grid cells in the simulation.
+         * @return A const reference to the vector of the linked cell pairs.
+         */
         const std::vector<GridCellPair> & linked_cells();
         // std::vector<GridCell> cells();
 
+        /**
+         * @brief Applies the boundary conditions to a particle.
+         * @param particle The particle to which the conditions will be applied.
+         */
         void apply_boundary(Particle & particle);
 
         /**

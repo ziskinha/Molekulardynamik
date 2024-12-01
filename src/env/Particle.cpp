@@ -3,7 +3,7 @@
 #include <sstream>
 
 #include "ParticleGrid.h"
-#include "io/Logger.h"
+#include "io/Logger/Logger.h"
 #include "utils/ArrayUtils.h"
 
 namespace md::env {

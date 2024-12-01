@@ -43,8 +43,8 @@ namespace md::env {
         [[nodiscard]] double cutoff() const { return cutoff_radius; }
 
        private:
-        double cutoff_radius;
-        ForceFunc force_func{};
+        double cutoff_radius;   ///< The cutoff radius for the calculations.
+        ForceFunc force_func{}; ///< The force function used for the calculations.
     };
 
     /**

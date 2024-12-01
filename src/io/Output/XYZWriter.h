@@ -9,7 +9,7 @@
 
 #include <fstream>
 
-#include "IOStrategy.h"
+#include "io/IOStrategy.h"
 
 namespace md::io {
     class XYZWriter : public OutputWriterBase {

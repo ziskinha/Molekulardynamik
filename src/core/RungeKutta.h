@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Environment.h"
-#include "Force.h"
+#include "env/Environment.h"
+#include "env/Force.h"
 #include "IntegratorBase.h"
 
 namespace md::Integrator {
@@ -23,6 +23,10 @@ namespace md::Integrator {
          * @param dt Δt The time increment for each simulation step.
          */
         void simulation_step(double dt) override;
+
+        /**
+         * @brief Computes the forces of the particles.
+         */
         void compute_forces() const;
     };
 }  // namespace md::Integrator

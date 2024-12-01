@@ -56,46 +56,46 @@
 //
 // End prologue.
 
-#include <xsd/cxx/config.hxx>
+#include "xsd/cxx/config.hxx"
 
 #if (XSD_INT_VERSION != 4000000L)
 #error XSD runtime version mismatch
 #endif
 
-#include <xsd/cxx/pre.hxx>
-#include <xsd/cxx/tree/elements.hxx>
-#include <xsd/cxx/tree/exceptions.hxx>
-#include <xsd/cxx/tree/parsing.hxx>
-#include <xsd/cxx/tree/parsing/boolean.hxx>
-#include <xsd/cxx/tree/parsing/byte.hxx>
-#include <xsd/cxx/tree/parsing/decimal.hxx>
-#include <xsd/cxx/tree/parsing/double.hxx>
-#include <xsd/cxx/tree/parsing/float.hxx>
-#include <xsd/cxx/tree/parsing/int.hxx>
-#include <xsd/cxx/tree/parsing/long.hxx>
-#include <xsd/cxx/tree/parsing/short.hxx>
-#include <xsd/cxx/tree/parsing/unsigned-byte.hxx>
-#include <xsd/cxx/tree/parsing/unsigned-int.hxx>
-#include <xsd/cxx/tree/parsing/unsigned-long.hxx>
-#include <xsd/cxx/tree/parsing/unsigned-short.hxx>
-#include <xsd/cxx/tree/serialization.hxx>
-#include <xsd/cxx/tree/serialization/boolean.hxx>
-#include <xsd/cxx/tree/serialization/byte.hxx>
-#include <xsd/cxx/tree/serialization/decimal.hxx>
-#include <xsd/cxx/tree/serialization/double.hxx>
-#include <xsd/cxx/tree/serialization/float.hxx>
-#include <xsd/cxx/tree/serialization/int.hxx>
-#include <xsd/cxx/tree/serialization/long.hxx>
-#include <xsd/cxx/tree/serialization/short.hxx>
-#include <xsd/cxx/tree/serialization/unsigned-byte.hxx>
-#include <xsd/cxx/tree/serialization/unsigned-int.hxx>
-#include <xsd/cxx/tree/serialization/unsigned-long.hxx>
-#include <xsd/cxx/tree/serialization/unsigned-short.hxx>
-#include <xsd/cxx/tree/types.hxx>
-#include <xsd/cxx/xml/char-utf8.hxx>
-#include <xsd/cxx/xml/dom/auto-ptr.hxx>
-#include <xsd/cxx/xml/dom/serialization-header.hxx>
-#include <xsd/cxx/xml/error-handler.hxx>
+#include "xsd/cxx/pre.hxx"
+#include "xsd/cxx/tree/elements.hxx"
+#include "xsd/cxx/tree/exceptions.hxx"
+#include "xsd/cxx/tree/parsing.hxx"
+#include "xsd/cxx/tree/parsing/boolean.hxx"
+#include "xsd/cxx/tree/parsing/byte.hxx"
+#include "xsd/cxx/tree/parsing/decimal.hxx"
+#include "xsd/cxx/tree/parsing/double.hxx"
+#include "xsd/cxx/tree/parsing/float.hxx"
+#include "xsd/cxx/tree/parsing/int.hxx"
+#include "xsd/cxx/tree/parsing/long.hxx"
+#include "xsd/cxx/tree/parsing/short.hxx"
+#include "xsd/cxx/tree/parsing/unsigned-byte.hxx"
+#include "xsd/cxx/tree/parsing/unsigned-int.hxx"
+#include "xsd/cxx/tree/parsing/unsigned-long.hxx"
+#include "xsd/cxx/tree/parsing/unsigned-short.hxx"
+#include "xsd/cxx/tree/serialization.hxx"
+#include "xsd/cxx/tree/serialization/boolean.hxx"
+#include "xsd/cxx/tree/serialization/byte.hxx"
+#include "xsd/cxx/tree/serialization/decimal.hxx"
+#include "xsd/cxx/tree/serialization/double.hxx"
+#include "xsd/cxx/tree/serialization/float.hxx"
+#include "xsd/cxx/tree/serialization/int.hxx"
+#include "xsd/cxx/tree/serialization/long.hxx"
+#include "xsd/cxx/tree/serialization/short.hxx"
+#include "xsd/cxx/tree/serialization/unsigned-byte.hxx"
+#include "xsd/cxx/tree/serialization/unsigned-int.hxx"
+#include "xsd/cxx/tree/serialization/unsigned-long.hxx"
+#include "xsd/cxx/tree/serialization/unsigned-short.hxx"
+#include "xsd/cxx/tree/types.hxx"
+#include "xsd/cxx/xml/char-utf8.hxx"
+#include "xsd/cxx/xml/dom/auto-ptr.hxx"
+#include "xsd/cxx/xml/dom/serialization-header.hxx"
+#include "xsd/cxx/xml/error-handler.hxx"
 
 /**
  * @brief C++ namespace for the %http://www.w3.org/2001/XMLSchema
@@ -608,12 +608,12 @@ class Cells;
 #include <limits>     // std::numeric_limits
 #include <memory>     // ::std::unique_ptr
 #include <utility>    // std::move
-#include <xsd/cxx/tree/containers.hxx>
-#include <xsd/cxx/tree/elements.hxx>
-#include <xsd/cxx/tree/exceptions.hxx>
-#include <xsd/cxx/tree/list.hxx>
-#include <xsd/cxx/xml/char-utf8.hxx>
-#include <xsd/cxx/xml/dom/parsing-header.hxx>
+#include "xsd/cxx/tree/containers.hxx"
+#include "xsd/cxx/tree/elements.hxx"
+#include "xsd/cxx/tree/exceptions.hxx"
+#include "xsd/cxx/tree/list.hxx"
+#include "xsd/cxx/xml/char-utf8.hxx"
+#include "xsd/cxx/xml/dom/parsing-header.hxx"
 
 /**
  * @brief List class corresponding to the %DataArrayList_t
@@ -3041,7 +3041,7 @@ class Cells : public ::xml_schema::type {
 #include <xercesc/dom/DOMDocument.hpp>
 #include <xercesc/dom/DOMErrorHandler.hpp>
 #include <xercesc/framework/XMLFormatter.hpp>
-#include <xsd/cxx/xml/dom/auto-ptr.hxx>
+#include "xsd/cxx/xml/dom/auto-ptr.hxx"
 
 void operator<<(::xercesc::DOMElement&, const DataArrayList_t&);
 
@@ -3209,7 +3209,7 @@ void operator<<(::xercesc::DOMElement&, const Points&);
 
 void operator<<(::xercesc::DOMElement&, const Cells&);
 
-#include <xsd/cxx/post.hxx>
+#include "xsd/cxx/post.hxx"
 
 // Begin epilogue.
 //

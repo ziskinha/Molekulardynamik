@@ -38,7 +38,7 @@
 
 #include "vtk-unstructured.h"
 
-#include <xsd/cxx/pre.hxx>
+#include "xsd/cxx/pre.hxx"
 
 // DataArrayList_t
 //
@@ -269,7 +269,7 @@ Cells::DataArray_sequence& Cells::DataArray() { return this->DataArray_; }
 
 void Cells::DataArray(const DataArray_sequence& s) { this->DataArray_ = s; }
 
-#include <xsd/cxx/xml/dom/parsing-source.hxx>
+#include "xsd/cxx/xml/dom/parsing-source.hxx"
 
 // DataArrayList_t
 //
@@ -1035,8 +1035,8 @@ Cells& Cells::operator=(const Cells& x) {
 Cells::~Cells() {}
 
 #include <istream>
-#include <xsd/cxx/tree/error-handler.hxx>
-#include <xsd/cxx/xml/sax/std-input-source.hxx>
+#include "xsd/cxx/tree/error-handler.hxx"
+#include "xsd/cxx/xml/sax/std-input-source.hxx"
 
 ::std::unique_ptr< ::VTKFile_t> VTKFile(const ::std::string& u, ::xml_schema::flags f,
                                         const ::xml_schema::properties& p) {
@@ -1192,8 +1192,8 @@ Cells::~Cells() {}
 }
 
 #include <ostream>
-#include <xsd/cxx/tree/error-handler.hxx>
-#include <xsd/cxx/xml/dom/serialization-source.hxx>
+#include "xsd/cxx/tree/error-handler.hxx"
+#include "xsd/cxx/xml/dom/serialization-source.hxx"
 
 void operator<<(::xercesc::DOMElement& e, const DataArrayList_t& i) {
     e << static_cast<
@@ -1510,7 +1510,7 @@ void operator<<(::xercesc::DOMElement& e, const Cells& i) {
     }
 }
 
-#include <xsd/cxx/post.hxx>
+#include "xsd/cxx/post.hxx"
 
 // Begin epilogue.
 //

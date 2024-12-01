@@ -18,18 +18,18 @@ namespace md::env {
      */
     struct GridCell {
         /**
-         * @brief Enumeration of the type of the grid cell
+         * @brief Enumeration of the type of the grid cell.
          */
         enum Type {
-            INNER               = 0x001,
-            BOUNDARY            = 0xFF0,
-            BOUNDARY_RIGHT      = 0x010,
-            BOUNDARY_LEFT       = 0x020,
-            BOUNDARY_TOP        = 0x040,
-            BOUNDARY_BOTTOM     = 0x080,
-            BOUNDARY_FRONT      = 0x100,
-            BOUNDARY_BACK       = 0x200,
-            OUTSIDE             = 0x002,
+            INNER               = 0x001,  ///< A cell inside the grid.
+            BOUNDARY            = 0xFF0,  ///< A boundary cell.
+            BOUNDARY_RIGHT      = 0x010,  ///< A boundary cell on the right side.
+            BOUNDARY_LEFT       = 0x020,  ///< A boundary cell on the left side.
+            BOUNDARY_TOP        = 0x040,  ///< A boundary cell on the top side.
+            BOUNDARY_BOTTOM     = 0x080,  ///< A boundary cell on the bottom side.
+            BOUNDARY_FRONT      = 0x100,  ///< A boundary cell on the front side.
+            BOUNDARY_BACK       = 0x200,  ///< A boundary cell on the back side.
+            OUTSIDE             = 0x002,  ///< A cell outside the grid.
             INSIDE = INNER | BOUNDARY,    ///< Cells considered inside the boundary
         };
 
@@ -88,6 +88,12 @@ namespace md::env {
         return static_cast<T>(lhs) & static_cast<T>(rhs);
     }
 
+    /**
+     * @brief Enables bitwise OR assignment for GridCell::Type.
+     * @param lhs
+     * @param rhs
+     * @return The updated lhs.
+     */
     constexpr GridCell::Type& operator|=(GridCell::Type& lhs, const GridCell::Type rhs) {
         using T = std::underlying_type_t<GridCell::Type>;
         lhs = static_cast<GridCell::Type>(static_cast<T>(lhs) | static_cast<T>(rhs));
