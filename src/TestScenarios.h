@@ -8,6 +8,10 @@
 
 using namespace md;
 
+
+// scenarios used during testing
+// not particularly important implementation wise but useful as an example how to interface with our program
+
 inline void four_particle_lennard_jones_test() {
     parse::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;

@@ -4,7 +4,11 @@
 #include "../src/env/Force.h"
 #include "../src/core/IntegratorBase.h"
 
-void build_env(md::env::Environment& env) {
+
+
+//Check correctness of updated values after performing a single simulation step 
+TEST(StoermerVerletTest, test){
+    md::env::Environment env;
     md::env::Boundary boundary;
     boundary.extent = {10, 10, 10};
     boundary.origin = {0, 0, 0};
@@ -15,14 +19,8 @@ void build_env(md::env::Environment& env) {
     env.set_grid_constant(10);
     env.set_force(md::env::InverseSquare(1,10));
     env.build();
-}
 
-//Check correctness of updated values after performing a single simulation step 
-TEST(StoermerVerletTest, test){
-    md::env::Environment env;
-    build_env(env);
-
-    md::Integrator::StoermerVerlet simulator (env, NULL);
+    md::Integrator::StoermerVerlet simulator (env, nullptr);
     simulator.simulate(0, 1.0, 1.0, 1000);
 
     const auto& afterSimParticle1 = env.operator[](0);
@@ -51,5 +49,80 @@ TEST(StoermerVerletTest, test){
     EXPECT_NEAR(afterSimParticle2.velocity[0],0.00400825846562090972409065881321059600046652999133668710917088161,1e-5);
     EXPECT_NEAR(afterSimParticle2.velocity[1],0.02404955079372545834454395287926357600279917994802012265502528966,1e-5);
     EXPECT_NEAR(afterSimParticle2.velocity[2],0.02404955079372545834454395287926357600279917994802012265502528966,1e-5);
+}
+
+
+TEST(StoermerVerletOrbitTest, test){
+    md::env::Environment env;
+
+    md::env::Boundary boundary;
+    boundary.extent = {15, 15, 10};
+    boundary.origin = {-5, -5, -5};
+    boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW);
+
+    constexpr double G = 1;
+    constexpr int R = 1;
+    constexpr double M = 1.0;
+    constexpr double m = 1e-10;
+    constexpr double v = G*M/R;
+    constexpr double T = 2* 3.14159265359 * v/R;
+
+    env.set_boundary(boundary);
+    env.add_particle({0, R, 0}, {v, 0, 0}, m, 0);
+    env.add_particle({0, 0, 0}, {0, 0, 0}, M, 1);
+    env.set_grid_constant(30); // Simulator uses direct sum method
+    env.set_force(md::env::InverseSquare(G,10));
+    env.build();
+
+    md::Integrator::StoermerVerlet simulator (env, nullptr);
+    simulator.simulate(0, T, 0.001, 10000);
+
+    const auto p = env[0];
+
+    EXPECT_NEAR(p.position[0], 0, 1e-3 );
+    EXPECT_NEAR(p.position[1], R, 1e-3);
+    EXPECT_EQ(p.position[2], 0);
+
+    EXPECT_NEAR(p.velocity[0], v, 1e-3);
+    EXPECT_NEAR(p.velocity[1], 0, 1e-3);
+    EXPECT_EQ(p.velocity[2], 0);
+
+}
+
+TEST(StoermerVerletOrbitTestLinkedCells, test){
+    md::env::Environment env;
+
+    md::env::Boundary boundary;
+    boundary.extent = {3.6, 3.6, 3};
+    boundary.origin = {-1.8, -1.8, 0};
+    boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW);
+
+    constexpr double G = 1;
+    constexpr int R = 1;
+    constexpr double M = 1.0;
+    constexpr double m = 1e-10;
+    constexpr double v = G*M/R;
+    constexpr double T = 2* 3.14159265359 * v/R;
+
+    env.set_boundary(boundary);
+    env.add_particle({0, R, 0}, {v, 0, 0}, m, 0);
+    env.add_particle({0, 0, 0}, {0, 0, 0}, M, 1);
+    env.set_grid_constant(1.2); // uses
+    env.set_force(md::env::InverseSquare(G,1.2));
+    env.build();
+
+    md::Integrator::StoermerVerlet simulator (env, nullptr);
+    simulator.simulate(0, T, 0.001, 10000);
+
+    const auto p = env[0];
+
+    EXPECT_NEAR(p.position[0], 0, 1e-3 );
+    EXPECT_NEAR(p.position[1], R, 1e-3);
+    EXPECT_EQ(p.position[2], 0);
+
+    EXPECT_NEAR(p.velocity[0], v, 1e-3);
+    EXPECT_NEAR(p.velocity[1], 0, 1e-3);
+    EXPECT_EQ(p.velocity[2], 0);
+
 }
 

@@ -34,13 +34,13 @@ inline size_t hash_combine(const size_t lhs, const size_t rhs) {
 
 // TODO: maybe move to ArrayUtils.h?
 /**
- * @brief TODO: add description
+ * @brief Functor for creating a hash from an array<INT_T, 3>
  */
 struct Int3Hasher {
     /**
-     * TODO: add description
-     * @param arr
-     * @return
+     * @brief hash int3
+     * @param arr array to be hashed
+     * @return hash
      */
     size_t operator()(const std::array<INT_T, 3>& arr) const {
         std::size_t seed = 0x123456789;  // initial value
