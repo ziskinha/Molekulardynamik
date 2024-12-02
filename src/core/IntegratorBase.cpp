@@ -7,7 +7,7 @@
 
 #include "io/Logger/Logger.h"
 
-#if SPDLOG_ACTIVE_LEVEL != SPDLOG_LEVEL_OFF
+#if SPDLOG_ACTIVE_LEVEL == SPDLOG_LEVEL_INFO
 #define SHOW_PROGRESS(current, total)                                                         \
     do {                                                                                      \
         constexpr int bar_width = 50;                                                         \
@@ -57,13 +57,6 @@ namespace md::Integrator {
         }
 
         SPDLOG_INFO("Simulation ended");
-    }
-
-    void IntegratorBase::simulate_without_writer(const double start_time, const double end_time, const double dt) {
-        int i = 0;
-        for (double t = start_time; t < end_time; t += dt, i++) {
-            simulation_step(dt);
-        }
     }
 
 

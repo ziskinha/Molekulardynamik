@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulation>
+    <output>
+        <baseName>simulation_output</baseName>
+        <writeFrequency>1000</writeFrequency>
+    </output>
+
+    <parameters>
+        <tEnd>10.0</tEnd>
+        <deltaT>0.00005</deltaT>
+        <cutoff_radius>3.0</cutoff_radius>
+    </parameters>
+
+    <Boundary
+            typeLEFT="REPULSIVE_FORCE"
+            typeRIGHT="REPULSIVE_FORCE"
+            typeTOP="REPULSIVE_FORCE"
+            typeBOTTOM="REPULSIVE_FORCE"
+            typeFRONT="REPULSIVE_FORCE"
+            typeBACK="REPULSIVE_FORCE"
+            CENTER_BOUNDARY_ORIGINX="0.0"
+            CENTER_BOUNDARY_ORIGINY="0.0"
+            CENTER_BOUNDARY_ORIGINZ="0.0"
+            EXTENT_WIDTH="120.0"
+            EXTENT_HEIGHT="50.0"
+            EXTENT_DEPTH="1.0"
+    />
+
+    <Forces>
+        <Force type="lennardJones" arg1="5.0" arg2="1.0"/>
+    </Forces>
+
+    <spheres>
+        <x>60</x>
+        <y>25</y>
+        <z>0</z>
+        <vel1>0</vel1>
+        <vel2>-10</vel2>
+        <vel3>0</vel3>
+        <thermal_v>0</thermal_v>
+        <radius>15</radius>
+        <width>1.1225</width>
+        <mass>1</mass>
+        <dimension>2</dimension>
+        <type>0</type>
+    </spheres>
+</simulation>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulation>
+    <output>
+        <baseName>simulation_output</baseName>
+        <writeFrequency>1000</writeFrequency>
+    </output>
+
+    <parameters>
+        <tEnd>10.0</tEnd>
+        <deltaT>0.0001</deltaT>
+        <cutoff_radius>3.0</cutoff_radius>
+    </parameters>
+
+    <Boundary
+            typeLEFT="VELOCITY_REFLECTION"
+            typeRIGHT="VELOCITY_REFLECTION"
+            typeTOP="VELOCITY_REFLECTION"
+            typeBOTTOM="VELOCITY_REFLECTION"
+            typeFRONT="VELOCITY_REFLECTION"
+            typeBACK="VELOCITY_REFLECTION"
+            CENTER_BOUNDARY_ORIGINX="0.0"
+            CENTER_BOUNDARY_ORIGINY="0.0"
+            CENTER_BOUNDARY_ORIGINZ="0.0"
+            EXTENT_WIDTH="100.0"
+            EXTENT_HEIGHT="100.0"
+            EXTENT_DEPTH="1.0"
+    />
+
+
+    <Forces>
+        <Force type="lennardJones" arg1="5" arg2="1"/>
+    </Forces>
+
+    <cuboids>
+        <x>20</x>
+        <y>20</y>
+        <z>0</z>
+        <vel1>10</vel1>
+        <vel2>10</vel2>
+        <vel3>0</vel3>
+        <numPartX>20</numPartX>
+        <numPartY>20</numPartY>
+        <numPartZ>1</numPartZ>
+        <thermal_v>0.1</thermal_v>
+        <width>1.0</width>
+        <mass>1.0</mass>
+        <dimension>2</dimension>
+        <type>0</type>
+    </cuboids>
+
+    <spheres>
+        <x>70</x>
+        <y>70</y>
+        <z>0</z>
+        <vel1>-10</vel1>
+        <vel2>-10</vel2>
+        <vel3>0</vel3>
+        <thermal_v>0.1</thermal_v>
+        <radius>10</radius>
+        <width>1</width>
+        <mass>1</mass>
+        <dimension>2</dimension>
+        <type>0</type>
+    </spheres>
+</simulation>

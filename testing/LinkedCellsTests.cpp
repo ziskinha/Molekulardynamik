@@ -84,7 +84,7 @@ TEST(LinkedCellsTest, calculation_test) {
     env.build();
 
     md::Integrator::StoermerVerlet simulator(env, NULL);
-    simulator.simulate_without_writer(0, 25, 0.001);
+    simulator.simulate(0, 25, 0.001, 1000);
 
     // particle 1 after simulation
     EXPECT_TRUE(env.operator[](0).position[0] == 7.5);
@@ -113,7 +113,7 @@ TEST(LinkedCellsTest, calculation_test) {
     EXPECT_NEAR(env.operator[](2).velocity[1], 4240.53, 1);
     EXPECT_TRUE(env.operator[](2).velocity[2] == 0);
 
-    // particle 4 after simulation
+    // particle 4 after simulation, nothing should have changed
     EXPECT_TRUE(env.operator[](3).position[0] == 13.5);
     EXPECT_TRUE(env.operator[](3).position[1] == 13.5);
     EXPECT_TRUE(env.operator[](3).position[2] == 0);

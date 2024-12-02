@@ -28,7 +28,7 @@ TEST(BoundaryConditionsTest, outflow_condition_test) {
     setUp(env, boundary);
 
     md::Integrator::StoermerVerlet simulator(env, NULL);
-    simulator.simulate_without_writer(0, 1, 0.001);
+    simulator.simulate(0, 1, 0.001, 1000);
 
     for (int i = 0; i < 4; i++) {
         EXPECT_TRUE(env.operator[](i).state == md::env::Particle::DEAD);
@@ -43,7 +43,7 @@ TEST(BoundaryConditionsTest, periodic_condition_test) {
     setUp(env, boundary);
 
     md::Integrator::StoermerVerlet simulator(env, NULL);
-    simulator.simulate_without_writer(0, 1, 0.001);
+    simulator.simulate(0, 1, 0.001, 1000);
 
     EXPECT_NEAR(env.operator[](0).position[0], 8, 0.01);
     EXPECT_NEAR(env.operator[](0).position[1], 8, 0.01);
@@ -66,7 +66,7 @@ TEST(BoundaryConditionsTest, repulsive_force_condition_test) {
     setUp(env, boundary);
 
     md::Integrator::StoermerVerlet simulator(env, NULL);
-    simulator.simulate_without_writer(0, 1, 0.001);
+    simulator.simulate(0, 1, 0.001, 1000);
 
     EXPECT_NEAR(env.operator[](0).position[0], 2.3096, 0.01);
     EXPECT_NEAR(env.operator[](0).position[1], 8, 0.01);
@@ -89,7 +89,7 @@ TEST(BoundaryConditionsTest, velocity_reflection_condition_test) {
     setUp(env, boundary);
 
     md::Integrator::StoermerVerlet simulator(env, NULL);
-    simulator.simulate_without_writer(0, 1, 0.001);
+    simulator.simulate(0, 1, 0.001, 1000);
 
     EXPECT_NEAR(env.operator[](0).position[0], 2, 0.01);
     EXPECT_NEAR(env.operator[](0).position[1], 8, 0.01);
@@ -114,7 +114,7 @@ TEST(BoundaryConditionsTest, mixed_condition_test) {
     setUp(env, boundary);
 
     md::Integrator::StoermerVerlet simulator(env, NULL);
-    simulator.simulate_without_writer(0, 1, 0.001);
+    simulator.simulate(0, 1, 0.001, 1000);
 
     EXPECT_TRUE(env.operator[](0).state == md::env::Particle::DEAD);
     EXPECT_TRUE(env.operator[](1).state == md::env::Particle::DEAD);
@@ -141,12 +141,12 @@ TEST(BoundaryConditionsTest, corner_condition_test) {
     env.build();
 
     md::Integrator::StoermerVerlet simulator(env, NULL);
-    simulator.simulate_without_writer(0, 1, 0.001);
+    simulator.simulate(0, 1, 0.001, 1000);
 
     EXPECT_FALSE(env.operator[](0).state == md::env::Particle::DEAD);
     EXPECT_NEAR(env.operator[](0).position[0], 0.1, 0.01);
     EXPECT_NEAR(env.operator[](0).position[1], 0.5, 0.01);
 
-    simulator.simulate_without_writer(0, 1, 0.001);
+    simulator.simulate(0, 1, 0.001, 10000);
     EXPECT_TRUE(env.operator[](0).state == md::env::Particle::DEAD);
 }

@@ -23,7 +23,7 @@ TEST(StoermerVerletTest, test){
     build_env(env);
 
     md::Integrator::StoermerVerlet simulator (env, NULL);
-    simulator.simulate_without_writer(0, 1.0, 1.0);
+    simulator.simulate(0, 1.0, 1.0, 1000);
 
     const auto& afterSimParticle1 = env.operator[](0);
     const auto& afterSimParticle2 = env.operator[](1);
