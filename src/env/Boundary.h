@@ -87,6 +87,7 @@ namespace md::env {
          */
         void apply_boundary(Particle &particle, const GridCell &current_cell, const GridCell &previous_cell) const;
 
+        // TODO set to private
         vec3 extent{MAX_EXTENT, MAX_EXTENT, MAX_EXTENT}; ///< Dimensions of the boundary [width, height, depth].
         vec3 origin{CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN}; ///< origin of the boundary.
 
@@ -106,6 +107,11 @@ namespace md::env {
          * @return A callable object representing the inverse distance force.
          */
         static BoundaryForce InverseDistanceForce(double cutoff, double pre_factor, int exponent = 2);
+
+
+        bool requires_force_function() const;
+        bool has_force_function() const;
+
     private:
         /**
          * @brief Applies a boundary rule to a particle based on the boundary face it interacts with.

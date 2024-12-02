@@ -188,6 +188,19 @@ namespace md::env {
         };
     }
 
+    bool Boundary::requires_force_function() const {
+        for (auto rule : rules) {
+            if (rule == REPULSIVE_FORCE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool Boundary::has_force_function() const {
+        return static_cast<bool>(force);
+    }
+
 
     void Boundary::apply_rule(const int3& normal, Particle& particle, const GridCell& current_cell) const {
         switch (rules[face_normal_to_idx(normal)]) {

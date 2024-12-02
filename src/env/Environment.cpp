@@ -147,9 +147,8 @@ namespace md::env {
     }
 
     void Environment::build() {
-        // TODO check parameters
         if (initialized) {
-            SPDLOG_WARN("Environment is already initialized!");
+            SPDLOG_ERROR("Environment is already initialized!");
             return;
         }
 
@@ -160,6 +159,25 @@ namespace md::env {
             SPDLOG_ERROR("Boundary extents must be non-negative.");
             throw std::invalid_argument("Boundary extents must be non-negative.");
         }
+        for (int i = 0; i < 3; i++) {
+            if (boundary.origin[i] == CENTER_BOUNDARY_ORIGIN) {
+                boundary.extent[i] = -boundary.extent[i] / 2;
+            }
+        }
+        for (Particle & particle : particle_storage) {
+            const vec3 pos = particle.position - boundary.origin;
+            if (pos[0] < 0 || pos[1] < 0 || pos[2] < 0 ||
+                pos[0] > boundary.extent[0] || pos[1] > boundary.extent[1] || pos[2] > boundary.extent[2]) {
+                SPDLOG_ERROR("Particle is being initialized outside of the boundary. Particle position: {}", particle.position);
+                throw std::invalid_argument("invalid particle position");
+                }
+        }
+        if (boundary.requires_force_function()) {
+            if (!boundary.has_force_function()) {
+                SPDLOG_ERROR("Boundary requires a boundary force to be set but no such force has been given");
+                throw std::invalid_argument("no boundary force");
+            }
+        }
 
         // check if grid constant is ok
         if (grid_constant > 0 && grid_constant <= force_func.cutoff()) {
@@ -169,7 +187,7 @@ namespace md::env {
             grid_constant = force_func.cutoff();
         }
         if (grid_constant < 0) {
-            SPDLOG_ERROR("Grid constant is negative. Will default to use GRID_CONSTANT_AUTO.");
+            SPDLOG_ERROR("Grid constant is negative. Grid constant should be chosen positive and at least the size of the force cutoff");
             throw std::invalid_argument("Grid constant is negative.");
         }
         if (grid_constant == GRID_CONSTANT_AUTO) {
@@ -182,11 +200,6 @@ namespace md::env {
             }
         }
 
-        for (int i = 0; i < 3; i++) {
-            if (boundary.origin[i] == CENTER_BOUNDARY_ORIGIN) {
-                boundary.extent[i] = -boundary.extent[i] / 2;
-            }
-        }
 
         grid.build(boundary.extent, grid_constant, particle_storage, boundary.origin);
         initialized = true;
