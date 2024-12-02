@@ -68,7 +68,17 @@ TEST(BoundaryConditionsTest, repulsive_force_condition_test) {
     md::Integrator::StoermerVerlet simulator(env, NULL);
     simulator.simulate_without_writer(0, 1, 0.001);
 
-    //TODO: add my calculations
+    EXPECT_NEAR(env.operator[](0).position[0], 2.3096, 0.01);
+    EXPECT_NEAR(env.operator[](0).position[1], 8, 0.01);
+
+    EXPECT_NEAR(env.operator[](1).position[0], 8, 0.01);
+    EXPECT_NEAR(env.operator[](1).position[1], 7.6904, 0.01);
+
+    EXPECT_NEAR(env.operator[](2).position[0], 7.6904, 0.01);
+    EXPECT_NEAR(env.operator[](2).position[1], 2, 0.01);
+
+    EXPECT_NEAR(env.operator[](3).position[0], 2, 0.01);
+    EXPECT_NEAR(env.operator[](3).position[1], 2.3096, 0.01);
 }
 
 // tests if the velocity reflection condition works correctly
@@ -99,7 +109,6 @@ TEST(BoundaryConditionsTest, mixed_condition_test) {
     md::env::Environment env;
     md::env::Boundary boundary;
     boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW);
-    boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE, md::env::BoundaryNormal::TOP);
     boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION, md::env::BoundaryNormal::RIGHT);
     boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC, md::env::BoundaryNormal::BOTTOM);
     setUp(env, boundary);
@@ -108,9 +117,7 @@ TEST(BoundaryConditionsTest, mixed_condition_test) {
     simulator.simulate_without_writer(0, 1, 0.001);
 
     EXPECT_TRUE(env.operator[](0).state == md::env::Particle::DEAD);
-
-    /*EXPECT_NEAR(env.operator[](1).position[0], 8, 0.01);
-    EXPECT_NEAR(env.operator[](1).position[1], 8, 0.01);*/
+    EXPECT_TRUE(env.operator[](1).state == md::env::Particle::DEAD);
 
     EXPECT_NEAR(env.operator[](2).position[0], 8, 0.01);
     EXPECT_NEAR(env.operator[](2).position[1], 2, 0.01);

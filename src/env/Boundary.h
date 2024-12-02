@@ -19,7 +19,6 @@ namespace md::env {
 
     /**
      * @brief A structure representing the normal vectors of the boundary.
-     * TODO
      */
     struct BoundaryNormal {
         static const int3 LEFT;    ///< Normal vector of the left face.
@@ -81,7 +80,7 @@ namespace md::env {
         void set_boundary_force(const BoundaryForce &force);
 
         /**
-         * @brief Applies the boundary conditions to a particle.
+         * @brief Calculates the face and applies the boundary conditions to a particle.
          * @param particle The particle to which the conditions are applied.
          * @param current_cell The particle's current gird cell.
          * @param previous_cell The particle's previous gird cell.
