@@ -7,6 +7,7 @@
 #include "io/input/xml/molSimSchema.hxx"
 #include <fstream>
 
+
 #define RETURN_PARSE_ERROR(err_msg)                                                \
     SPDLOG_ERROR(err_msg);                                                         \
     SPDLOG_ERROR("For help, run the program with ./MolSim -h or ./MolSim --help"); \
@@ -71,11 +72,7 @@ namespace md::parse {
         args.benchmark = flag_exists("-b");
         args.override = flag_exists("-f");
 
-        // parse arguments
-        args.file = arguments[1];
-        if (!std::filesystem::exists(args.file) || !std::filesystem::is_regular_file(args.file)) {
-            RETURN_PARSE_ERROR(fmt::format("Error: File does not exist or is not a valid file.", args.file));
-        }
+       
 std::ifstream file(arguments[1]);
 
      try {
@@ -99,13 +96,35 @@ std::ifstream file(arguments[1]);
         args.duration = simulation.get()->parameters().tEnd();
         args.dt = simulation.get()->parameters().deltaT();
 
-        if(simulation.get()->Forces().Force().get().type()=="lennardJones"){
+      
+        
+
+        env::Boundary boundary;
+        boundary.extent = {simulation.get()->Boundary().EXTENT_WIDTH().get(), simulation.get()->Boundary().EXTENT_HEIGHT().get(), simulation.get()->Boundary().EXTENT_DEPTH().get()};
+        boundary.origin = {simulation.get()->Boundary().CENTER_BOUNDARY_ORIGINX().get(), simulation.get()->Boundary().CENTER_BOUNDARY_ORIGINY().get(), simulation.get()->Boundary().CENTER_BOUNDARY_ORIGINZ().get()};
+        if(simulation.get()->Boundary().typeFRONT()=="OUTFLOW"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW);
+
+        }else if(simulation.get()->Boundary().typeFRONT()=="VELOCITY_REFLECTION"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION);
+
+        }else if (simulation.get()->Boundary().typeFRONT()=="REPULSIVE_FORCE"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE);
+
+        }else{
+        boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC);
+        }
+       
+          if(simulation.get()->Forces().Force().get().type()=="lennardJones"){
             args.env.set_force(env::LennardJones(simulation.get()->Forces().Force().get().arg1().get(),simulation.get()->Forces().Force().get().arg2().get()));
             args.force="lennardJones";
+            boundary.set_boundary_force(env::Boundary::LennardJonesForce(simulation.get()->Forces().Force().get().arg1().get(),simulation.get()->Forces().Force().get().arg2().get()));
+
         }
         else if(simulation.get()->Forces().Force().get().type()=="inverseSquare"){
         args.env.set_force(env::InverseSquare(simulation.get()->Forces().Force().get().arg1().get()));
         args.force="inverseSquare";
+        boundary.set_boundary_force(env::Boundary::InverseDistanceForce(simulation.get()->parameters().cutoff_radius(),simulation.get()->Forces().Force().get().arg1().get()));
         }
         else if(simulation.get()->Forces().Force().get().type()=="HooksLaw"){
         args.env.set_force(env::HookesLaw(simulation.get()->Forces().Force().get().arg1().get(), simulation.get()->Forces().Force().get().arg2().get()));
@@ -115,18 +134,24 @@ std::ifstream file(arguments[1]);
             args.force="no force applied";
         }
 
-        if (args.benchmark) {
-            return OK;
-        }
+        args.env.set_boundary(boundary);
+
+        args.cutoff_radius= simulation.get()->parameters().cutoff_radius();
 
         args.write_freq= simulation.get()->output().writeFrequency();
         file.close();
+       
             }
             catch (const xml_schema::exception& e) {
         std::cerr << "XML parsing error: " << e.what() << std::endl;
         file.close();
         return EXIT;
     }
+
+        if (args.benchmark) {
+            args.output_format=io::OutputFormat::XYZ;
+            return OK;
+        }
 
         if (parameters[2] != "XYZ" && parameters[2] != "VTK") {
             RETURN_PARSE_ERROR(fmt::format("Error: invalid file output format: {}", args.file));

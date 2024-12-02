@@ -25,9 +25,8 @@
  <xsd:simpleType name="BoundaryType">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="OUTFLOW"/>
-            <xsd:enumeration value="REFLECTIVE_SYMMETRIC"/>
-            <xsd:enumeration value="REFLECTIVE_VECTOR"/>
-            <xsd:enumeration value="REFLECTIVE_REPULSIVE"/>
+            <xsd:enumeration value="VELOCITY_REFLECTION"/>
+            <xsd:enumeration value="REPULSIVE_FORCE"/>
             <xsd:enumeration value="PERIODIC"/>
 
         </xsd:restriction>

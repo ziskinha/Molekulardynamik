@@ -9,11 +9,9 @@ int main(const int argc, char* argv[]) {
 
     parse::ProgramArguments args;
     switch (parse_args(argc, argv, args)) {
-        case parse::EXIT:
-            return 0;
-        case parse::ERROR:
-            return -1;
-        default:;
+    case parse::EXIT: return 0;
+    case parse::ERROR: return -1;
+    default: ;
     };
 
     log_arguments(args);
@@ -25,7 +23,6 @@ int main(const int argc, char* argv[]) {
     } else {
         simulator.benchmark_simulate(0, args.duration, args.dt, args.file);
     }
-
     SPDLOG_INFO("Output written. Terminating...");
 
     return 0;

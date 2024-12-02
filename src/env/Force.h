@@ -111,7 +111,7 @@ namespace md::env {
                                         pow(p2.position[2] - p1.position[2], 2);
 
             if (dist_squared > cutoff_radius * cutoff_radius) {
-                return vec3{0.0, 0.0, 0.0};
+              return vec3{0.0, 0.0, 0.0};
             }
 
             const double inv_dist_squared = 1.0 / dist_squared;

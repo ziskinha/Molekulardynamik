@@ -2,6 +2,7 @@
 #include "io/IOStrategy.h"
 #include "io/Logger/Logger.h"
 #include "../env/Environment.h"
+#include "../env/Boundary.h"
 
 namespace md::parse {
 
@@ -17,6 +18,7 @@ namespace md::parse {
         std::string output_baseName;
         double duration;
         double dt;
+        double cutoff_radius;
         int write_freq;
         env::Environment env;
         std::string force;
@@ -35,13 +37,14 @@ namespace md::parse {
             "       output name:   {}\n"
             "       duration:      {}\n"
             "       dt:            {}\n"
+            "       cutoff_radius: {}\n"
             "       write_freq:    {}\n"
             "       particles:     {}\n" 
             "       force:         {}\n" 
             "       benchmark:     {}\n"
             "       override:      {}\n"
             "       output_format: {}",
-            args.output_baseName, args.duration, args.dt, args.write_freq, args.env.size(), args.force, args.benchmark ? "true" : "false",
+            args.output_baseName, args.duration, args.dt, args.cutoff_radius, args.write_freq, args.env.size(), args.force, args.benchmark ? "true" : "false",
             args.override ? "true" : "false", args.output_format == io::OutputFormat::XYZ ? "XYZ" : "VTK");
     }
 
