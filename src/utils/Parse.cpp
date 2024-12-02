@@ -75,7 +75,9 @@ namespace md::parse {
             for (const auto& particle : simulation.get()->particles()) {
                 args.env.add_particle({particle.x(), particle.y(), particle.z()},
                                       {particle.vel1(), particle.vel2(), particle.vel3()}, particle.mass(), 0);
+
             }
+
 
             for (const auto& cuboid : simulation.get()->cuboids()) {
                 args.env.add_cuboid({cuboid.x(), cuboid.y(), cuboid.z()}, {cuboid.vel1(), cuboid.vel2(), cuboid.vel3()},
@@ -90,8 +92,14 @@ namespace md::parse {
             }
 
             args.output_baseName = simulation.get()->output().baseName();
+            SPDLOG_DEBUG("Output Basename parsed: {}", args.output_baseName);
+
             args.duration = simulation.get()->parameters().tEnd();
+            SPDLOG_DEBUG("Simulation duration parsed: {}", args.duration);
+
             args.dt = simulation.get()->parameters().deltaT();
+            SPDLOG_DEBUG("Delta_t parsed: {}", args.dt);
+
             std::string types;
             env::Boundary boundary;
             boundary.extent = {simulation.get()->Boundary().EXTENT_WIDTH().get(),
@@ -187,6 +195,7 @@ namespace md::parse {
             } else {
                 boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC, md::env::BoundaryNormal::TOP);
             }
+            SPDLOG_DEBUG("Boundaries set.");
 
             if (simulation.get()->Forces().Force().get().type() == "lennardJones") {
                 args.env.set_force(env::LennardJones(simulation.get()->Forces().Force().get().arg1().get(),
@@ -195,17 +204,19 @@ namespace md::parse {
                 boundary.set_boundary_force(
                     env::Boundary::LennardJonesForce(simulation.get()->Forces().Force().get().arg1().get(),
                                                      simulation.get()->Forces().Force().get().arg2().get()));
-
+                SPDLOG_ERROR("Using Lennard Jones Force");
             } else if (simulation.get()->Forces().Force().get().type() == "inverseSquare") {
                 args.env.set_force(env::InverseSquare(simulation.get()->Forces().Force().get().arg1().get()));
                 args.force = "inverseSquare";
                 boundary.set_boundary_force(
                     env::Boundary::InverseDistanceForce(simulation.get()->parameters().cutoff_radius(),
                                                         simulation.get()->Forces().Force().get().arg1().get()));
+                SPDLOG_ERROR("Using Inverse Square Force");
             } else if (simulation.get()->Forces().Force().get().type() == "HooksLaw") {
                 args.env.set_force(env::HookesLaw(simulation.get()->Forces().Force().get().arg1().get(),
                                                   simulation.get()->Forces().Force().get().arg2().get()));
                 args.force = "HooksLaw";
+                SPDLOG_ERROR("Using Hooks Law Force");
             } else {
                 args.force = "no force applied";
             }
@@ -213,8 +224,10 @@ namespace md::parse {
             args.env.set_boundary(boundary);
 
             args.cutoff_radius = simulation.get()->parameters().cutoff_radius();
+            SPDLOG_DEBUG("Cutoff Radius parsed: {}", args.cutoff_radius);
 
             args.write_freq = simulation.get()->output().writeFrequency();
+            SPDLOG_DEBUG("Write frequency parsed: {}", args.cutoff_radius);
             file.close();
 
         } catch (const xml_schema::exception& e) {
