@@ -59,6 +59,13 @@ namespace md::Integrator {
         SPDLOG_INFO("Simulation ended");
     }
 
+    void IntegratorBase::simulate_without_writer(const double start_time, const double end_time, const double dt) {
+        int i = 0;
+        for (double t = start_time; t < end_time; t += dt, i++) {
+            simulation_step(dt);
+        }
+    }
+
 
     /// -----------------------------------------
     /// \brief Benchmark functions
@@ -69,9 +76,9 @@ namespace md::Integrator {
 
         for (int k = 1; k <= repetitions; k++) {
             spdlog::set_level(spdlog::level::off);
-            env::Environment new_env;
+            /*env::Environment new_env;
             md::io::read_file(file_name, new_env);
-            new_env.build();
+            new_env.build();*/
 
             auto start = std::chrono::high_resolution_clock::now();
 
@@ -83,7 +90,7 @@ namespace md::Integrator {
             spdlog::set_level(spdlog::level::info);
             SPDLOG_INFO("Finished {}. benchmark simulation, out of {}", k, repetitions);
             SPDLOG_INFO("Execution time: {} ms", duration);
-            SPDLOG_INFO("Number of particles: {}", new_env.size());
+            SPDLOG_INFO("Number of particles: {}", env.size());
             duration_sum += duration;
         }
         SPDLOG_INFO("Average execution time: {} ms", duration_sum / repetitions);
@@ -97,9 +104,9 @@ namespace md::Integrator {
             spdlog::set_level(spdlog::level::off);
             auto duration_sum = 0.0;
 
-            env::Environment new_env;
+            /*env::Environment new_env;
             md::io::read_file(file_name, new_env);
-            new_env.build();
+            new_env.build();*/
 
             for (double t = start_time; t < end_time; t += dt) {
                 auto start = std::chrono::high_resolution_clock::now();

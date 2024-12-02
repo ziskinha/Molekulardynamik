@@ -17,13 +17,6 @@ namespace md::Integrator {
          * @param dt Δt The time increment for each simulation step.
          */
         void simulation_step(double dt) override;
-
-        // TODO is ugly -> remove
-        // Friend function declaration, granting access to private members
-        friend void dummy_run_simulation(StoermerVerlet& obj, double dt);
     };
-
-    // TODO is ugly -> remove
-    void dummy_run_simulation(StoermerVerlet& obj, double dt);
 
 }  // namespace md::Integrator

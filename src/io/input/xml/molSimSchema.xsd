@@ -108,9 +108,9 @@
                             <xsd:element name="vel1" type="xsd:double"/>
                             <xsd:element name="vel2" type="xsd:double"/>
                             <xsd:element name="vel3" type="xsd:double"/>
-                            <xsd:element name="numPartX" type="xsd:int"/>
-                            <xsd:element name="numPartY" type="xsd:int"/>
-                            <xsd:element name="numPartZ" type="xsd:int"/>
+                            <xsd:element name="numPartX" type="xsd:unsignedInt"/>
+                            <xsd:element name="numPartY" type="xsd:unsignedInt"/>
+                            <xsd:element name="numPartZ" type="xsd:unsignedInt"/>
                             <xsd:element name="thermal_v" type="xsd:double"/>
                             <xsd:element name="width" type="xsd:double"/>
                             <xsd:element name="mass" type="xsd:double"/>
@@ -120,7 +120,7 @@
                     </xsd:complexType>
                 </xsd:element>
 
-              <xsd:element name="discs" minOccurs="0" maxOccurs="unbounded">
+              <xsd:element name="spheres" minOccurs="0" maxOccurs="unbounded">
                     <xsd:complexType>
                         <xsd:sequence>
                             <xsd:element name="x" type="xsd:double"/>
@@ -129,8 +129,12 @@
                             <xsd:element name="vel1" type="xsd:double"/>
                             <xsd:element name="vel2" type="xsd:double"/>
                             <xsd:element name="vel3" type="xsd:double"/>
-                            <xsd:element name="distance_h" type="xsd:double"/>
-                            <xsd:element name="radius" type="xsd:double"/>
+                            <xsd:element name="thermal_v" type="xsd:double"/>
+                            <xsd:element name="radius" type="xsd:int"/>
+                            <xsd:element name="width" type="xsd:double"/>
+                            <xsd:element name="mass" type="xsd:double"/>
+                            <xsd:element name="dimension" type="DimensionT"/>
+                            <xsd:element name="type" minOccurs="0" type="xsd:int"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>

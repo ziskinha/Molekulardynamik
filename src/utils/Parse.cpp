@@ -4,9 +4,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "../io/molSimSchema.hxx"
+#include "io/input/xml/molSimSchema.hxx"
 #include <fstream>
-#include <iostream>
 
 #define RETURN_PARSE_ERROR(err_msg)                                                \
     SPDLOG_ERROR(err_msg);                                                         \

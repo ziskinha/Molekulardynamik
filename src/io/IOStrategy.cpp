@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "io/input/FileReader.h"
+#include "io/input/txt/FileReader.h"
 #include "io/Output/VTKWriter.h"
 #include "io/Output/XYZWriter.h"
 #include "io/Logger/Logger.h"

@@ -139,7 +139,6 @@ namespace md::env {
                 }
             }
         }
-
     }
 
     void Environment::add_sphere(const SphereCreateInfo& sphere) {

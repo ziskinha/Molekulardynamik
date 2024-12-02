@@ -36,7 +36,7 @@
 //
 // End prologue.
 
-#include <xsd/cxx/pre.hxx>
+#include "xsd/cxx/pre.hxx"
 
 #include "molSimSchema.hxx"
 
@@ -1353,7 +1353,7 @@ radius (const radius_type& x)
 }
 
 
-#include <xsd/cxx/xml/dom/parsing-source.hxx>
+#include "xsd/cxx/xml/dom/parsing-source.hxx"
 
 // DimensionT
 //
@@ -3299,8 +3299,8 @@ discs::
 }
 
 #include <istream>
-#include <xsd/cxx/xml/sax/std-input-source.hxx>
-#include <xsd/cxx/tree/error-handler.hxx>
+#include "xsd/cxx/xml/sax/std-input-source.hxx"
+#include "xsd/cxx/tree/error-handler.hxx"
 
 ::std::auto_ptr< ::simulation >
 simulation_ (const ::std::string& u,
@@ -3569,8 +3569,8 @@ simulation_ (::xml_schema::dom::auto_ptr< ::xercesc::DOMDocument > d,
 }
 
 #include <ostream>
-#include <xsd/cxx/tree/error-handler.hxx>
-#include <xsd/cxx/xml/dom/serialization-source.hxx>
+#include "xsd/cxx/tree/error-handler.hxx"
+#include "xsd/cxx/xml/dom/serialization-source.hxx"
 
 void
 operator<< (::xercesc::DOMElement& e, const DimensionT& i)
@@ -4477,7 +4477,7 @@ operator<< (::xercesc::DOMElement& e, const discs& i)
   }
 }
 
-#include <xsd/cxx/post.hxx>
+#include "xsd/cxx/post.hxx"
 
 // Begin epilogue.
 //

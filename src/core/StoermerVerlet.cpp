@@ -8,8 +8,6 @@
 
 namespace md::Integrator {
 
-    void dummy_run_simulation(StoermerVerlet& obj, double dt) { obj.simulation_step(dt); }
-
     void StoermerVerlet::simulation_step(const double dt) {
         // update position
         for (auto& p : env.particles()) {

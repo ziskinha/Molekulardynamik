@@ -27,9 +27,17 @@ namespace md::Integrator {
          * @param end_time
          * @param dt Δt The time increment for each simulation step.
          * @param write_freq The frequency with which the data is written to output.
-         * @param benchmark
          */
         void simulate(double start_time, double end_time, double dt, unsigned int write_freq);
+
+        /**
+         * @brief Runs the simulation over a given time interval with specified step size and output frequency.
+         * (Used for tests).
+         * @param start_time
+         * @param end_time
+         * @param dt Δt The time increment for each simulation step.
+         */
+        void simulate_without_writer(double start_time, double end_time, double dt);
 
         /**
          * @brief Runs the simulation in benchmark mode. Benchmarking the overall runtime of the simulation.

@@ -1,100 +1,43 @@
-# Define the test executable
-add_executable(ParticleContainerTests
-        ${CMAKE_SOURCE_DIR}/src/env/Environment.cpp
-        ${CMAKE_SOURCE_DIR}/testing/ParticleContainerTests.cpp
-        ${CMAKE_SOURCE_DIR}/src/env/Environment.h
-        ${CMAKE_SOURCE_DIR}/src/env/Particle.cpp
-        ${CMAKE_SOURCE_DIR}/src/env/ParticleGrid.cpp
-)
+# function to add test executables
+function(add_test_executable test_name)
+    file(GLOB TEST_SOURCES
+            ${CMAKE_SOURCE_DIR}/testing/${test_name}.cpp
+            ${CMAKE_SOURCE_DIR}/src/env/Boundary.cpp
+            ${CMAKE_SOURCE_DIR}/src/env/Common.h
+            ${CMAKE_SOURCE_DIR}/src/env/Environment.cpp
+            ${CMAKE_SOURCE_DIR}/src/env/Force.h
+            ${CMAKE_SOURCE_DIR}/src/env/Particle.cpp
+            ${CMAKE_SOURCE_DIR}/src/env/ParticleGrid.cpp
+            ${CMAKE_SOURCE_DIR}/src/core/StoermerVerlet.cpp
+            ${CMAKE_SOURCE_DIR}/src/core/IntegratorBase.cpp
+    )
 
-# Define the test executable
-add_executable(ForceTests
-        ${CMAKE_SOURCE_DIR}/src/env/Force.h
-        ${CMAKE_SOURCE_DIR}/src/env/Environment.cpp
-        ${CMAKE_SOURCE_DIR}/testing/ForceTests.cpp
-        ${CMAKE_SOURCE_DIR}/src/env/Environment.h
-        ${CMAKE_SOURCE_DIR}/src/env/Common.h
-        ${CMAKE_SOURCE_DIR}/src/env/ParticleGrid.cpp
-        ${CMAKE_SOURCE_DIR}/src/env/Particle.cpp
+    add_executable(${test_name} ${TEST_SOURCES})
 
-)
+    target_include_directories(${test_name}
+            PUBLIC
+            ${CMAKE_SOURCE_DIR}/libs/libxsd
+            ${CMAKE_CURRENT_SOURCE_DIR}/xsd-4.0.0-x86_64-linux-gnu/libxsd
+            PRIVATE
+            ${CMAKE_SOURCE_DIR}/src
+    )
 
-# Define the test executable
-add_executable(StoermerVerletTests
-        ${CMAKE_SOURCE_DIR}/src/env/Force.h
-        ${CMAKE_SOURCE_DIR}/src/env/Environment.cpp
-        ${CMAKE_SOURCE_DIR}/src/core/StoermerVerlet.cpp
-        ${CMAKE_SOURCE_DIR}/testing/StoermerVerletTests.cpp
-        ${CMAKE_SOURCE_DIR}/src/core/IntegratorBase.cpp
-        ${CMAKE_SOURCE_DIR}/src/env/Environment.h
-        ${CMAKE_SOURCE_DIR}/src/env/ParticleGrid.cpp
-        ${CMAKE_SOURCE_DIR}/src/env/Particle.cpp
+    target_link_libraries(${test_name}
+            PUBLIC
+            xerces-c
+            gtest
+            gtest_main
+            PRIVATE
+            spdlog::spdlog
+    )
 
-)
+    add_dependencies(${test_name} gtest MolSim)
+    add_test(NAME ${test_name} COMMAND ${test_name})
+endfunction()
 
-#include directories to test executables
-target_include_directories(ParticleContainerTests
-        PUBLIC
-        ${CMAKE_SOURCE_DIR}/libs/libxsd
-        ${CMAKE_CURRENT_SOURCE_DIR}/xsd-4.0.0-x86_64-linux-gnu/libxsd
-
-        PRIVATE
-        ${CMAKE_SOURCE_DIR}/src
-)
-
-target_include_directories(ForceTests
-        PUBLIC
-        ${CMAKE_SOURCE_DIR}/libs/libxsd
-        ${CMAKE_CURRENT_SOURCE_DIR}/xsd-4.0.0-x86_64-linux-gnu/libxsd
-
-        PRIVATE
-        ${CMAKE_SOURCE_DIR}/src
-)
-
-target_include_directories(StoermerVerletTests
-        PRIVATE
-        ${CMAKE_SOURCE_DIR}/external/spdlog/include
-        PUBLIC
-        ${CMAKE_SOURCE_DIR}/libs/libxsd
-        ${CMAKE_CURRENT_SOURCE_DIR}/xsd-4.0.0-x86_64-linux-gnu/libxsd
-
-        PRIVATE
-        ${CMAKE_SOURCE_DIR}/src
-)
-
-#link liblaries to test executables
-target_link_libraries( ParticleContainerTests
-        PUBLIC
-        xerces-c
-        gtest
-        gtest_main
-        PRIVATE
-        spdlog::spdlog
-)
-
-target_link_libraries(ForceTests
-        PUBLIC
-        xerces-c
-        gtest
-        gtest_main
-        PRIVATE
-        spdlog::spdlog
-)
-
-target_link_libraries(StoermerVerletTests
-        PUBLIC
-        xerces-c
-        gtest
-        gtest_main
-        PRIVATE
-        spdlog::spdlog
-)
-
-add_dependencies(ParticleContainerTests gtest MolSim)
-add_dependencies(ForceTests gtest MolSim)
-add_dependencies(StoermerVerletTests gtest MolSim)
-
-# Register the tests
-add_test(NAME PartContTests COMMAND ParticleContainerTests)
-add_test(NAME ForceTests COMMAND ForceTests)
-add_test(NAME StoermerVerletTests COMMAND StoermerVerletTests)
+# add the tests
+add_test_executable(ParticleContainerTests)
+add_test_executable(ForceTests)
+add_test_executable(StoermerVerletTests)
+add_test_executable(LinkedCellsTests)
+add_test_executable(BoundaryConditionTests)

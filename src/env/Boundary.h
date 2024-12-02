@@ -107,7 +107,6 @@ namespace md::env {
          * @return A callable object representing the inverse distance force.
          */
         static BoundaryForce InverseDistanceForce(double cutoff, double pre_factor, int exponent = 2);
-
     private:
         /**
          * @brief Applies a boundary rule to a particle based on the boundary face it interacts with.
