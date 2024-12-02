@@ -36,7 +36,7 @@
 //
 // End prologue.
 
-#include "xsd/cxx/pre.hxx"
+#include <xsd/cxx/pre.hxx>
 
 #include "molSimSchema.hxx"
 
@@ -650,22 +650,22 @@ cuboids (const cuboids_sequence& s)
   this->cuboids_ = s;
 }
 
-const simulation::discs_sequence& simulation::
-discs () const
+const simulation::spheres_sequence& simulation::
+spheres () const
 {
-  return this->discs_;
+  return this->spheres_;
 }
 
-simulation::discs_sequence& simulation::
-discs ()
+simulation::spheres_sequence& simulation::
+spheres ()
 {
-  return this->discs_;
+  return this->spheres_;
 }
 
 void simulation::
-discs (const discs_sequence& s)
+spheres (const spheres_sequence& s)
 {
-  this->discs_ = s;
+  this->spheres_ = s;
 }
 
 
@@ -1205,155 +1205,239 @@ type (const type_optional& x)
 }
 
 
-// discs
+// spheres
 // 
 
-const discs::x_type& discs::
+const spheres::x_type& spheres::
 x () const
 {
   return this->x_.get ();
 }
 
-discs::x_type& discs::
+spheres::x_type& spheres::
 x ()
 {
   return this->x_.get ();
 }
 
-void discs::
+void spheres::
 x (const x_type& x)
 {
   this->x_.set (x);
 }
 
-const discs::y_type& discs::
+const spheres::y_type& spheres::
 y () const
 {
   return this->y_.get ();
 }
 
-discs::y_type& discs::
+spheres::y_type& spheres::
 y ()
 {
   return this->y_.get ();
 }
 
-void discs::
+void spheres::
 y (const y_type& x)
 {
   this->y_.set (x);
 }
 
-const discs::z_type& discs::
+const spheres::z_type& spheres::
 z () const
 {
   return this->z_.get ();
 }
 
-discs::z_type& discs::
+spheres::z_type& spheres::
 z ()
 {
   return this->z_.get ();
 }
 
-void discs::
+void spheres::
 z (const z_type& x)
 {
   this->z_.set (x);
 }
 
-const discs::vel1_type& discs::
+const spheres::vel1_type& spheres::
 vel1 () const
 {
   return this->vel1_.get ();
 }
 
-discs::vel1_type& discs::
+spheres::vel1_type& spheres::
 vel1 ()
 {
   return this->vel1_.get ();
 }
 
-void discs::
+void spheres::
 vel1 (const vel1_type& x)
 {
   this->vel1_.set (x);
 }
 
-const discs::vel2_type& discs::
+const spheres::vel2_type& spheres::
 vel2 () const
 {
   return this->vel2_.get ();
 }
 
-discs::vel2_type& discs::
+spheres::vel2_type& spheres::
 vel2 ()
 {
   return this->vel2_.get ();
 }
 
-void discs::
+void spheres::
 vel2 (const vel2_type& x)
 {
   this->vel2_.set (x);
 }
 
-const discs::vel3_type& discs::
+const spheres::vel3_type& spheres::
 vel3 () const
 {
   return this->vel3_.get ();
 }
 
-discs::vel3_type& discs::
+spheres::vel3_type& spheres::
 vel3 ()
 {
   return this->vel3_.get ();
 }
 
-void discs::
+void spheres::
 vel3 (const vel3_type& x)
 {
   this->vel3_.set (x);
 }
 
-const discs::distance_h_type& discs::
-distance_h () const
+const spheres::thermal_v_type& spheres::
+thermal_v () const
 {
-  return this->distance_h_.get ();
+  return this->thermal_v_.get ();
 }
 
-discs::distance_h_type& discs::
-distance_h ()
+spheres::thermal_v_type& spheres::
+thermal_v ()
 {
-  return this->distance_h_.get ();
+  return this->thermal_v_.get ();
 }
 
-void discs::
-distance_h (const distance_h_type& x)
+void spheres::
+thermal_v (const thermal_v_type& x)
 {
-  this->distance_h_.set (x);
+  this->thermal_v_.set (x);
 }
 
-const discs::radius_type& discs::
+const spheres::radius_type& spheres::
 radius () const
 {
   return this->radius_.get ();
 }
 
-discs::radius_type& discs::
+spheres::radius_type& spheres::
 radius ()
 {
   return this->radius_.get ();
 }
 
-void discs::
+void spheres::
 radius (const radius_type& x)
 {
   this->radius_.set (x);
 }
 
+const spheres::width_type& spheres::
+width () const
+{
+  return this->width_.get ();
+}
 
-#include "xsd/cxx/xml/dom/parsing-source.hxx"
+spheres::width_type& spheres::
+width ()
+{
+  return this->width_.get ();
+}
+
+void spheres::
+width (const width_type& x)
+{
+  this->width_.set (x);
+}
+
+const spheres::mass_type& spheres::
+mass () const
+{
+  return this->mass_.get ();
+}
+
+spheres::mass_type& spheres::
+mass ()
+{
+  return this->mass_.get ();
+}
+
+void spheres::
+mass (const mass_type& x)
+{
+  this->mass_.set (x);
+}
+
+const spheres::dimension_type& spheres::
+dimension () const
+{
+  return this->dimension_.get ();
+}
+
+spheres::dimension_type& spheres::
+dimension ()
+{
+  return this->dimension_.get ();
+}
+
+void spheres::
+dimension (const dimension_type& x)
+{
+  this->dimension_.set (x);
+}
+
+void spheres::
+dimension (::std::auto_ptr< dimension_type > x)
+{
+  this->dimension_.set (x);
+}
+
+const spheres::type_optional& spheres::
+type () const
+{
+  return this->type_;
+}
+
+spheres::type_optional& spheres::
+type ()
+{
+  return this->type_;
+}
+
+void spheres::
+type (const type_type& x)
+{
+  this->type_.set (x);
+}
+
+void spheres::
+type (const type_optional& x)
+{
+  this->type_ = x;
+}
+
+
+#include <xsd/cxx/xml/dom/parsing-source.hxx>
 
 // DimensionT
 //
@@ -1885,7 +1969,7 @@ simulation (const output_type& output,
   particles_ (this),
   Forces_ (Forces, this),
   cuboids_ (this),
-  discs_ (this)
+  spheres_ (this)
 {
 }
 
@@ -1901,7 +1985,7 @@ simulation (::std::auto_ptr< output_type > output,
   particles_ (this),
   Forces_ (Forces, this),
   cuboids_ (this),
-  discs_ (this)
+  spheres_ (this)
 {
 }
 
@@ -1916,7 +2000,7 @@ simulation (const simulation& x,
   particles_ (x.particles_, f, this),
   Forces_ (x.Forces_, f, this),
   cuboids_ (x.cuboids_, f, this),
-  discs_ (x.discs_, f, this)
+  spheres_ (x.spheres_, f, this)
 {
 }
 
@@ -1931,7 +2015,7 @@ simulation (const ::xercesc::DOMElement& e,
   particles_ (this),
   Forces_ (this),
   cuboids_ (this),
-  discs_ (this)
+  spheres_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2028,14 +2112,14 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       continue;
     }
 
-    // discs
+    // spheres
     //
-    if (n.name () == "discs" && n.namespace_ ().empty ())
+    if (n.name () == "spheres" && n.namespace_ ().empty ())
     {
-      ::std::auto_ptr< discs_type > r (
-        discs_traits::create (i, f, this));
+      ::std::auto_ptr< spheres_type > r (
+        spheres_traits::create (i, f, this));
 
-      this->discs_.push_back (r);
+      this->spheres_.push_back (r);
       continue;
     }
 
@@ -2090,7 +2174,7 @@ operator= (const simulation& x)
     this->particles_ = x.particles_;
     this->Forces_ = x.Forces_;
     this->cuboids_ = x.cuboids_;
-    this->discs_ = x.discs_;
+    this->spheres_ = x.spheres_;
   }
 
   return *this;
@@ -3046,18 +3130,21 @@ cuboids::
 {
 }
 
-// discs
+// spheres
 //
 
-discs::
-discs (const x_type& x,
-       const y_type& y,
-       const z_type& z,
-       const vel1_type& vel1,
-       const vel2_type& vel2,
-       const vel3_type& vel3,
-       const distance_h_type& distance_h,
-       const radius_type& radius)
+spheres::
+spheres (const x_type& x,
+         const y_type& y,
+         const z_type& z,
+         const vel1_type& vel1,
+         const vel2_type& vel2,
+         const vel3_type& vel3,
+         const thermal_v_type& thermal_v,
+         const radius_type& radius,
+         const width_type& width,
+         const mass_type& mass,
+         const dimension_type& dimension)
 : ::xml_schema::type (),
   x_ (x, this),
   y_ (y, this),
@@ -3065,15 +3152,19 @@ discs (const x_type& x,
   vel1_ (vel1, this),
   vel2_ (vel2, this),
   vel3_ (vel3, this),
-  distance_h_ (distance_h, this),
-  radius_ (radius, this)
+  thermal_v_ (thermal_v, this),
+  radius_ (radius, this),
+  width_ (width, this),
+  mass_ (mass, this),
+  dimension_ (dimension, this),
+  type_ (this)
 {
 }
 
-discs::
-discs (const discs& x,
-       ::xml_schema::flags f,
-       ::xml_schema::container* c)
+spheres::
+spheres (const spheres& x,
+         ::xml_schema::flags f,
+         ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
   x_ (x.x_, f, this),
   y_ (x.y_, f, this),
@@ -3081,15 +3172,19 @@ discs (const discs& x,
   vel1_ (x.vel1_, f, this),
   vel2_ (x.vel2_, f, this),
   vel3_ (x.vel3_, f, this),
-  distance_h_ (x.distance_h_, f, this),
-  radius_ (x.radius_, f, this)
+  thermal_v_ (x.thermal_v_, f, this),
+  radius_ (x.radius_, f, this),
+  width_ (x.width_, f, this),
+  mass_ (x.mass_, f, this),
+  dimension_ (x.dimension_, f, this),
+  type_ (x.type_, f, this)
 {
 }
 
-discs::
-discs (const ::xercesc::DOMElement& e,
-       ::xml_schema::flags f,
-       ::xml_schema::container* c)
+spheres::
+spheres (const ::xercesc::DOMElement& e,
+         ::xml_schema::flags f,
+         ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   x_ (this),
   y_ (this),
@@ -3097,8 +3192,12 @@ discs (const ::xercesc::DOMElement& e,
   vel1_ (this),
   vel2_ (this),
   vel3_ (this),
-  distance_h_ (this),
-  radius_ (this)
+  thermal_v_ (this),
+  radius_ (this),
+  width_ (this),
+  mass_ (this),
+  dimension_ (this),
+  type_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -3107,7 +3206,7 @@ discs (const ::xercesc::DOMElement& e,
   }
 }
 
-void discs::
+void spheres::
 parse (::xsd::cxx::xml::dom::parser< char >& p,
        ::xml_schema::flags f)
 {
@@ -3183,13 +3282,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // distance_h
+    // thermal_v
     //
-    if (n.name () == "distance_h" && n.namespace_ ().empty ())
+    if (n.name () == "thermal_v" && n.namespace_ ().empty ())
     {
-      if (!distance_h_.present ())
+      if (!thermal_v_.present ())
       {
-        this->distance_h_.set (distance_h_traits::create (i, f, this));
+        this->thermal_v_.set (thermal_v_traits::create (i, f, this));
         continue;
       }
     }
@@ -3201,6 +3300,53 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       if (!radius_.present ())
       {
         this->radius_.set (radius_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // width
+    //
+    if (n.name () == "width" && n.namespace_ ().empty ())
+    {
+      if (!width_.present ())
+      {
+        this->width_.set (width_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // mass
+    //
+    if (n.name () == "mass" && n.namespace_ ().empty ())
+    {
+      if (!mass_.present ())
+      {
+        this->mass_.set (mass_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // dimension
+    //
+    if (n.name () == "dimension" && n.namespace_ ().empty ())
+    {
+      ::std::auto_ptr< dimension_type > r (
+        dimension_traits::create (i, f, this));
+
+      if (!dimension_.present ())
+      {
+        this->dimension_.set (r);
+        continue;
+      }
+    }
+
+    // type
+    //
+    if (n.name () == "type" && n.namespace_ ().empty ())
+    {
+      if (!this->type_)
+      {
+        this->type_.set (type_traits::create (i, f, this));
         continue;
       }
     }
@@ -3250,10 +3396,10 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "");
   }
 
-  if (!distance_h_.present ())
+  if (!thermal_v_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
-      "distance_h",
+      "thermal_v",
       "");
   }
 
@@ -3263,17 +3409,38 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "radius",
       "");
   }
+
+  if (!width_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "width",
+      "");
+  }
+
+  if (!mass_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "mass",
+      "");
+  }
+
+  if (!dimension_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "dimension",
+      "");
+  }
 }
 
-discs* discs::
+spheres* spheres::
 _clone (::xml_schema::flags f,
         ::xml_schema::container* c) const
 {
-  return new class discs (*this, f, c);
+  return new class spheres (*this, f, c);
 }
 
-discs& discs::
-operator= (const discs& x)
+spheres& spheres::
+operator= (const spheres& x)
 {
   if (this != &x)
   {
@@ -3284,21 +3451,25 @@ operator= (const discs& x)
     this->vel1_ = x.vel1_;
     this->vel2_ = x.vel2_;
     this->vel3_ = x.vel3_;
-    this->distance_h_ = x.distance_h_;
+    this->thermal_v_ = x.thermal_v_;
     this->radius_ = x.radius_;
+    this->width_ = x.width_;
+    this->mass_ = x.mass_;
+    this->dimension_ = x.dimension_;
+    this->type_ = x.type_;
   }
 
   return *this;
 }
 
-discs::
-~discs ()
+spheres::
+~spheres ()
 {
 }
 
 #include <istream>
-#include "xsd/cxx/xml/sax/std-input-source.hxx"
-#include "xsd/cxx/tree/error-handler.hxx"
+#include <xsd/cxx/xml/sax/std-input-source.hxx>
+#include <xsd/cxx/tree/error-handler.hxx>
 
 ::std::auto_ptr< ::simulation >
 simulation_ (const ::std::string& u,
@@ -3567,8 +3738,8 @@ simulation_ (::xml_schema::dom::auto_ptr< ::xercesc::DOMDocument > d,
 }
 
 #include <ostream>
-#include "xsd/cxx/tree/error-handler.hxx"
-#include "xsd/cxx/xml/dom/serialization-source.hxx"
+#include <xsd/cxx/tree/error-handler.hxx>
+#include <xsd/cxx/xml/dom/serialization-source.hxx>
 
 void
 operator<< (::xercesc::DOMElement& e, const DimensionT& i)
@@ -4037,15 +4208,15 @@ operator<< (::xercesc::DOMElement& e, const simulation& i)
     s << *b;
   }
 
-  // discs
+  // spheres
   //
-  for (simulation::discs_const_iterator
-       b (i.discs ().begin ()), n (i.discs ().end ());
+  for (simulation::spheres_const_iterator
+       b (i.spheres ().begin ()), n (i.spheres ().end ());
        b != n; ++b)
   {
     ::xercesc::DOMElement& s (
       ::xsd::cxx::xml::dom::create_element (
-        "discs",
+        "spheres",
         e));
 
     s << *b;
@@ -4382,7 +4553,7 @@ operator<< (::xercesc::DOMElement& e, const cuboids& i)
 }
 
 void
-operator<< (::xercesc::DOMElement& e, const discs& i)
+operator<< (::xercesc::DOMElement& e, const spheres& i)
 {
   e << static_cast< const ::xml_schema::type& > (i);
 
@@ -4452,15 +4623,15 @@ operator<< (::xercesc::DOMElement& e, const discs& i)
     s << ::xml_schema::as_double(i.vel3 ());
   }
 
-  // distance_h
+  // thermal_v
   //
   {
     ::xercesc::DOMElement& s (
       ::xsd::cxx::xml::dom::create_element (
-        "distance_h",
+        "thermal_v",
         e));
 
-    s << ::xml_schema::as_double(i.distance_h ());
+    s << ::xml_schema::as_double(i.thermal_v ());
   }
 
   // radius
@@ -4471,11 +4642,56 @@ operator<< (::xercesc::DOMElement& e, const discs& i)
         "radius",
         e));
 
-    s << ::xml_schema::as_double(i.radius ());
+    s << i.radius ();
+  }
+
+  // width
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "width",
+        e));
+
+    s << ::xml_schema::as_double(i.width ());
+  }
+
+  // mass
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "mass",
+        e));
+
+    s << ::xml_schema::as_double(i.mass ());
+  }
+
+  // dimension
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "dimension",
+        e));
+
+    s << i.dimension ();
+  }
+
+  // type
+  //
+  if (i.type ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "type",
+        e));
+
+    s << *i.type ();
   }
 }
 
-#include "xsd/cxx/post.hxx"
+#include <xsd/cxx/post.hxx>
 
 // Begin epilogue.
 //

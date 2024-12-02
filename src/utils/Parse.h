@@ -14,7 +14,6 @@ namespace md::parse {
      * @brief Struct used to return arguments read from the terminal.
      */
     struct ProgramArguments {
-        std::string file;
         std::string output_baseName;
         double duration;
         double dt;

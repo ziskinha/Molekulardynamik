@@ -44,29 +44,26 @@ namespace md::Integrator {
          * @param start_time
          * @param end_time
          * @param dt
-         * @param file_name
          * @param repititions
          */
-        void benchmark_overall(const double start_time, const double end_time, const double dt, const std::string& file_name, int repetitions);
+        void benchmark_overall(const double start_time, const double end_time, const double dt,  int repetitions);
 
         /**
          * @brief Runs the simulation in benchmark mode. Benchmarking the runtime per iteration.
          * @param start_time
          * @param end_time
          * @param dt
-         * @param file_name
          * @param repetitions
          */
-        void benchmark_iterations(const double start_time, const double end_time, const double dt, const std::string& file_name, int repetitions);
+        void benchmark_iterations(const double start_time, const double end_time, const double dt, int repetitions);
 
         /**
          * @brief Runs the simulation in benchmark mode,
          * @param start_time
          * @param end_time
          * @param dt
-         * @param file_name
          */
-        void benchmark_simulate(const double start_time, const double end_time, const double dt, const std::string &file_name);
+        void benchmark_simulate(const double start_time, const double end_time, const double dt);
 
        protected:
         /**

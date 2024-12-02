@@ -71,7 +71,7 @@ namespace md::Integrator {
     /// \brief Benchmark functions
     /// -----------------------------------------
     void IntegratorBase::benchmark_overall(const double start_time, const double end_time, const double dt,
-                                           const std::string &file_name, int repetitions) {
+                                            int repetitions) {
         long duration_sum = 0;
 
         for (int k = 1; k <= repetitions; k++) {
@@ -97,7 +97,7 @@ namespace md::Integrator {
     }
 
     void IntegratorBase::benchmark_iterations(const double start_time, const double end_time, const double dt,
-                                              const std::string &file_name, int repetitions) {
+                                               int repetitions) {
         double avg_duration_sum = 0.0;
 
         for (int k = 1; k <= repetitions; k++) {
@@ -126,11 +126,10 @@ namespace md::Integrator {
         SPDLOG_INFO("Average loop time of {} repetitions: {} ms", repetitions, avg_duration_sum /repetitions);
     }
 
-    void IntegratorBase::benchmark_simulate(const double start_time, const double end_time, const double dt,
-                                            const std::string &file_name) {
+    void IntegratorBase::benchmark_simulate(const double start_time, const double end_time, const double dt) {
         SPDLOG_INFO("Benchmarking enabled. Subsequent logging messages during simulation are disabled.");
         int repetitions = 10;
         //benchmark_overall(start_time, end_time, dt, repetitions);
-        benchmark_iterations(start_time, end_time, dt, file_name, repetitions);
+        benchmark_iterations(start_time, end_time, dt, repetitions);
     };
 }  // namespace md::Integrator

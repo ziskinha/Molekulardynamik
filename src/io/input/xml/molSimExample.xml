@@ -12,11 +12,11 @@
     </parameters>
 
     <Boundary
-        typeLEFT="PERIODIC"
-        typeRIGHT="REPULSIVE_FORCE"
+        typeLEFT="OUTFLOW"
+        typeRIGHT="OUTFLOW"
         typeTOP="OUTFLOW"
         typeBOTTOM="OUTFLOW"
-        typeFRONT="REPULSIVE_FORCE"
+        typeFRONT="OUTFLOW"
         typeBACK="OUTFLOW"
         CENTER_BOUNDARY_ORIGINX="0.0"
         CENTER_BOUNDARY_ORIGINY="0.0"
@@ -74,4 +74,19 @@
         <dimension>3</dimension>
         <type>1</type>
     </cuboids>
+
+    <spheres>
+        <x>2.0</x>
+        <y>3.0</y>
+        <z>4.0</z>
+        <vel1>0.0</vel1>
+        <vel2>1.0</vel2>
+        <vel3>0.5</vel3>
+        <thermal_v>0.3</thermal_v>
+        <radius>5</radius>
+        <width>2.0</width>
+        <mass>1.5</mass>
+        <dimension>3</dimension>
+        <type>2</type>
+    </spheres>
 </simulation>

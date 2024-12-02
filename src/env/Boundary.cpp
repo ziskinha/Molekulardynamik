@@ -16,7 +16,6 @@ namespace md::env {
     const int3 BoundaryNormal::FRONT = {0, 0, 1};
     const int3 BoundaryNormal::BACK = {0, 0, -1};
 
-
     /// -----------------------------------------
     /// \brief Helper methods
     /// -----------------------------------------

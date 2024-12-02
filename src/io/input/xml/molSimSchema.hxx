@@ -47,52 +47,52 @@
 //
 // End prologue.
 
-#include "xsd/cxx/config.hxx"
+#include <xsd/cxx/config.hxx>
 
 #if (XSD_INT_VERSION != 4000000L)
 #error XSD runtime version mismatch
 #endif
 
-#include "xsd/cxx/pre.hxx"
+#include <xsd/cxx/pre.hxx>
 
-#include "xsd/cxx/xml/char-utf8.hxx"
+#include <xsd/cxx/xml/char-utf8.hxx>
 
-#include "xsd/cxx/tree/exceptions.hxx"
-#include "xsd/cxx/tree/elements.hxx"
-#include "xsd/cxx/tree/types.hxx"
+#include <xsd/cxx/tree/exceptions.hxx>
+#include <xsd/cxx/tree/elements.hxx>
+#include <xsd/cxx/tree/types.hxx>
 
-#include "xsd/cxx/xml/error-handler.hxx"
+#include <xsd/cxx/xml/error-handler.hxx>
 
-#include "xsd/cxx/xml/dom/auto-ptr.hxx"
+#include <xsd/cxx/xml/dom/auto-ptr.hxx>
 
-#include "xsd/cxx/tree/parsing.hxx"
-#include "xsd/cxx/tree/parsing/byte.hxx"
-#include "xsd/cxx/tree/parsing/unsigned-byte.hxx"
-#include "xsd/cxx/tree/parsing/short.hxx"
-#include "xsd/cxx/tree/parsing/unsigned-short.hxx"
-#include "xsd/cxx/tree/parsing/int.hxx"
-#include "xsd/cxx/tree/parsing/unsigned-int.hxx"
-#include "xsd/cxx/tree/parsing/long.hxx"
-#include "xsd/cxx/tree/parsing/unsigned-long.hxx"
-#include "xsd/cxx/tree/parsing/boolean.hxx"
-#include "xsd/cxx/tree/parsing/float.hxx"
-#include "xsd/cxx/tree/parsing/double.hxx"
-#include "xsd/cxx/tree/parsing/decimal.hxx"
+#include <xsd/cxx/tree/parsing.hxx>
+#include <xsd/cxx/tree/parsing/byte.hxx>
+#include <xsd/cxx/tree/parsing/unsigned-byte.hxx>
+#include <xsd/cxx/tree/parsing/short.hxx>
+#include <xsd/cxx/tree/parsing/unsigned-short.hxx>
+#include <xsd/cxx/tree/parsing/int.hxx>
+#include <xsd/cxx/tree/parsing/unsigned-int.hxx>
+#include <xsd/cxx/tree/parsing/long.hxx>
+#include <xsd/cxx/tree/parsing/unsigned-long.hxx>
+#include <xsd/cxx/tree/parsing/boolean.hxx>
+#include <xsd/cxx/tree/parsing/float.hxx>
+#include <xsd/cxx/tree/parsing/double.hxx>
+#include <xsd/cxx/tree/parsing/decimal.hxx>
 
-#include "xsd/cxx/xml/dom/serialization-header.hxx"
-#include "xsd/cxx/tree/serialization.hxx"
-#include "xsd/cxx/tree/serialization/byte.hxx"
-#include "xsd/cxx/tree/serialization/unsigned-byte.hxx"
-#include "xsd/cxx/tree/serialization/short.hxx"
-#include "xsd/cxx/tree/serialization/unsigned-short.hxx"
-#include "xsd/cxx/tree/serialization/int.hxx"
-#include "xsd/cxx/tree/serialization/unsigned-int.hxx"
-#include "xsd/cxx/tree/serialization/long.hxx"
-#include "xsd/cxx/tree/serialization/unsigned-long.hxx"
-#include "xsd/cxx/tree/serialization/boolean.hxx"
-#include "xsd/cxx/tree/serialization/float.hxx"
-#include "xsd/cxx/tree/serialization/double.hxx"
-#include "xsd/cxx/tree/serialization/decimal.hxx"
+#include <xsd/cxx/xml/dom/serialization-header.hxx>
+#include <xsd/cxx/tree/serialization.hxx>
+#include <xsd/cxx/tree/serialization/byte.hxx>
+#include <xsd/cxx/tree/serialization/unsigned-byte.hxx>
+#include <xsd/cxx/tree/serialization/short.hxx>
+#include <xsd/cxx/tree/serialization/unsigned-short.hxx>
+#include <xsd/cxx/tree/serialization/int.hxx>
+#include <xsd/cxx/tree/serialization/unsigned-int.hxx>
+#include <xsd/cxx/tree/serialization/long.hxx>
+#include <xsd/cxx/tree/serialization/unsigned-long.hxx>
+#include <xsd/cxx/tree/serialization/boolean.hxx>
+#include <xsd/cxx/tree/serialization/float.hxx>
+#include <xsd/cxx/tree/serialization/double.hxx>
+#include <xsd/cxx/tree/serialization/decimal.hxx>
 
 namespace xml_schema
 {
@@ -259,20 +259,20 @@ class parameters;
 class particles;
 class Forces;
 class cuboids;
-class discs;
+class spheres;
 
 #include <memory>    // ::std::auto_ptr
 #include <limits>    // std::numeric_limits
 #include <algorithm> // std::binary_search
 
-#include "xsd/cxx/xml/char-utf8.hxx"
+#include <xsd/cxx/xml/char-utf8.hxx>
 
-#include "xsd/cxx/tree/exceptions.hxx"
-#include "xsd/cxx/tree/elements.hxx"
-#include "xsd/cxx/tree/containers.hxx"
-#include "xsd/cxx/tree/list.hxx"
+#include <xsd/cxx/tree/exceptions.hxx>
+#include <xsd/cxx/tree/elements.hxx>
+#include <xsd/cxx/tree/containers.hxx>
+#include <xsd/cxx/tree/list.hxx>
 
-#include "xsd/cxx/xml/dom/parsing-header.hxx"
+#include <xsd/cxx/xml/dom/parsing-header.hxx>
 
 class DimensionT: public ::xsd::cxx::tree::fundamental_base< ::xml_schema::int_, char, ::xml_schema::simple_type >
 {
@@ -874,22 +874,22 @@ class simulation: public ::xml_schema::type
   void
   cuboids (const cuboids_sequence& s);
 
-  // discs
+  // spheres
   //
-  typedef ::discs discs_type;
-  typedef ::xsd::cxx::tree::sequence< discs_type > discs_sequence;
-  typedef discs_sequence::iterator discs_iterator;
-  typedef discs_sequence::const_iterator discs_const_iterator;
-  typedef ::xsd::cxx::tree::traits< discs_type, char > discs_traits;
+  typedef ::spheres spheres_type;
+  typedef ::xsd::cxx::tree::sequence< spheres_type > spheres_sequence;
+  typedef spheres_sequence::iterator spheres_iterator;
+  typedef spheres_sequence::const_iterator spheres_const_iterator;
+  typedef ::xsd::cxx::tree::traits< spheres_type, char > spheres_traits;
 
-  const discs_sequence&
-  discs () const;
+  const spheres_sequence&
+  spheres () const;
 
-  discs_sequence&
-  discs ();
+  spheres_sequence&
+  spheres ();
 
   void
-  discs (const discs_sequence& s);
+  spheres (const spheres_sequence& s);
 
   // Constructors.
   //
@@ -935,7 +935,7 @@ class simulation: public ::xml_schema::type
   particles_sequence particles_;
   ::xsd::cxx::tree::one< Forces_type > Forces_;
   cuboids_sequence cuboids_;
-  discs_sequence discs_;
+  spheres_sequence spheres_;
 };
 
 class output: public ::xml_schema::type
@@ -1381,7 +1381,7 @@ class cuboids: public ::xml_schema::type
 
   // numPartX
   //
-  typedef ::xml_schema::int_ numPartX_type;
+  typedef ::xml_schema::unsigned_int numPartX_type;
   typedef ::xsd::cxx::tree::traits< numPartX_type, char > numPartX_traits;
 
   const numPartX_type&
@@ -1395,7 +1395,7 @@ class cuboids: public ::xml_schema::type
 
   // numPartY
   //
-  typedef ::xml_schema::int_ numPartY_type;
+  typedef ::xml_schema::unsigned_int numPartY_type;
   typedef ::xsd::cxx::tree::traits< numPartY_type, char > numPartY_traits;
 
   const numPartY_type&
@@ -1409,7 +1409,7 @@ class cuboids: public ::xml_schema::type
 
   // numPartZ
   //
-  typedef ::xml_schema::int_ numPartZ_type;
+  typedef ::xml_schema::unsigned_int numPartZ_type;
   typedef ::xsd::cxx::tree::traits< numPartZ_type, char > numPartZ_traits;
 
   const numPartZ_type&
@@ -1556,7 +1556,7 @@ class cuboids: public ::xml_schema::type
   type_optional type_;
 };
 
-class discs: public ::xml_schema::type
+class spheres: public ::xml_schema::type
 {
   public:
   // x
@@ -1643,24 +1643,24 @@ class discs: public ::xml_schema::type
   void
   vel3 (const vel3_type& x);
 
-  // distance_h
+  // thermal_v
   //
-  typedef ::xml_schema::double_ distance_h_type;
-  typedef ::xsd::cxx::tree::traits< distance_h_type, char, ::xsd::cxx::tree::schema_type::double_ > distance_h_traits;
+  typedef ::xml_schema::double_ thermal_v_type;
+  typedef ::xsd::cxx::tree::traits< thermal_v_type, char, ::xsd::cxx::tree::schema_type::double_ > thermal_v_traits;
 
-  const distance_h_type&
-  distance_h () const;
+  const thermal_v_type&
+  thermal_v () const;
 
-  distance_h_type&
-  distance_h ();
+  thermal_v_type&
+  thermal_v ();
 
   void
-  distance_h (const distance_h_type& x);
+  thermal_v (const thermal_v_type& x);
 
   // radius
   //
-  typedef ::xml_schema::double_ radius_type;
-  typedef ::xsd::cxx::tree::traits< radius_type, char, ::xsd::cxx::tree::schema_type::double_ > radius_traits;
+  typedef ::xml_schema::int_ radius_type;
+  typedef ::xsd::cxx::tree::traits< radius_type, char > radius_traits;
 
   const radius_type&
   radius () const;
@@ -1671,34 +1671,100 @@ class discs: public ::xml_schema::type
   void
   radius (const radius_type& x);
 
+  // width
+  //
+  typedef ::xml_schema::double_ width_type;
+  typedef ::xsd::cxx::tree::traits< width_type, char, ::xsd::cxx::tree::schema_type::double_ > width_traits;
+
+  const width_type&
+  width () const;
+
+  width_type&
+  width ();
+
+  void
+  width (const width_type& x);
+
+  // mass
+  //
+  typedef ::xml_schema::double_ mass_type;
+  typedef ::xsd::cxx::tree::traits< mass_type, char, ::xsd::cxx::tree::schema_type::double_ > mass_traits;
+
+  const mass_type&
+  mass () const;
+
+  mass_type&
+  mass ();
+
+  void
+  mass (const mass_type& x);
+
+  // dimension
+  //
+  typedef ::DimensionT dimension_type;
+  typedef ::xsd::cxx::tree::traits< dimension_type, char > dimension_traits;
+
+  const dimension_type&
+  dimension () const;
+
+  dimension_type&
+  dimension ();
+
+  void
+  dimension (const dimension_type& x);
+
+  void
+  dimension (::std::auto_ptr< dimension_type > p);
+
+  // type
+  //
+  typedef ::xml_schema::int_ type_type;
+  typedef ::xsd::cxx::tree::optional< type_type > type_optional;
+  typedef ::xsd::cxx::tree::traits< type_type, char > type_traits;
+
+  const type_optional&
+  type () const;
+
+  type_optional&
+  type ();
+
+  void
+  type (const type_type& x);
+
+  void
+  type (const type_optional& x);
+
   // Constructors.
   //
-  discs (const x_type&,
-         const y_type&,
-         const z_type&,
-         const vel1_type&,
-         const vel2_type&,
-         const vel3_type&,
-         const distance_h_type&,
-         const radius_type&);
+  spheres (const x_type&,
+           const y_type&,
+           const z_type&,
+           const vel1_type&,
+           const vel2_type&,
+           const vel3_type&,
+           const thermal_v_type&,
+           const radius_type&,
+           const width_type&,
+           const mass_type&,
+           const dimension_type&);
 
-  discs (const ::xercesc::DOMElement& e,
-         ::xml_schema::flags f = 0,
-         ::xml_schema::container* c = 0);
+  spheres (const ::xercesc::DOMElement& e,
+           ::xml_schema::flags f = 0,
+           ::xml_schema::container* c = 0);
 
-  discs (const discs& x,
-         ::xml_schema::flags f = 0,
-         ::xml_schema::container* c = 0);
+  spheres (const spheres& x,
+           ::xml_schema::flags f = 0,
+           ::xml_schema::container* c = 0);
 
-  virtual discs*
+  virtual spheres*
   _clone (::xml_schema::flags f = 0,
           ::xml_schema::container* c = 0) const;
 
-  discs&
-  operator= (const discs& x);
+  spheres&
+  operator= (const spheres& x);
 
   virtual 
-  ~discs ();
+  ~spheres ();
 
   // Implementation.
   //
@@ -1714,8 +1780,12 @@ class discs: public ::xml_schema::type
   ::xsd::cxx::tree::one< vel1_type > vel1_;
   ::xsd::cxx::tree::one< vel2_type > vel2_;
   ::xsd::cxx::tree::one< vel3_type > vel3_;
-  ::xsd::cxx::tree::one< distance_h_type > distance_h_;
+  ::xsd::cxx::tree::one< thermal_v_type > thermal_v_;
   ::xsd::cxx::tree::one< radius_type > radius_;
+  ::xsd::cxx::tree::one< width_type > width_;
+  ::xsd::cxx::tree::one< mass_type > mass_;
+  ::xsd::cxx::tree::one< dimension_type > dimension_;
+  type_optional type_;
 };
 
 #include <iosfwd>
@@ -1823,7 +1893,7 @@ simulation_ (::xml_schema::dom::auto_ptr< ::xercesc::DOMDocument > d,
 #include <xercesc/dom/DOMErrorHandler.hpp>
 #include <xercesc/framework/XMLFormatter.hpp>
 
-#include "xsd/cxx/xml/dom/auto-ptr.hxx"
+#include <xsd/cxx/xml/dom/auto-ptr.hxx>
 
 void
 operator<< (::xercesc::DOMElement&, const DimensionT&);
@@ -1948,9 +2018,9 @@ void
 operator<< (::xercesc::DOMElement&, const cuboids&);
 
 void
-operator<< (::xercesc::DOMElement&, const discs&);
+operator<< (::xercesc::DOMElement&, const spheres&);
 
-#include "xsd/cxx/post.hxx"
+#include <xsd/cxx/post.hxx>
 
 // Begin epilogue.
 //

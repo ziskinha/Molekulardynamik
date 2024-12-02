@@ -78,7 +78,7 @@ std::ifstream file(arguments[1]);
      try {
 
         if (!file.is_open()) {
-             std::cerr << "Error: Unable to open xml file: " << arguments[2] << '\n';
+             std::cerr << "Error: Unable to open xml file: " << arguments[1] << '\n';
              return EXIT;
         }
 
@@ -92,27 +92,103 @@ std::ifstream file(arguments[1]);
             args.env.add_cuboid({cuboid.x(),cuboid.y(),cuboid.z()}, {cuboid.vel1(),cuboid.vel2(),cuboid.vel3()}, {40,8,1}, cuboid.thermal_v(), cuboid.width(), cuboid.mass(), cuboid.dimension(), 0);
             }
             
+        for (const auto& sphere : simulation.get()->spheres()) {
+            args.env.add_sphere({sphere.x(),sphere.y(),sphere.z()}, {sphere.vel1(),sphere.vel2(),sphere.vel3()}, sphere.thermal_v(), sphere.radius(), sphere.width(), sphere.mass(), sphere.dimension(), 0);
+            }
+
         args.output_baseName= simulation.get()->output().baseName();
         args.duration = simulation.get()->parameters().tEnd();
         args.dt = simulation.get()->parameters().deltaT();
-
-      
-        
-
+        std::string types;
         env::Boundary boundary;
         boundary.extent = {simulation.get()->Boundary().EXTENT_WIDTH().get(), simulation.get()->Boundary().EXTENT_HEIGHT().get(), simulation.get()->Boundary().EXTENT_DEPTH().get()};
         boundary.origin = {simulation.get()->Boundary().CENTER_BOUNDARY_ORIGINX().get(), simulation.get()->Boundary().CENTER_BOUNDARY_ORIGINY().get(), simulation.get()->Boundary().CENTER_BOUNDARY_ORIGINZ().get()};
-        if(simulation.get()->Boundary().typeFRONT()=="OUTFLOW"){
-        boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW);
+        types=simulation.get()->Boundary().typeFRONT();
+        
+        if(types=="OUTFLOW"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::FRONT);
 
-        }else if(simulation.get()->Boundary().typeFRONT()=="VELOCITY_REFLECTION"){
-        boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION);
+        }else if(types=="VELOCITY_REFLECTION"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION,md::env::BoundaryNormal::FRONT);
 
-        }else if (simulation.get()->Boundary().typeFRONT()=="REPULSIVE_FORCE"){
-        boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE);
+        }else if (types=="REPULSIVE_FORCE"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE,md::env::BoundaryNormal::FRONT);
 
         }else{
-        boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC);
+        boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC,md::env::BoundaryNormal::FRONT);
+        }
+
+        types =simulation.get()->Boundary().typeBACK();
+
+        if(types=="OUTFLOW"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW,md::env::BoundaryNormal::BACK);
+
+        }else if(types=="VELOCITY_REFLECTION"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION,md::env::BoundaryNormal::BACK);
+
+        }else if (types=="REPULSIVE_FORCE"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE,md::env::BoundaryNormal::BACK);
+
+        }else{
+        boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC,md::env::BoundaryNormal::BACK);
+        }
+
+        types = simulation.get()->Boundary().typeBOTTOM();
+        if(types=="OUTFLOW"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW,md::env::BoundaryNormal::BOTTOM);
+
+        }else if(types=="VELOCITY_REFLECTION"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION,md::env::BoundaryNormal::BOTTOM);
+
+        }else if (types=="REPULSIVE_FORCE"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE,md::env::BoundaryNormal::BOTTOM);
+
+        }else{
+        boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC,md::env::BoundaryNormal::BOTTOM);
+        }
+
+        types = simulation.get()->Boundary().typeLEFT();
+
+        if(types=="OUTFLOW"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW,md::env::BoundaryNormal::LEFT);
+
+        }else if(types=="VELOCITY_REFLECTION"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION,md::env::BoundaryNormal::LEFT);
+
+        }else if (types=="REPULSIVE_FORCE"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE,md::env::BoundaryNormal::LEFT);
+
+        }else{
+        boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC,md::env::BoundaryNormal::LEFT);
+        }
+
+        types =simulation.get()->Boundary().typeRIGHT();
+        if(types=="OUTFLOW"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW,md::env::BoundaryNormal::RIGHT);
+
+        }else if(types=="VELOCITY_REFLECTION"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION,md::env::BoundaryNormal::RIGHT);
+
+        }else if (types=="REPULSIVE_FORCE"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE,md::env::BoundaryNormal::RIGHT);
+
+        }else{
+        boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC,md::env::BoundaryNormal::RIGHT);
+        }
+
+        types=simulation.get()->Boundary().typeTOP();
+
+        if(types=="OUTFLOW"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW,md::env::BoundaryNormal::TOP);
+
+        }else if(types=="VELOCITY_REFLECTION"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION,md::env::BoundaryNormal::TOP);
+
+        }else if (types=="REPULSIVE_FORCE"){
+        boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE,md::env::BoundaryNormal::TOP);
+
+        }else{
+        boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC,md::env::BoundaryNormal::TOP);
         }
        
           if(simulation.get()->Forces().Force().get().type()=="lennardJones"){
@@ -154,7 +230,7 @@ std::ifstream file(arguments[1]);
         }
 
         if (parameters[2] != "XYZ" && parameters[2] != "VTK") {
-            RETURN_PARSE_ERROR(fmt::format("Error: invalid file output format: {}", args.file));
+            RETURN_PARSE_ERROR(fmt::format("Error: invalid file output format: {}", parameters[2]));
         }
         args.output_format = parameters[2] == "XYZ" ? io::OutputFormat::XYZ : io::OutputFormat::VTK;
 

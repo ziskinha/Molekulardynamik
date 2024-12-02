@@ -17,7 +17,6 @@ function(add_test_executable test_name)
     target_include_directories(${test_name}
             PUBLIC
             ${CMAKE_SOURCE_DIR}/libs/libxsd
-            ${CMAKE_CURRENT_SOURCE_DIR}/xsd-4.0.0-x86_64-linux-gnu/libxsd
             PRIVATE
             ${CMAKE_SOURCE_DIR}/src
     )
