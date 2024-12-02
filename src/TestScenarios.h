@@ -16,9 +16,8 @@ inline void four_particle_lennard_jones_test() {
 
     args.duration = 10;
     args.dt = 0.00001;
-    args.num_frames = 600;
-    const double num_steps = args.duration / args.dt;
-    const int write_freq = std::max(static_cast<int> (round(num_steps / args.num_frames)), 1);
+    args.write_freq = 1000;
+
 
     env::Environment env;
     env.add_particle({2.8,2.9,0}, {4,2,0}, 1, 1);
@@ -40,8 +39,8 @@ inline void four_particle_lennard_jones_test() {
 
     env.build();
 
-    Integrator::StoermerVerlet simulator(env, create_writer(args.output_format, args.override));
-    simulator.simulate(0, args.duration, args.dt, write_freq, args.benchmark);
+    Integrator::StoermerVerlet simulator(env, create_writer(args.output_baseName, args.output_format, args.override));
+    simulator.simulate(0, args.duration, args.dt, args.write_freq);
 }
 
 
@@ -53,9 +52,8 @@ inline void four_particle_inverse_force_test() {
 
     args.duration = 10;
     args.dt = 0.00001;
-    args.num_frames = 600;
-    const double num_steps = args.duration / args.dt;
-    const int write_freq = std::max(static_cast<int> (round(num_steps / args.num_frames)), 1);
+    args.write_freq = 1000;
+
 
     env::Environment env;
     env.add_particle({2.8,2.9,0}, {0,0,0}, 1, 1);
@@ -77,8 +75,8 @@ inline void four_particle_inverse_force_test() {
 
     env.build();
 
-    Integrator::StoermerVerlet simulator(env, create_writer(args.output_format, args.override));
-    simulator.simulate(0, args.duration, args.dt, write_freq, args.benchmark);
+    Integrator::StoermerVerlet simulator(env, create_writer(args.output_baseName, args.output_format, args.override));
+    simulator.simulate(0, args.duration, args.dt, args.write_freq);
 }
 
 inline void four_particle_periodic_conditions_test() {
@@ -89,9 +87,8 @@ inline void four_particle_periodic_conditions_test() {
 
     args.duration = 10;
     args.dt = 0.00001;
-    args.num_frames = 600;
-    const double num_steps = args.duration / args.dt;
-    const int write_freq = std::max(static_cast<int> (round(num_steps / args.num_frames)), 1);
+    args.write_freq = 1000;
+
 
     env::Boundary boundary;
     boundary.extent = {3, 3, 1};
@@ -115,8 +112,8 @@ inline void four_particle_periodic_conditions_test() {
 
     env.build();
 
-    Integrator::StoermerVerlet simulator(env, create_writer(args.output_format, args.override));
-    simulator.simulate(0, args.duration, args.dt, write_freq, args.benchmark);
+    Integrator::StoermerVerlet simulator(env, create_writer(args.output_baseName, args.output_format, args.override));
+    simulator.simulate(0, args.duration, args.dt, args.write_freq);
 }
 
 inline void four_particle_reflective_velocity_test() {
@@ -127,9 +124,8 @@ inline void four_particle_reflective_velocity_test() {
 
     args.duration = 10;
     args.dt = 0.0001;
-    args.num_frames = 600;
-    const double num_steps = args.duration / args.dt;
-    const int write_freq = std::max(static_cast<int> (round(num_steps / args.num_frames)), 1);
+    args.write_freq = 1000;
+
 
     env::Environment env;
     env.add_particle({2.8,2.9,0}, {4,2,0}, 1, 1);
@@ -150,6 +146,6 @@ inline void four_particle_reflective_velocity_test() {
 
     env.build();
 
-    Integrator::StoermerVerlet simulator(env, create_writer(args.output_format, args.override));
-    simulator.simulate(0, args.duration, args.dt, write_freq, args.benchmark);
+    Integrator::StoermerVerlet simulator(env, create_writer(args.output_baseName, args.output_format, args.override));
+    simulator.simulate(0, args.duration, args.dt, args.write_freq);
 }
