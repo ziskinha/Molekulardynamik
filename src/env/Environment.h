@@ -108,13 +108,13 @@ namespace md::env {
         void build();
 
         /**
-         * @brief Sets the grid constant.
+         * @brief Sets the grid constant, the desired side length of a cell
          * @param g New grid constant.
          */
         void set_grid_constant(double g);
 
         /**
-         * @brief Sets the force function for the environment.
+         * @brief Sets the force with which particles interact
          * @param force The force function to be used.
          */
         void set_force(const Force& force);
@@ -224,7 +224,7 @@ namespace md::env {
          * @return A const reference to the vector of the linked cell pairs.
          */
         const std::vector<GridCellPair> & linked_cells();
-         std::vector<GridCell> cells();
+
 
         /**
          * @brief Applies the boundary conditions to a particle.
@@ -260,8 +260,9 @@ namespace md::env {
          */
         [[nodiscard]] bool filter_particles(const Particle& particle, Particle::State state, GridCell::Type type) const;
 
-        std::vector<Particle>
-            particle_storage;  // TODO replace vector with a vector wrapper that emulates a vector of fixed size
+        // TODO replace vector with a vector wrapper that emulates a vector of fixed size
+        std::vector<Particle> particle_storage; ///< vector with all particles
+
         Boundary boundary;     ///< Boundary conditions of the environment.
         ParticleGrid grid;     ///< Grid of the environment.
 

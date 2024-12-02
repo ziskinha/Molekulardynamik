@@ -108,9 +108,9 @@ namespace md::env {
          */
         static BoundaryForce InverseDistanceForce(double cutoff, double pre_factor, int exponent = 2);
 
-
-        bool requires_force_function() const;
-        bool has_force_function() const;
+        // functions for querying whether the force has been set if required
+        [[nodiscard]] bool requires_force_function() const;
+        [[nodiscard]] bool has_force_function() const;
 
     private:
         /**
@@ -123,7 +123,7 @@ namespace md::env {
 
         /**
          * @brief Implements the outflow rule.
-         * (Particles that cross the boundary are being removed).
+         * (Particles that cross the boundary are removed).
          * @param particle The particle in question.
          * @param previous_cell The particle's previous cell.
          */

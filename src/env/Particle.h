@@ -72,7 +72,7 @@ namespace md::env {
         [[nodiscard]] std::string to_string() const;
 
         vec3 position;      ///< The current position of the particle.
-        vec3 old_position;  ///< The previous position of the particle.
+        vec3 old_position;  ///< The previous position of the particle. Useful for applying boundary conditions
         vec3 velocity;      ///< The current velocity of the particle.
         vec3 force;         ///< The current force acting on the particle.
         vec3 old_force;     ///< The previous force acting on the particle.
