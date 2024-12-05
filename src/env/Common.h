@@ -3,12 +3,11 @@
 #include <array>
 #include <cstdint>
 #include <functional>
-#include <limits>
 
 
 #define UINT_T uint32_t
 #define INT_T int32_t
-#define PARTICLE_TYPE_DEAD std::numeric_limits<int>::max()
+// #define INF std::numeric_limits<double>::infinity()
 
 /**
  * @brief Contains fundamental types and utilities
@@ -50,3 +49,5 @@ struct Int3Hasher {
         return seed;
     }
 };
+
+

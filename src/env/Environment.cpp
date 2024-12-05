@@ -71,6 +71,11 @@ namespace md::env {
         this->boundary = boundary;
     }
 
+    void Environment::set_thermostat(const Thermostat& thermostat) {
+        WARN_IF_INIT("set the thermostat");
+        this->thermostat = thermostat;
+    }
+
     void Environment::add_particle(const vec3& position, const vec3& velocity, double mass, int type) {
         WARN_IF_INIT("add particles");
         particle_storage.emplace_back(particle_storage.size(), grid, position, velocity, mass, type);
@@ -107,8 +112,8 @@ namespace md::env {
                    cuboid.dimension, cuboid.type);
     }
 
-    void Environment::add_sphere(const vec3& origin, const vec3& initial_v, const double thermal_v, int radius,
-                                 double width, double mass, uint8_t dimension, int type) {
+    void Environment::add_sphere(const vec3& origin, const vec3& initial_v, const double thermal_v, const int radius,
+                                 const double width, const double mass, const uint8_t dimension, const int type) {
         WARN_IF_INIT("add particles (sphere)");
         int num_particles = 0;
 
@@ -128,8 +133,8 @@ namespace md::env {
                         continue;
                     }
 
-                    vec3 current_pos = vec3({x * width, y * width, z * width});
-                    double distance_to_origin = ArrayUtils::L2Norm(current_pos);
+                    const vec3 current_pos = {x * width, y * width, z * width};
+                    const double distance_to_origin = ArrayUtils::L2Norm(current_pos);
 
                     if (distance_to_origin <= radius * width) {
                         vec3 pos = origin + current_pos;
@@ -152,7 +157,7 @@ namespace md::env {
             return;
         }
 
-        SPDLOG_INFO("Start building the environment");
+        SPDLOG_INFO("Start building the environment ...");
 
         // check if boundary is ok
         if (boundary.extent[0] < 0 || boundary.extent[1] < 0 || boundary.extent[2] < 0) {
@@ -202,6 +207,7 @@ namespace md::env {
 
 
         grid.build(boundary.extent, grid_constant, particle_storage, boundary.origin);
+        thermostat.set_initial_temperature(particle_storage);
         initialized = true;
         SPDLOG_INFO("Environment successfully built.");
     }
@@ -228,6 +234,10 @@ namespace md::env {
         auto & current = grid.get_cell(particle.cell);
         auto & previous = grid.get_cell(grid.what_cell(particle.old_position));
         boundary.apply_boundary(particle, current, previous);
+    }
+
+    void Environment::adjust_temperature() {
+        thermostat.change_temperature(particle_storage);
     }
 
     Particle& Environment::operator[](const size_t id) { return particle_storage[id]; }

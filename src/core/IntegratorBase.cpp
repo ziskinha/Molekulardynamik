@@ -36,8 +36,8 @@
 #endif
 
 namespace md::Integrator {
-    IntegratorBase::IntegratorBase(env::Environment& system, std::unique_ptr<io::OutputWriterBase> writer)
-        : env(system), writer(std::move(writer)){}
+    IntegratorBase::IntegratorBase(env::Environment& environment, std::unique_ptr<io::OutputWriterBase> writer)
+        : env(environment), writer(std::move(writer)){}
 
     void IntegratorBase::simulate(const double start_time, const double end_time, const double dt,
                                   const unsigned int write_freq) {

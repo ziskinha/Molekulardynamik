@@ -11,9 +11,7 @@
 #include "Force.h"
 #include "Particle.h"
 #include "ParticleGrid.h"
-#include "Force.h"
-#include "Boundary.h"
-#include <ranges>
+#include "Thermostat.h"
 
 #define GRID_CONSTANT_AUTO 0
 
@@ -74,9 +72,11 @@ namespace md::env {
          * @brief Constructs a SphereCreateInfo.
          * @param origin Coordinates of the center.
          * @param initial_v Initial velocity of all particles.
+         * @param thermal_v
          * @param radius The radius in terms of the number of molecules along the radius.
          * @param width Distance between the particles.
          * @param mass The mass of the particles.
+         * @param dimension
          * @param type The type of each particles (dafault: 0).
          */
         SphereCreateInfo(const vec3& origin, const vec3& initial_v, const double thermal_v, int radius, double width,
@@ -95,7 +95,7 @@ namespace md::env {
      * @brief Class representing the simulation environment, which manages particles, forces, boundaries, and the grid.
      */
     class Environment {
-       public:
+    public:
         /**
          * @brief Constructs an empty environment.
          */
@@ -106,6 +106,7 @@ namespace md::env {
          * It checks the validity of the boundary extents and grid constant. If necessary, applies default values.
          */
         void build();
+
 
         /**
          * @brief Sets the grid constant, the desired side length of a cell
@@ -124,6 +125,13 @@ namespace md::env {
          * @param boundary The boundary condition to be used.
          */
         void set_boundary(const Boundary& boundary);
+
+        /**
+         * @brief Sets a thermostat to adjust temperature
+         * @param thermostat Thermostat to be used.
+         */
+        void set_thermostat(const Thermostat& thermostat);
+
 
         /**
          * @brief Adds a single particle to the environment.
@@ -175,10 +183,11 @@ namespace md::env {
          * @param width Distance between the particles.
          * @param mass The mass of the particles.
          * @param dimension Dimension of the sphere.
-         * @param type The type of each particles (dafault: 0).
+         * @param type The type of each particle (default: 0).
          */
-        void add_sphere(const vec3& origin, const vec3& initial_v,  double thermal_v, int radius, double width,
+        void add_sphere(const vec3& origin, const vec3& initial_v, double thermal_v, int radius, double width,
                         double mass, uint8_t dimension, int type = 0);
+
 
         /**
          * @brief Computes the force between two particles.
@@ -201,19 +210,20 @@ namespace md::env {
          * @param state The state to filter (default: (GridCell::ALIVE).
          * @return A range of particles matching the specified type and state.
          */
-        auto particles( GridCell::Type type = GridCell::INSIDE, Particle::State state = Particle::ALIVE) {
+        auto particles(GridCell::Type type = GridCell::INSIDE, Particle::State state = Particle::ALIVE) {
             return particle_storage | std::ranges::views::filter([this, state, type](const Particle& particle) {
                 return filter_particles(particle, state, type);
             });
         }
-        
+
         /**
         * @brief Provides access to particles filtered by grid cell type and state (const version).
         * @param type The type to filter (default: GridCell::Inside).
         * @param state The state to filter (default: (GridCell::ALIVE).
         * @return A const range of particles matching the specified type and state.
         */
-        [[nodiscard]] auto particles(GridCell::Type type = GridCell::INSIDE, Particle::State state = Particle::ALIVE) const {
+        [[nodiscard]] auto particles(GridCell::Type type = GridCell::INSIDE,
+                                     Particle::State state = Particle::ALIVE) const {
             return particle_storage | std::ranges::views::filter([this, state, type](const Particle& particle) {
                 return filter_particles(particle, state, type);
             });
@@ -223,14 +233,19 @@ namespace md::env {
          * @brief Retrieves the linked grid cells in the simulation.
          * @return A const reference to the vector of the linked cell pairs.
          */
-        const std::vector<GridCellPair> & linked_cells();
+        const std::vector<GridCellPair>& linked_cells();
 
 
         /**
          * @brief Applies the boundary conditions to a particle.
          * @param particle The particle to which the conditions will be applied.
          */
-        void apply_boundary(Particle & particle);
+        void apply_boundary(Particle& particle);
+
+        /**
+         * @brief Adjusts the temperature of the environment according to the parameters set in the thermostat.
+         */
+        void adjust_temperature();
 
         /**
          * @brief Accesses particle by its ID.
@@ -250,7 +265,7 @@ namespace md::env {
         Environment(const Environment&) = delete;
         Environment& operator=(const Environment&) = delete;
 
-       private:
+    private:
         /**
          * @brief Filters particles based on their state and location within the grid.
          * @param particle The particle to be filtered.
@@ -265,9 +280,10 @@ namespace md::env {
 
         Boundary boundary;     ///< Boundary conditions of the environment.
         ParticleGrid grid;     ///< Grid of the environment.
+        Thermostat thermostat; ///< Thermostat to adjust temperature of the environment
 
-        Force force_func;      ///< Used force function in the environment.
-        double grid_constant;  ///< Used grid Constant in the environment.
-        bool initialized;      ///< Indicates whether the environment has been initialized.
+        Force force_func;     ///< Used force function in the environment.
+        double grid_constant; ///< Used grid Constant in the environment.
+        bool initialized;     ///< Indicates whether the environment has been initialized.
     };
-}  // namespace md::env
+} // namespace md::env
