@@ -49,12 +49,13 @@ namespace md::env {
           type(type){}
 
     /// -----------------------------------------
-    /// \brief Environment Class Methods
+    /// Environment Class Methods
     /// -----------------------------------------
-    Environment::Environment() : force_func(NoForce()), grid_constant(GRID_CONSTANT_AUTO), initialized(false) {}
+    Environment::Environment()
+        : force_func(NoForce()), dimension(TwoD), grid_constant(GRID_CONSTANT_AUTO), initialized(false) {}
 
     /// -----------------------------------------
-    /// \brief Methods for environment setup
+    ///  Methods for environment setup
     /// -----------------------------------------
     void Environment::set_force(const Force& force) {
         WARN_IF_INIT("set the force");
@@ -71,9 +72,10 @@ namespace md::env {
         this->boundary = boundary;
     }
 
-    void Environment::set_thermostat(const Thermostat& thermostat) {
-        WARN_IF_INIT("set the thermostat");
-        this->thermostat = thermostat;
+    void Environment::set_dimension(const Dimension dim) {
+        WARN_IF_INIT("set the dimension");
+        dimension = dim;
+        // TODO use dimension for initializing cuboid and sphere velocities
     }
 
     void Environment::add_particle(const vec3& position, const vec3& velocity, double mass, int type) {
@@ -205,15 +207,13 @@ namespace md::env {
             }
         }
 
-
         grid.build(boundary.extent, grid_constant, particle_storage, boundary.origin);
-        thermostat.set_initial_temperature(particle_storage);
         initialized = true;
         SPDLOG_INFO("Environment successfully built.");
     }
 
     /// -----------------------------------------
-    /// \brief Methods for interacting with the environment
+    /// Methods for interacting with the environment
     /// -----------------------------------------
     vec3 Environment::force(const Particle& p1, const Particle& p2) const { return force_func(p1, p2); }
 
@@ -226,19 +226,25 @@ namespace md::env {
         return grid.linked_cells();
     }
 
-    // std::vector<GridCell> Environment::cells() {
-    //     return grid.grid_cells();
-    // }
-
     void Environment::apply_boundary(Particle& particle) {
         auto & current = grid.get_cell(particle.cell);
         auto & previous = grid.get_cell(grid.what_cell(particle.old_position));
         boundary.apply_boundary(particle, current, previous);
     }
 
-    void Environment::adjust_temperature() {
-        thermostat.change_temperature(particle_storage);
+    double Environment::temperature() const {
+        double energy = 0;
+        for (auto & particle : particles(GridCell::INSIDE, Particle::ALIVE)) {
+            energy += 0.5 * particle.mass * ArrayUtils::L2NormSquared(particle.velocity);
+        }
+
+        return dimension * energy/3;
     }
+
+    int Environment::dim() const {
+        return dimension;
+    }
+
 
     Particle& Environment::operator[](const size_t id) { return particle_storage[id]; }
 

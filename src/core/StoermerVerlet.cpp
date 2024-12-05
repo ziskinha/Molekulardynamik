@@ -8,7 +8,7 @@
 
 namespace md::Integrator {
 
-    void StoermerVerlet::simulation_step(const double dt) {
+    void StoermerVerlet::simulation_step(unsigned step, const double dt ) {
         // update position
         for (auto& p : env.particles()) {
             p.update_position(dt * p.velocity + pow(dt, 2) / (2 * p.mass) * p.old_force);
@@ -33,6 +33,11 @@ namespace md::Integrator {
         // update velocities
         for (auto& p : env.particles()) {
             p.velocity = p.velocity + dt / 2 / p.mass * (p.force + p.old_force);
+        }
+
+        // apply thermostat
+        if (step % temp_adjust_freq == 0) {
+            thermostat.adjust_temperature(env);
         }
     }
 }  // namespace md::Integrator

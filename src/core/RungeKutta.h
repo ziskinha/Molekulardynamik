@@ -1,7 +1,6 @@
 #pragma once
 
 #include "env/Environment.h"
-#include "env/Force.h"
 #include "IntegratorBase.h"
 
 namespace md::Integrator {
@@ -22,7 +21,7 @@ namespace md::Integrator {
          * @brief Performs a single step of the Runge Kutta.
          * @param dt Δt The time increment for each simulation step.
          */
-        void simulation_step(double dt) override;
+        void simulation_step(unsigned step, double dt) override;
 
         /**
          * @brief Computes the forces of the particles.

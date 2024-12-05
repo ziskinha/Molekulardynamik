@@ -11,7 +11,6 @@
 #include "Force.h"
 #include "Particle.h"
 #include "ParticleGrid.h"
-#include "Thermostat.h"
 
 #define GRID_CONSTANT_AUTO 0
 
@@ -92,6 +91,14 @@ namespace md::env {
     };
 
     /**
+     * @brief Number of dimensions for the simulation
+     */
+    enum Dimension {
+        TwoD = 2,
+        ThreeD = 3,
+    };
+
+    /**
      * @brief Class representing the simulation environment, which manages particles, forces, boundaries, and the grid.
      */
     class Environment {
@@ -127,11 +134,10 @@ namespace md::env {
         void set_boundary(const Boundary& boundary);
 
         /**
-         * @brief Sets a thermostat to adjust temperature
-         * @param thermostat Thermostat to be used.
-         */
-        void set_thermostat(const Thermostat& thermostat);
-
+        * @brief Sets the dimension of the environment
+        * @param dim
+        */
+        void set_dimension(Dimension dim);
 
         /**
          * @brief Adds a single particle to the environment.
@@ -243,9 +249,11 @@ namespace md::env {
         void apply_boundary(Particle& particle);
 
         /**
-         * @brief Adjusts the temperature of the environment according to the parameters set in the thermostat.
+         * @brief Calculate temperature of the system
          */
-        void adjust_temperature();
+        double temperature() const;
+
+        int dim() const;
 
         /**
          * @brief Accesses particle by its ID.
@@ -280,9 +288,9 @@ namespace md::env {
 
         Boundary boundary;     ///< Boundary conditions of the environment.
         ParticleGrid grid;     ///< Grid of the environment.
-        Thermostat thermostat; ///< Thermostat to adjust temperature of the environment
 
         Force force_func;     ///< Used force function in the environment.
+        Dimension dimension;  ///< Dimension of the simulation
         double grid_constant; ///< Used grid Constant in the environment.
         bool initialized;     ///< Indicates whether the environment has been initialized.
     };

@@ -130,7 +130,6 @@ inline void four_particle_reflective_velocity_test() {
     args.dt = 0.0001;
     args.write_freq = 1000;
 
-
     env::Environment env;
     env.add_particle({2.8,2.9,0}, {4,2,0}, 1, 1);
     env.add_particle({0.1,0.15,0}, {-6,1,0}, 1, 1);
@@ -153,3 +152,4 @@ inline void four_particle_reflective_velocity_test() {
     Integrator::StoermerVerlet simulator(env, create_writer(args.output_baseName, args.output_format, args.override));
     simulator.simulate(0, args.duration, args.dt, args.write_freq);
 }
+
