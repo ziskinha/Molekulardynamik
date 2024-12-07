@@ -16,6 +16,10 @@ namespace md {
     using vec3 = std::array<double, 3>;
     using uint3 = std::array<UINT_T, 3>;
     using int3 = std::array<INT_T, 3>;
+
+    namespace env {
+
+    }
 }  // namespace md
 
 /**

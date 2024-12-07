@@ -7,6 +7,7 @@
 
 #include "env/Common.h"
 #include "env/Particle.h"
+#include "env/Boundary.h"
 #include "utils/ContainerUtils.h"
 
 /**
@@ -100,18 +101,29 @@ namespace md::env {
         return lhs;
     }
 
+
+
+
     /**
      * @brief Structure representing a pair of linked grid cells
      */
-    struct GridCellPair{
+    struct CellPair{
+        enum Periodicity {
+            PERIODIC_NONE    = 0x0,
+            PERIODIC_X       = 0x1,
+            PERIODIC_Y       = 0x2,
+            PERIODIC_Z       = 0x4,
+        };
+
         using ParticlePairIterator = utils::DualPairIterator<std::unordered_set<Particle*>>;
 
         /**
          * @brief Constructs a new GridCellPair of two grid cells.
          * @param cell1 The fist grid cell.
          * @param cell2 The second grid cell.
+         * @param periodicity
          */
-        GridCellPair(GridCell& cell1, GridCell& cell2);
+        CellPair(GridCell& cell1, GridCell& cell2, Periodicity periodicity);
 
         /**
          * @brief Checks if the GridCellPair is empty.
@@ -137,10 +149,28 @@ namespace md::env {
          */
         [[nodiscard]] std::pair<int, int> id() const;
 
+        const Periodicity periodicity;
        private:
         GridCell& cell1;  ///< The first grid cell in the pair.
         GridCell& cell2;  ///< The second grid cell in the pair.
     };
+
+    inline CellPair::Periodicity operator|(const CellPair::Periodicity lhs, const CellPair::Periodicity rhs) {
+        using T = std::underlying_type_t<CellPair::Periodicity>;
+        return static_cast<CellPair::Periodicity>(static_cast<T>(lhs) | static_cast<T>(rhs));
+    }
+
+    inline CellPair::Periodicity& operator|=(CellPair::Periodicity &lhs, CellPair::Periodicity rhs) {
+        using T = std::underlying_type_t<CellPair::Periodicity>;
+        lhs = static_cast<CellPair::Periodicity>(static_cast<T>(lhs) | static_cast<T>(rhs));
+        return lhs;
+    }
+
+    inline CellPair::Periodicity operator&(const CellPair::Periodicity lhs, const CellPair::Periodicity rhs) {
+        using T = std::underlying_type_t<CellPair::Periodicity>;
+        return static_cast<CellPair::Periodicity>(static_cast<T>(lhs) & static_cast<T>(rhs));
+    }
+
 
     /**
      * @brief A class representing the particle grid.
@@ -151,12 +181,12 @@ namespace md::env {
 
         /**
          * @brief Builds the particle grid with the given parameters.
-         * @param extent The size of the simulation space.
+         * @param boundary
          * @param grid_const The constant used to define grid cell size.
          * @param particles The particles that fill the cells.
          * @param origin The lower left corner of the domain.
          */
-        void build(const vec3& extent, double grid_const, std::vector<Particle>& particles, const vec3& origin);
+        void build(const Boundary & boundary, double grid_const, std::vector<Particle>& particles);
 
         /**
          * @brief Retrieves the grid cell corresponding the index.
@@ -203,7 +233,7 @@ namespace md::env {
          * @brief returns all pairs of linked cells
          * @return A vector with GridCellPairs
          */
-        const std::vector<GridCellPair> & linked_cells();
+        const std::vector<CellPair> & linked_cells();
 
         /**
          * @brief returns all cells at the boundary
@@ -234,10 +264,10 @@ namespace md::env {
         /**
         * @brief Builds pairs of neighboring cells.
         */
-        void build_cell_pairs();
+        void build_cell_pairs(const std::array<BoundaryRule, 6> & rules);
 
         std::unordered_map<int3, GridCell, Int3Hasher> cells {}; ///< A hash map storing the cells in the grid.
-        std::vector<GridCellPair> cell_pairs{};                  ///< A vector of linked cell pairs.
+        std::vector<CellPair> cell_pairs{};                  ///< A vector of linked cell pairs.
         std::vector<GridCell*> border_cells;                     ///< A vector of cells at the domain boundary
 
         uint3 cell_count{};         ///< The number of cells in the grid along each dimension.

@@ -17,13 +17,16 @@ namespace md::Integrator {
         }
 
         for (auto & particle : env.particles(env::GridCell::BOUNDARY | env::GridCell::OUTSIDE)) {
+            if (particle.position[0] < 0 || particle.position[1] < 0 || particle.position[2] < 0) {
+                int i = 0;
+            }
             env.apply_boundary(particle);
         }
 
         // calculate forces
         for (auto& cell_pair : env.linked_cells()) {
             for (auto [p1, p2] : cell_pair.particles()) {
-                vec3 new_F = env.force(*p1, *p2);
+                vec3 new_F = env.force(*p1, *p2, cell_pair);
 
                 p2->force = p2->force + new_F;
                 p1->force = p1->force - new_F;

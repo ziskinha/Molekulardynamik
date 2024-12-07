@@ -57,7 +57,7 @@ namespace md::env {
         return {-1, -1};
     }
 
-    size_t face_normal_to_idx(const int3 & face_normal){
+    Boundary::Face Boundary::normal_to_face(const int3& face_normal) {
         // Assert whether face_normal[i] is either 1, -1, or 0 for all i = 0,1,2
         ASSERT(
             (face_normal[0] == 0 || face_normal[0] == 1 || face_normal[0] == -1) &&
@@ -72,12 +72,12 @@ namespace md::env {
             "Exactly one component of face_normal must have magnitude 1."
         );
 
-        if (face_normal[0] == -1) return 0;
-        if (face_normal[0] == 1) return 1;
-        if (face_normal[1] == 1) return 3;
-        if (face_normal[1] == -1) return 2;
-        if (face_normal[2] == 1) return 5;
-        if (face_normal[2] == -1) return 4;
+        if (face_normal[0] == -1) return Boundary::LEFT;
+        if (face_normal[0] == 1)  return Boundary::RIGHT;
+        if (face_normal[1] == 1)  return Boundary::TOP;
+        if (face_normal[1] == -1) return Boundary::BOTTOM;
+        if (face_normal[2] == 1)  return Boundary::FRONT;
+        if (face_normal[2] == -1) return Boundary::BACK;
         throw std::invalid_argument("Invalid face normal");
     }
 
@@ -105,7 +105,7 @@ namespace md::env {
     }
 
     void Boundary::set_boundary_rule(const BoundaryRule rule, const int3 & face_normal) {
-        rules[face_normal_to_idx(face_normal)] = rule;
+        rules[normal_to_face(face_normal)] = rule;
     }
 
     void Boundary::set_boundary_force(const BoundaryForce& force) {
@@ -165,6 +165,10 @@ namespace md::env {
         }
     }
 
+    const std::array<BoundaryRule, 6>& Boundary::boundary_rules() const {
+        return rules;
+    }
+
 
     BoundaryForce Boundary::LennardJonesForce(const double epsilon, const double sigma) {
         return [sigma, epsilon](const double dist) {
@@ -203,7 +207,7 @@ namespace md::env {
 
 
     void Boundary::apply_rule(const int3& normal, Particle& particle, const GridCell& current_cell) const {
-        switch (rules[face_normal_to_idx(normal)]) {
+        switch (rules[normal_to_face(normal)]) {
             case OUTFLOW: outflow_rule(particle, current_cell); break;
             case PERIODIC: periodic_rule(particle, normal, current_cell); break;
             case REPULSIVE_FORCE: repulsive_force_rule(particle, normal, current_cell); break;
@@ -227,7 +231,7 @@ namespace md::env {
             vec3 dx = {0,0,0};
             if (normal[axis] == 1) dx[axis] = - extent[axis];
             else if (normal[axis] == -1) dx[axis] = extent[axis];
-            particle.update_position(dx);
+            particle.position = particle.position + dx;
             particle.update_grid();
         }
     }
@@ -237,7 +241,7 @@ namespace md::env {
 
         if (dist != 0) { // particles may be initialized at the boundary
             vec3 df = {};
-            int axis = axis_from_normal(normal);
+            const int axis = axis_from_normal(normal);
             df[axis] = force(dist) * normal[axis];
             particle.force = particle.force - df;
         }
@@ -246,6 +250,7 @@ namespace md::env {
     void Boundary::velocity_reflection_rule(Particle& particle, const int3 & normal, const GridCell& cell) const {
         if (cell.type != GridCell::OUTSIDE) return;
 
+        // TODO implement double reflection
         const vec3 pos = particle.old_position - origin;
         const vec3 diff = particle.position - particle.old_position;
         const int axis = axis_from_normal(normal);

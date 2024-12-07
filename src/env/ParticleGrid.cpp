@@ -6,6 +6,7 @@
 #include <string>
 
 #include "io/Logger/Logger.h"
+#include "io/input/xml/molSimSchema.hxx"
 #include "utils/ArrayUtils.h"
 
 #define DOUBLE_MIN std::numeric_limits<double>::min()
@@ -38,13 +39,16 @@ namespace md::env {
     /// -----------------------------------------
     /// \brief Grid cell pair methods
     /// -----------------------------------------
-    GridCellPair::GridCellPair(GridCell& cell1, GridCell& cell2) : cell1(cell1), cell2(cell2) {}
+    CellPair::CellPair(GridCell& cell1, GridCell& cell2, const Periodicity periodicity) :
+    periodicity(periodicity), cell1(cell1), cell2(cell2) {}
 
-    bool GridCellPair::empty() const { return cell1.particles.empty() || cell2.particles.empty(); }
+    bool CellPair::empty() const { return cell1.particles.empty() || cell2.particles.empty(); }
 
-    GridCellPair::ParticlePairIterator GridCellPair::particles() const { return {cell1.particles, cell2.particles}; }
+    CellPair::ParticlePairIterator CellPair::particles() const {
+        return {cell1.particles, cell2.particles};
+    }
 
-    std::string GridCellPair::to_string() const {
+    std::string CellPair::to_string() const {
         std::stringstream stream;
         using ::operator<<;
         stream << "cell1 id: " << cell1.id << " coord: " << cell1.origin <<
@@ -52,16 +56,15 @@ namespace md::env {
         return stream.str();
     }
 
-    std::pair<int, int> GridCellPair::id() const { return {cell1.id, cell2.id}; }
+    std::pair<int, int> CellPair::id() const { return {cell1.id, cell2.id}; }
 
     /// -----------------------------------------
     /// \brief ParticleGrid initilization methods
     /// -----------------------------------------
-    void ParticleGrid::build(const vec3& extent, const double grid_const, std::vector<Particle>& particles,
-                             const vec3& origin) {
-        this->boundary_origin = origin;
-        build_cells(extent, grid_const, particles);
-        build_cell_pairs();
+    void ParticleGrid::build(const Boundary & boundary, const double grid_const, std::vector<Particle>& particles) {
+        this->boundary_origin = boundary.origin;
+        build_cells(boundary.extent, grid_const, particles);
+        build_cell_pairs(boundary.boundary_rules());
     }
 
     void ParticleGrid::build_cells(const vec3& extent, const double grid_constant, std::vector<Particle>& particles) {
@@ -117,7 +120,20 @@ namespace md::env {
         }
     }
 
-    void ParticleGrid::build_cell_pairs() {
+    bool wrap_around(int &x, const unsigned N) {
+        const int n = static_cast<int>(N);
+        if (x >= n) {
+            x = x - n;
+            return true;
+        }
+        if (x < 0) {
+            x = x + n;
+            return true;
+        }
+        return false;
+    }
+
+    void ParticleGrid::build_cell_pairs(const std::array<BoundaryRule, 6> & rules) {
         std::vector<int3> displacements;
         for (INT_T dx = -1; dx <= 1; dx++) {
             for (INT_T dy = -1; dy <= 1; dy++) {
@@ -128,14 +144,26 @@ namespace md::env {
             }
         }
 
+        const bool periodic_x = rules[Boundary::LEFT] == PERIODIC;
+        const bool periodic_y = rules[Boundary::TOP] == PERIODIC;
+        const bool periodic_z = rules[Boundary::FRONT] == PERIODIC;
+
+        // add cell pairs
         for (UINT_T x = 0; x < cell_count[0]; x++) {
             for (UINT_T y = 0; y < cell_count[1]; y++) {
                 for (UINT_T z = 0; z < cell_count[2]; z++) {
                     int3 idx1 = {static_cast<INT_T>(x), static_cast<INT_T>(y), static_cast<INT_T>(z)};
-                    cell_pairs.emplace_back(cells.at(idx1), cells.at(idx1));
+                    cell_pairs.emplace_back(cells.at(idx1), cells.at(idx1),  CellPair::PERIODIC_NONE);
 
                     for (const auto d : displacements) {
+                        CellPair::Periodicity periodicity = CellPair::PERIODIC_NONE;
                         int3 idx2 = idx1 + d;
+
+                        // ensure pairs are added when periodic conditions are applied
+                        if (periodic_x && wrap_around(idx2[0], cell_count[0])) periodicity |=  CellPair::PERIODIC_X;
+                        if (periodic_y && wrap_around(idx2[1], cell_count[1])) periodicity |=  CellPair::PERIODIC_Y;
+                        if (periodic_z && wrap_around(idx2[2], cell_count[2])) periodicity |=  CellPair::PERIODIC_Z;
+
                         if (idx1 >= idx2  // ensure only unique pairs are added
                             || idx2[0] < 0 || idx2[1] < 0 || idx2[2] < 0 ||
                             static_cast<UINT_T>(idx2[0]) >= cell_count[0] ||
@@ -144,7 +172,7 @@ namespace md::env {
                             continue;
                         }
 
-                        cell_pairs.emplace_back(cells.at(idx1), cells.at(idx2));
+                        cell_pairs.emplace_back(cells.at(idx1), cells.at(idx2), periodicity);
                     }
                 }
             }
@@ -191,25 +219,13 @@ namespace md::env {
         return keys;
     }
 
-    const std::vector<GridCellPair>& ParticleGrid::linked_cells() {
+    const std::vector<CellPair>& ParticleGrid::linked_cells() {
         return cell_pairs;
     }
 
     const std::vector<GridCell*> & ParticleGrid::boundary_cells() {
         return border_cells;
     }
-
-    // std::vector<GridCell> ParticleGrid::grid_cells() {
-    //     // not the best design but this function is intended for debugging purposes so its ok
-    //     std::vector<GridCell> cells;
-    //     cells.reserve(this->cells.size());
-    //
-    //     for (auto& snd : this->cells | std::views::values) {
-    //         cells.push_back(snd);
-    //     }
-    //
-    //     return cells;
-    // }
 
     void ParticleGrid::update_cells(Particle* particle, const int3& old_cell, const int3& new_cell) {
         if (old_cell != new_cell) {

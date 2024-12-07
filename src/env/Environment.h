@@ -94,8 +94,9 @@ namespace md::env {
      * @brief Number of dimensions for the simulation
      */
     enum Dimension {
-        TwoD = 2,
-        ThreeD = 3,
+        TWO = 2,
+        THREE = 3,
+        INFER = -1
     };
 
     /**
@@ -201,7 +202,7 @@ namespace md::env {
          * @param p2 The second particle.
          * @return The force between the two particles.
          */
-        [[nodiscard]] vec3 force(const Particle& p1, const Particle& p2) const;
+        [[nodiscard]] vec3 force(const Particle& p1, const Particle& p2, const CellPair & pair) const;
 
         /**
          * Returns the number of particles of a certain state in the environment.
@@ -239,7 +240,7 @@ namespace md::env {
          * @brief Retrieves the linked grid cells in the simulation.
          * @return A const reference to the vector of the linked cell pairs.
          */
-        const std::vector<GridCellPair>& linked_cells();
+        const std::vector<CellPair>& linked_cells();
 
 
         /**

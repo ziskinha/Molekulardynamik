@@ -52,7 +52,7 @@ namespace md::env {
     /// Environment Class Methods
     /// -----------------------------------------
     Environment::Environment()
-        : force_func(NoForce()), dimension(TwoD), grid_constant(GRID_CONSTANT_AUTO), initialized(false) {}
+        : force_func(NoForce()), dimension(TWO), grid_constant(GRID_CONSTANT_AUTO), initialized(false) {}
 
     /// -----------------------------------------
     ///  Methods for environment setup
@@ -207,7 +207,7 @@ namespace md::env {
             }
         }
 
-        grid.build(boundary.extent, grid_constant, particle_storage, boundary.origin);
+        grid.build(boundary, grid_constant, particle_storage);
         initialized = true;
         SPDLOG_INFO("Environment successfully built.");
     }
@@ -215,20 +215,40 @@ namespace md::env {
     /// -----------------------------------------
     /// Methods for interacting with the environment
     /// -----------------------------------------
-    vec3 Environment::force(const Particle& p1, const Particle& p2) const { return force_func(p1, p2); }
+    double wrap_around_diff(const double x1, const double x2, const double n) {
+        if (x2 > x1) return x2 - (x1 + n);
+        return (x2 + n) - x1;
+    }
+
+    vec3 Environment::force(const Particle& p1, const Particle& p2, const CellPair & pair) const {
+        vec3 diff = p2.position - p1.position;
+
+        // handle force wrap around
+        if (pair.periodicity & CellPair::PERIODIC_X) {
+            diff[0] = wrap_around_diff(p1.position[0], p2.position[0], boundary.extent[0]);
+        }
+        if (pair.periodicity & CellPair::PERIODIC_Y) {
+            diff[1] = wrap_around_diff(p1.position[1], p2.position[1], boundary.extent[1]);
+        }
+        if (pair.periodicity & CellPair::PERIODIC_Z) {
+            diff[2] = wrap_around_diff(p1.position[2], p2.position[2], boundary.extent[2]);
+        }
+
+        return force_func(diff, p1, p2);
+    }
 
     size_t Environment::size(Particle::State) const {
         // todo: query number of particles in a given state
         return particle_storage.size();
     }
 
-    const std::vector<GridCellPair> & Environment::linked_cells() {
+    const std::vector<CellPair> & Environment::linked_cells() {
         return grid.linked_cells();
     }
 
     void Environment::apply_boundary(Particle& particle) {
-        auto & current = grid.get_cell(particle.cell);
-        auto & previous = grid.get_cell(grid.what_cell(particle.old_position));
+        const auto & current = grid.get_cell(particle.cell);
+        const auto & previous = grid.get_cell(grid.what_cell(particle.old_position));
         boundary.apply_boundary(particle, current, previous);
     }
 
@@ -237,7 +257,6 @@ namespace md::env {
         for (auto & particle : particles(GridCell::INSIDE, Particle::ALIVE)) {
             energy += 0.5 * particle.mass * ArrayUtils::L2NormSquared(particle.velocity);
         }
-
         return dimension * energy/3;
     }
 

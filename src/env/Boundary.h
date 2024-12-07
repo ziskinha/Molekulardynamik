@@ -4,7 +4,6 @@
 
 #include "Common.h"
 #include "Force.h"
-// #include "ParticleGrid.h"
 
 
 #define MAX_EXTENT std::numeric_limits<double>::max()
@@ -28,6 +27,7 @@ namespace md::env {
         static const int3 FRONT;   ///< Normal vector of the front face.
         static const int3 BACK;    ///< Normal vector of the back face.
     };
+
 
     /**
     * @brief Enumeration of possible boundary conditions.
@@ -54,6 +54,17 @@ namespace md::env {
             HEIGHT,  ///< Height of the simulation space.
             DEPTH    ///< Depth of the simulation space.
         };
+
+        enum Face {
+            LEFT,
+            RIGHT,
+            TOP,
+            BOTTOM,
+            FRONT,
+            BACK
+       };
+
+        static Face normal_to_face(const int3 & normal);
 
         /**
          * @brief Constructs a default Boundary object.
@@ -86,6 +97,8 @@ namespace md::env {
          * @param previous_cell The particle's previous gird cell.
          */
         void apply_boundary(Particle &particle, const GridCell &current_cell, const GridCell &previous_cell) const;
+
+        [[nodiscard]] const std::array<BoundaryRule, 6> & boundary_rules() const;
 
         // TODO set to private
         vec3 extent{MAX_EXTENT, MAX_EXTENT, MAX_EXTENT}; ///< Dimensions of the boundary [width, height, depth].

@@ -71,7 +71,7 @@ namespace md::Integrator {
         virtual void simulation_step(unsigned int step, double dt) = 0;
 
         env::Environment& env;  ///< Reference to the environment.
-        const env::Thermostat& thermostat; ///< Thermostat to adjust temperature of the environment
+        const env::Thermostat thermostat; ///< Thermostat to adjust temperature of the environment
         unsigned int temp_adjust_freq;
 
        private:

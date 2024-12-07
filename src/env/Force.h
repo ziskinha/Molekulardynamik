@@ -14,7 +14,8 @@
  * @brief Contains classes and structures for managing the environment of the simulation.
  */
 namespace md::env {
-    using ForceFunc = std::function<vec3(const Particle&, const Particle&)>;
+    using ForceFunc = std::function<vec3(const vec3&, const Particle&, const Particle&)>;
+
 
     /**
      * @brief Structure representing a force function with an optional cutoff distance.
@@ -30,22 +31,28 @@ namespace md::env {
 
         /**
          * @brief Calculates the force between two particles.
+         * @param diff distance vector between the two particles. (needed to correctly handle force wrap around)
          * @param p1 The first particle.
          * @param p2 The second particle.
          * @return The force between the two particles.
          */
-        vec3 operator()(const Particle& p1, const Particle& p2) const { return force_func(p1, p2); }
+        vec3 operator()(const vec3& diff, const Particle& p1, const Particle& p2) const {
+            return force_func(diff, p1, p2);
+        }
 
         /**
          * @brief Retrieves the cutoff radius.
          * @return The cutoff radius.
          */
-        [[nodiscard]] double cutoff() const { return cutoff_radius; }
+        [[nodiscard]] double cutoff() const {
+            return cutoff_radius;
+        }
 
        private:
         double cutoff_radius;   ///< The cutoff radius for the calculations.
-        ForceFunc force_func{}; ///< The force function used for the calculations.
+        ForceFunc force_func {}; ///< The force function used for the calculations.
     };
+
 
     /**
      * @brief Returns a Force object that represents no interaction between particles.
@@ -53,8 +60,9 @@ namespace md::env {
      * @return A Force object representing no interaction.
      */
     inline Force NoForce(const double cutoff = 0) {
-        return Force([](const Particle&, const Particle&) { return vec3{0, 0, 0}; }, cutoff);
+        return Force([](const vec3&, const Particle&, const Particle&) { return vec3{0, 0, 0}; }, cutoff);
     }
+
 
     /**
      * @brief Returns a Force object that represents the inverse-square force between two particles.
@@ -66,17 +74,17 @@ namespace md::env {
     inline Force InverseSquare(const double pre_factor = 1.0, double cutoff_radius = FORCE_CUTOFF_AUTO) {
         if (cutoff_radius == FORCE_CUTOFF_AUTO) cutoff_radius = 10 * pre_factor;
 
-        const ForceFunc force_func = [=](const Particle& p1, const Particle& p2) {
-            const double dist = ArrayUtils::L2Norm(p1.position - p2.position);
+        const ForceFunc force_func = [=](const vec3& diff, const Particle& p1, const Particle& p2) {
+            const double dist = ArrayUtils::L2Norm(diff);
             if (dist > cutoff_radius) {
                 return vec3{0.0, 0.0, 0.0};
             }
             const double f_mag = p1.mass * p2.mass / pow(dist, 3);
-            return -pre_factor * f_mag * (p2.position - p1.position);
+            return -pre_factor * f_mag * diff;
         };
-
         return Force(force_func, cutoff_radius);
     }
+
 
     /**
      * @brief Returns a function that calculates the spring force using Hookes law between two particles.
@@ -85,14 +93,14 @@ namespace md::env {
      * @return The function that calculates the force vector acting on p1 due to p2.
      */
     inline Force HookesLaw(const double k = 0.1, const double rest_length = 0.0) {
-        const ForceFunc force_func = [=](const Particle& p1, const Particle& p2) {
-            const double dist = ArrayUtils::L2Norm(p1.position - p2.position);
-            const double f_mag = k * (dist - rest_length) / dist;
-            return -f_mag * (p2.position - p1.position);
+        const ForceFunc force_func = [=](const vec3& diff, const Particle&, const Particle&) {
+            const double dist = ArrayUtils::L2Norm(diff);
+            const double magnitude = k * (dist - rest_length) / dist;
+            return - magnitude * diff;
         };
-
         return Force(force_func, NO_FORCE_CUTOFF);
     }
+
 
     /**
      * @brief Returns a function that calculates the forces in a lennard jones potential between two particles.
@@ -105,10 +113,8 @@ namespace md::env {
                               double cutoff_radius = FORCE_CUTOFF_AUTO) {
         if (cutoff_radius == FORCE_CUTOFF_AUTO) cutoff_radius = 3 * sigma;
 
-        const ForceFunc force_func = [=](const Particle& p1, const Particle& p2) {
-            const double dist_squared = pow(p2.position[0] - p1.position[0], 2) +
-                                        pow(p2.position[1] - p1.position[1], 2) +
-                                        pow(p2.position[2] - p1.position[2], 2);
+        const ForceFunc force_func = [=](const vec3& diff, const Particle&, const Particle&) {
+            const double dist_squared = ArrayUtils::L2NormSquared(diff);
 
             if (dist_squared > cutoff_radius * cutoff_radius) {
               return vec3{0.0, 0.0, 0.0};
@@ -121,9 +127,8 @@ namespace md::env {
             const double scalar =
                 24 * epsilon * inv_dist_squared * (2 * pow(sigma, 12) * inv_dist_12 - pow(sigma, 6) * inv_dist_6);
 
-            return scalar * (p2.position - p1.position);
+            return scalar * diff;
         };
-
         return Force(force_func, cutoff_radius);
     }
 }  // namespace md::env

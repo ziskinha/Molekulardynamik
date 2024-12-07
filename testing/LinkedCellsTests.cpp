@@ -45,7 +45,7 @@ TEST(LinkedCellsTest, grid_construction_test) {
 
 // tests if grid pairs are created correctly
 TEST(LinkedCellsTest, grid_pair_test) {
-    std::vector<md::env::GridCellPair> cell_pair = grid.linked_cells();
+    std::vector<md::env::CellPair> cell_pair = grid.linked_cells();
     int i = 0;
 
     for (auto& pair : cell_pair) {
