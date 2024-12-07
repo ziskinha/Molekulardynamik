@@ -14,121 +14,104 @@
  * @brief Contains classes and structures for managing the environment of the simulation.
  */
 namespace md::env {
-    using ForceFunc = std::function<vec3(const vec3&, const Particle&, const Particle&)>;
+
+    struct ForceBase {
+        double cutoff = FORCE_CUTOFF_AUTO;
+    };
 
 
+    // TODO fix description
     /**
-     * @brief Structure representing a force function with an optional cutoff distance.
-     */
-    struct Force {
+    * @brief Returns a Force object representing the Lennard-Jones potential between two particles.
+    * @param epsilon Depth of the potential well.
+    * @param sigma Distance at which the potential reaches zero.
+    * @param cutoff_radius The cutoff radius for the force.
+    * @return The Force object configured for Lennard-Jones potential.
+    */
+    struct LennardJones : ForceBase{
+        LennardJones() = default;
+        LennardJones(const double epsilon, const double sigma, const double cutoff)
+        : ForceBase(cutoff), epsilon(epsilon), sigma(sigma) {}
+        double epsilon = 5;
+        double sigma = 1;
+    };
+
+    // TODO fix description
+    /**
+    * @brief Returns a Force object that represents the inverse-square force between two particles.
+    * @param pre_factor Scaling factor for the magnitude of the force (e.g., for gravity or Coulomb's law).
+    * @param cutoff_radius The cutoff radius for the force.
+    * @return The Force object configured for an inverse-square force.
+    */
+    struct InverseSquare : ForceBase{
+        InverseSquare() = default;
+        InverseSquare(const double pre_factor, const double cutoff)
+        : ForceBase(cutoff), pre_factor(pre_factor) {}
+        double pre_factor = 1;
+    };
+
+
+    using ForceType = std::variant<LennardJones, InverseSquare>;
+
+
+    class Force {
+    public:
+        using ForceFunc = std::function<vec3(const vec3&, const Particle&, const Particle&)>;
+
+        Force();
+
         /**
          * @brief Constructs a Force object with a specified force function and cutoff.
-         * @param force_func
-         * @param cutoff
+         * @param force_func The function to calculate force between particles.
+         * @param cutoff The cutoff radius for the force.
          */
-        explicit Force(ForceFunc  force_func = {}, const double cutoff = NO_FORCE_CUTOFF)
-            : cutoff_radius(cutoff), force_func(std::move(force_func)) {}
+        explicit Force(ForceFunc force_func, double cutoff = NO_FORCE_CUTOFF);
 
         /**
          * @brief Calculates the force between two particles.
-         * @param diff distance vector between the two particles. (needed to correctly handle force wrap around)
+         * @param diff Distance vector between the two particles.
          * @param p1 The first particle.
          * @param p2 The second particle.
          * @return The force between the two particles.
          */
-        vec3 operator()(const vec3& diff, const Particle& p1, const Particle& p2) const {
-            return force_func(diff, p1, p2);
-        }
+        vec3 operator()(const vec3& diff, const Particle& p1, const Particle& p2) const;
 
         /**
          * @brief Retrieves the cutoff radius.
          * @return The cutoff radius.
          */
-        [[nodiscard]] double cutoff() const {
-            return cutoff_radius;
-        }
+        [[nodiscard]] double cutoff() const;
 
-       private:
-        double cutoff_radius;   ///< The cutoff radius for the calculations.
+    private:
+        double cutoff_radius;    ///< The cutoff radius for the calculations.
         ForceFunc force_func {}; ///< The force function used for the calculations.
     };
 
 
-    /**
-     * @brief Returns a Force object that represents no interaction between particles.
-     * @param cutoff The cutoff distance.
-     * @return A Force object representing no interaction.
-     */
-    inline Force NoForce(const double cutoff = 0) {
-        return Force([](const vec3&, const Particle&, const Particle&) { return vec3{0, 0, 0}; }, cutoff);
-    }
 
+    class ForceManager {
+        using ParticleType = int;
+        using ForceKey = std::pair<ParticleType, ParticleType>;
 
-    /**
-     * @brief Returns a Force object that represents the inverse-square force between two particles.
-     * @param pre_factor scaling factor for the magnitude of the force. can be used to implement newtons gravity or
-     * coulombs law.
-     * @param cutoff_radius
-     * @return The function that calculates the force vector acting on p1 due to p2.
-     */
-    inline Force InverseSquare(const double pre_factor = 1.0, double cutoff_radius = FORCE_CUTOFF_AUTO) {
-        if (cutoff_radius == FORCE_CUTOFF_AUTO) cutoff_radius = 10 * pre_factor;
-
-        const ForceFunc force_func = [=](const vec3& diff, const Particle& p1, const Particle& p2) {
-            const double dist = ArrayUtils::L2Norm(diff);
-            if (dist > cutoff_radius) {
-                return vec3{0.0, 0.0, 0.0};
+        struct ForceKeyHash {
+            template <typename T1, typename T2>
+            std::size_t operator()(const std::pair<T1, T2>& key) const {
+                return std::hash<T1>()(key.first) ^ (std::hash<T2>()(key.second) << 1);
             }
-            const double f_mag = p1.mass * p2.mass / pow(dist, 3);
-            return -pre_factor * f_mag * diff;
         };
-        return Force(force_func, cutoff_radius);
-    }
+    public:
+        ForceManager();
 
+        void init();
+        void add_force(const ForceType&, int particle_type);
+        vec3 evaluate(const vec3 &diff, const Particle& p1, const Particle& p2) const;
+        double cutoff() const;
 
-    /**
-     * @brief Returns a function that calculates the spring force using Hookes law between two particles.
-     * @param k spring constant
-     * @param rest_length The rest length (default: 0.0).
-     * @return The function that calculates the force vector acting on p1 due to p2.
-     */
-    inline Force HookesLaw(const double k = 0.1, const double rest_length = 0.0) {
-        const ForceFunc force_func = [=](const vec3& diff, const Particle&, const Particle&) {
-            const double dist = ArrayUtils::L2Norm(diff);
-            const double magnitude = k * (dist - rest_length) / dist;
-            return - magnitude * diff;
-        };
-        return Force(force_func, NO_FORCE_CUTOFF);
-    }
+    private:
+        static Force mix_forces(const ForceType& force1, const ForceType& force2);
+        std::unordered_map<ParticleType, ForceType> force_types;
+        std::unordered_map<ForceKey, Force, ForceKeyHash> forces;
+        double cutoff_radius;
+    };
 
-
-    /**
-     * @brief Returns a function that calculates the forces in a lennard jones potential between two particles.
-     * @param epsilon
-     * @param sigma
-     * @param cutoff_radius
-     * @return The function that calculates the force vector acting on p1 due to p2.
-     */
-    inline Force LennardJones(const double epsilon = 1.0, const double sigma = 1.0,
-                              double cutoff_radius = FORCE_CUTOFF_AUTO) {
-        if (cutoff_radius == FORCE_CUTOFF_AUTO) cutoff_radius = 3 * sigma;
-
-        const ForceFunc force_func = [=](const vec3& diff, const Particle&, const Particle&) {
-            const double dist_squared = ArrayUtils::L2NormSquared(diff);
-
-            if (dist_squared > cutoff_radius * cutoff_radius) {
-              return vec3{0.0, 0.0, 0.0};
-            }
-
-            const double inv_dist_squared = 1.0 / dist_squared;
-            const double inv_dist_6 = pow(inv_dist_squared, 3);
-            const double inv_dist_12 = inv_dist_6 * inv_dist_6;
-
-            const double scalar =
-                24 * epsilon * inv_dist_squared * (2 * pow(sigma, 12) * inv_dist_12 - pow(sigma, 6) * inv_dist_6);
-
-            return scalar * diff;
-        };
-        return Force(force_func, cutoff_radius);
-    }
 }  // namespace md::env

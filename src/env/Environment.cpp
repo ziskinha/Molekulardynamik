@@ -37,8 +37,8 @@ namespace md::env {
           dimension(dimension),
           type(type) {}
 
-    SphereCreateInfo::SphereCreateInfo(const md::vec3 &origin, const md::vec3 &initial_v, const double thermal_v,
-                                       int radius, double width, double mass, const uint8_t dimension, int type)
+    SphereCreateInfo::SphereCreateInfo(const vec3 &origin, const vec3 &initial_v, const double thermal_v,
+                                       const int radius, const double width, const double mass, const uint8_t dimension, const int type)
         : origin(origin),
           initial_v(initial_v),
           thermal_v(thermal_v),
@@ -52,14 +52,14 @@ namespace md::env {
     /// Environment Class Methods
     /// -----------------------------------------
     Environment::Environment()
-        : force_func(NoForce()), dimension(TWO), grid_constant(GRID_CONSTANT_AUTO), initialized(false), g_grav(0) {}
+        : dimension(TWO), grid_constant(GRID_CONSTANT_AUTO), initialized(false), g_grav(0) {}
 
     /// -----------------------------------------
     ///  Methods for environment setup
     /// -----------------------------------------
-    void Environment::set_force(const Force& force) {
+    void Environment::set_force(const ForceType& force, const int particle_type) {
         WARN_IF_INIT("set the force");
-        this->force_func = force;
+        forces.add_force(force, particle_type);
     }
 
     void Environment::set_grid_constant(const double g) {
@@ -192,27 +192,26 @@ namespace md::env {
             }
         }
 
+        forces.init();
         // check if grid constant is ok
-        if (grid_constant > 0 && grid_constant <= force_func.cutoff()) {
+        if (grid_constant > 0 && grid_constant <= forces.cutoff()) {
             SPDLOG_WARN(
                 "Grid constant is smaller than force cutoff. Will default to use GRID_CONSTANT_AUTO."
                 "Are you sure you setup the environment correctly?");
-            grid_constant = force_func.cutoff();
+            grid_constant = forces.cutoff();
+        }
+        if (grid_constant == GRID_CONSTANT_AUTO) {
+            if (boundary.extent[0] == MAX_EXTENT && boundary.extent[1] == MAX_EXTENT && boundary.extent[2] == MAX_EXTENT) {
+                grid_constant = MAX_EXTENT;
+            } else {
+                grid_constant = forces.cutoff();
+                SPDLOG_DEBUG("Using GRID_CONSTANT_AUTO. Grid constant set to force cutoff: {}", grid_constant);
+            }
         }
         if (grid_constant < 0) {
             SPDLOG_ERROR("Grid constant is negative. Grid constant should be chosen positive and at least the size of the force cutoff");
             throw std::invalid_argument("Grid constant is negative.");
         }
-        if (grid_constant == GRID_CONSTANT_AUTO) {
-            if (boundary.extent[0] == MAX_EXTENT && boundary.extent[1] == MAX_EXTENT &&
-                boundary.extent[2] == MAX_EXTENT) {
-                grid_constant = MAX_EXTENT;
-            } else {
-                grid_constant = force_func.cutoff();
-                SPDLOG_DEBUG("Using GRID_CONSTANT_AUTO. Grid constant set to force cutoff: {}", grid_constant);
-            }
-        }
-
         grid.build(boundary, grid_constant, particle_storage);
         initialized = true;
         SPDLOG_INFO("Environment successfully built.");
@@ -240,7 +239,7 @@ namespace md::env {
             diff[2] = wrap_around_diff(p1.position[2], p2.position[2], boundary.extent[2]);
         }
 
-        return force_func(diff, p1, p2);
+        return forces.evaluate(diff, p1, p2);
     }
 
     size_t Environment::size(Particle::State) const {

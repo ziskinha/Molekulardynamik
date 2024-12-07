@@ -184,7 +184,6 @@ namespace md::env {
          * @param boundary
          * @param grid_const The constant used to define grid cell size.
          * @param particles The particles that fill the cells.
-         * @param origin The lower left corner of the domain.
          */
         void build(const Boundary & boundary, double grid_const, std::vector<Particle>& particles);
 

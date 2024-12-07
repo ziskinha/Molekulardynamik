@@ -190,7 +190,7 @@ namespace md::io {
         std::ranges::replace(force_name, '-', ' ');
         std::ranges::replace(force_name, '_', ' ');
         trim(force_name);
-        Force force;
+        ForceType force;
 
         while (data_stream >> num) {
             vals.push_back(num);
@@ -199,18 +199,15 @@ namespace md::io {
             if (force_name == "lennard jones") {
                 force = LennardJones(vals[0], vals[1], vals[2]);
                 SPDLOG_INFO("Using Lennard Jones with parameters: epsilon={}, sigma={}, cutoff_radius={}", vals[0], vals[1], vals[2]);
-            } else if (force_name == "Hookes law") {
-                force = HookesLaw(vals[0], vals[1]);
-                SPDLOG_INFO("Using Hookes Law with parameters: k={}, l={}", vals[0], vals[1]);
             } else if (force_name == "inverse square") {
-                force = InverseSquare(vals[0]);
+                force = InverseSquare(vals[0], vals[1]);
                 SPDLOG_INFO("Using inverse square force with parameter: pre_factor={}", vals[0]);
             }
         } catch (std::out_of_range& e) {
             SPDLOG_ERROR("Parameter error in force parsing: {}. Line: {}", e.what(), line);
             exit(-1);
         }
-        env.set_force(force);
+        env.set_force(force, 0);
     }
 
     /// -----------------------------------------

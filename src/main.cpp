@@ -60,7 +60,7 @@ int main(const int argc, char* argv[]) {
     boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::BOTTOM);
 
     env.set_boundary(boundary);
-    env.set_force(env::LennardJones(5, 0.2, 1));
+    env.set_force(env::LennardJones(5, 0.2, 1), 1);
     env.set_grid_constant(1);
 
     env.build();

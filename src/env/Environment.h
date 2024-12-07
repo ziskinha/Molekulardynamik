@@ -125,8 +125,9 @@ namespace md::env {
         /**
          * @brief Sets the force with which particles interact
          * @param force The force function to be used.
+         * @param particle_type
          */
-        void set_force(const Force& force);
+        void set_force(const ForceType& force, int particle_type);
 
         /**
          * @brief Sets the boundary conditions for the environment.
@@ -140,6 +141,10 @@ namespace md::env {
         */
         void set_dimension(Dimension dim);
 
+        /**
+        * @brief Set the gravitational force strength
+        * @param g gravitational acceleration
+        */
         void set_gravity_constant(double g);
 
         /**
@@ -293,8 +298,8 @@ namespace md::env {
 
         Boundary boundary;     ///< Boundary conditions of the environment.
         ParticleGrid grid;     ///< Grid of the environment.
+        ForceManager forces;   ///< Forces with which the particles interact.
 
-        Force force_func;     ///< Used force function in the environment.
         Dimension dimension;  ///< Dimension of the simulation
         double grid_constant; ///< Used grid Constant in the environment.
         bool initialized;     ///< Indicates whether the environment has been initialized.

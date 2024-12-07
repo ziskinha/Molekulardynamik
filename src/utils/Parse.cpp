@@ -188,27 +188,28 @@ namespace md::parse {
                 boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC, md::env::BoundaryNormal::TOP);
             }
 
-            if (simulation.get()->Forces().Force().get().type() == "lennardJones") {
-                args.env.set_force(env::LennardJones(simulation.get()->Forces().Force().get().arg1().get(),
-                                                     simulation.get()->Forces().Force().get().arg2().get()));
-                args.force = "lennardJones";
-                boundary.set_boundary_force(
-                    env::Boundary::LennardJonesForce(simulation.get()->Forces().Force().get().arg1().get(),
-                                                     simulation.get()->Forces().Force().get().arg2().get()));
-
-            } else if (simulation.get()->Forces().Force().get().type() == "inverseSquare") {
-                args.env.set_force(env::InverseSquare(simulation.get()->Forces().Force().get().arg1().get()));
-                args.force = "inverseSquare";
-                boundary.set_boundary_force(
-                    env::Boundary::InverseDistanceForce(simulation.get()->parameters().cutoff_radius(),
-                                                        simulation.get()->Forces().Force().get().arg1().get()));
-            } else if (simulation.get()->Forces().Force().get().type() == "HooksLaw") {
-                args.env.set_force(env::HookesLaw(simulation.get()->Forces().Force().get().arg1().get(),
-                                                  simulation.get()->Forces().Force().get().arg2().get()));
-                args.force = "HooksLaw";
-            } else {
-                args.force = "no force applied";
-            }
+            // TODO fix this
+            // if (simulation.get()->Forces().Force().get().type() == "lennardJones") {
+            //     args.env.set_force(env::LennardJones(simulation.get()->Forces().Force().get().arg1().get(),
+            //                                          simulation.get()->Forces().Force().get().arg2().get()));
+            //     args.force = "lennardJones";
+            //     boundary.set_boundary_force(
+            //         env::Boundary::LennardJonesForce(simulation.get()->Forces().Force().get().arg1().get(),
+            //                                          simulation.get()->Forces().Force().get().arg2().get()));
+            //
+            // } else if (simulation.get()->Forces().Force().get().type() == "inverseSquare") {
+            //     args.env.set_force(env::InverseSquare(simulation.get()->Forces().Force().get().arg1().get()));
+            //     args.force = "inverseSquare";
+            //     boundary.set_boundary_force(
+            //         env::Boundary::InverseDistanceForce(simulation.get()->parameters().cutoff_radius(),
+            //                                             simulation.get()->Forces().Force().get().arg1().get()));
+            // } else if (simulation.get()->Forces().Force().get().type() == "HooksLaw") {
+            //     args.env.set_force(env::HookesLaw(simulation.get()->Forces().Force().get().arg1().get(),
+            //                                       simulation.get()->Forces().Force().get().arg2().get()));
+            //     args.force = "HooksLaw";
+            // } else {
+            //     args.force = "no force applied";
+            // }
 
             args.env.set_boundary(boundary);
 
