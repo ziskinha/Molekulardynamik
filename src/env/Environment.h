@@ -140,6 +140,8 @@ namespace md::env {
         */
         void set_dimension(Dimension dim);
 
+        void set_gravity_constant(double g);
+
         /**
          * @brief Adds a single particle to the environment.
          * @param position Position of the particle.
@@ -249,6 +251,8 @@ namespace md::env {
          */
         void apply_boundary(Particle& particle);
 
+        vec3 gravity_force(const Particle& particle) const;
+
         /**
          * @brief Calculate temperature of the system
          */
@@ -294,5 +298,6 @@ namespace md::env {
         Dimension dimension;  ///< Dimension of the simulation
         double grid_constant; ///< Used grid Constant in the environment.
         bool initialized;     ///< Indicates whether the environment has been initialized.
+        double g_grav;
     };
 } // namespace md::env

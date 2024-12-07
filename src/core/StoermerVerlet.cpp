@@ -17,9 +17,6 @@ namespace md::Integrator {
         }
 
         for (auto & particle : env.particles(env::GridCell::BOUNDARY | env::GridCell::OUTSIDE)) {
-            if (particle.position[0] < 0 || particle.position[1] < 0 || particle.position[2] < 0) {
-                int i = 0;
-            }
             env.apply_boundary(particle);
         }
 
@@ -31,6 +28,11 @@ namespace md::Integrator {
                 p2->force = p2->force + new_F;
                 p1->force = p1->force - new_F;
             }
+        }
+
+        // apply gravity
+        for (auto& p : env.particles()) {
+            p.force = p.force + env.gravity_force(p);
         }
 
         // update velocities

@@ -52,7 +52,7 @@ namespace md::env {
     /// Environment Class Methods
     /// -----------------------------------------
     Environment::Environment()
-        : force_func(NoForce()), dimension(TWO), grid_constant(GRID_CONSTANT_AUTO), initialized(false) {}
+        : force_func(NoForce()), dimension(TWO), grid_constant(GRID_CONSTANT_AUTO), initialized(false), g_grav(0) {}
 
     /// -----------------------------------------
     ///  Methods for environment setup
@@ -76,6 +76,14 @@ namespace md::env {
         WARN_IF_INIT("set the dimension");
         dimension = dim;
         // TODO use dimension for initializing cuboid and sphere velocities
+    }
+
+    void Environment::set_gravity_constant(const double g) {
+        g_grav = g;
+    }
+
+    vec3 Environment::gravity_force(const Particle& particle) const {
+        return vec3{0, - particle.mass * g_grav, 0};
     }
 
     void Environment::add_particle(const vec3& position, const vec3& velocity, double mass, int type) {
@@ -131,9 +139,7 @@ namespace md::env {
         for (int x = -radius; x <= radius; ++x) {
             for (int y = -radius; y <= radius; ++y) {
                 for (int z = - radius; z <= radius; ++z) {
-                    if (dimension == 2 && z != 0) {
-                        continue;
-                    }
+                    if (dimension == 2 && z != 0) continue;
 
                     const vec3 current_pos = {x * width, y * width, z * width};
                     const double distance_to_origin = ArrayUtils::L2Norm(current_pos);

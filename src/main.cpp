@@ -50,10 +50,6 @@ int main(const int argc, char* argv[]) {
     env.add_particle({0.3,2.7,0}, {0,0,0}, 1, 1);
     env.add_particle({2.7,0.3,0}, {0,0,0}, 1, 1);
 
-    // env.add_particle({0.1,0.15,0}, {0,0.1,0}, 1, 1);
-    // env.add_particle({2.5,0.1,0}, {-0.1,0,0}, 1, 1);
-    // env.add_particle({0.2,2.6,0}, {0,-0.1,0}, 1, 1);
-
     env::Boundary boundary;
     boundary.extent = {3, 3, 1};
     boundary.origin = {0, 0, 0};
