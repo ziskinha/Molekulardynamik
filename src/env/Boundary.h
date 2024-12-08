@@ -55,6 +55,9 @@ namespace md::env {
             DEPTH    ///< Depth of the simulation space.
         };
 
+        /**
+         * @brief Enumeration of the faces of the boundary.
+         */
         enum Face {
             LEFT,
             RIGHT,
@@ -64,6 +67,13 @@ namespace md::env {
             BACK
        };
 
+        /**
+         * @brief Evaluates the corresponding face to a given face normal vector.
+         * @param normal The face normal vector.
+         * @return The corresponding "Face" value.
+         *
+         * @throws std::invalid_argument if the face normal vector is not valid (Program should never reach that point).
+         */
         static Face normal_to_face(const int3 & normal);
 
         /**

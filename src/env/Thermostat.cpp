@@ -4,9 +4,7 @@
 #include "utils/MaxwellBoltzmannDistribution.h"
 #include "env/Environment.h"
 
-#include <print>
-
-#include "../../build/_deps/spdlog-src/include/spdlog/spdlog.h"
+#include "io/Logger/Logger.h"
 
 namespace md::env {
     Thermostat::Thermostat(const double init_T, const double target_T, const double dT) :

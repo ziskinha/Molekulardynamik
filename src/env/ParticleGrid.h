@@ -108,11 +108,14 @@ namespace md::env {
      * @brief Structure representing a pair of linked grid cells
      */
     struct CellPair{
+        /**
+         * @brief Enumeration representing the periodicity, used for applying periodic boundary condition.
+         */
         enum Periodicity {
-            PERIODIC_NONE    = 0x0,
-            PERIODIC_X       = 0x1,
-            PERIODIC_Y       = 0x2,
-            PERIODIC_Z       = 0x4,
+            PERIODIC_NONE    = 0x0,  ///< No periodicity.
+            PERIODIC_X       = 0x1,  ///< Periodicity in the x-direction.
+            PERIODIC_Y       = 0x2,  ///< Periodicity in the y-direction.
+            PERIODIC_Z       = 0x4,  ///< Periodicity in the z-direction.
         };
 
         using ParticlePairIterator = utils::DualPairIterator<std::unordered_set<Particle*>>;
@@ -121,7 +124,7 @@ namespace md::env {
          * @brief Constructs a new GridCellPair of two grid cells.
          * @param cell1 The fist grid cell.
          * @param cell2 The second grid cell.
-         * @param periodicity
+         * @param periodicity The periodicity.
          */
         CellPair(GridCell& cell1, GridCell& cell2, Periodicity periodicity);
 
@@ -155,17 +158,35 @@ namespace md::env {
         GridCell& cell2;  ///< The second grid cell in the pair.
     };
 
+    /**
+     * @brief Enables bitwise OR operation for combining periodicity flags.
+     * @param lhs
+     * @param rhs
+     * @return The combined periodicity condition.
+     */
     inline CellPair::Periodicity operator|(const CellPair::Periodicity lhs, const CellPair::Periodicity rhs) {
         using T = std::underlying_type_t<CellPair::Periodicity>;
         return static_cast<CellPair::Periodicity>(static_cast<T>(lhs) | static_cast<T>(rhs));
     }
 
+    /**
+     * @brief Enables bitwise OR assignment for periodicity flags.
+     * @param lhs
+     * @param rhs
+     * @return A reference to the modified periodicity condition.
+     */
     inline CellPair::Periodicity& operator|=(CellPair::Periodicity &lhs, CellPair::Periodicity rhs) {
         using T = std::underlying_type_t<CellPair::Periodicity>;
         lhs = static_cast<CellPair::Periodicity>(static_cast<T>(lhs) | static_cast<T>(rhs));
         return lhs;
     }
 
+    /**
+     * @brief Enables bitwise AND operator for periodicity flags.
+     * @param lhs
+     * @param rhs
+     * @return The intersection of the periodicity conditions.
+     */
     inline CellPair::Periodicity operator&(const CellPair::Periodicity lhs, const CellPair::Periodicity rhs) {
         using T = std::underlying_type_t<CellPair::Periodicity>;
         return static_cast<CellPair::Periodicity>(static_cast<T>(lhs) & static_cast<T>(rhs));
