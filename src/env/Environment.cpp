@@ -83,7 +83,7 @@ namespace md::env {
     }
 
     vec3 Environment::gravity_force(const Particle& particle) const {
-        return vec3{0, - particle.mass * g_grav, 0};
+        return vec3{0, particle.mass * g_grav, 0};
     }
 
     void Environment::add_particle(const vec3& position, const vec3& velocity, double mass, int type) {

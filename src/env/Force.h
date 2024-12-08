@@ -3,6 +3,7 @@
 #include <functional>
 #include <limits>
 #include <utility>
+#include <variant>
 #include "Common.h"
 #include "utils/ArrayUtils.h"
 #include "Particle.h"
