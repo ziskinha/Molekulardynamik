@@ -34,7 +34,7 @@ namespace md::Integrator {
          * @param temp_adj_freq number of time steps between periodic temperature adjustments
          * @param write_freq The frequency with which the data is written to output.
          */
-        void simulate(double start_time, double end_time, double dt, unsigned int temp_adj_freq = MAX_UNS, unsigned int write_freq = 1000);
+        void simulate(double start_time, double end_time, double dt, unsigned int write_freq = 1000, unsigned int temp_adj_freq = MAX_UNS);
 
         /**
          * @brief Runs the simulation in benchmark mode. Benchmarking the overall runtime of the simulation.

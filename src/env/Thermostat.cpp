@@ -4,6 +4,9 @@
 #include "utils/MaxwellBoltzmannDistribution.h"
 #include "env/Environment.h"
 
+#include <print>
+
+#include "../../build/_deps/spdlog-src/include/spdlog/spdlog.h"
 
 namespace md::env {
     Thermostat::Thermostat(const double init_T, const double target_T, const double dT) :
@@ -30,6 +33,9 @@ namespace md::env {
         const double diff = target_temp - current_temp;
         const double new_temp = current_temp + std::clamp(diff, -max_temp_change, max_temp_change);
         const double beta = sqrt(new_temp/current_temp);
+
+        SPDLOG_DEBUG("current temp: {}, new temp: {}, beta {}", current_temp, new_temp, beta);
+
         if (new_temp == current_temp) return;
 
         for (auto & particle : env.particles(GridCell::INSIDE, Particle::ALIVE)) {

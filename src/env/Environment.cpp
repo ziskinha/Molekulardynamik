@@ -194,7 +194,7 @@ namespace md::env {
 
         forces.init();
         // check if grid constant is ok
-        if (grid_constant > 0 && grid_constant <= forces.cutoff()) {
+        if (grid_constant > 0 && grid_constant < forces.cutoff()) {
             SPDLOG_WARN(
                 "Grid constant is smaller than force cutoff. Will default to use GRID_CONSTANT_AUTO."
                 "Are you sure you setup the environment correctly?");

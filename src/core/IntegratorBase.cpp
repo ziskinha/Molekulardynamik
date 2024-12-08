@@ -66,7 +66,7 @@ namespace md::Integrator {
         : env(environment), thermostat(thermostat), temp_adjust_freq(0), writer(std::move(writer)) {}
 
     void IntegratorBase::simulate(const double start_time, const double end_time, const double dt,
-                                  const unsigned int temp_adj_freq, const unsigned int write_freq) {
+                                  const unsigned int write_freq, const unsigned int temp_adj_freq) {
         temp_adjust_freq = temp_adj_freq;
         int i = 0;
         const int total_steps = static_cast<int>((end_time - start_time) / dt);
