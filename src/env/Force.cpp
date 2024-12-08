@@ -79,8 +79,15 @@ namespace md::env {
         }
 
         for (size_t i = 0; i < types.size(); i++) {
-            for (size_t j = i + 1; j < types.size(); j++) {
-                forces[{i, j}] = mix_forces(force_types[i], force_types[j]);
+            for (size_t j = 0; j < types.size(); j++) {
+                auto force1 = force_types[static_cast<int>(i)];
+                auto force2 = force_types[static_cast<int>(j)];
+
+                double c1 = std::visit([](const auto& obj) -> int {return obj.cutoff;}, force1);
+                double c2 = std::visit([](const auto& obj) -> int {return obj.cutoff;}, force2);
+                cutoff_radius = std::max(cutoff_radius, std::max(c1, c2));
+
+                forces[{types[i], types[j]}] = mix_forces(force1, force2);
             }
         }
     }

@@ -41,11 +41,11 @@ int main(const int argc, char* argv[]) {
 
     args.duration = 20;
     args.dt = 0.0001;
-    args.write_freq = 1000;
+    args.write_freq = 100;
 
     env::Environment env;
     env.add_particle({0.3,0.3,0}, {0,0,0}, 1, 1);
-    env.add_particle({2.7,2.7,0}, {0,0,0}, 200, 1);
+    env.add_particle({2.7,2.7,0}, {0,0,0}, 200, 2);
     env.add_particle({0.3,2.7,0}, {0,0,0}, 1, 1);
     env.add_particle({2.7,0.3,0}, {0,0,0}, 1, 1);
 
@@ -61,6 +61,8 @@ int main(const int argc, char* argv[]) {
 
     env.set_boundary(boundary);
     env.set_force(env::LennardJones(5, 0.2, 1), 1);
+    env.set_force(env::LennardJones(1, 0.5, 1), 2);
+
     env.set_grid_constant(1);
 
     env.build();
