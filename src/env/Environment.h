@@ -71,11 +71,11 @@ namespace md::env {
          * @brief Constructs a SphereCreateInfo.
          * @param origin Coordinates of the center.
          * @param initial_v Initial velocity of all particles.
-         * @param thermal_v
+         * @param thermal_v Thermal velocity of the particles.
          * @param radius The radius in terms of the number of molecules along the radius.
          * @param width Distance between the particles.
          * @param mass The mass of the particles.
-         * @param dimension
+         * @param dimension Dimension of the sphere.
          * @param type The type of each particles (dafault: 0).
          */
         SphereCreateInfo(const vec3& origin, const vec3& initial_v, const double thermal_v, int radius, double width,
@@ -136,14 +136,14 @@ namespace md::env {
         void set_boundary(const Boundary& boundary);
 
         /**
-        * @brief Sets the dimension of the environment
+        * @brief Sets the dimension of the environment.
         * @param dim
         */
         void set_dimension(Dimension dim);
 
         /**
-        * @brief Set the gravitational force strength
-        * @param g gravitational acceleration
+        * @brief Set the gravitational force strength.
+        * @param g gravitational acceleration.
         */
         void set_gravity_constant(double g);
 
@@ -256,6 +256,11 @@ namespace md::env {
          */
         void apply_boundary(Particle& particle);
 
+        /**
+         * @brief Calculates the gravitational force acting on a given particle.
+         * @param particle The particle for which it is being calculated.
+         * @return The gravitational force acting on the particle.
+         */
         vec3 gravity_force(const Particle& particle) const;
 
         /**
@@ -263,6 +268,10 @@ namespace md::env {
          */
         double temperature() const;
 
+        /**
+         * @brief Returns the dimension of the environment.
+         * @return The dimension.
+         */
         int dim() const;
 
         /**
@@ -306,6 +315,6 @@ namespace md::env {
         Dimension dimension;  ///< Dimension of the simulation
         double grid_constant; ///< Used grid Constant in the environment.
         bool initialized;     ///< Indicates whether the environment has been initialized.
-        double g_grav;
+        double g_grav;        ///< Gravitational force strength.
     };
 } // namespace md::env
