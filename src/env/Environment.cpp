@@ -8,12 +8,12 @@
 #include "utils/ArrayUtils.h"
 #include "utils/MaxwellBoltzmannDistribution.h"
 
-#define WARN_IF_INIT(msg)                                                                                    \
-    do {                                                                                                     \
-        if (initialized) {                                                                                   \
-            SPDLOG_WARN("You are trying to {} in an initialized environment. Request will be ignored", msg); \
-            return;                                                                                          \
-        }                                                                                                    \
+#define WARN_IF_INIT(msg)                                                                                     \
+    do {                                                                                                      \
+        if (initialized) {                                                                                    \
+            SPDLOG_WARN("You are trying to {} in an initialized environment. Request will be ignored.", msg); \
+            return;                                                                                           \
+        }                                                                                                     \
     } while (0)
 
 namespace md::env {
@@ -165,7 +165,7 @@ namespace md::env {
             return;
         }
 
-        SPDLOG_INFO("Start building the environment ...");
+        SPDLOG_INFO("Start building the environment.");
 
         // check if boundary is ok
         if (boundary.extent[0] < 0 || boundary.extent[1] < 0 || boundary.extent[2] < 0) {

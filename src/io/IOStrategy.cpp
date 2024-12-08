@@ -1,9 +1,9 @@
 #include "IOStrategy.h"
 
-#include <iostream>
 #include <string>
 
 #include "io/input/txt/FileReader.h"
+#include "io/input/xml/XMLFileReader.h"
 #include "io/Output/VTKWriter.h"
 #include "io/Output/XYZWriter.h"
 #include "io/Logger/Logger.h"
@@ -44,11 +44,15 @@ namespace md::io {
         return std::make_unique<XYZWriter>(XYZWriter(outputFileBaseName + "_xyz", allow_delete));
     }
 
-    void read_file(const std::string& filename, env::Environment& environment) {
+    void read_file(const std::string& filename, ProgramArguments& args) {
         if (checkFormat(filename, ".txt")) {
-            return read_file_txt(filename, environment);
+            return read_file_txt(filename, args);
         }
-        // TODO: add XML FileReader in the future
-        throw std::invalid_argument("File format not supported");
+        else if (checkFormat(filename, ".xml")) {
+            return read_file_xml(filename, args);
+        }
+
+        SPDLOG_ERROR("File format not supported.");
+        exit(-1);
     }
 }  // namespace md::io

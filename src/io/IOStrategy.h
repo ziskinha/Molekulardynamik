@@ -5,6 +5,7 @@
 #include <string>
 
 #include "env/Environment.h"
+#include "io/Logger/Logger.h"
 
 #define OUTPUT_DIR "output"
 
@@ -14,6 +15,43 @@
 namespace md::io {
 
     enum class OutputFormat { VTK, XYZ };
+
+    /**
+     * @brief Struct used to return arguments read from the terminal.
+     */
+    struct ProgramArguments {
+        std::string output_baseName;
+        double duration;
+        double dt;
+        double cutoff_radius;
+        int write_freq;
+        env::Environment env;
+        std::string force;
+        bool benchmark;
+        bool override;
+        OutputFormat output_format;
+    };
+
+    /**
+     * @brief Logs the parsed program arguments.
+     * @param args
+     */
+    inline void log_arguments(const ProgramArguments& args) {
+        SPDLOG_INFO(
+                "Parsed Arguments:\n"
+                "       output name:   {}\n"
+                "       duration:      {}\n"
+                "       dt:            {}\n"
+                "       cutoff_radius: {}\n"
+                "       write_freq:    {}\n"
+                "       particles:     {}\n"
+                "       force:         {}\n"
+                "       benchmark:     {}\n"
+                "       override:      {}\n"
+                "       output_format: {}",
+                args.output_baseName, args.duration, args.dt, args.cutoff_radius, args.write_freq, args.env.size(), args.force, args.benchmark ? "true" : "false",
+                args.override ? "true" : "false", args.output_format == OutputFormat::XYZ ? "XYZ" : "VTK");
+    }
 
     /**
      * @brief Abstract base class for output writers.
@@ -59,7 +97,7 @@ namespace md::io {
     /**
      * @brief Reads an input file.
      * @param filename
-     * @param environment
+     * @param args
      */
-    void read_file(const std::string& filename, env::Environment& environment);
+    void read_file(const std::string& filename, ProgramArguments& args);
 }  // namespace md::io

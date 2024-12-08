@@ -13,7 +13,7 @@ using namespace md;
 // not particularly important implementation wise but useful as an example how to interface with our program
 
 inline void four_particle_lennard_jones_test() {
-    parse::ProgramArguments args;
+    io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
     args.override = true;
@@ -49,7 +49,7 @@ inline void four_particle_lennard_jones_test() {
 
 
 inline void four_particle_inverse_force_test() {
-    parse::ProgramArguments args;
+    io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
     args.override = true;
@@ -84,7 +84,7 @@ inline void four_particle_inverse_force_test() {
 }
 
 inline void four_particle_periodic_conditions_test() {
-    parse::ProgramArguments args;
+    io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
     args.override = true;
@@ -121,7 +121,7 @@ inline void four_particle_periodic_conditions_test() {
 }
 
 inline void four_particle_reflective_velocity_test() {
-    parse::ProgramArguments args;
+    io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
     args.override = true;
@@ -155,7 +155,7 @@ inline void four_particle_reflective_velocity_test() {
 
 
 inline void periodic_force_mixing_test() {
-    parse::ProgramArguments args;
+    io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
     args.override = true;
@@ -196,7 +196,7 @@ inline void periodic_force_mixing_test() {
 
 
 inline void thermostat_test() {
-    parse::ProgramArguments args;
+    io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
     args.override = true;
@@ -233,7 +233,7 @@ inline void thermostat_test() {
 
 // Task 2 on the worksheet 4
 inline void ws4_task2_small() {
-    parse::ProgramArguments args;
+    io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
     args.override = true;
@@ -282,7 +282,7 @@ inline void ws4_task2_small() {
 }
 
 inline void ws4_task2_big() {
-    parse::ProgramArguments args;
+    io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
     args.override = true;
