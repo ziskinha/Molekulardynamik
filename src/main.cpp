@@ -44,9 +44,8 @@ int main(const int argc, char* argv[]) {
     args.write_freq = 1000;
 
     env::Environment env;
-    env.set_dimension(env::TWO);
     env.add_particle({0.3,0.3,0}, {0,0,0}, 1, 1);
-    env.add_particle({2.7,2.7,0}, {0,0,0}, 200000, 1);
+    env.add_particle({2.7,2.7,0}, {0,0,0}, 200, 1);
     env.add_particle({0.3,2.7,0}, {0,0,0}, 1, 1);
     env.add_particle({2.7,0.3,0}, {0,0,0}, 1, 1);
 
@@ -58,6 +57,7 @@ int main(const int argc, char* argv[]) {
     boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::RIGHT);
     boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::TOP);
     boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::BOTTOM);
+
 
     env.set_boundary(boundary);
     env.set_force(env::LennardJones(5, 0.2, 1), 1);

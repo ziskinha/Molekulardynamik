@@ -103,7 +103,7 @@ namespace md::env {
         ForceManager();
 
         void init();
-        void add_force(const ForceType&, int particle_type);
+        void add_force(const ForceType& force, int particle_type);
         vec3 evaluate(const vec3 &diff, const Particle& p1, const Particle& p2) const;
         double cutoff() const;
 

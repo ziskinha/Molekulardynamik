@@ -93,7 +93,7 @@ namespace md::env {
     /**
      * @brief Number of dimensions for the simulation
      */
-    enum Dimension {
+    enum class Dimension {
         TWO = 2,
         THREE = 3,
         INFER = -1
@@ -123,8 +123,8 @@ namespace md::env {
         void set_grid_constant(double g);
 
         /**
-         * @brief Sets the force with which particles interact
-         * @param force The force function to be used.
+         * @brief Sets the force with which particles interact of a given type interact
+         * @param force The type force to be used.
          * @param particle_type
          */
         void set_force(const ForceType& force, int particle_type);
@@ -292,6 +292,9 @@ namespace md::env {
          * @return "true" if the particle's state matches the given state and type, "false" otherwise.
          */
         [[nodiscard]] bool filter_particles(const Particle& particle, Particle::State state, GridCell::Type type) const;
+
+        std::vector<CuboidCreateInfo> cuboids;
+        std::vector<SphereCreateInfo> spheres;
 
         // TODO replace vector with a vector wrapper that emulates a vector of fixed size
         std::vector<Particle> particle_storage; ///< vector with all particles

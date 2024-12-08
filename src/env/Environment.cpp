@@ -52,7 +52,7 @@ namespace md::env {
     /// Environment Class Methods
     /// -----------------------------------------
     Environment::Environment()
-        : dimension(TWO), grid_constant(GRID_CONSTANT_AUTO), initialized(false), g_grav(0) {}
+        : dimension(Dimension::INFER), grid_constant(GRID_CONSTANT_AUTO), initialized(false), g_grav(0) {}
 
     /// -----------------------------------------
     ///  Methods for environment setup
@@ -104,7 +104,7 @@ namespace md::env {
                                  const int type) {
         WARN_IF_INIT("add particles (cuboids)");
 
-        particle_storage.reserve(particle_storage.size() + num_particles[0] + num_particles[1] + num_particles[2]);
+        particle_storage.reserve(particle_storage.size() + num_particles[0] * num_particles[1] * num_particles[2]);
 
         for (unsigned int x = 0; x < num_particles[0]; ++x) {
             for (unsigned int y = 0; y < num_particles[1]; ++y) {
@@ -212,6 +212,18 @@ namespace md::env {
             SPDLOG_ERROR("Grid constant is negative. Grid constant should be chosen positive and at least the size of the force cutoff");
             throw std::invalid_argument("Grid constant is negative.");
         }
+
+        // infer dimensionality
+        if (dimension == Dimension::INFER) {
+            dimension = Dimension::TWO;
+            for (auto & p : particle_storage) {
+                if (p.position[3] != 0 || p.velocity[3] != 0) {
+                    dimension = Dimension::THREE;
+                    break;
+                }
+            }
+        }
+
         grid.build(boundary, grid_constant, particle_storage);
         initialized = true;
         SPDLOG_INFO("Environment successfully built.");
@@ -262,11 +274,11 @@ namespace md::env {
         for (auto & particle : particles(GridCell::INSIDE, Particle::ALIVE)) {
             energy += 0.5 * particle.mass * ArrayUtils::L2NormSquared(particle.velocity);
         }
-        return dimension * energy/3;
+        return dim() * energy/3;
     }
 
     int Environment::dim() const {
-        return dimension;
+        return static_cast<int>(dimension);
     }
 
 
