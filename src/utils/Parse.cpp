@@ -55,7 +55,7 @@ namespace md::parse {
         // check number of arguments
         // if -b set, expecting at least 2 arguments (filename, xml file)
         // else expecting 3 arguments (filename, xml file, output_format)
-        if ((flag_exists("-b") && parameters.size() < 1) || parameters.size() < 2) {
+        if ((flag_exists("-b") && parameters.empty()) || parameters.size() < 2) {
             RETURN_PARSE_ERROR(
                 fmt::format("Error: Not enough arguments provided. Received {} arguments.", parameters.size()));
         }
@@ -72,38 +72,36 @@ namespace md::parse {
             }
 
             auto simulation = simulation_(file, xml_schema::flags::dont_validate);
-            for (const auto& particle : simulation.get()->particles()) {
+            for (const auto& particle : simulation->particles()) {
                 args.env.add_particle({particle.x(), particle.y(), particle.z()},
                                       {particle.vel1(), particle.vel2(), particle.vel3()}, particle.mass(), 0);
             }
 
-            for (const auto& cuboid : simulation.get()->cuboids()) {
+            for (const auto& cuboid : simulation->cuboids()) {
                 args.env.add_cuboid({cuboid.x(), cuboid.y(), cuboid.z()}, {cuboid.vel1(), cuboid.vel2(), cuboid.vel3()},
                                     {40, 8, 1}, cuboid.thermal_v(), cuboid.width(), cuboid.mass(), cuboid.dimension(),
                                     0);
             }
 
-            for (const auto& sphere : simulation.get()->spheres()) {
+            for (const auto& sphere : simulation->spheres()) {
                 args.env.add_sphere({sphere.x(), sphere.y(), sphere.z()}, {sphere.vel1(), sphere.vel2(), sphere.vel3()},
                                     sphere.thermal_v(), sphere.radius(), sphere.width(), sphere.mass(),
                                     sphere.dimension(), 0);
             }
 
             args.output_baseName = static_cast<std::string>(simulation->output().baseName());
-            args.duration = simulation.get()->parameters().tEnd();
-            args.dt = simulation.get()->parameters().deltaT();
+            args.duration = simulation->parameters().tEnd();
+            args.dt = simulation->parameters().deltaT();
             std::string boundary_type;
 
             auto boundary_xml = simulation->Boundary();
 
             auto extract_boundary_type = [&](const std::string& type) -> env::BoundaryRule {
-                switch (type) {
-                    case "OUTFLOW": return env::BoundaryRule::OUTFLOW;
-                    case "VELOCITY_REFLECTION": return env::BoundaryRule::VELOCITY_REFLECTION;
-                    case "REPULSIVE_FORCE": return env::BoundaryRule::REPULSIVE_FORCE;
-                    case "PERIODIC": return env::BoundaryRule::PERIODIC;
-                    default: throw std::invalid_argument("Unknown boundary type");
-                }
+                if (type == "OUTFLOW") return env::BoundaryRule::OUTFLOW;
+                if (type == "VELOCITY_REFLECTION") return env::BoundaryRule::VELOCITY_REFLECTION;
+                if (type == "REPULSIVE_FORCE") return env::BoundaryRule::REPULSIVE_FORCE;
+                if (type == "PERIODIC") return env::BoundaryRule::PERIODIC;
+                throw std::invalid_argument("Unknown boundary type: " + type);
             };
 
             env::Boundary boundary;
@@ -232,9 +230,9 @@ namespace md::parse {
 
             args.env.set_boundary(boundary);
 
-            args.cutoff_radius = simulation.get()->parameters().cutoff_radius();
+            args.cutoff_radius = simulation->parameters().cutoff_radius();
 
-            args.write_freq = simulation.get()->output().writeFrequency();
+            args.write_freq = simulation->output().writeFrequency();
             file.close();
 
         } catch (const xml_schema::exception& e) {

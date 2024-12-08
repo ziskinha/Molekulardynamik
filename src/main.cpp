@@ -24,7 +24,7 @@ void run_mol_sim(const int argc, char* argv[]) {
     if (!args.benchmark) {
         simulator.simulate(0, args.duration, args.dt, args.write_freq);
     } else {
-        simulator.benchmark_simulate(0, args.duration, args.dt);
+        simulator.benchmark(0, args.duration, args.dt);
     }
     SPDLOG_INFO("Output written. Terminating...");
 }
