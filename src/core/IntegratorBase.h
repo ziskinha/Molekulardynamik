@@ -4,7 +4,7 @@
 #include "env/Environment.h"
 #include "env/Thermostat.h"
 #include "io/IOStrategy.h"
-#define MAX_UNS std::numeric_limits<unsigned int>::max()
+#define NEVER std::numeric_limits<unsigned int>::max()
 
 namespace md::Integrator {
     /**
@@ -34,33 +34,35 @@ namespace md::Integrator {
          * @param temp_adj_freq number of time steps between periodic temperature adjustments
          * @param write_freq The frequency with which the data is written to output.
          */
-        void simulate(double start_time, double end_time, double dt, unsigned int write_freq = 1000, unsigned int temp_adj_freq = MAX_UNS);
+        void simulate(double start_time, double end_time, double dt, unsigned int write_freq = 1000, unsigned int temp_adj_freq = NEVER);
 
-        /**
-         * @brief Runs the simulation in benchmark mode. Benchmarking the overall runtime of the simulation.
-         * @param start_time
-         * @param end_time
-         * @param dt
-         * @param repetitions
-         */
-        void benchmark_overall(double start_time, double end_time, double dt,  int repetitions);
+        void benchmark(double start_time, double end_time, double dt, unsigned int temp_adj_freq = NEVER);
 
-        /**
-         * @brief Runs the simulation in benchmark mode. Benchmarking the runtime per iteration.
-         * @param start_time
-         * @param end_time
-         * @param dt
-         * @param repetitions
-         */
-        void benchmark_iterations(double start_time, double end_time, double dt, int repetitions);
-
-        /**
-         * @brief Runs the simulation in benchmark mode,
-         * @param start_time
-         * @param end_time
-         * @param dt
-         */
-        void benchmark_simulate(double start_time, double end_time, double dt);
+        // /**
+        //  * @brief Runs the simulation in benchmark mode. Benchmarking the overall runtime of the simulation.
+        //  * @param start_time
+        //  * @param end_time
+        //  * @param dt
+        //  * @param repetitions
+        //  */
+        // void benchmark_overall(double start_time, double end_time, double dt,  int repetitions);
+        //
+        // /**
+        //  * @brief Runs the simulation in benchmark mode. Benchmarking the runtime per iteration.
+        //  * @param start_time
+        //  * @param end_time
+        //  * @param dt
+        //  * @param repetitions
+        //  */
+        // void benchmark_iterations(double start_time, double end_time, double dt, int repetitions);
+        //
+        // /**
+        //  * @brief Runs the simulation in benchmark mode,
+        //  * @param start_time
+        //  * @param end_time
+        //  * @param dt
+        //  */
+        // void benchmark_simulate(double start_time, double end_time, double dt);
 
        protected:
         /**
