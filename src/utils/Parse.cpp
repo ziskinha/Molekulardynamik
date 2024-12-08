@@ -89,104 +89,123 @@ namespace md::parse {
                                     sphere.dimension(), 0);
             }
 
-            args.output_baseName = simulation.get()->output().baseName();
+            args.output_baseName = static_cast<std::string>(simulation->output().baseName());
             args.duration = simulation.get()->parameters().tEnd();
             args.dt = simulation.get()->parameters().deltaT();
-            std::string types;
+            std::string boundary_type;
+
+            auto boundary_xml = simulation->Boundary();
+
+            auto extract_boundary_type = [&](const std::string& type) -> env::BoundaryRule {
+                switch (type) {
+                    case "OUTFLOW": return env::BoundaryRule::OUTFLOW;
+                    case "VELOCITY_REFLECTION": return env::BoundaryRule::VELOCITY_REFLECTION;
+                    case "REPULSIVE_FORCE": return env::BoundaryRule::REPULSIVE_FORCE;
+                    case "PERIODIC": return env::BoundaryRule::PERIODIC;
+                    default: throw std::invalid_argument("Unknown boundary type");
+                }
+            };
+
             env::Boundary boundary;
-            boundary.extent = {simulation.get()->Boundary().EXTENT_WIDTH().get(),
-                               simulation.get()->Boundary().EXTENT_HEIGHT().get(),
-                               simulation.get()->Boundary().EXTENT_DEPTH().get()};
-            boundary.origin = {simulation.get()->Boundary().CENTER_BOUNDARY_ORIGINX().get(),
-                               simulation.get()->Boundary().CENTER_BOUNDARY_ORIGINY().get(),
-                               simulation.get()->Boundary().CENTER_BOUNDARY_ORIGINZ().get()};
-            types = simulation.get()->Boundary().typeFRONT();
+            boundary.extent = {boundary_xml.EXTENT_WIDTH().get(),
+                               boundary_xml.EXTENT_HEIGHT().get(),
+                               boundary_xml.EXTENT_DEPTH().get()};
+            boundary.origin = {boundary_xml.CENTER_BOUNDARY_ORIGINX().get(),
+                               boundary_xml.CENTER_BOUNDARY_ORIGINY().get(),
+                               boundary_xml.CENTER_BOUNDARY_ORIGINZ().get()};
 
-            if (types == "OUTFLOW") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::FRONT);
+            boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeFRONT()), env::BoundaryNormal::FRONT);
+            boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeBACK()), env::BoundaryNormal::BACK);
+            boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeRIGHT()), env::BoundaryNormal::RIGHT);
+            boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeTOP()), env::BoundaryNormal::TOP);
+            boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeLEFT()), env::BoundaryNormal::LEFT);
+            boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeBOTTOM()), env::BoundaryNormal::BOTTOM);
 
-            } else if (types == "VELOCITY_REFLECTION") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION, md::env::BoundaryNormal::FRONT);
-
-            } else if (types == "REPULSIVE_FORCE") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE, md::env::BoundaryNormal::FRONT);
-
-            } else {
-                boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC, md::env::BoundaryNormal::FRONT);
-            }
-
-            types = simulation.get()->Boundary().typeBACK();
-
-            if (types == "OUTFLOW") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::BACK);
-
-            } else if (types == "VELOCITY_REFLECTION") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION, md::env::BoundaryNormal::BACK);
-
-            } else if (types == "REPULSIVE_FORCE") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE, md::env::BoundaryNormal::BACK);
-
-            } else {
-                boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC, md::env::BoundaryNormal::BACK);
-            }
-
-            types = simulation.get()->Boundary().typeBOTTOM();
-            if (types == "OUTFLOW") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::BOTTOM);
-
-            } else if (types == "VELOCITY_REFLECTION") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION, md::env::BoundaryNormal::BOTTOM);
-
-            } else if (types == "REPULSIVE_FORCE") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE, md::env::BoundaryNormal::BOTTOM);
-
-            } else {
-                boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC, md::env::BoundaryNormal::BOTTOM);
-            }
-
-            types = simulation.get()->Boundary().typeLEFT();
-
-            if (types == "OUTFLOW") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::LEFT);
-
-            } else if (types == "VELOCITY_REFLECTION") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION, md::env::BoundaryNormal::LEFT);
-
-            } else if (types == "REPULSIVE_FORCE") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE, md::env::BoundaryNormal::LEFT);
-
-            } else {
-                boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC, md::env::BoundaryNormal::LEFT);
-            }
-
-            types = simulation.get()->Boundary().typeRIGHT();
-            if (types == "OUTFLOW") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::RIGHT);
-
-            } else if (types == "VELOCITY_REFLECTION") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION, md::env::BoundaryNormal::RIGHT);
-
-            } else if (types == "REPULSIVE_FORCE") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE, md::env::BoundaryNormal::RIGHT);
-
-            } else {
-                boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC, md::env::BoundaryNormal::RIGHT);
-            }
-
-            types = simulation.get()->Boundary().typeTOP();
-
-            if (types == "OUTFLOW") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::TOP);
-
-            } else if (types == "VELOCITY_REFLECTION") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION, md::env::BoundaryNormal::TOP);
-
-            } else if (types == "REPULSIVE_FORCE") {
-                boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE, md::env::BoundaryNormal::TOP);
-
-            } else {
-                boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC, md::env::BoundaryNormal::TOP);
-            }
+            // if (types == "OUTFLOW") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::FRONT);
+            //
+            // } else if (types == "VELOCITY_REFLECTION") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION, md::env::BoundaryNormal::FRONT);
+            //
+            // } else if (types == "REPULSIVE_FORCE") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE, md::env::BoundaryNormal::FRONT);
+            //
+            // } else {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC, md::env::BoundaryNormal::FRONT);
+            // }
+            //
+            // types = simulation.get()->Boundary().typeBACK();
+            //
+            // if (types == "OUTFLOW") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::BACK);
+            //
+            // } else if (types == "VELOCITY_REFLECTION") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION, md::env::BoundaryNormal::BACK);
+            //
+            // } else if (types == "REPULSIVE_FORCE") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE, md::env::BoundaryNormal::BACK);
+            //
+            // } else {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC, md::env::BoundaryNormal::BACK);
+            // }
+            //
+            // types = simulation.get()->Boundary().typeBOTTOM();
+            // if (types == "OUTFLOW") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::BOTTOM);
+            //
+            // } else if (types == "VELOCITY_REFLECTION") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION, md::env::BoundaryNormal::BOTTOM);
+            //
+            // } else if (types == "REPULSIVE_FORCE") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE, md::env::BoundaryNormal::BOTTOM);
+            //
+            // } else {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC, md::env::BoundaryNormal::BOTTOM);
+            // }
+            //
+            // types = simulation.get()->Boundary().typeLEFT();
+            //
+            // if (types == "OUTFLOW") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::LEFT);
+            //
+            // } else if (types == "VELOCITY_REFLECTION") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION, md::env::BoundaryNormal::LEFT);
+            //
+            // } else if (types == "REPULSIVE_FORCE") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE, md::env::BoundaryNormal::LEFT);
+            //
+            // } else {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC, md::env::BoundaryNormal::LEFT);
+            // }
+            //
+            // types = simulation.get()->Boundary().typeRIGHT();
+            // if (types == "OUTFLOW") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::RIGHT);
+            //
+            // } else if (types == "VELOCITY_REFLECTION") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION, md::env::BoundaryNormal::RIGHT);
+            //
+            // } else if (types == "REPULSIVE_FORCE") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE, md::env::BoundaryNormal::RIGHT);
+            //
+            // } else {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC, md::env::BoundaryNormal::RIGHT);
+            // }
+            //
+            // types = simulation.get()->Boundary().typeTOP();
+            //
+            // if (types == "OUTFLOW") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::TOP);
+            //
+            // } else if (types == "VELOCITY_REFLECTION") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION, md::env::BoundaryNormal::TOP);
+            //
+            // } else if (types == "REPULSIVE_FORCE") {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::REPULSIVE_FORCE, md::env::BoundaryNormal::TOP);
+            //
+            // } else {
+            //     boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC, md::env::BoundaryNormal::TOP);
+            // }
 
             // TODO fix this
             // if (simulation.get()->Forces().Force().get().type() == "lennardJones") {
