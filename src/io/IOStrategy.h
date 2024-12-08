@@ -50,6 +50,7 @@ namespace md::io {
 
     /**
      * @brief Factory function to create an output writer.
+     * @param outputFileBaseName
      * @param output_format A boolean flag indicating whether to use the VTK output format or XYZ.
      * @param allow_delete
      * @return A pointer to an OutputWriter object.

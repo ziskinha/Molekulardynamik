@@ -6,12 +6,14 @@
 #include "io/Logger/Logger.h"
 #include "utils/ArrayUtils.h"
 
+#include <print>
+
 namespace md::Integrator {
 
     void StoermerVerlet::simulation_step(unsigned step, const double dt ) {
         // update position
         for (auto& p : env.particles()) {
-            p.update_position(dt * p.velocity + pow(dt, 2) / (2 * p.mass) * p.old_force);
+            p.update_position(dt * p.velocity + dt * dt / (2 * p.mass) * p.force);
             p.update_grid();
             p.reset_force();
         }

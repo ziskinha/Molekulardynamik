@@ -167,9 +167,9 @@ inline void periodic_force_mixing_test() {
 
     env::Environment env;
     env.add_particle({0.3,0.3,0}, {0,0,0}, 1, 1);
-    env.add_particle({2.7,2.7,0}, {0,0,0}, 200, 2);
-    env.add_particle({0.3,2.7,0}, {0,0,0}, 1, 1);
-    env.add_particle({2.7,0.3,0}, {0,0,0}, 1, 1);
+    env.add_particle({2.7,2.7,0}, {0,0,0}, 200, 4);
+    env.add_particle({0.3,2.7,0}, {0,0,0}, 1, 2);
+    env.add_particle({2.7,0.3,0}, {0,0,0}, 1, 3);
 
     env::Boundary boundary;
     boundary.extent = {3, 3, 1};
@@ -183,7 +183,9 @@ inline void periodic_force_mixing_test() {
 
     env.set_boundary(boundary);
     env.set_force(env::LennardJones(5, 0.2, 1), 1);
-    env.set_force(env::LennardJones(1, 0.5, 1), 2);
+    env.set_force(env::LennardJones(5, 0.2, 1), 2);
+    env.set_force(env::LennardJones(5, 0.2, 1), 3);
+    env.set_force(env::LennardJones(1, 0.5, 1), 4);
 
     env.set_grid_constant(1);
 
