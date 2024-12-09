@@ -275,12 +275,12 @@ inline void ws4_task2_small() {
     env.set_gravity_constant(-12.44);
     env.build();
 
-    env::Thermostat thermostat(40, -1, 1000);
+    env::Thermostat thermostat(40, 25, 0.0005);
     thermostat.set_initial_temperature(env);
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
     Integrator::StoermerVerlet simulator(env, std::move(writer), thermostat);
-    simulator.simulate(0, args.duration, args.dt, args.write_freq, args.write_freq);
+    simulator.simulate(0, args.duration, args.dt, args.write_freq, 1000);
 }
 
 inline void ws4_task2_big() {
@@ -322,10 +322,10 @@ inline void ws4_task2_big() {
     env.set_gravity_constant(-12.44);
     env.build();
 
-    env::Thermostat thermostat(40, -1, 1000);
+    env::Thermostat thermostat(40, 25, 0.0005);
     thermostat.set_initial_temperature(env);
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
     Integrator::StoermerVerlet simulator(env, std::move(writer), thermostat);
-    simulator.simulate(0, args.duration, args.dt, args.write_freq, args.write_freq);
+    simulator.simulate(0, args.duration, args.dt, args.write_freq, 1000);
 }
