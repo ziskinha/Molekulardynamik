@@ -34,7 +34,7 @@ namespace md::env {
          * @param mass The initial mass of the particle.
          * @param type The type of the particle.
          */
-        Particle(size_t id, ParticleGrid& grid, const vec3& position, const vec3& velocity, double mass, int type);
+        Particle(size_t id, ParticleGrid& grid, const vec3& position, const vec3& velocity, double mass, int type, vec3 force);
 
         /**
          * @brief Copy constructor for Particle.

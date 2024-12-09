@@ -9,7 +9,7 @@
 
 
 #if SPDLOG_ACTIVE_LEVEL == SPDLOG_LEVEL_INFO
-#define SHOW_PROGRESS(current, total)                                                         \
+#define SHOW_PROGRESS(current, total)                                                      \
  do {                                                                                      \
      constexpr int bar_width = 50;                                                         \
      const float progress = static_cast<float>(current) / (total);                         \
@@ -45,6 +45,7 @@ namespace md::Integrator {
 
     void IntegratorBase::simulate(const double start_time, const double end_time, const double dt,
                                   const unsigned int write_freq, const unsigned int temp_adj_freq) {
+        auto checkpoint_writer = io::create_checkpoint_writer();
         temp_adjust_freq = temp_adj_freq;
         int step = 0;
         const int total_steps = static_cast<int>((end_time - start_time) / dt);
@@ -55,6 +56,7 @@ namespace md::Integrator {
             if (step % write_freq == 0 && writer) {
                 SPDLOG_DEBUG("Plotting particles @ iteration {}, time {}", step, t);
                 writer->plot_particles(env, step);
+                checkpoint_writer->write_checkpoint_file(env, step);
             }
             SHOW_PROGRESS(step, total_steps);
         }

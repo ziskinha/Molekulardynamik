@@ -1,8 +1,7 @@
-#include "IOStrategy.h"
-
 #include <string>
 
-#include "io/input/txt/FileReader.h"
+#include "IOStrategy.h"
+#include "io/input/txt/TXTFileReader.h"
 #include "io/input/xml/XMLFileReader.h"
 #include "io/Output/VTKWriter.h"
 #include "io/Output/XYZWriter.h"
@@ -42,6 +41,10 @@ namespace md::io {
             return std::make_unique<VTKWriter>(VTKWriter(outputFileBaseName + "_vtk", allow_delete));
         }
         return std::make_unique<XYZWriter>(XYZWriter(outputFileBaseName + "_xyz", allow_delete));
+    }
+
+    std::unique_ptr<CheckpointWriter> create_checkpoint_writer() {
+        return std::make_unique<CheckpointWriter>(CheckpointWriter());
     }
 
     void read_file(const std::string& filename, ProgramArguments& args) {

@@ -6,6 +6,7 @@
 
 #include "env/Environment.h"
 #include "io/Logger/Logger.h"
+#include "io/Output/CheckpointWriter.h"
 
 #define OUTPUT_DIR "output"
 
@@ -45,11 +46,10 @@ namespace md::io {
                 "       cutoff_radius: {}\n"
                 "       write_freq:    {}\n"
                 "       particles:     {}\n"
-                "       force:         {}\n"
                 "       benchmark:     {}\n"
                 "       override:      {}\n"
                 "       output_format: {}",
-                args.output_baseName, args.duration, args.dt, args.cutoff_radius, args.write_freq, args.env.size(), args.force, args.benchmark ? "true" : "false",
+                args.output_baseName, args.duration, args.dt, args.cutoff_radius, args.write_freq, args.env.size(), args.benchmark ? "true" : "false",
                 args.override ? "true" : "false", args.output_format == OutputFormat::XYZ ? "XYZ" : "VTK");
     }
 
@@ -93,6 +93,8 @@ namespace md::io {
      * @return A pointer to an OutputWriter object.
      */
     std::unique_ptr<OutputWriterBase> create_writer(const std::string& outputFileBaseName, OutputFormat output_format, bool allow_delete);
+
+    std::unique_ptr<CheckpointWriter> create_checkpoint_writer();
 
     /**
      * @brief Reads an input file.

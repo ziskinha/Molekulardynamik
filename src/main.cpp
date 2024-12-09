@@ -16,13 +16,14 @@ void run_mol_sim(const int argc, char* argv[]) {
         default: ;
     };
 
-    auto writer = create_writer(args.output_baseName, args.output_format, args.override);
+    auto writer = io::create_writer(args.output_baseName, args.output_format, args.override);
     Integrator::StoermerVerlet simulator(args.env, std::move(writer));
     if (!args.benchmark) {
         simulator.simulate(0, args.duration, args.dt, args.write_freq);
     } else {
         simulator.benchmark(0, args.duration, args.dt);
     }
+
     SPDLOG_INFO("Output written. Terminating...");
 }
 

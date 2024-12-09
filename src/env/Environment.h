@@ -154,7 +154,8 @@ namespace md::env {
          * @param mass Mass of the particle.
          * @param type Type of the particle.
          */
-        void add_particle(const vec3& position, const vec3& velocity, double mass, int type = 0);
+        void add_particle(const vec3& position, const vec3& velocity, double mass, int type = 0,
+                          const vec3& force = {0, 0, 0});
 
         /**
          * @brief Adds multiple particles to the environment.
@@ -264,7 +265,7 @@ namespace md::env {
         vec3 gravity_force(const Particle& particle) const;
 
         /**
-         * @brief Calculate temperature of the system
+         * @brief Calculate temperature of the system.
          */
         double temperature() const;
 

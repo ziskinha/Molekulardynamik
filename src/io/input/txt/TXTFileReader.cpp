@@ -1,4 +1,4 @@
-#include "FileReader.h"
+#include "TXTFileReader.h"
 
 #include <algorithm>
 #include <cctype>
@@ -34,31 +34,39 @@ namespace md::io {
         ltrim(s);
     }
 
+    std::vector<double> parse_values(const std::string& line, size_t expected_size) {
+        std::istringstream data_stream(line);
+        std::vector<double> vals;
+        double num;
+        while (data_stream >> num) {
+            vals.push_back(num);
+        }
+        if (vals.size() < expected_size) {
+            SPDLOG_ERROR("Not enough numbers in line: {}", line);
+            exit(-1);
+        }
+        return vals;
+    }
+
     /// -----------------------------------------
     /// \brief Parse article information
     /// -----------------------------------------
     void parse_particle(const std::string& line, Environment& env) {
-        SPDLOG_INFO("Reading Particle:    {}", line);
-        std::istringstream data_stream(line);
-        std::vector<double> vals;
-        double num;
+        SPDLOG_DEBUG("Reading Particle:    {}", line);
 
-        while (data_stream >> num) {
-            vals.push_back(num);
-        }
-
-        if (vals.size() < 7) {
-            SPDLOG_ERROR("Not enough numbers in line: {}", line);
-            exit(-1);
-        }
+        // Minimum required values: 3 (origin) + 3 (velocity) + 1 (mass) + 1 (type) + optional 3 (force)
+        auto vals = parse_values(line, 8);
 
         vec3 origin = {vals[0], vals[1], vals[2]};
         vec3 init_v = {vals[3], vals[4], vals[5]};
         double mass = vals[6];
-        int type = 0;
-        if (vals.size() == 7) {
-            type = static_cast<int>(vals[7]);
+        int type = static_cast<int>(vals[7]);
+
+        if (vals.size() == 11) {
+            vec3 force = {vals[8], vals[9], vals[10]};
+            env.add_particle({origin[0], origin[1], origin[2]}, {init_v[0], init_v[1], init_v[2]}, mass, type, force);
         }
+        else env.add_particle({origin[0], origin[1], origin[2]}, {init_v[0], init_v[1], init_v[2]}, mass, type);
 
         SPDLOG_DEBUG(
             "Parsed Particle:\n"
@@ -67,8 +75,6 @@ namespace md::io {
             "       Mass:             {}\n"
             "       Type:             {}",
             origin[0], origin[1], origin[2], init_v[0], init_v[1], init_v[2], mass, type);
-
-        env.add_particle({origin[0], origin[1], origin[2]}, {init_v[0], init_v[1], init_v[2]}, mass, type);
     }
 
     /// -----------------------------------------
@@ -77,19 +83,8 @@ namespace md::io {
     void parse_cuboid(const std::string& line, Environment& environment) {
         SPDLOG_DEBUG("Reading Cuboid:     {}", line);
 
-        std::istringstream data_stream(line);
-        std::vector<double> vals;
-        double num;
-
-        while (data_stream >> num) {
-            vals.push_back(num);
-        }
-
         // Minimum required values: 3 (x) + 3 (v) + 3 (#particles) + 1 (width) + 1 (mass) + 1 (thermal_v) + 1 (dim)
-        if (vals.size() < 13) {
-            SPDLOG_ERROR("Not enough numbers in line: {}", line);
-            exit(-1);
-        }
+        auto vals = parse_values(line, 13);
 
         const vec3 origin = {vals[0], vals[1], vals[2]};
         const vec3 init_v = {vals[3], vals[4], vals[5]};
@@ -104,10 +99,8 @@ namespace md::io {
             SPDLOG_ERROR("Invalid dimension parameter {}", line);
         }
 
-        int type = 0;
-        if (vals.size() == 14) {
-            type = static_cast<int>(vals[13]);
-        }
+        int type = vals.size() == 14 ? static_cast<int>(vals[13]) : 0;
+        environment.add_cuboid(origin, init_v, num_particles, thermal_v, width, mass, dimension, type);
 
         SPDLOG_DEBUG(
             "Parsed Cuboid:\n"
@@ -121,8 +114,6 @@ namespace md::io {
             "       Type:                {}",
             origin[0], origin[1], origin[2], init_v[0], init_v[1], init_v[2], num_particles[0], num_particles[1],
             num_particles[2], width, mass, thermal_v, dimension, type);
-
-        environment.add_cuboid(origin, init_v, num_particles, thermal_v, width, mass, dimension, type);
     }
 
     /// -----------------------------------------
@@ -131,19 +122,8 @@ namespace md::io {
     void parse_sphere(const std::string& line, Environment& environment) {
         SPDLOG_DEBUG("Reading Sphere:     {}", line);
 
-        std::istringstream data_stream(line);
-        std::vector<double> vals;
-        double num;
-
-        while (data_stream >> num) {
-            vals.push_back(num);
-        }
-
         // Minimum required values: 3 (x) + 3 (v) + 1 (radius) + 1 (width) + 1 (mass) + 1 (thermal_v) + 1 (dim)
-        if (vals.size() < 11) {
-            SPDLOG_ERROR("Not enough numbers in line: {}", line);
-            exit(-1);
-        }
+        auto vals = parse_values(line, 11);
 
         const vec3 origin = {vals[0], vals[1], vals[2]};
         const vec3 init_v = {vals[3], vals[4], vals[5]};
@@ -157,10 +137,8 @@ namespace md::io {
             SPDLOG_ERROR("Invalid dimension parameter {}", line);
         }
 
-        int type = 0;
-        if (vals.size() == 12) {
-            type = static_cast<int>(vals[11]);
-        }
+        int type = vals.size() == 12 ? type = static_cast<int>(vals[11]) : 0;
+        environment.add_sphere(origin, init_v, thermal_v, (int) radius, width, mass, dimension, type);
 
         SPDLOG_DEBUG(
                 "Parsed Sphere:\n"
@@ -173,8 +151,6 @@ namespace md::io {
                 "       Dimension:           {}\n"
                 "       Type:                {}",
                 origin[0], origin[1], origin[2], init_v[0], init_v[1], init_v[2], radius, width, mass, thermal_v, dimension, type);
-
-        environment.add_sphere(origin, init_v, thermal_v, (int) radius, width, mass, dimension, type);
     }
 
     /// -----------------------------------------
@@ -203,10 +179,10 @@ namespace md::io {
         try {
             if (force_name == "lennard jones") {
                 force = LennardJones(vals[0], vals[1], args.cutoff_radius);
-                SPDLOG_INFO("For Particle Type {} using Lennard Jones with parameters: epsilon={}, sigma={}, cutoff_radius={}", vals[2], vals[0], vals[1], args.cutoff_radius);
+                SPDLOG_INFO("Force - For Particle Type {} using Lennard Jones with parameters: epsilon={}, sigma={}, cutoff_radius={}", vals[2], vals[0], vals[1], args.cutoff_radius);
             } else if (force_name == "inverse square") {
                 force = InverseSquare(vals[0], vals[1]);
-                SPDLOG_INFO("For Particle Type {} using inverse square force with parameter: pre_factor={}", vals[1], vals[0]);
+                SPDLOG_INFO("Force - For Particle Type {} using inverse square force with parameter: pre_factor={}", vals[1], vals[0]);
             }
         } catch (std::out_of_range& e) {
             SPDLOG_ERROR("Parameter error in force parsing: {}. Line: {}", e.what(), line);
@@ -221,19 +197,8 @@ namespace md::io {
     void parse_environment(const std::string& line, Environment& env) {
         SPDLOG_DEBUG("Reading Boundary:     {}", line);
 
-        std::istringstream data_stream(line);
-        std::vector<double> vals;
-        double num;
-
-        while (data_stream >> num) {
-            vals.push_back(num);
-        }
-
         // Minimum required values: 3 (origin) + 3 (extent) + 1 (grid_constant) + 6 (boundary conds)
-        if (vals.size() < 13) {
-            SPDLOG_ERROR("Not enough numbers in line: {}");
-            exit(-1);
-        }
+        auto vals = parse_values(line, 13);
 
         env::Boundary boundary;
         boundary.origin = {vals[0], vals[1], vals[2]};
@@ -242,7 +207,7 @@ namespace md::io {
         env.set_grid_constant(vals[6]);
         env.set_gravity_constant(vals[7]);
 
-        SPDLOG_INFO("Environment - Boundary origin set at: [{}, {}, {}]", vals[0], vals[1], vals[2]);
+        SPDLOG_INFO("Environment - Boundary origin set to: [{}, {}, {}]", vals[0], vals[1], vals[2]);
         SPDLOG_INFO("Environment - Boundary extent set to: [{}, {}, {}]", vals[3], vals[4], vals[5]);
         SPDLOG_INFO("Environment - Grid constant set to: {}", vals[6]);
         SPDLOG_INFO("Environment - Gravity constant set to: {}", vals[7]);
@@ -266,23 +231,12 @@ namespace md::io {
     void parse_thermostats(const std::string& line, Environment& env) {
         SPDLOG_DEBUG("Reading Thermostats:     {}", line);
 
-        std::istringstream data_stream(line);
-        std::vector<double> vals;
-        double num;
-
-        while (data_stream >> num) {
-            vals.push_back(num);
-        }
-
         // Minimum required values: 1 (T_init) + 1 (n_thermos) + 1 (T_target) + 1 (delta_T)
-        if (vals.size() < 4) {
-            SPDLOG_ERROR("Not enough numbers in line: {}");
-            exit(-1);
-        }
+        auto vals = parse_values(line, 4);
 
         env::Thermostat thermostat(vals[0], vals[2], vals[3]);
         thermostat.set_initial_temperature(env);
-        SPDLOG_INFO("Thermostat: Initial temperature: {}, n_thermostat: {}, Target temperature: {}, delta T: {}",
+        SPDLOG_INFO("Thermostat - Initial temperature: {}, n_thermostat: {}, Target temperature: {}, delta T: {}",
                     vals[0], vals[1], vals[2], vals[3]);
     }
 
