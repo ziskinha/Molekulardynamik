@@ -272,9 +272,9 @@ namespace md::env {
     double Environment::temperature() const {
         double energy = 0;
         for (auto & particle : particles(GridCell::INSIDE, Particle::ALIVE)) {
-            energy += 0.5 * particle.mass * ArrayUtils::L2NormSquared(particle.velocity);
+            energy +=  particle.mass * ArrayUtils::L2NormSquared(particle.velocity);
         }
-        return dim() * energy/3;
+        return energy/static_cast<double>(dim()*size());
     }
 
     int Environment::dim() const {
