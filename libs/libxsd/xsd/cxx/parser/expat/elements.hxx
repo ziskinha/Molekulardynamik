@@ -187,7 +187,7 @@ namespace xsd
                  xml::error_handler<C>&);
 
         public:
-          // Parse a chunk of input. You can call these functions multiple
+          // Parse a chunk of Input. You can call these functions multiple
           // times with the last call having the last argument true.
           //
           void

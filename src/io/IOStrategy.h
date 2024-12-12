@@ -26,6 +26,7 @@ namespace md::io {
         double dt;
         double cutoff_radius;
         int write_freq;
+        unsigned int temp_adj_freq = std::numeric_limits<unsigned int>::max();
         env::Environment env;
         std::string force;
         bool benchmark;
@@ -97,7 +98,7 @@ namespace md::io {
     std::unique_ptr<CheckpointWriter> create_checkpoint_writer();
 
     /**
-     * @brief Reads an input file.
+     * @brief Reads an Input file.
      * @param filename
      * @param args
      */

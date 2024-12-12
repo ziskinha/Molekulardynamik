@@ -62,19 +62,21 @@ namespace md::io {
         double mass = vals[6];
         int type = static_cast<int>(vals[7]);
 
+        vec3 force = {0, 0, 0};
         if (vals.size() == 11) {
-            vec3 force = {vals[8], vals[9], vals[10]};
-            env.add_particle({origin[0], origin[1], origin[2]}, {init_v[0], init_v[1], init_v[2]}, mass, type, force);
+            force = {vals[8], vals[9], vals[10]};
         }
-        else env.add_particle({origin[0], origin[1], origin[2]}, {init_v[0], init_v[1], init_v[2]}, mass, type);
+
+        env.add_particle({origin[0], origin[1], origin[2]}, {init_v[0], init_v[1], init_v[2]}, mass, type, force);
 
         SPDLOG_DEBUG(
             "Parsed Particle:\n"
             "       Origin:           [{}, {}, {}]\n"
             "       Initial Velocity: [{}, {}, {}]\n"
             "       Mass:             {}\n"
-            "       Type:             {}",
-            origin[0], origin[1], origin[2], init_v[0], init_v[1], init_v[2], mass, type);
+            "       Type:             {}\n"
+            "       Force:            [{}, {}, {}]",
+            origin[0], origin[1], origin[2], init_v[0], init_v[1], init_v[2], mass, type, force[0], force[1], force[2]);
     }
 
     /// -----------------------------------------
@@ -137,7 +139,7 @@ namespace md::io {
             SPDLOG_ERROR("Invalid dimension parameter {}", line);
         }
 
-        int type = vals.size() == 12 ? type = static_cast<int>(vals[11]) : 0;
+        int type = vals.size() == 12 ? static_cast<int>(vals[11]) : 0;
         environment.add_sphere(origin, init_v, thermal_v, (int) radius, width, mass, dimension, type);
 
         SPDLOG_DEBUG(
@@ -179,10 +181,12 @@ namespace md::io {
         try {
             if (force_name == "lennard jones") {
                 force = LennardJones(vals[0], vals[1], args.cutoff_radius);
-                SPDLOG_INFO("Force - For Particle Type {} using Lennard Jones with parameters: epsilon={}, sigma={}, cutoff_radius={}", vals[2], vals[0], vals[1], args.cutoff_radius);
+                SPDLOG_INFO("Force - For Particle Type {} using Lennard Jones with parameters: epsilon = {}, sigma = {}, "
+                            "cutoff_radius = {}", vals[2], vals[0], vals[1], args.cutoff_radius);
             } else if (force_name == "inverse square") {
                 force = InverseSquare(vals[0], vals[1]);
-                SPDLOG_INFO("Force - For Particle Type {} using inverse square force with parameter: pre_factor={}", vals[1], vals[0]);
+                SPDLOG_INFO("Force - For Particle Type {} using inverse square force with parameter: pre_factor = {}",
+                            vals[1], vals[0]);
             }
         } catch (std::out_of_range& e) {
             SPDLOG_ERROR("Parameter error in force parsing: {}. Line: {}", e.what(), line);
@@ -228,16 +232,21 @@ namespace md::io {
     /// -----------------------------------------
     /// \brief Parse thermostats information
     /// -----------------------------------------
-    void parse_thermostats(const std::string& line, Environment& env) {
+    void parse_thermostats(const std::string& line, ProgramArguments &args) {
         SPDLOG_DEBUG("Reading Thermostats:     {}", line);
 
         // Minimum required values: 1 (T_init) + 1 (n_thermos) + 1 (T_target) + 1 (delta_T)
         auto vals = parse_values(line, 4);
 
-        env::Thermostat thermostat(vals[0], vals[2], vals[3]);
-        thermostat.set_initial_temperature(env);
+        double init_T = vals[0];
+        args.temp_adj_freq = vals[1];
+        double target_T = vals[2];
+        double dT = vals[3] == -1 ? std::numeric_limits<double>::infinity() : vals[3];
+
+        env::Thermostat thermostat(init_T, target_T, dT);
+        thermostat.set_initial_temperature(args.env);
         SPDLOG_INFO("Thermostat - Initial temperature: {}, n_thermostat: {}, Target temperature: {}, delta T: {}",
-                    vals[0], vals[1], vals[2], vals[3]);
+                    init_T, args.temp_adj_freq, target_T, dT);
     }
 
     /// -----------------------------------------
@@ -328,9 +337,9 @@ namespace md::io {
             else if (section == ENVIRONMENT)
                 parse_environment(line, args.env);
             else if (section == THERMOSTATS)
-                parse_thermostats(line, args.env);
+                parse_thermostats(line, args);
         }
 
-        SPDLOG_INFO("File read successfully: {}", file_name);
+        SPDLOG_INFO("File successfully read: {}", file_name);
     }
 }  // namespace md::io

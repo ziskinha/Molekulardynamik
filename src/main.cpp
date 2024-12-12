@@ -18,10 +18,11 @@ void run_mol_sim(const int argc, char* argv[]) {
 
     auto writer = io::create_writer(args.output_baseName, args.output_format, args.override);
     Integrator::StoermerVerlet simulator(args.env, std::move(writer));
+
     if (!args.benchmark) {
-        simulator.simulate(0, args.duration, args.dt, args.write_freq);
+        simulator.simulate(0, args.duration, args.dt, args.write_freq, args.temp_adj_freq);
     } else {
-        simulator.benchmark(0, args.duration, args.dt);
+        simulator.benchmark(0, args.duration, args.dt, args.temp_adj_freq);
     }
 
     SPDLOG_INFO("Output written. Terminating...");
@@ -32,7 +33,7 @@ int main(const int argc, char* argv[]) {
     SPDLOG_INFO("TODO: Main zurücksetzen");
 
     run_mol_sim(argc, argv);
-    //ws4_task2_small();
+    //test();
     return 0;
 }
 

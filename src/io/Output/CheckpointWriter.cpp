@@ -7,7 +7,9 @@ constexpr const char* OUTPUT_DIR = "Checkpoint";
 constexpr const char* GENERAL_HEADER = "# duration   delta_t     write_freq   cutoff_radius   output_baseName";
 constexpr const char* PARTICLE_HEADER = "# origin             velocity         mass    type     old_force";
 constexpr const char* FORCE_HEADER = "# name          parameter   particle_type";
-constexpr const char* ENVIRONMENT_HEADER = "# boundary_origin     boundary_extent     grid_constant   grav_const    "
+constexpr const char* ENVIRONMENT_HEADER = "# (Boundary condition identification: 0: OUTFLOW, 1: PERIODIC, "
+                                           "2: REPULSIVE FORCE, 3: VELOCITY REFLECTION)\n"
+                                           "# boundary_origin     boundary_extent     grid_constant   grav_const    "
                                            "boundary_conds(left, right, top, bottom, front, back)";
 constexpr const char* THERMOSTATS_HEADER = "# T_init     n_thermos     T_target(for no target: -1)      delta_T(for no delta_t: -1)";
 constexpr const char* SPACE = "     ";
@@ -31,7 +33,7 @@ namespace md::io {
     void section(const char* HEADER, const std::string& section, std::ofstream& outfile) {
         outfile << section << std::endl;
         outfile << HEADER << std::endl;
-        outfile << "-- Please provide the missing values --\n" << std::endl;
+        outfile << "# -- Please provide the missing values or delete -- #\n" << std::endl;
     }
 
     void CheckpointWriter::write_checkpoint_file(env::Environment &env, size_t num) {
@@ -45,7 +47,7 @@ namespace md::io {
 
         SPDLOG_DEBUG("Start creating checkpoint file {}", file.string());
 
-        outfile << "# for file format info please take a look at /input/others/txt_file_description.txt" << std::endl;
+        outfile << "# for file format info please take a look at /Input/others/txt_file_description.txt\n" << std::endl;
 
         //General Section
         section(GENERAL_HEADER, "general:", outfile);

@@ -5,7 +5,7 @@
 #include "XMLFileReader.h"
 #include "env/Environment.h"
 #include "utils/Parse.h"
-#include "io/input/xml/molSimSchema.hxx"
+#include "io/Input/xml/molSimSchema.hxx"
 #include "io/Logger/Logger.h"
 
 namespace md::io {

@@ -223,65 +223,15 @@ inline void thermostat_test() {
     env.set_grid_constant(1);
     env.build();
 
-    env::Thermostat thermostat(1, 1000000, 200);
+    env::Thermostat thermostat(40, -1, -1);
     thermostat.set_initial_temperature(env);
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
     Integrator::StoermerVerlet simulator(env, std::move(writer), thermostat);
-    simulator.simulate(0, args.duration, args.dt, args.write_freq, args.write_freq);
+    simulator.simulate(0, args.duration, args.dt, args.write_freq, 1000);
 }
 
-// Task 2 on the worksheet 4
-inline void ws4_task2_small() {
-    io::ProgramArguments args;
-    args.output_format = io::OutputFormat::VTK;
-    args.benchmark = false;
-    args.override = true;
-    args.output_baseName = "output";
-
-    args.duration = 25;
-    args.dt = 0.0005;
-    args.write_freq = 100;
-
-    env::Environment env;
-
-    env::Boundary boundary;
-    // boundary size
-    boundary.extent = {63, 36, 1};
-    boundary.origin = {0, 0, 0};
-
-    //boundary conditions
-    boundary.set_boundary_rule(env::BoundaryRule::OUTFLOW);
-    boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::LEFT);
-    boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::RIGHT);
-    boundary.set_boundary_rule(env::BoundaryRule::REPULSIVE_FORCE, env::BoundaryNormal::TOP);
-    boundary.set_boundary_rule(env::BoundaryRule::REPULSIVE_FORCE, env::BoundaryNormal::BOTTOM);
-
-    boundary.set_boundary_force(env::Boundary::LennardJonesForce(1, 1));
-
-    //boundary.set_boundary_force(env::LennardJones);
-    env.set_boundary(boundary);
-
-    // Liquid 1, type = 0
-    env.add_cuboid({0.6, 2, 0}, {0, 0, 0}, {50, 14, 1}, 0, 1.2, 1, 2, 0);
-    env.set_force(env::LennardJones(1, 1, 2.5), 0);
-    // Liquid 2, type = 1
-    env.add_cuboid({0.6, 19, 0}, {0, 0, 0}, {50, 14, 1}, 0, 1.2, 2, 2, 1);
-    env.set_force(env::LennardJones(1, 0.9412, 2.5), 1);
-
-    env.set_grid_constant(2.5);
-    env.set_gravity_constant(-12.44);
-    env.build();
-
-    env::Thermostat thermostat(40, -1, 1000);
-    thermostat.set_initial_temperature(env);
-
-    auto writer = create_writer(args.output_baseName, args.output_format, args.override);
-    Integrator::StoermerVerlet simulator(env, std::move(writer), thermostat);
-    simulator.simulate(0, args.duration, args.dt, args.write_freq, args.write_freq);
-}
-
-inline void ws4_task2_big() {
+inline void test() {
     io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
@@ -296,7 +246,7 @@ inline void ws4_task2_big() {
 
     env::Boundary boundary;
     // boundary size
-    boundary.extent = {300, 54, 1};
+    boundary.extent = {60, 60, 1};
     boundary.origin = {0, 0, 0};
 
     //boundary conditions
@@ -310,20 +260,20 @@ inline void ws4_task2_big() {
     env.set_boundary(boundary);
 
     // Liquid 1, type = 0
-    env.add_cuboid({0.6, 2, 0}, {0, 0, 0}, {250, 20, 1}, 0, 1.2, 1, 2, 0);
+    env.add_particle({57.7125, 11.8433, 0}, {16.5933, -12.6987, 0}, 1, 0, {424.457, 165.615, 0});
     env.set_force(env::LennardJones(1, 1.2, 3), 0);
     // Liquid 2, type = 1
-    env.add_cuboid({0.6, 27, 0}, {0, 0, 0}, {250, 20, 1}, 0, 1.2, 2, 2, 1);
-    env.set_force(env::LennardJones(1, 1.1, 3), 1);
+    //env.add_particle({1.85969, 4.46527e-05, 0}, {-12.7911, -0.00474062, 0}, 1, 0, {-5222.53, -306.117, 0});
+    //env.set_force(env::LennardJones(1, 1.1, 3), 1);
 
     env.set_grid_constant(3);
     env.set_gravity_constant(-12.44);
     env.build();
 
-    env::Thermostat thermostat(40, -1, 1000);
+    env::Thermostat thermostat(40, -1, -1);
     thermostat.set_initial_temperature(env);
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
     Integrator::StoermerVerlet simulator(env, std::move(writer), thermostat);
-    simulator.simulate(0, args.duration, args.dt, args.write_freq, args.write_freq);
+    simulator.simulate(0, args.duration, args.dt, args.write_freq, 1000);
 }

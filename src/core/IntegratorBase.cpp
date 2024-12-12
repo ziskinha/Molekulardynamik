@@ -56,10 +56,11 @@ namespace md::Integrator {
             if (step % write_freq == 0 && writer) {
                 SPDLOG_DEBUG("Plotting particles @ iteration {}, time {}", step, t);
                 writer->plot_particles(env, step);
-                checkpoint_writer->write_checkpoint_file(env, step);
             }
             SHOW_PROGRESS(step, total_steps);
         }
+
+        checkpoint_writer->write_checkpoint_file(env, 1);
         SPDLOG_INFO("Simulation ended");
     }
 
@@ -81,8 +82,9 @@ namespace md::Integrator {
         }
         const double avg_step_time = static_cast<double>(total_micros) / static_cast<double>(step+1);
 
-        SPDLOG_INFO("Total execution time: {} ms", total_micros/1000.0);
-        SPDLOG_INFO("Average execution time per step: {} ms", avg_step_time/1000.0);
-        SPDLOG_INFO("Number of particles: {}", env.size());
+        // Using std::cout instead of logging, as logging should be disabled during benchmarking.
+        std::cout << "Total execution time:" << total_micros/1000.0 << " ms" << std::endl;
+        std::cout << "Average execution time per step: " << avg_step_time/1000.0 << " ms" << std::endl;
+        std::cout << "Number of particles: " << env.size() << std::endl;
     }
 }  // namespace md::Integrator

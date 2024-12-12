@@ -1,8 +1,8 @@
 #include <string>
 
 #include "IOStrategy.h"
-#include "io/input/txt/TXTFileReader.h"
-#include "io/input/xml/XMLFileReader.h"
+#include "io/Input/txt/TXTFileReader.h"
+#include "io/Input/xml/XMLFileReader.h"
 #include "io/Output/VTKWriter.h"
 #include "io/Output/XYZWriter.h"
 #include "io/Logger/Logger.h"
