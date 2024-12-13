@@ -61,18 +61,6 @@ namespace md::env {
         : cutoff_radius(0) {}
 
     void ForceManager::init() {
-        for (auto& [type, force] : force_types) {
-            if (const auto fLJ = std::get_if<LennardJones>(&force)) {
-                forces[{type, type}] = LennardJonesForce(fLJ->epsilon, fLJ->sigma, fLJ->cutoff);
-                cutoff_radius = std::max(cutoff_radius, fLJ->cutoff);
-            } else if (const auto fIS = std::get_if<InverseSquare>(&force)) {
-                forces[{type, type}] = InverseSquareForce(fIS->pre_factor, fIS->cutoff);
-                cutoff_radius = std::max(cutoff_radius, fIS->cutoff);
-            } else {
-                throw std::runtime_error("Unhandled force type in std::variant");
-            }
-        }
-
         std::vector<int> types;
         for (const auto& key : std::views::keys(force_types)) {
            types.push_back(key);
@@ -83,11 +71,8 @@ namespace md::env {
                 auto force1 = force_types[static_cast<int>(i)];
                 auto force2 = force_types[static_cast<int>(j)];
 
-                double c1 = std::visit([](const auto& obj) -> int {return obj.cutoff;}, force1);
-                double c2 = std::visit([](const auto& obj) -> int {return obj.cutoff;}, force2);
-                cutoff_radius = std::max(cutoff_radius, std::max(c1, c2));
-
                 forces[{types[i], types[j]}] = mix_forces(force1, force2);
+                cutoff_radius = std::max(cutoff_radius, forces[{types[i], types[j]}].cutoff() );
             }
         }
     }
