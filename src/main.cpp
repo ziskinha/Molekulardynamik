@@ -9,23 +9,22 @@ using namespace md;
 void run_mol_sim(const int argc, char* argv[]) {
     io::Logger::initialize_logger();
 
-    parse::ProgramArguments args;
-    switch (parse_args(argc, argv, args)) {
+    io::ProgramArguments args;
+    switch (parse::parse_args(argc, argv, args)) {
         case parse::EXIT: exit(0);
         case parse::ERROR: exit(-1);
         default: ;
     };
 
-    log_arguments(args);
-    args.env.build();
-
-    auto writer = create_writer(args.output_baseName, args.output_format, args.override);
+    auto writer = io::create_writer(args.output_baseName, args.output_format, args.override);
     Integrator::StoermerVerlet simulator(args.env, std::move(writer));
+
     if (!args.benchmark) {
-        simulator.simulate(0, args.duration, args.dt, args.write_freq);
+        simulator.simulate(0, args.duration, args.dt, args.write_freq, args.temp_adj_freq);
     } else {
-        simulator.benchmark(0, args.duration, args.dt);
+        simulator.benchmark(0, args.duration, args.dt, args.temp_adj_freq);
     }
+
     SPDLOG_INFO("Output written. Terminating...");
 }
 
@@ -33,7 +32,8 @@ void run_mol_sim(const int argc, char* argv[]) {
 int main(const int argc, char* argv[]) {
     SPDLOG_INFO("TODO: Main zurücksetzen");
 
-    ws4_task2_small();
+    run_mol_sim(argc, argv);
+    //test();
     return 0;
 }
 

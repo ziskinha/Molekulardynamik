@@ -6,8 +6,6 @@
 #include "io/Logger/Logger.h"
 #include "utils/ArrayUtils.h"
 
-#include <print>
-
 namespace md::Integrator {
 
     void StoermerVerlet::simulation_step(unsigned step, const double dt ) {

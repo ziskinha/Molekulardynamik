@@ -13,7 +13,7 @@ using namespace md;
 // not particularly important implementation wise but useful as an example how to interface with our program
 
 inline void four_particle_lennard_jones_test() {
-    parse::ProgramArguments args;
+    io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
     args.override = true;
@@ -49,7 +49,7 @@ inline void four_particle_lennard_jones_test() {
 
 
 inline void four_particle_inverse_force_test() {
-    parse::ProgramArguments args;
+    io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
     args.override = true;
@@ -84,7 +84,7 @@ inline void four_particle_inverse_force_test() {
 }
 
 inline void four_particle_periodic_conditions_test() {
-    parse::ProgramArguments args;
+    io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
     args.override = true;
@@ -121,7 +121,7 @@ inline void four_particle_periodic_conditions_test() {
 }
 
 inline void four_particle_reflective_velocity_test() {
-    parse::ProgramArguments args;
+    io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
     args.override = true;
@@ -155,7 +155,7 @@ inline void four_particle_reflective_velocity_test() {
 
 
 inline void periodic_force_mixing_test() {
-    parse::ProgramArguments args;
+    io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
     args.override = true;
@@ -198,7 +198,7 @@ inline void periodic_force_mixing_test() {
 
 
 inline void thermostat_test() {
-    parse::ProgramArguments args;
+    io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
     args.override = true;
@@ -225,17 +225,17 @@ inline void thermostat_test() {
     env.set_grid_constant(1);
     env.build();
 
-    env::Thermostat thermostat(1, 1000000, 200);
+    env::Thermostat thermostat(40, -1, -1);
     thermostat.set_initial_temperature(env);
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
     Integrator::StoermerVerlet simulator(env, std::move(writer), thermostat);
-    simulator.simulate(0, args.duration, args.dt, args.write_freq, args.write_freq);
+    simulator.simulate(0, args.duration, args.dt, args.write_freq, 1000);
 }
 
 // Task 2 on the worksheet 4
 inline void ws4_task2_small() {
-    parse::ProgramArguments args;
+    io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
     args.override = true;
@@ -246,7 +246,6 @@ inline void ws4_task2_small() {
     args.write_freq = 100;
 
     env::Environment env;
-
     env::Boundary boundary;
     // boundary size
     boundary.extent = {63, 36, 1};
@@ -261,7 +260,6 @@ inline void ws4_task2_small() {
 
     boundary.set_boundary_force(env::Boundary::LennardJonesForce(1, 1));
 
-    //boundary.set_boundary_force(env::LennardJones);
     env.set_boundary(boundary);
 
     // Liquid 1, type = 0
@@ -275,7 +273,7 @@ inline void ws4_task2_small() {
     env.set_gravity_constant(-12.44);
     env.build();
 
-    env::Thermostat thermostat(40, 25, 0.0005);
+    env::Thermostat thermostat(40);
     thermostat.set_initial_temperature(env);
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
@@ -284,7 +282,7 @@ inline void ws4_task2_small() {
 }
 
 inline void ws4_task2_big() {
-    parse::ProgramArguments args;
+    io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
     args.benchmark = false;
     args.override = true;
@@ -308,7 +306,8 @@ inline void ws4_task2_big() {
     boundary.set_boundary_rule(env::BoundaryRule::VELOCITY_REFLECTION, env::BoundaryNormal::TOP);
     boundary.set_boundary_rule(env::BoundaryRule::VELOCITY_REFLECTION, env::BoundaryNormal::BOTTOM);
 
-    //boundary.set_boundary_force(env::Boundary::LennardJonesForce(1, 1.2));
+    boundary.set_boundary_force(env::Boundary::LennardJonesForce(1, 1.2));
+
     env.set_boundary(boundary);
 
     // Liquid 1, type = 0
@@ -322,7 +321,7 @@ inline void ws4_task2_big() {
     env.set_gravity_constant(-12.44);
     env.build();
 
-    env::Thermostat thermostat(40, 25, 0.0005);
+    env::Thermostat thermostat(40);
     thermostat.set_initial_temperature(env);
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);

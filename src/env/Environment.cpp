@@ -8,12 +8,12 @@
 #include "utils/ArrayUtils.h"
 #include "utils/MaxwellBoltzmannDistribution.h"
 
-#define WARN_IF_INIT(msg)                                                                                    \
-    do {                                                                                                     \
-        if (initialized) {                                                                                   \
-            SPDLOG_WARN("You are trying to {} in an initialized environment. Request will be ignored", msg); \
-            return;                                                                                          \
-        }                                                                                                    \
+#define WARN_IF_INIT(msg)                                                                                     \
+    do {                                                                                                      \
+        if (initialized) {                                                                                    \
+            SPDLOG_WARN("You are trying to {} in an initialized environment. Request will be ignored.", msg); \
+            return;                                                                                           \
+        }                                                                                                     \
     } while (0)
 
 namespace md::env {
@@ -86,9 +86,9 @@ namespace md::env {
         return vec3{0, particle.mass * g_grav, 0};
     }
 
-    void Environment::add_particle(const vec3& position, const vec3& velocity, double mass, int type) {
+    void Environment::add_particle(const vec3& position, const vec3& velocity, double mass, int type, const vec3& force) {
         WARN_IF_INIT("add particles");
-        particle_storage.emplace_back(particle_storage.size(), grid, position, velocity, mass, type);
+        particle_storage.emplace_back(particle_storage.size(), grid, position, velocity, mass, type, force);
         SPDLOG_TRACE("Particle added to env. Position: [{}, {}, {}], Velocity: [{}, {}, {}], Mass: {}, Type: {}",
                      position[0], position[1], position[2], velocity[0], velocity[1], velocity[2], mass, type);
     }
@@ -165,7 +165,7 @@ namespace md::env {
             return;
         }
 
-        SPDLOG_INFO("Start building the environment ...");
+        SPDLOG_INFO("Start building the environment.");
 
         // check if boundary is ok
         if (boundary.extent[0] < 0 || boundary.extent[1] < 0 || boundary.extent[2] < 0) {

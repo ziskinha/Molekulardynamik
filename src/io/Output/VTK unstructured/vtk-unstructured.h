@@ -2866,9 +2866,9 @@ class Cells : public ::xml_schema::type {
                                         const ::xml_schema::properties& p = ::xml_schema::properties());
 
 /**
- * @brief Parse a standard input stream.
+ * @brief Parse a standard Input stream.
  *
- * @param is A standrad input stream.
+ * @param is A standrad Input stream.
  * @param f Parsing flags.
  * @param p Parsing properties.
  * @return A pointer to the root of the object model.
@@ -2879,9 +2879,9 @@ class Cells : public ::xml_schema::type {
                                         const ::xml_schema::properties& p = ::xml_schema::properties());
 
 /**
- * @brief Parse a standard input stream with an error handler.
+ * @brief Parse a standard Input stream with an error handler.
  *
- * @param is A standrad input stream.
+ * @param is A standrad Input stream.
  * @param eh An error handler.
  * @param f Parsing flags.
  * @param p Parsing properties.
@@ -2893,10 +2893,10 @@ class Cells : public ::xml_schema::type {
                                         const ::xml_schema::properties& p = ::xml_schema::properties());
 
 /**
- * @brief Parse a standard input stream with a Xerces-C++ DOM error
+ * @brief Parse a standard Input stream with a Xerces-C++ DOM error
  * handler.
  *
- * @param is A standrad input stream.
+ * @param is A standrad Input stream.
  * @param eh A Xerces-C++ DOM error handler.
  * @param f Parsing flags.
  * @param p Parsing properties.
@@ -2908,9 +2908,9 @@ class Cells : public ::xml_schema::type {
                                         const ::xml_schema::properties& p = ::xml_schema::properties());
 
 /**
- * @brief Parse a standard input stream with a resource id.
+ * @brief Parse a standard Input stream with a resource id.
  *
- * @param is A standrad input stream.
+ * @param is A standrad Input stream.
  * @param id A resource id.
  * @param f Parsing flags.
  * @param p Parsing properties.
@@ -2925,10 +2925,10 @@ class Cells : public ::xml_schema::type {
                                         const ::xml_schema::properties& p = ::xml_schema::properties());
 
 /**
- * @brief Parse a standard input stream with a resource id and an
+ * @brief Parse a standard Input stream with a resource id and an
  * error handler.
  *
- * @param is A standrad input stream.
+ * @param is A standrad Input stream.
  * @param id A resource id.
  * @param eh An error handler.
  * @param f Parsing flags.
@@ -2945,10 +2945,10 @@ class Cells : public ::xml_schema::type {
                                         const ::xml_schema::properties& p = ::xml_schema::properties());
 
 /**
- * @brief Parse a standard input stream with a resource id and a
+ * @brief Parse a standard Input stream with a resource id and a
  * Xerces-C++ DOM error handler.
  *
- * @param is A standrad input stream.
+ * @param is A standrad Input stream.
  * @param id A resource id.
  * @param eh A Xerces-C++ DOM error handler.
  * @param f Parsing flags.
@@ -2965,9 +2965,9 @@ class Cells : public ::xml_schema::type {
                                         const ::xml_schema::properties& p = ::xml_schema::properties());
 
 /**
- * @brief Parse a Xerces-C++ input source.
+ * @brief Parse a Xerces-C++ Input source.
  *
- * @param is A Xerces-C++ input source.
+ * @param is A Xerces-C++ Input source.
  * @param f Parsing flags.
  * @param p Parsing properties.
  * @return A pointer to the root of the object model.
@@ -2978,9 +2978,9 @@ class Cells : public ::xml_schema::type {
                                         const ::xml_schema::properties& p = ::xml_schema::properties());
 
 /**
- * @brief Parse a Xerces-C++ input source with an error handler.
+ * @brief Parse a Xerces-C++ Input source with an error handler.
  *
- * @param is A Xerces-C++ input source.
+ * @param is A Xerces-C++ Input source.
  * @param eh An error handler.
  * @param f Parsing flags.
  * @param p Parsing properties.
@@ -2993,10 +2993,10 @@ class Cells : public ::xml_schema::type {
                                         const ::xml_schema::properties& p = ::xml_schema::properties());
 
 /**
- * @brief Parse a Xerces-C++ input source with a Xerces-C++ DOM
+ * @brief Parse a Xerces-C++ Input source with a Xerces-C++ DOM
  * error handler.
  *
- * @param is A Xerces-C++ input source.
+ * @param is A Xerces-C++ Input source.
  * @param eh A Xerces-C++ DOM error handler.
  * @param f Parsing flags.
  * @param p Parsing properties.

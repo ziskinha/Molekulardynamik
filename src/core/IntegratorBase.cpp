@@ -9,7 +9,7 @@
 
 
 #if SPDLOG_ACTIVE_LEVEL == SPDLOG_LEVEL_INFO
-#define SHOW_PROGRESS(current, total)                                                         \
+#define SHOW_PROGRESS(current, total)                                                      \
  do {                                                                                      \
      constexpr int bar_width = 50;                                                         \
      const float progress = static_cast<float>(current) / (total);                         \
@@ -45,6 +45,7 @@ namespace md::Integrator {
 
     void IntegratorBase::simulate(const double start_time, const double end_time, const double dt,
                                   const unsigned int write_freq, const unsigned int temp_adj_freq) {
+        auto checkpoint_writer = io::create_checkpoint_writer();
         temp_adjust_freq = temp_adj_freq;
         int step = 0;
         const int total_steps = static_cast<int>((end_time - start_time) / dt);
@@ -58,6 +59,8 @@ namespace md::Integrator {
             }
             SHOW_PROGRESS(step, total_steps);
         }
+
+        checkpoint_writer->write_checkpoint_file(env, 1);
         SPDLOG_INFO("Simulation ended");
     }
 
@@ -79,8 +82,9 @@ namespace md::Integrator {
         }
         const double avg_step_time = static_cast<double>(total_micros) / static_cast<double>(step+1);
 
-        SPDLOG_INFO("Total execution time: {} ms", total_micros/1000.0);
-        SPDLOG_INFO("Average execution time per step: {} ms", avg_step_time/1000.0);
-        SPDLOG_INFO("Number of particles: {}", env.size());
+        // Using std::cout instead of logging, as logging should be disabled during benchmarking.
+        std::cout << "Total execution time:" << total_micros/1000.0 << " ms" << std::endl;
+        std::cout << "Average execution time per step: " << avg_step_time/1000.0 << " ms" << std::endl;
+        std::cout << "Number of particles: " << env.size() << std::endl;
     }
 }  // namespace md::Integrator
