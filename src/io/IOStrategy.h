@@ -3,10 +3,8 @@
 #include <filesystem>
 #include <memory>
 #include <string>
-#include <utility>
 
-#include "Particle.h"
-#include "force.h"
+#include "env/Environment.h"
 
 #define OUTPUT_DIR "output"
 
@@ -15,7 +13,7 @@
  */
 namespace md::io {
 
-    enum OutputFormat { VTK, XYZ };
+    enum class OutputFormat { VTK, XYZ };
 
     /**
      * @brief Abstract base class for output writers.
@@ -33,10 +31,10 @@ namespace md::io {
 
         /**
          * @brief Outputs particle data at a given iteration.
-         * @param container The particle container to be plotted.
+         * @param environment
          * @param iteration The current simulation iteration.
          */
-        virtual void plot_particles(const ParticleContainer& container, int iteration) = 0;
+        virtual void plot_particles(const env::Environment& environment, int iteration) = 0;
 
        protected:
         const std::string file_name;
@@ -56,13 +54,12 @@ namespace md::io {
      * @param allow_delete
      * @return A pointer to an OutputWriter object.
      */
-    std::unique_ptr<OutputWriterBase> create_writer(OutputFormat output_format, bool allow_delete);
+    std::unique_ptr<OutputWriterBase> create_writer(const std::string& outputFileBaseName, OutputFormat output_format, bool allow_delete);
 
     /**
      * @brief Reads an input file.
      * @param filename
-     * @param container
-     * @param force
+     * @param environment
      */
-    void read_file(const std::string& filename, ParticleContainer& container, force::ForceFunc& force);
+    void read_file(const std::string& filename, env::Environment& environment);
 }  // namespace md::io

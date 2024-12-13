@@ -3,10 +3,10 @@
 #include <iostream>
 #include <string>
 
-#include "FileReader.h"
-#include "VTKWriter.h"
-#include "XYZWriter.h"
-#include "io/Logger.h"
+#include "io/input/txt/FileReader.h"
+#include "io/Output/VTKWriter.h"
+#include "io/Output/XYZWriter.h"
+#include "io/Logger/Logger.h"
 
 namespace md::io {
     OutputWriterBase::OutputWriterBase(std::string file_name, const bool allow_delete)
@@ -30,23 +30,23 @@ namespace md::io {
 
     bool checkFormat(const std::string& filename, const std::string& extension) {
         if (filename.length() >= extension.length()) {
-            bool format_match =
-                (0 == filename.compare(filename.length() - extension.length(), extension.length(), extension));
+            const bool format_match =
+                0 == filename.compare(filename.length() - extension.length(), extension.length(), extension);
             return format_match;
         }
         return false;
     }
 
-    std::unique_ptr<OutputWriterBase> create_writer(const OutputFormat output_format, bool allow_delete) {
+    std::unique_ptr<OutputWriterBase> create_writer(const std::string& outputFileBaseName,const OutputFormat output_format, bool allow_delete) {
         if (output_format == OutputFormat::VTK) {
-            return std::make_unique<VTKWriter>(VTKWriter("MD_vtk", allow_delete));
+            return std::make_unique<VTKWriter>(VTKWriter(outputFileBaseName + "_vtk", allow_delete));
         }
-        return std::make_unique<XYZWriter>(XYZWriter("MD_xyz", allow_delete));
+        return std::make_unique<XYZWriter>(XYZWriter(outputFileBaseName + "_xyz", allow_delete));
     }
 
-    void read_file(const std::string& filename, ParticleContainer& container, force::ForceFunc& force) {
+    void read_file(const std::string& filename, env::Environment& environment) {
         if (checkFormat(filename, ".txt")) {
-            return read_file_txt(filename, container, force);
+            return read_file_txt(filename, environment);
         }
         // TODO: add XML FileReader in the future
         throw std::invalid_argument("File format not supported");

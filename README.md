@@ -21,16 +21,13 @@ The build target is called `MolSim`.
 ## Usage
 After building, you can run the simulation with the following commands:
 ```bash
-./MolSim <input_file> <duration> <delta_t> <num_frames> <output_format>
+./MolSim <xml_file> <output_format>
 ./MolSim -h | --help
 ./MolSim -f
 ./MolSim -b
 ```
 ### Arguments:
-- **input_file** Name of the file to read particle data from. Should end in .txt
-- **duration** Simulation duration (e.g., 10.0)
-- **delta_t** Time step delta_t (e.g., 0.01)
-- **num_frames** Number of Frames saved (e.g. 500)
+- **xml_file** XML file with input parameters important for the simulation.
 - **output_format** Output format: either 'XYZ' or 'VTK'
 
 ### Flags

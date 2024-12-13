@@ -1,6 +1,8 @@
 #pragma once
 #include "io/IOStrategy.h"
-#include "io/Logger.h"
+#include "io/Logger/Logger.h"
+#include "../env/Environment.h"
+#include "../env/Boundary.h"
 
 namespace md::parse {
 
@@ -12,10 +14,13 @@ namespace md::parse {
      * @brief Struct used to return arguments read from the terminal.
      */
     struct ProgramArguments {
-        std::string file;
+        std::string output_baseName;
         double duration;
         double dt;
-        int num_frames;
+        double cutoff_radius;
+        int write_freq;
+        env::Environment env;
+        std::string force;
         bool benchmark;
         bool override;
         io::OutputFormat output_format;
@@ -28,14 +33,17 @@ namespace md::parse {
     inline void log_arguments(const ProgramArguments& args) {
         SPDLOG_INFO(
             "Parsed Arguments:\n"
-            "       file:          {}\n"
+            "       output name:   {}\n"
             "       duration:      {}\n"
             "       dt:            {}\n"
-            "       num_frames:    {}\n"
+            "       cutoff_radius: {}\n"
+            "       write_freq:    {}\n"
+            "       particles:     {}\n" 
+            "       force:         {}\n" 
             "       benchmark:     {}\n"
             "       override:      {}\n"
             "       output_format: {}",
-            args.file, args.duration, args.dt, args.num_frames, args.benchmark ? "true" : "false",
+            args.output_baseName, args.duration, args.dt, args.cutoff_radius, args.write_freq, args.env.size(), args.force, args.benchmark ? "true" : "false",
             args.override ? "true" : "false", args.output_format == io::OutputFormat::XYZ ? "XYZ" : "VTK");
     }
 

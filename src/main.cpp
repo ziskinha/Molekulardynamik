@@ -1,35 +1,29 @@
-#include "Particle.h"
-#include "StoermerVerlet.h"
-#include "force.h"
+#include "core/StoermerVerlet.h"
 #include "io/IOStrategy.h"
 #include "utils/Parse.h"
+#include "io/Logger/Logger.h"
 
+using namespace md;
 int main(const int argc, char* argv[]) {
-    md::io::Logger::initialize_logger();
+    io::Logger::initialize_logger();
 
-    md::parse::ProgramArguments args;
+    parse::ProgramArguments args;
     switch (parse_args(argc, argv, args)) {
-        case md::parse::EXIT:
-            return 0;
-        case md::parse::ERROR:
-            return -1;
-        default:;
+        case parse::EXIT: return 0;
+        case parse::ERROR: return -1;
+        default: ;
     };
 
     log_arguments(args);
+    args.env.build();
 
-    const double num_steps = args.duration / args.dt;
-    const int write_freq = std::max(static_cast<int>(round(num_steps / args.num_frames)), 1);
-    SPDLOG_DEBUG("Write frequency: {}", write_freq);
-
-    md::force::ForceFunc force;
-    md::ParticleContainer particles;
-    md::io::read_file(args.file, particles, force);
-
-    auto writer = args.benchmark ? nullptr : create_writer(args.output_format, args.override);
-    md::Integrator::StoermerVerlet simulator(particles, force, std::move(writer));
-    simulator.simulate(0, args.duration, args.dt, write_freq, args.benchmark);
-
+    Integrator::StoermerVerlet simulator(args.env, create_writer(args.output_baseName, args.output_format, args.override));
+    if (!args.benchmark) {
+        simulator.simulate(0, args.duration, args.dt, args.write_freq);
+    } else {
+        simulator.benchmark_simulate(0, args.duration, args.dt);
+    }
     SPDLOG_INFO("Output written. Terminating...");
+
     return 0;
 }
