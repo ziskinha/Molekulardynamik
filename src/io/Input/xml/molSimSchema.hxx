@@ -258,6 +258,7 @@ class output;
 class parameters;
 class particles;
 class Forces;
+class Thermostat;
 class cuboids;
 class spheres;
 
@@ -857,6 +858,23 @@ class simulation: public ::xml_schema::type
   void
   Forces (::std::auto_ptr< Forces_type > p);
 
+  // Thermostat
+  //
+  typedef ::Thermostat Thermostat_type;
+  typedef ::xsd::cxx::tree::traits< Thermostat_type, char > Thermostat_traits;
+
+  const Thermostat_type&
+  Thermostat () const;
+
+  Thermostat_type&
+  Thermostat ();
+
+  void
+  Thermostat (const Thermostat_type& x);
+
+  void
+  Thermostat (::std::auto_ptr< Thermostat_type > p);
+
   // cuboids
   //
   typedef ::cuboids cuboids_type;
@@ -896,12 +914,14 @@ class simulation: public ::xml_schema::type
   simulation (const output_type&,
               const parameters_type&,
               const Boundary_type&,
-              const Forces_type&);
+              const Forces_type&,
+              const Thermostat_type&);
 
   simulation (::std::auto_ptr< output_type >,
               ::std::auto_ptr< parameters_type >,
               ::std::auto_ptr< Boundary_type >,
-              ::std::auto_ptr< Forces_type >);
+              ::std::auto_ptr< Forces_type >,
+              ::std::auto_ptr< Thermostat_type >);
 
   simulation (const ::xercesc::DOMElement& e,
               ::xml_schema::flags f = 0,
@@ -934,6 +954,7 @@ class simulation: public ::xml_schema::type
   ::xsd::cxx::tree::one< Boundary_type > Boundary_;
   particles_sequence particles_;
   ::xsd::cxx::tree::one< Forces_type > Forces_;
+  ::xsd::cxx::tree::one< Thermostat_type > Thermostat_;
   cuboids_sequence cuboids_;
   spheres_sequence spheres_;
 };
@@ -1306,6 +1327,117 @@ class Forces: public ::xml_schema::type
 
   protected:
   Force_optional Force_;
+};
+
+class Thermostat: public ::xml_schema::type
+{
+  public:
+  // n_thermostats
+  //
+  typedef ::xml_schema::int_ n_thermostats_type;
+  typedef ::xsd::cxx::tree::optional< n_thermostats_type > n_thermostats_optional;
+  typedef ::xsd::cxx::tree::traits< n_thermostats_type, char > n_thermostats_traits;
+
+  const n_thermostats_optional&
+  n_thermostats () const;
+
+  n_thermostats_optional&
+  n_thermostats ();
+
+  void
+  n_thermostats (const n_thermostats_type& x);
+
+  void
+  n_thermostats (const n_thermostats_optional& x);
+
+  // init_T
+  //
+  typedef ::xml_schema::double_ init_T_type;
+  typedef ::xsd::cxx::tree::optional< init_T_type > init_T_optional;
+  typedef ::xsd::cxx::tree::traits< init_T_type, char, ::xsd::cxx::tree::schema_type::double_ > init_T_traits;
+
+  const init_T_optional&
+  init_T () const;
+
+  init_T_optional&
+  init_T ();
+
+  void
+  init_T (const init_T_type& x);
+
+  void
+  init_T (const init_T_optional& x);
+
+  // target_T
+  //
+  typedef ::xml_schema::double_ target_T_type;
+  typedef ::xsd::cxx::tree::optional< target_T_type > target_T_optional;
+  typedef ::xsd::cxx::tree::traits< target_T_type, char, ::xsd::cxx::tree::schema_type::double_ > target_T_traits;
+
+  const target_T_optional&
+  target_T () const;
+
+  target_T_optional&
+  target_T ();
+
+  void
+  target_T (const target_T_type& x);
+
+  void
+  target_T (const target_T_optional& x);
+
+  // temp_dT
+  //
+  typedef ::xml_schema::double_ temp_dT_type;
+  typedef ::xsd::cxx::tree::optional< temp_dT_type > temp_dT_optional;
+  typedef ::xsd::cxx::tree::traits< temp_dT_type, char, ::xsd::cxx::tree::schema_type::double_ > temp_dT_traits;
+
+  const temp_dT_optional&
+  temp_dT () const;
+
+  temp_dT_optional&
+  temp_dT ();
+
+  void
+  temp_dT (const temp_dT_type& x);
+
+  void
+  temp_dT (const temp_dT_optional& x);
+
+  // Constructors.
+  //
+  Thermostat ();
+
+  Thermostat (const ::xercesc::DOMElement& e,
+              ::xml_schema::flags f = 0,
+              ::xml_schema::container* c = 0);
+
+  Thermostat (const Thermostat& x,
+              ::xml_schema::flags f = 0,
+              ::xml_schema::container* c = 0);
+
+  virtual Thermostat*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  Thermostat&
+  operator= (const Thermostat& x);
+
+  virtual 
+  ~Thermostat ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  n_thermostats_optional n_thermostats_;
+  init_T_optional init_T_;
+  target_T_optional target_T_;
+  temp_dT_optional temp_dT_;
 };
 
 class cuboids: public ::xml_schema::type
@@ -2029,6 +2161,9 @@ operator<< (::xercesc::DOMElement&, const particles&);
 
 void
 operator<< (::xercesc::DOMElement&, const Forces&);
+
+void
+operator<< (::xercesc::DOMElement&, const Thermostat&);
 
 void
 operator<< (::xercesc::DOMElement&, const cuboids&);

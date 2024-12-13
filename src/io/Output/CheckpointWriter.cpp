@@ -47,7 +47,7 @@ namespace md::io {
 
         SPDLOG_DEBUG("Start creating checkpoint file {}", file.string());
 
-        outfile << "# for file format info please take a look at /Input/others/txt_file_description.txt\n" << std::endl;
+        outfile << "# for file format info please take a look at /input/others/txt_file_description.txt\n" << std::endl;
 
         //General Section
         section(GENERAL_HEADER, "general:", outfile);

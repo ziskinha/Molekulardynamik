@@ -99,6 +99,17 @@
                     </xsd:complexType>
                 </xsd:element>
 
+                 <xsd:element name="Thermostat">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="n_thermostats" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+                            <xsd:element name="init_T" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+                            <xsd:element name="target_T" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+                            <xsd:element name="temp_dT" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+
                 <xsd:element name="cuboids" minOccurs="0" maxOccurs="unbounded">
                     <xsd:complexType>
                         <xsd:sequence>

@@ -632,6 +632,30 @@ Forces (::std::auto_ptr< Forces_type > x)
   this->Forces_.set (x);
 }
 
+const simulation::Thermostat_type& simulation::
+Thermostat () const
+{
+  return this->Thermostat_.get ();
+}
+
+simulation::Thermostat_type& simulation::
+Thermostat ()
+{
+  return this->Thermostat_.get ();
+}
+
+void simulation::
+Thermostat (const Thermostat_type& x)
+{
+  this->Thermostat_.set (x);
+}
+
+void simulation::
+Thermostat (::std::auto_ptr< Thermostat_type > x)
+{
+  this->Thermostat_.set (x);
+}
+
 const simulation::cuboids_sequence& simulation::
 cuboids () const
 {
@@ -952,6 +976,106 @@ void Forces::
 Force (::std::auto_ptr< Force_type > x)
 {
   this->Force_.set (x);
+}
+
+
+// Thermostat
+// 
+
+const Thermostat::n_thermostats_optional& Thermostat::
+n_thermostats () const
+{
+  return this->n_thermostats_;
+}
+
+Thermostat::n_thermostats_optional& Thermostat::
+n_thermostats ()
+{
+  return this->n_thermostats_;
+}
+
+void Thermostat::
+n_thermostats (const n_thermostats_type& x)
+{
+  this->n_thermostats_.set (x);
+}
+
+void Thermostat::
+n_thermostats (const n_thermostats_optional& x)
+{
+  this->n_thermostats_ = x;
+}
+
+const Thermostat::init_T_optional& Thermostat::
+init_T () const
+{
+  return this->init_T_;
+}
+
+Thermostat::init_T_optional& Thermostat::
+init_T ()
+{
+  return this->init_T_;
+}
+
+void Thermostat::
+init_T (const init_T_type& x)
+{
+  this->init_T_.set (x);
+}
+
+void Thermostat::
+init_T (const init_T_optional& x)
+{
+  this->init_T_ = x;
+}
+
+const Thermostat::target_T_optional& Thermostat::
+target_T () const
+{
+  return this->target_T_;
+}
+
+Thermostat::target_T_optional& Thermostat::
+target_T ()
+{
+  return this->target_T_;
+}
+
+void Thermostat::
+target_T (const target_T_type& x)
+{
+  this->target_T_.set (x);
+}
+
+void Thermostat::
+target_T (const target_T_optional& x)
+{
+  this->target_T_ = x;
+}
+
+const Thermostat::temp_dT_optional& Thermostat::
+temp_dT () const
+{
+  return this->temp_dT_;
+}
+
+Thermostat::temp_dT_optional& Thermostat::
+temp_dT ()
+{
+  return this->temp_dT_;
+}
+
+void Thermostat::
+temp_dT (const temp_dT_type& x)
+{
+  this->temp_dT_.set (x);
+}
+
+void Thermostat::
+temp_dT (const temp_dT_optional& x)
+{
+  this->temp_dT_ = x;
 }
 
 
@@ -1979,13 +2103,15 @@ simulation::
 simulation (const output_type& output,
             const parameters_type& parameters,
             const Boundary_type& Boundary,
-            const Forces_type& Forces)
+            const Forces_type& Forces,
+            const Thermostat_type& Thermostat)
 : ::xml_schema::type (),
   output_ (output, this),
   parameters_ (parameters, this),
   Boundary_ (Boundary, this),
   particles_ (this),
   Forces_ (Forces, this),
+  Thermostat_ (Thermostat, this),
   cuboids_ (this),
   spheres_ (this)
 {
@@ -1995,13 +2121,15 @@ simulation::
 simulation (::std::auto_ptr< output_type > output,
             ::std::auto_ptr< parameters_type > parameters,
             ::std::auto_ptr< Boundary_type > Boundary,
-            ::std::auto_ptr< Forces_type > Forces)
+            ::std::auto_ptr< Forces_type > Forces,
+            ::std::auto_ptr< Thermostat_type > Thermostat)
 : ::xml_schema::type (),
   output_ (output, this),
   parameters_ (parameters, this),
   Boundary_ (Boundary, this),
   particles_ (this),
   Forces_ (Forces, this),
+  Thermostat_ (Thermostat, this),
   cuboids_ (this),
   spheres_ (this)
 {
@@ -2017,6 +2145,7 @@ simulation (const simulation& x,
   Boundary_ (x.Boundary_, f, this),
   particles_ (x.particles_, f, this),
   Forces_ (x.Forces_, f, this),
+  Thermostat_ (x.Thermostat_, f, this),
   cuboids_ (x.cuboids_, f, this),
   spheres_ (x.spheres_, f, this)
 {
@@ -2032,6 +2161,7 @@ simulation (const ::xercesc::DOMElement& e,
   Boundary_ (this),
   particles_ (this),
   Forces_ (this),
+  Thermostat_ (this),
   cuboids_ (this),
   spheres_ (this)
 {
@@ -2119,6 +2249,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // Thermostat
+    //
+    if (n.name () == "Thermostat" && n.namespace_ ().empty ())
+    {
+      ::std::auto_ptr< Thermostat_type > r (
+        Thermostat_traits::create (i, f, this));
+
+      if (!Thermostat_.present ())
+      {
+        this->Thermostat_.set (r);
+        continue;
+      }
+    }
+
     // cuboids
     //
     if (n.name () == "cuboids" && n.namespace_ ().empty ())
@@ -2171,6 +2315,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "Forces",
       "");
   }
+
+  if (!Thermostat_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "Thermostat",
+      "");
+  }
 }
 
 simulation* simulation::
@@ -2191,6 +2342,7 @@ operator= (const simulation& x)
     this->Boundary_ = x.Boundary_;
     this->particles_ = x.particles_;
     this->Forces_ = x.Forces_;
+    this->Thermostat_ = x.Thermostat_;
     this->cuboids_ = x.cuboids_;
     this->spheres_ = x.spheres_;
   }
@@ -2785,6 +2937,133 @@ operator= (const Forces& x)
 
 Forces::
 ~Forces ()
+{
+}
+
+// Thermostat
+//
+
+Thermostat::
+Thermostat ()
+: ::xml_schema::type (),
+  n_thermostats_ (this),
+  init_T_ (this),
+  target_T_ (this),
+  temp_dT_ (this)
+{
+}
+
+Thermostat::
+Thermostat (const Thermostat& x,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  n_thermostats_ (x.n_thermostats_, f, this),
+  init_T_ (x.init_T_, f, this),
+  target_T_ (x.target_T_, f, this),
+  temp_dT_ (x.temp_dT_, f, this)
+{
+}
+
+Thermostat::
+Thermostat (const ::xercesc::DOMElement& e,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  n_thermostats_ (this),
+  init_T_ (this),
+  target_T_ (this),
+  temp_dT_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void Thermostat::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // n_thermostats
+    //
+    if (n.name () == "n_thermostats" && n.namespace_ ().empty ())
+    {
+      if (!this->n_thermostats_)
+      {
+        this->n_thermostats_.set (n_thermostats_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // init_T
+    //
+    if (n.name () == "init_T" && n.namespace_ ().empty ())
+    {
+      if (!this->init_T_)
+      {
+        this->init_T_.set (init_T_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // target_T
+    //
+    if (n.name () == "target_T" && n.namespace_ ().empty ())
+    {
+      if (!this->target_T_)
+      {
+        this->target_T_.set (target_T_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // temp_dT
+    //
+    if (n.name () == "temp_dT" && n.namespace_ ().empty ())
+    {
+      if (!this->temp_dT_)
+      {
+        this->temp_dT_.set (temp_dT_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+}
+
+Thermostat* Thermostat::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class Thermostat (*this, f, c);
+}
+
+Thermostat& Thermostat::
+operator= (const Thermostat& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->n_thermostats_ = x.n_thermostats_;
+    this->init_T_ = x.init_T_;
+    this->target_T_ = x.target_T_;
+    this->temp_dT_ = x.temp_dT_;
+  }
+
+  return *this;
+}
+
+Thermostat::
+~Thermostat ()
 {
 }
 
@@ -4235,6 +4514,17 @@ operator<< (::xercesc::DOMElement& e, const simulation& i)
     s << i.Forces ();
   }
 
+  // Thermostat
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "Thermostat",
+        e));
+
+    s << i.Thermostat ();
+  }
+
   // cuboids
   //
   for (simulation::cuboids_const_iterator
@@ -4440,6 +4730,60 @@ operator<< (::xercesc::DOMElement& e, const Forces& i)
         e));
 
     s << *i.Force ();
+  }
+}
+
+void
+operator<< (::xercesc::DOMElement& e, const Thermostat& i)
+{
+  e << static_cast< const ::xml_schema::type& > (i);
+
+  // n_thermostats
+  //
+  if (i.n_thermostats ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "n_thermostats",
+        e));
+
+    s << *i.n_thermostats ();
+  }
+
+  // init_T
+  //
+  if (i.init_T ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "init_T",
+        e));
+
+    s << ::xml_schema::as_double(*i.init_T ());
+  }
+
+  // target_T
+  //
+  if (i.target_T ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "target_T",
+        e));
+
+    s << ::xml_schema::as_double(*i.target_T ());
+  }
+
+  // temp_dT
+  //
+  if (i.temp_dT ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "temp_dT",
+        e));
+
+    s << ::xml_schema::as_double(*i.temp_dT ());
   }
 }
 

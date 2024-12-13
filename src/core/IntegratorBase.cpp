@@ -52,7 +52,11 @@ namespace md::Integrator {
         SPDLOG_INFO("Simulation started");
 
         for (double t = start_time; t < end_time; t += dt, step++) {
+                        SPDLOG_INFO("before sim step");
+
             simulation_step(step, dt, modifications);
+                                    SPDLOG_INFO("after sim step");
+
             if (step % write_freq == 0 && writer) {
                 SPDLOG_DEBUG("Plotting particles @ iteration {}, time {}", step, t);
                 writer->plot_particles(env, step);
