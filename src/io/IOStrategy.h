@@ -21,13 +21,14 @@ namespace md::io {
      * @brief Struct used to return arguments read from the terminal.
      */
     struct ProgramArguments {
+        env::Environment env;
+        env::Boundary boundary;
         std::string output_baseName;
         double duration;
         double dt;
         double cutoff_radius;
         int write_freq;
         unsigned int temp_adj_freq = std::numeric_limits<unsigned int>::max();
-        env::Environment env;
         std::string force;
         bool benchmark;
         bool override;
@@ -98,7 +99,7 @@ namespace md::io {
     std::unique_ptr<CheckpointWriter> create_checkpoint_writer();
 
     /**
-     * @brief Reads an Input file.
+     * @brief Reads an input file depending on its format.
      * @param filename
      * @param args
      */

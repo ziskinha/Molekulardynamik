@@ -181,6 +181,8 @@ namespace md::io {
         try {
             if (force_name == "lennard jones") {
                 force = LennardJones(vals[0], vals[1], args.cutoff_radius);
+                // TODO: Set boundary force with parrticle type
+                args.boundary.set_boundary_force(Boundary::LennardJonesForce(vals[0], vals[1]));
                 SPDLOG_INFO("Force - For Particle Type {} using Lennard Jones with parameters: epsilon = {}, sigma = {}, "
                             "cutoff_radius = {}", vals[2], vals[0], vals[1], args.cutoff_radius);
             } else if (force_name == "inverse square") {
@@ -198,18 +200,17 @@ namespace md::io {
     /// -----------------------------------------
     /// \brief Parse environment information
     /// -----------------------------------------
-    void parse_environment(const std::string& line, Environment& env) {
+    void parse_environment(const std::string& line, ProgramArguments &args) {
         SPDLOG_DEBUG("Reading Boundary:     {}", line);
 
         // Minimum required values: 3 (origin) + 3 (extent) + 1 (grid_constant) + 6 (boundary conds)
         auto vals = parse_values(line, 13);
 
-        env::Boundary boundary;
-        boundary.origin = {vals[0], vals[1], vals[2]};
-        boundary.extent = {vals[3], vals[4], vals[5]};
-        env.set_boundary(boundary);
-        env.set_grid_constant(vals[6]);
-        env.set_gravity_constant(vals[7]);
+        args.boundary.origin = {vals[0], vals[1], vals[2]};
+        args.boundary.extent = {vals[3], vals[4], vals[5]};
+        args.env.set_boundary(args.boundary);
+        args.env.set_grid_constant(vals[6]);
+        args.env.set_gravity_constant(vals[7]);
 
         SPDLOG_INFO("Environment - Boundary origin set to: [{}, {}, {}]", vals[0], vals[1], vals[2]);
         SPDLOG_INFO("Environment - Boundary extent set to: [{}, {}, {}]", vals[3], vals[4], vals[5]);
@@ -222,11 +223,11 @@ namespace md::io {
         std::array<std::array<int, 3>, 6> normals = {{{-1, 0, 0}, {1, 0, 0}, {0, 1, 0},
                                                       {0, -1, 0}, {0, 0, 1}, {0, 0, -1}}};
         for (int i = 0; i < 6; ++i) {
-            boundary.set_boundary_rule(rules[vals[8 + i]], normals[i]);
+            args.boundary.set_boundary_rule(rules[vals[8 + i]], normals[i]);
         }
 
-        env.set_boundary(boundary);
-        env.build();
+        args.env.set_boundary(args.boundary);
+        args.env.build();
     }
 
     /// -----------------------------------------
@@ -335,7 +336,7 @@ namespace md::io {
             else if (section == FORCE)
                 parse_force(line, args);
             else if (section == ENVIRONMENT)
-                parse_environment(line, args.env);
+                parse_environment(line, args);
             else if (section == THERMOSTATS)
                 parse_thermostats(line, args);
         }

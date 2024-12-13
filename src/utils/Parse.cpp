@@ -20,7 +20,7 @@ namespace md::parse {
             "  ./MolSim -f\n"
             "  ./MolSim -b\n"
             "Arguments:\n"
-            "  xml_file         file with Input parameters important for the simulation. For more information about "
+            "  xml_file         file with input parameters important for the simulation. For more information about "
             "the structure see ../io/molSimSchema.xsd\n"
             "  output_format    Output format: either 'XYZ' or 'VTK'.\n\n"
             "Flags:\n"
