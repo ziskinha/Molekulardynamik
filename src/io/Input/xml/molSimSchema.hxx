@@ -1052,11 +1052,26 @@ class parameters: public ::xml_schema::type
   void
   cutoff_radius (const cutoff_radius_type& x);
 
+  // gravitational_force
+  //
+  typedef ::xml_schema::double_ gravitational_force_type;
+  typedef ::xsd::cxx::tree::traits< gravitational_force_type, char, ::xsd::cxx::tree::schema_type::double_ > gravitational_force_traits;
+
+  const gravitational_force_type&
+  gravitational_force () const;
+
+  gravitational_force_type&
+  gravitational_force ();
+
+  void
+  gravitational_force (const gravitational_force_type& x);
+
   // Constructors.
   //
   parameters (const tEnd_type&,
               const deltaT_type&,
-              const cutoff_radius_type&);
+              const cutoff_radius_type&,
+              const gravitational_force_type&);
 
   parameters (const ::xercesc::DOMElement& e,
               ::xml_schema::flags f = 0,
@@ -1087,6 +1102,7 @@ class parameters: public ::xml_schema::type
   ::xsd::cxx::tree::one< tEnd_type > tEnd_;
   ::xsd::cxx::tree::one< deltaT_type > deltaT_;
   ::xsd::cxx::tree::one< cutoff_radius_type > cutoff_radius_;
+  ::xsd::cxx::tree::one< gravitational_force_type > gravitational_force_;
 };
 
 class particles: public ::xml_schema::type

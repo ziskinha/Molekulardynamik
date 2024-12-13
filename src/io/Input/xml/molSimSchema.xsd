@@ -68,6 +68,7 @@
                             <xsd:element name="tEnd" type="xsd:double"/>
                             <xsd:element name="deltaT" type="xsd:double"/>
                             <xsd:element name="cutoff_radius" type="xsd:double"/>
+                            <xsd:element name="gravitational_force" type="xsd:double"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>

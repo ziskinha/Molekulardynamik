@@ -12,6 +12,7 @@ using namespace md;
 // scenarios used during testing
 // not particularly important implementation wise but useful as an example how to interface with our program
 
+/*
 inline void four_particle_lennard_jones_test() {
     io::ProgramArguments args;
     args.output_format = io::OutputFormat::VTK;
@@ -180,13 +181,12 @@ inline void periodic_force_mixing_test() {
     boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::TOP);
     boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::BOTTOM);
 
-
     env.set_boundary(boundary);
     env.set_force(env::LennardJones(5, 0.2, 1), 1);
     env.set_force(env::LennardJones(1, 0.5, 1), 2);
 
     env.set_grid_constant(1);
-
+    
     env.build();
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
@@ -276,4 +276,4 @@ inline void test() {
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
     Integrator::StoermerVerlet simulator(env, std::move(writer), thermostat);
     simulator.simulate(0, args.duration, args.dt, args.write_freq, 1000);
-}
+}*/

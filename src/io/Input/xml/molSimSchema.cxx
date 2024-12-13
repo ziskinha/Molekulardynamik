@@ -772,6 +772,24 @@ cutoff_radius (const cutoff_radius_type& x)
   this->cutoff_radius_.set (x);
 }
 
+const parameters::gravitational_force_type& parameters::
+gravitational_force () const
+{
+  return this->gravitational_force_.get ();
+}
+
+parameters::gravitational_force_type& parameters::
+gravitational_force ()
+{
+  return this->gravitational_force_.get ();
+}
+
+void parameters::
+gravitational_force (const gravitational_force_type& x)
+{
+  this->gravitational_force_.set (x);
+}
+
 
 // particles
 // 
@@ -2306,11 +2324,13 @@ output::
 parameters::
 parameters (const tEnd_type& tEnd,
             const deltaT_type& deltaT,
-            const cutoff_radius_type& cutoff_radius)
+            const cutoff_radius_type& cutoff_radius,
+            const gravitational_force_type& gravitational_force)
 : ::xml_schema::type (),
   tEnd_ (tEnd, this),
   deltaT_ (deltaT, this),
-  cutoff_radius_ (cutoff_radius, this)
+  cutoff_radius_ (cutoff_radius, this),
+  gravitational_force_ (gravitational_force, this)
 {
 }
 
@@ -2321,7 +2341,8 @@ parameters (const parameters& x,
 : ::xml_schema::type (x, f, c),
   tEnd_ (x.tEnd_, f, this),
   deltaT_ (x.deltaT_, f, this),
-  cutoff_radius_ (x.cutoff_radius_, f, this)
+  cutoff_radius_ (x.cutoff_radius_, f, this),
+  gravitational_force_ (x.gravitational_force_, f, this)
 {
 }
 
@@ -2332,7 +2353,8 @@ parameters (const ::xercesc::DOMElement& e,
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   tEnd_ (this),
   deltaT_ (this),
-  cutoff_radius_ (this)
+  cutoff_radius_ (this),
+  gravitational_force_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2384,6 +2406,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // gravitational_force
+    //
+    if (n.name () == "gravitational_force" && n.namespace_ ().empty ())
+    {
+      if (!gravitational_force_.present ())
+      {
+        this->gravitational_force_.set (gravitational_force_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -2407,6 +2440,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "cutoff_radius",
       "");
   }
+
+  if (!gravitational_force_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "gravitational_force",
+      "");
+  }
 }
 
 parameters* parameters::
@@ -2425,6 +2465,7 @@ operator= (const parameters& x)
     this->tEnd_ = x.tEnd_;
     this->deltaT_ = x.deltaT_;
     this->cutoff_radius_ = x.cutoff_radius_;
+    this->gravitational_force_ = x.gravitational_force_;
   }
 
   return *this;
@@ -4287,6 +4328,17 @@ operator<< (::xercesc::DOMElement& e, const parameters& i)
         e));
 
     s << ::xml_schema::as_double(i.cutoff_radius ());
+  }
+
+  // gravitational_force
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "gravitational_force",
+        e));
+
+    s << ::xml_schema::as_double(i.gravitational_force ());
   }
 }
 
