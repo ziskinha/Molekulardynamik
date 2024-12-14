@@ -256,9 +256,9 @@ class Boundary;
 class simulation;
 class output;
 class parameters;
-class particles;
 class Forces;
 class Thermostat;
+class particles;
 class cuboids;
 class spheres;
 
@@ -308,8 +308,7 @@ class ForceType: public ::xml_schema::string
   enum value
   {
     lennardJones,
-    inverseSquare,
-    HooksLaw
+    inverseSquare
   };
 
   ForceType (value v);
@@ -355,8 +354,8 @@ class ForceType: public ::xml_schema::string
   _xsd_ForceType_convert () const;
 
   public:
-  static const char* const _xsd_ForceType_literals_[3];
-  static const value _xsd_ForceType_indexes_[3];
+  static const char* const _xsd_ForceType_literals_[2];
+  static const value _xsd_ForceType_indexes_[2];
 };
 
 class Force: public ::xml_schema::type
@@ -378,6 +377,20 @@ class Force: public ::xml_schema::type
 
   void
   type (::std::auto_ptr< type_type > p);
+
+  // partType
+  //
+  typedef ::xml_schema::int_ partType_type;
+  typedef ::xsd::cxx::tree::traits< partType_type, char > partType_traits;
+
+  const partType_type&
+  partType () const;
+
+  partType_type&
+  partType ();
+
+  void
+  partType (const partType_type& x);
 
   // arg1
   //
@@ -417,7 +430,8 @@ class Force: public ::xml_schema::type
 
   // Constructors.
   //
-  Force (const type_type&);
+  Force (const type_type&,
+         const partType_type&);
 
   Force (const ::xercesc::DOMElement& e,
          ::xml_schema::flags f = 0,
@@ -446,6 +460,7 @@ class Force: public ::xml_schema::type
 
   protected:
   ::xsd::cxx::tree::one< type_type > type_;
+  ::xsd::cxx::tree::one< partType_type > partType_;
   arg1_optional arg1_;
   arg2_optional arg2_;
 };
@@ -721,6 +736,63 @@ class Boundary: public ::xml_schema::type
   void
   EXTENT_DEPTH (const EXTENT_DEPTH_optional& x);
 
+  // Force_type
+  //
+  typedef ::ForceType Force_type_type;
+  typedef ::xsd::cxx::tree::optional< Force_type_type > Force_type_optional;
+  typedef ::xsd::cxx::tree::traits< Force_type_type, char > Force_type_traits;
+
+  const Force_type_optional&
+  Force_type () const;
+
+  Force_type_optional&
+  Force_type ();
+
+  void
+  Force_type (const Force_type_type& x);
+
+  void
+  Force_type (const Force_type_optional& x);
+
+  void
+  Force_type (::std::auto_ptr< Force_type_type > p);
+
+  // force_arg1
+  //
+  typedef ::xml_schema::double_ force_arg1_type;
+  typedef ::xsd::cxx::tree::optional< force_arg1_type > force_arg1_optional;
+  typedef ::xsd::cxx::tree::traits< force_arg1_type, char, ::xsd::cxx::tree::schema_type::double_ > force_arg1_traits;
+
+  const force_arg1_optional&
+  force_arg1 () const;
+
+  force_arg1_optional&
+  force_arg1 ();
+
+  void
+  force_arg1 (const force_arg1_type& x);
+
+  void
+  force_arg1 (const force_arg1_optional& x);
+
+  // force_arg2
+  //
+  typedef ::xml_schema::double_ force_arg2_type;
+  typedef ::xsd::cxx::tree::optional< force_arg2_type > force_arg2_optional;
+  typedef ::xsd::cxx::tree::traits< force_arg2_type, char, ::xsd::cxx::tree::schema_type::double_ > force_arg2_traits;
+
+  const force_arg2_optional&
+  force_arg2 () const;
+
+  force_arg2_optional&
+  force_arg2 ();
+
+  void
+  force_arg2 (const force_arg2_type& x);
+
+  void
+  force_arg2 (const force_arg2_optional& x);
+
   // Constructors.
   //
   Boundary (const typeLEFT_type&,
@@ -768,6 +840,9 @@ class Boundary: public ::xml_schema::type
   EXTENT_WIDTH_optional EXTENT_WIDTH_;
   EXTENT_HEIGHT_optional EXTENT_HEIGHT_;
   EXTENT_DEPTH_optional EXTENT_DEPTH_;
+  Force_type_optional Force_type_;
+  force_arg1_optional force_arg1_;
+  force_arg2_optional force_arg2_;
 };
 
 class simulation: public ::xml_schema::type
@@ -824,22 +899,19 @@ class simulation: public ::xml_schema::type
   void
   Boundary (::std::auto_ptr< Boundary_type > p);
 
-  // particles
+  // GridConstant
   //
-  typedef ::particles particles_type;
-  typedef ::xsd::cxx::tree::sequence< particles_type > particles_sequence;
-  typedef particles_sequence::iterator particles_iterator;
-  typedef particles_sequence::const_iterator particles_const_iterator;
-  typedef ::xsd::cxx::tree::traits< particles_type, char > particles_traits;
+  typedef ::xml_schema::double_ GridConstant_type;
+  typedef ::xsd::cxx::tree::traits< GridConstant_type, char, ::xsd::cxx::tree::schema_type::double_ > GridConstant_traits;
 
-  const particles_sequence&
-  particles () const;
+  const GridConstant_type&
+  GridConstant () const;
 
-  particles_sequence&
-  particles ();
+  GridConstant_type&
+  GridConstant ();
 
   void
-  particles (const particles_sequence& s);
+  GridConstant (const GridConstant_type& x);
 
   // Forces
   //
@@ -874,6 +946,23 @@ class simulation: public ::xml_schema::type
 
   void
   Thermostat (::std::auto_ptr< Thermostat_type > p);
+
+  // particles
+  //
+  typedef ::particles particles_type;
+  typedef ::xsd::cxx::tree::sequence< particles_type > particles_sequence;
+  typedef particles_sequence::iterator particles_iterator;
+  typedef particles_sequence::const_iterator particles_const_iterator;
+  typedef ::xsd::cxx::tree::traits< particles_type, char > particles_traits;
+
+  const particles_sequence&
+  particles () const;
+
+  particles_sequence&
+  particles ();
+
+  void
+  particles (const particles_sequence& s);
 
   // cuboids
   //
@@ -914,12 +1003,14 @@ class simulation: public ::xml_schema::type
   simulation (const output_type&,
               const parameters_type&,
               const Boundary_type&,
+              const GridConstant_type&,
               const Forces_type&,
               const Thermostat_type&);
 
   simulation (::std::auto_ptr< output_type >,
               ::std::auto_ptr< parameters_type >,
               ::std::auto_ptr< Boundary_type >,
+              const GridConstant_type&,
               ::std::auto_ptr< Forces_type >,
               ::std::auto_ptr< Thermostat_type >);
 
@@ -952,9 +1043,10 @@ class simulation: public ::xml_schema::type
   ::xsd::cxx::tree::one< output_type > output_;
   ::xsd::cxx::tree::one< parameters_type > parameters_;
   ::xsd::cxx::tree::one< Boundary_type > Boundary_;
-  particles_sequence particles_;
+  ::xsd::cxx::tree::one< GridConstant_type > GridConstant_;
   ::xsd::cxx::tree::one< Forces_type > Forces_;
   ::xsd::cxx::tree::one< Thermostat_type > Thermostat_;
+  particles_sequence particles_;
   cuboids_sequence cuboids_;
   spheres_sequence spheres_;
 };
@@ -1126,175 +1218,25 @@ class parameters: public ::xml_schema::type
   ::xsd::cxx::tree::one< gravitational_force_type > gravitational_force_;
 };
 
-class particles: public ::xml_schema::type
-{
-  public:
-  // x
-  //
-  typedef ::xml_schema::double_ x_type;
-  typedef ::xsd::cxx::tree::traits< x_type, char, ::xsd::cxx::tree::schema_type::double_ > x_traits;
-
-  const x_type&
-  x () const;
-
-  x_type&
-  x ();
-
-  void
-  x (const x_type& x);
-
-  // y
-  //
-  typedef ::xml_schema::double_ y_type;
-  typedef ::xsd::cxx::tree::traits< y_type, char, ::xsd::cxx::tree::schema_type::double_ > y_traits;
-
-  const y_type&
-  y () const;
-
-  y_type&
-  y ();
-
-  void
-  y (const y_type& x);
-
-  // z
-  //
-  typedef ::xml_schema::double_ z_type;
-  typedef ::xsd::cxx::tree::traits< z_type, char, ::xsd::cxx::tree::schema_type::double_ > z_traits;
-
-  const z_type&
-  z () const;
-
-  z_type&
-  z ();
-
-  void
-  z (const z_type& x);
-
-  // vel1
-  //
-  typedef ::xml_schema::double_ vel1_type;
-  typedef ::xsd::cxx::tree::traits< vel1_type, char, ::xsd::cxx::tree::schema_type::double_ > vel1_traits;
-
-  const vel1_type&
-  vel1 () const;
-
-  vel1_type&
-  vel1 ();
-
-  void
-  vel1 (const vel1_type& x);
-
-  // vel2
-  //
-  typedef ::xml_schema::double_ vel2_type;
-  typedef ::xsd::cxx::tree::traits< vel2_type, char, ::xsd::cxx::tree::schema_type::double_ > vel2_traits;
-
-  const vel2_type&
-  vel2 () const;
-
-  vel2_type&
-  vel2 ();
-
-  void
-  vel2 (const vel2_type& x);
-
-  // vel3
-  //
-  typedef ::xml_schema::double_ vel3_type;
-  typedef ::xsd::cxx::tree::traits< vel3_type, char, ::xsd::cxx::tree::schema_type::double_ > vel3_traits;
-
-  const vel3_type&
-  vel3 () const;
-
-  vel3_type&
-  vel3 ();
-
-  void
-  vel3 (const vel3_type& x);
-
-  // mass
-  //
-  typedef ::xml_schema::double_ mass_type;
-  typedef ::xsd::cxx::tree::traits< mass_type, char, ::xsd::cxx::tree::schema_type::double_ > mass_traits;
-
-  const mass_type&
-  mass () const;
-
-  mass_type&
-  mass ();
-
-  void
-  mass (const mass_type& x);
-
-  // Constructors.
-  //
-  particles (const x_type&,
-             const y_type&,
-             const z_type&,
-             const vel1_type&,
-             const vel2_type&,
-             const vel3_type&,
-             const mass_type&);
-
-  particles (const ::xercesc::DOMElement& e,
-             ::xml_schema::flags f = 0,
-             ::xml_schema::container* c = 0);
-
-  particles (const particles& x,
-             ::xml_schema::flags f = 0,
-             ::xml_schema::container* c = 0);
-
-  virtual particles*
-  _clone (::xml_schema::flags f = 0,
-          ::xml_schema::container* c = 0) const;
-
-  particles&
-  operator= (const particles& x);
-
-  virtual 
-  ~particles ();
-
-  // Implementation.
-  //
-  protected:
-  void
-  parse (::xsd::cxx::xml::dom::parser< char >&,
-         ::xml_schema::flags);
-
-  protected:
-  ::xsd::cxx::tree::one< x_type > x_;
-  ::xsd::cxx::tree::one< y_type > y_;
-  ::xsd::cxx::tree::one< z_type > z_;
-  ::xsd::cxx::tree::one< vel1_type > vel1_;
-  ::xsd::cxx::tree::one< vel2_type > vel2_;
-  ::xsd::cxx::tree::one< vel3_type > vel3_;
-  ::xsd::cxx::tree::one< mass_type > mass_;
-};
-
 class Forces: public ::xml_schema::type
 {
   public:
   // Force
   //
   typedef ::Force Force_type;
-  typedef ::xsd::cxx::tree::optional< Force_type > Force_optional;
+  typedef ::xsd::cxx::tree::sequence< Force_type > Force_sequence;
+  typedef Force_sequence::iterator Force_iterator;
+  typedef Force_sequence::const_iterator Force_const_iterator;
   typedef ::xsd::cxx::tree::traits< Force_type, char > Force_traits;
 
-  const Force_optional&
+  const Force_sequence&
   Force () const;
 
-  Force_optional&
+  Force_sequence&
   Force ();
 
   void
-  Force (const Force_type& x);
-
-  void
-  Force (const Force_optional& x);
-
-  void
-  Force (::std::auto_ptr< Force_type > p);
+  Force (const Force_sequence& s);
 
   // Constructors.
   //
@@ -1326,7 +1268,7 @@ class Forces: public ::xml_schema::type
          ::xml_schema::flags);
 
   protected:
-  Force_optional Force_;
+  Force_sequence Force_;
 };
 
 class Thermostat: public ::xml_schema::type
@@ -1438,6 +1380,168 @@ class Thermostat: public ::xml_schema::type
   init_T_optional init_T_;
   target_T_optional target_T_;
   temp_dT_optional temp_dT_;
+};
+
+class particles: public ::xml_schema::type
+{
+  public:
+  // x
+  //
+  typedef ::xml_schema::double_ x_type;
+  typedef ::xsd::cxx::tree::traits< x_type, char, ::xsd::cxx::tree::schema_type::double_ > x_traits;
+
+  const x_type&
+  x () const;
+
+  x_type&
+  x ();
+
+  void
+  x (const x_type& x);
+
+  // y
+  //
+  typedef ::xml_schema::double_ y_type;
+  typedef ::xsd::cxx::tree::traits< y_type, char, ::xsd::cxx::tree::schema_type::double_ > y_traits;
+
+  const y_type&
+  y () const;
+
+  y_type&
+  y ();
+
+  void
+  y (const y_type& x);
+
+  // z
+  //
+  typedef ::xml_schema::double_ z_type;
+  typedef ::xsd::cxx::tree::traits< z_type, char, ::xsd::cxx::tree::schema_type::double_ > z_traits;
+
+  const z_type&
+  z () const;
+
+  z_type&
+  z ();
+
+  void
+  z (const z_type& x);
+
+  // vel1
+  //
+  typedef ::xml_schema::double_ vel1_type;
+  typedef ::xsd::cxx::tree::traits< vel1_type, char, ::xsd::cxx::tree::schema_type::double_ > vel1_traits;
+
+  const vel1_type&
+  vel1 () const;
+
+  vel1_type&
+  vel1 ();
+
+  void
+  vel1 (const vel1_type& x);
+
+  // vel2
+  //
+  typedef ::xml_schema::double_ vel2_type;
+  typedef ::xsd::cxx::tree::traits< vel2_type, char, ::xsd::cxx::tree::schema_type::double_ > vel2_traits;
+
+  const vel2_type&
+  vel2 () const;
+
+  vel2_type&
+  vel2 ();
+
+  void
+  vel2 (const vel2_type& x);
+
+  // vel3
+  //
+  typedef ::xml_schema::double_ vel3_type;
+  typedef ::xsd::cxx::tree::traits< vel3_type, char, ::xsd::cxx::tree::schema_type::double_ > vel3_traits;
+
+  const vel3_type&
+  vel3 () const;
+
+  vel3_type&
+  vel3 ();
+
+  void
+  vel3 (const vel3_type& x);
+
+  // mass
+  //
+  typedef ::xml_schema::double_ mass_type;
+  typedef ::xsd::cxx::tree::traits< mass_type, char, ::xsd::cxx::tree::schema_type::double_ > mass_traits;
+
+  const mass_type&
+  mass () const;
+
+  mass_type&
+  mass ();
+
+  void
+  mass (const mass_type& x);
+
+  // type
+  //
+  typedef ::xml_schema::int_ type_type;
+  typedef ::xsd::cxx::tree::traits< type_type, char > type_traits;
+
+  const type_type&
+  type () const;
+
+  type_type&
+  type ();
+
+  void
+  type (const type_type& x);
+
+  // Constructors.
+  //
+  particles (const x_type&,
+             const y_type&,
+             const z_type&,
+             const vel1_type&,
+             const vel2_type&,
+             const vel3_type&,
+             const mass_type&,
+             const type_type&);
+
+  particles (const ::xercesc::DOMElement& e,
+             ::xml_schema::flags f = 0,
+             ::xml_schema::container* c = 0);
+
+  particles (const particles& x,
+             ::xml_schema::flags f = 0,
+             ::xml_schema::container* c = 0);
+
+  virtual particles*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  particles&
+  operator= (const particles& x);
+
+  virtual 
+  ~particles ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< x_type > x_;
+  ::xsd::cxx::tree::one< y_type > y_;
+  ::xsd::cxx::tree::one< z_type > z_;
+  ::xsd::cxx::tree::one< vel1_type > vel1_;
+  ::xsd::cxx::tree::one< vel2_type > vel2_;
+  ::xsd::cxx::tree::one< vel3_type > vel3_;
+  ::xsd::cxx::tree::one< mass_type > mass_;
+  ::xsd::cxx::tree::one< type_type > type_;
 };
 
 class cuboids: public ::xml_schema::type
@@ -1631,20 +1735,16 @@ class cuboids: public ::xml_schema::type
   // type
   //
   typedef ::xml_schema::int_ type_type;
-  typedef ::xsd::cxx::tree::optional< type_type > type_optional;
   typedef ::xsd::cxx::tree::traits< type_type, char > type_traits;
 
-  const type_optional&
+  const type_type&
   type () const;
 
-  type_optional&
+  type_type&
   type ();
 
   void
   type (const type_type& x);
-
-  void
-  type (const type_optional& x);
 
   // Constructors.
   //
@@ -1660,7 +1760,8 @@ class cuboids: public ::xml_schema::type
            const thermal_v_type&,
            const width_type&,
            const mass_type&,
-           const dimension_type&);
+           const dimension_type&,
+           const type_type&);
 
   cuboids (const ::xercesc::DOMElement& e,
            ::xml_schema::flags f = 0,
@@ -1701,7 +1802,7 @@ class cuboids: public ::xml_schema::type
   ::xsd::cxx::tree::one< width_type > width_;
   ::xsd::cxx::tree::one< mass_type > mass_;
   ::xsd::cxx::tree::one< dimension_type > dimension_;
-  type_optional type_;
+  ::xsd::cxx::tree::one< type_type > type_;
 };
 
 class spheres: public ::xml_schema::type
@@ -1867,20 +1968,16 @@ class spheres: public ::xml_schema::type
   // type
   //
   typedef ::xml_schema::int_ type_type;
-  typedef ::xsd::cxx::tree::optional< type_type > type_optional;
   typedef ::xsd::cxx::tree::traits< type_type, char > type_traits;
 
-  const type_optional&
+  const type_type&
   type () const;
 
-  type_optional&
+  type_type&
   type ();
 
   void
   type (const type_type& x);
-
-  void
-  type (const type_optional& x);
 
   // Constructors.
   //
@@ -1894,7 +1991,8 @@ class spheres: public ::xml_schema::type
            const radius_type&,
            const width_type&,
            const mass_type&,
-           const dimension_type&);
+           const dimension_type&,
+           const type_type&);
 
   spheres (const ::xercesc::DOMElement& e,
            ::xml_schema::flags f = 0,
@@ -1933,7 +2031,7 @@ class spheres: public ::xml_schema::type
   ::xsd::cxx::tree::one< width_type > width_;
   ::xsd::cxx::tree::one< mass_type > mass_;
   ::xsd::cxx::tree::one< dimension_type > dimension_;
-  type_optional type_;
+  ::xsd::cxx::tree::one< type_type > type_;
 };
 
 #include <iosfwd>
@@ -2157,13 +2255,13 @@ void
 operator<< (::xercesc::DOMElement&, const parameters&);
 
 void
-operator<< (::xercesc::DOMElement&, const particles&);
-
-void
 operator<< (::xercesc::DOMElement&, const Forces&);
 
 void
 operator<< (::xercesc::DOMElement&, const Thermostat&);
+
+void
+operator<< (::xercesc::DOMElement&, const particles&);
 
 void
 operator<< (::xercesc::DOMElement&, const cuboids&);

@@ -12,12 +12,12 @@
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="lennardJones"/>
             <xsd:enumeration value="inverseSquare"/>
-            <xsd:enumeration value="HooksLaw"/>
         </xsd:restriction>
     </xsd:simpleType>
 
     <xsd:complexType name="Force">
         <xsd:attribute name="type" type="ForceType" use="required"/>
+        <xsd:attribute name="partType" type="xsd:int" use="required"/>
         <xsd:attribute name="arg1" type="xsd:double" use="optional"/>
         <xsd:attribute name="arg2" type="xsd:double" use="optional"/>
     </xsd:complexType>
@@ -28,7 +28,6 @@
             <xsd:enumeration value="VELOCITY_REFLECTION"/>
             <xsd:enumeration value="REPULSIVE_FORCE"/>
             <xsd:enumeration value="PERIODIC"/>
-
         </xsd:restriction>
     </xsd:simpleType>
 
@@ -46,6 +45,9 @@
         <xsd:attribute name="EXTENT_WIDTH" type="xsd:double"/>
         <xsd:attribute name="EXTENT_HEIGHT" type="xsd:double"/>
         <xsd:attribute name="EXTENT_DEPTH" type="xsd:double"/>
+        <xsd:attribute name="Force_type" type="ForceType"/>
+        <xsd:attribute name="force_arg1" type="xsd:double"/>
+        <xsd:attribute name="force_arg2" type="xsd:double" use="optional"/>
 
     </xsd:complexType>
 
@@ -75,26 +77,12 @@
 
                 
                 <xsd:element name="Boundary" type="Boundary" minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="GridConstant" type="xsd:double" minOccurs="1" maxOccurs="1"/>
                    
-
-                <xsd:element name="particles" minOccurs="0" maxOccurs="unbounded">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <xsd:element name="x" type="xsd:double"/>
-                            <xsd:element name="y" type="xsd:double"/>
-                            <xsd:element name="z" type="xsd:double"/>
-                            <xsd:element name="vel1" type="xsd:double"/>
-                            <xsd:element name="vel2" type="xsd:double"/>
-                            <xsd:element name="vel3" type="xsd:double"/>
-                            <xsd:element name="mass" type="xsd:double"/>
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
-
                 <xsd:element name="Forces">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element name="Force" type="Force" minOccurs="0" maxOccurs="1"/>
+                            <xsd:element name="Force" type="Force" minOccurs="1" maxOccurs="2"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
@@ -106,6 +94,21 @@
                             <xsd:element name="init_T" type="xsd:double" minOccurs="0" maxOccurs="1"/>
                             <xsd:element name="target_T" type="xsd:double" minOccurs="0" maxOccurs="1"/>
                             <xsd:element name="temp_dT" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+
+                                <xsd:element name="particles" minOccurs="0" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="x" type="xsd:double"/>
+                            <xsd:element name="y" type="xsd:double"/>
+                            <xsd:element name="z" type="xsd:double"/>
+                            <xsd:element name="vel1" type="xsd:double"/>
+                            <xsd:element name="vel2" type="xsd:double"/>
+                            <xsd:element name="vel3" type="xsd:double"/>
+                            <xsd:element name="mass" type="xsd:double"/>
+                            <xsd:element name="type"  type="xsd:int"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
@@ -126,7 +129,7 @@
                             <xsd:element name="width" type="xsd:double"/>
                             <xsd:element name="mass" type="xsd:double"/>
                             <xsd:element name="dimension" type="DimensionT"/>
-                            <xsd:element name="type" minOccurs="0" type="xsd:int"/>
+                            <xsd:element name="type"  type="xsd:int"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
@@ -145,7 +148,7 @@
                             <xsd:element name="width" type="xsd:double"/>
                             <xsd:element name="mass" type="xsd:double"/>
                             <xsd:element name="dimension" type="DimensionT"/>
-                            <xsd:element name="type" minOccurs="0" type="xsd:int"/>
+                            <xsd:element name="type"  type="xsd:int"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>

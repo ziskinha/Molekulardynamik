@@ -49,13 +49,9 @@ namespace md::Integrator {
         temp_adjust_freq = temp_adj_freq;
         int step = 0;
         const int total_steps = static_cast<int>((end_time - start_time) / dt);
-        SPDLOG_INFO("Simulation started");
 
         for (double t = start_time; t < end_time; t += dt, step++) {
-                        SPDLOG_INFO("before sim step");
-
             simulation_step(step, dt, modifications);
-                                    SPDLOG_INFO("after sim step");
 
             if (step % write_freq == 0 && writer) {
                 SPDLOG_DEBUG("Plotting particles @ iteration {}, time {}", step, t);
@@ -65,7 +61,7 @@ namespace md::Integrator {
         }
 
         checkpoint_writer->write_checkpoint_file(env, 1);
-        SPDLOG_INFO("Simulation ended");
+        SPDLOG_INFO("Simulation ended\n");
     }
 
     /// -----------------------------------------

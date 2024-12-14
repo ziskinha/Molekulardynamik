@@ -9,7 +9,6 @@
 namespace md::Integrator {
 
     void StoermerVerlet::simulation_step(unsigned step, const double dt, double& modifications ) {
-                                SPDLOG_INFO("before particles");
 
         // update position
         for (auto& p : env.particles()) {
@@ -19,14 +18,12 @@ namespace md::Integrator {
             p.update_grid();
             p.reset_force();
         }
-            SPDLOG_INFO("particles");
 
 
         for (auto & particle : env.particles(env::GridCell::BOUNDARY | env::GridCell::OUTSIDE)) {
             env.apply_boundary(particle);
         }
-                    SPDLOG_INFO("boundary");
-
+        
         // calculate forces
         for (auto& cell_pair : env.linked_cells()) {
             for (auto [p1, p2] : cell_pair.particles()) {
@@ -37,27 +34,23 @@ namespace md::Integrator {
                 modifications+=2;
             }
         }
-            SPDLOG_INFO("linked cells");
 
         // apply gravity
         for (auto& p : env.particles()) {
             p.force = p.force + env.gravity_force(p);
             modifications++;
         }
-            SPDLOG_INFO("gravity cells");
 
         // update velocities
         for (auto& p : env.particles()) {
             p.velocity = p.velocity + dt / 2 / p.mass * (p.force + p.old_force);
             modifications++;
         }
-            SPDLOG_INFO("velocities");
 
         // apply thermostat
         if (step % temp_adjust_freq == 0) {
             thermostat.adjust_temperature(env,modifications);
         }
-                    SPDLOG_INFO("thermostat");
 
     }
 }  // namespace md::Integrator
