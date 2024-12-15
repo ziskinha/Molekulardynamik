@@ -57,10 +57,13 @@ target_include_directories(MolSim
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+find_package(XercesC REQUIRED)
+
 target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
-        xerces-c
+        #xerces-c
+        XercesC::XercesC
 )
 
 # activate all compiler warnings. Clean up your code :P
