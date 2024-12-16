@@ -4,16 +4,17 @@
 #SBATCH -D ./
 #SBATCH --get-user-env
 #SBATCH --clusters=cm4
-#SBATCH --partition=cm4_tiny
-#SBATCH --qos=cm4_tiny
-#SBATCH --nodes=1
+#SBATCH --partition=cm4_std
+#SBATCH --qos=cm4_std
+#SBATCH --nodes=4
 #SBATCH --ntasks-per-node=112
 #SBATCH --export=NONE
 #SBATCH --time=08:00:00
 
+module load slurm_setup
 module load gcc/13.2.0
 module load xerces-c/3.2.1
-module load slurm_setup
+
 
 # Ensure /usr/bin is in PATH
 export PATH=/usr/bin:$PATH
