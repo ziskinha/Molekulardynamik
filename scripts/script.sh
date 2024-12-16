@@ -3,13 +3,12 @@
 #SBATCH -o ./%x.%j.%N.out
 #SBATCH -D ./
 #SBATCH --get-user-env
-#SBATCH --clusters=cm4
-#SBATCH --partition=cm4_std
-#SBATCH --qos=cm4_std
-#SBATCH --nodes=4
-#SBATCH --ntasks-per-node=112
+#SBATCH --clusters=serial
+#SBATCH --partition=serial_std
+#SBATCH --mem=800mb
+#SBATCH --cpus-per-task=1
 #SBATCH --export=NONE
-#SBATCH --time=08:00:00
+#SBATCH --time=24:00:00
 
 module load slurm_setup
 module load gcc/13.2.0
