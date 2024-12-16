@@ -8,10 +8,10 @@ md::env::ParticleGrid grid;
 md::env::Boundary boundary;
 std::vector<md::env::Particle> particle_storage;
 
-md::env::Particle particle1 = md::env::Particle(0, grid, {7.5, 7.5, 0}, {0.0, 0.0, 0.0}, 100.0, 0);
-md::env::Particle particle2 = md::env::Particle(0, grid, {4.5, 7.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
-md::env::Particle particle3 = md::env::Particle(0, grid, {7.5, 4.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
-md::env::Particle particle4 = md::env::Particle(0, grid, {13.5, 13.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
+auto particle1 = md::env::Particle(0, grid, {7.5, 7.5, 0}, {0.0, 0.0, 0.0}, 100.0, 0);
+auto particle2 = md::env::Particle(0, grid, {4.5, 7.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
+auto particle3 = md::env::Particle(0, grid, {7.5, 4.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
+auto particle4 = md::env::Particle(0, grid, {13.5, 13.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
 
 void init_grid() {
     boundary.origin = {0, 0, 0};
@@ -74,4 +74,36 @@ TEST(LinkedCellsTest, grid_pair_test) {
             ++i;
         }
     }
+}
+
+struct SymmetricPairHasher {  // symmetric pair hasher
+    template <typename T1, typename T2>
+    std::size_t operator()(const std::pair<T1, T2>& key) const {
+        std::size_t h1 = std::hash<T1>()(key.first);
+        std::size_t h2 = std::hash<T2>()(key.second);
+        return h1 ^ h2 ^ ((h1 + h2) << 1);
+    }
+};
+
+TEST(LinkedCellsTest, no_double_particle_pairs) {
+    boundary.origin = {0, 0, 0};
+    boundary.extent = {50, 50, 50};
+    boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC);
+
+    md::env::Environment env;
+    env.add_cuboid({0.5,0.5,0.5}, {}, {49,49,49}, 0, 1, 0, 3);
+    env.set_boundary(boundary);
+    env.set_gravity_constant(10);
+
+    for (auto& cell_pair : env.linked_cells()) {
+        std::unordered_set<std::pair<int, int>, SymmetricPairHasher> pairs;
+        for (auto [p1, p2] : cell_pair.particles()) {
+            std::pair<int, int> current_pair{p1->id, p2->id};
+            ASSERT_FALSE(pairs.find(current_pair) != pairs.end()) << "Duplicate pair found: {"
+                                                                             << current_pair.first << ", "
+                                                                             << current_pair.second << "}";
+            pairs.insert(current_pair);
+        }
+    }
+
 }
