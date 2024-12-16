@@ -229,7 +229,7 @@ inline void thermostat_test() {
     thermostat.set_initial_temperature(env);
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
-    Integrator::StoermerVerlet simulator(env, std::move(writer), thermostat);
+    Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, thermostat);
     simulator.simulate(0, args.duration, args.dt, args.write_freq, 1000);
 }
 
@@ -277,7 +277,7 @@ inline void ws4_task2_small() {
     thermostat.set_initial_temperature(env);
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
-    Integrator::StoermerVerlet simulator(env, std::move(writer), thermostat);
+    Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, thermostat);
     simulator.simulate(0, args.duration, args.dt, args.write_freq, 1000);
 }
 
@@ -325,6 +325,6 @@ inline void ws4_task2_big() {
     thermostat.set_initial_temperature(env);
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
-    Integrator::StoermerVerlet simulator(env, std::move(writer), thermostat);
+    Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, thermostat);
     simulator.simulate(0, args.duration, args.dt, args.write_freq, 1000);
 }

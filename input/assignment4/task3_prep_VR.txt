@@ -1,0 +1,20 @@
+general:
+# duration   delta_t     write_freq   cutoff_radius   output_baseName
+15            0.0005       500           3                output
+
+cuboids:
+# LL-cord       velocity        N            h           m       br_v    dim   particle_type
+1.5 2 0          0 0 0       250 50 1       1.2         1.0        0      2          0
+
+force:
+# name           parameter   particle_type
+lennard_jones    1.0 1.2          0
+
+environment:
+# (Boundary condition identification: 0: OUTFLOW, 1: PERIODIC, 2: REPULSIVE FORCE, 3: VELOCITY REFLECTION)
+# boundary_origin     boundary_extent     grid_constant   grav_const    boundary_conds(l, r, t, bo, f, ba)
+0 0 0                  303 180 1              3            -12.44          3 3 3 3 0 0
+
+thermostats:
+# T_init     n_thermos     T_target(for no target: -1)      delta_T(for no delta_t: -1)
+0.5            1000                  -1                              -1

@@ -56,12 +56,12 @@ namespace md::io {
         outfile << "particles:" << std::endl;
         outfile << PARTICLE_HEADER << std::endl;
 
-        for (size_t i = 0; i < env.size(); ++i) {
-            outfile << env.operator[](i).position[0] << " " << env.operator[](i).position[1] << " " << env.operator[](i).position[2] << SPACE
-                    << env.operator[](i).velocity[0] << " " << env.operator[](i).velocity[1] << " " << env.operator[](i).velocity[2] << SPACE
-                    << env.operator[](i).mass << SPACE
-                    << env.operator[](i).type << SPACE
-                    << env.operator[](i).old_force[0] << " " << env.operator[](i).old_force[1] << " " << env.operator[](i).old_force[2] << SPACE
+        for (auto & particle : env.particles(env::GridCell::INSIDE, env::Particle::ALIVE)) {
+            outfile << particle.position[0] << " " << particle.position[1] << " " << particle.position[2] << SPACE
+                    << particle.velocity[0] << " " << particle.velocity[1] << " " << particle.velocity[2] << SPACE
+                    << particle.mass << SPACE
+                    << particle.type << SPACE
+                    << particle.old_force[0] << " " << particle.old_force[1] << " " << particle.old_force[2] << SPACE
                     << std::endl;
         }
         outfile << " " << std::endl;

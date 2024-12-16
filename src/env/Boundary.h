@@ -131,7 +131,7 @@ namespace md::env {
          */
         static BoundaryForce InverseDistanceForce(double cutoff, double pre_factor, int exponent = 2);
 
-        // functions for querying whether the force has been set if required
+        // functions for querying whether the force has been set if required.
         [[nodiscard]] bool requires_force_function() const;
         [[nodiscard]] bool has_force_function() const;
 

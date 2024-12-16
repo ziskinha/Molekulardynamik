@@ -17,7 +17,8 @@ void run_mol_sim(const int argc, char* argv[]) {
     };
 
     auto writer = io::create_writer(args.output_baseName, args.output_format, args.override);
-    Integrator::StoermerVerlet simulator(args.env, std::move(writer));
+    auto checkpoint_writer = io::create_checkpoint_writer();
+    Integrator::StoermerVerlet simulator(args.env, std::move(writer), std::move(checkpoint_writer));
 
     if (!args.benchmark) {
         simulator.simulate(0, args.duration, args.dt, args.write_freq, args.temp_adj_freq);
@@ -31,9 +32,7 @@ void run_mol_sim(const int argc, char* argv[]) {
 
 int main(const int argc, char* argv[]) {
     SPDLOG_INFO("TODO: Main zurücksetzen");
-
     run_mol_sim(argc, argv);
-    //test();
     return 0;
 }
 

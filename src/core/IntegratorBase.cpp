@@ -40,12 +40,13 @@ namespace md::Integrator {
     IntegratorBase::IntegratorBase(
         env::Environment& environment,
         std::unique_ptr<io::OutputWriterBase> writer,
+        std::unique_ptr<io::CheckpointWriter> checkpoint_writer,
         const env::Thermostat & thermostat)
-        : env(environment), thermostat(thermostat), temp_adjust_freq(0), writer(std::move(writer)) {}
+        : env(environment), thermostat(thermostat), temp_adjust_freq(0),
+        writer(std::move(writer)), checkpoint_writer(std::move(checkpoint_writer)) {}
 
     void IntegratorBase::simulate(const double start_time, const double end_time, const double dt,
                                   const unsigned int write_freq, const unsigned int temp_adj_freq) {
-        auto checkpoint_writer = io::create_checkpoint_writer();
         temp_adjust_freq = temp_adj_freq;
         int step = 0;
         const int total_steps = static_cast<int>((end_time - start_time) / dt);
@@ -60,7 +61,9 @@ namespace md::Integrator {
             SHOW_PROGRESS(step, total_steps);
         }
 
-        checkpoint_writer->write_checkpoint_file(env, 1);
+        if (checkpoint_writer) {
+            checkpoint_writer->write_checkpoint_file(env, 1);
+        }
         SPDLOG_INFO("Simulation ended");
     }
 

@@ -61,7 +61,7 @@ namespace md::env {
     /// -----------------------------------------
     /// \brief ParticleGrid initilization methods
     /// -----------------------------------------
-    void ParticleGrid::build(const Boundary & boundary, const double grid_const, std::vector<Particle>& particles) {
+void ParticleGrid::build(const Boundary & boundary, const double grid_const, std::vector<Particle>& particles) {
         this->boundary_origin = boundary.origin;
         build_cells(boundary.extent, grid_const, particles);
         build_cell_pairs(boundary.boundary_rules());

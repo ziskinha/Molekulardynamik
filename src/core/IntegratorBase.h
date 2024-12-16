@@ -17,9 +17,11 @@ namespace md::Integrator {
          * @param environment physical system to be simulated.
          * @param thermostat
          * @param writer used to log/plot particle data.
+         * @param output_writer
          */
         explicit IntegratorBase(env::Environment& environment, std::unique_ptr<io::OutputWriterBase> writer = nullptr,
-            const env::Thermostat & thermostat = env::Thermostat());
+                                std::unique_ptr<io::CheckpointWriter> checkpoint_writer = nullptr,
+                                const env::Thermostat & thermostat = env::Thermostat());
 
         /**
          * @brief Virtual destructor.
@@ -60,5 +62,6 @@ namespace md::Integrator {
 
        private:
         std::unique_ptr<io::OutputWriterBase> writer;  ///< The output writer.
+        std::unique_ptr<io::CheckpointWriter> checkpoint_writer;  ///< The output checkpoint writer.
     };
 }  // namespace md::Integrator

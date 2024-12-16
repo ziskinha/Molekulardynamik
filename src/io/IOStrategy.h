@@ -24,15 +24,15 @@ namespace md::io {
         env::Environment env;
         env::Boundary boundary;
         std::string output_baseName;
+        OutputFormat output_format;
+        bool benchmark;
+        bool override;
         double duration;
         double dt;
         double cutoff_radius;
         int write_freq;
         unsigned int temp_adj_freq = std::numeric_limits<unsigned int>::max();
         std::string force;
-        bool benchmark;
-        bool override;
-        OutputFormat output_format;
     };
 
     /**
@@ -89,7 +89,7 @@ namespace md::io {
     bool check_format(const std::string& filename, const std::string& extension);
 
     /**
-     * @brief Factory function to create an output writer.
+     * @brief Create an output writer.
      * @param outputFileBaseName
      * @param output_format A boolean flag indicating whether to use the VTK output format or XYZ.
      * @param allow_delete
@@ -97,6 +97,10 @@ namespace md::io {
      */
     std::unique_ptr<OutputWriterBase> create_writer(const std::string& outputFileBaseName, OutputFormat output_format, bool allow_delete);
 
+    /**
+     * @brief Create an checkpoint output writer.
+     * @return A pointer to an CheckpointWriter object.
+     */
     std::unique_ptr<CheckpointWriter> create_checkpoint_writer();
 
     /**

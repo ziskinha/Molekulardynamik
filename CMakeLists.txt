@@ -42,9 +42,7 @@ add_executable(MolSim ${MY_SRC})
 # set cxx standard. You may raise this if you want.
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-#set(CMAKE_C_STANDARD 23)
-#set(CMAKE_C_STANDARD_REQUIRED ON)
-#set(CMAKE_C_EXTENSIONS OFF) # Disable compiler-specific extensions
+
 target_compile_features(MolSim
         PRIVATE
         cxx_std_23
@@ -81,5 +79,5 @@ include(spdlog)
 include(googletest)
 
 # Enable testing and a separate testing directory with its own CMakeLists.txt
-#enable_testing()
-#add_subdirectory(testing)
+enable_testing()
+add_subdirectory(testing)
