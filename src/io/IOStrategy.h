@@ -21,7 +21,6 @@ namespace md::io {
      * @brief Struct used to return arguments read from the terminal.
      */
     struct ProgramArguments {
-        env::Environment env;
         env::Boundary boundary;
         std::string output_baseName;
         OutputFormat output_format;
@@ -31,7 +30,12 @@ namespace md::io {
         double dt;
         double cutoff_radius;
         int write_freq;
-        unsigned int temp_adj_freq = std::numeric_limits<unsigned int>::max();
+        double gravitational_force;
+        unsigned int temp_adj_freq;
+        double init_T;
+        double target_T;
+        double temp_dT;
+        env::Environment env;
         std::string force;
     };
 
@@ -42,16 +46,17 @@ namespace md::io {
     inline void log_arguments(const ProgramArguments& args) {
         SPDLOG_INFO(
                 "Parsed Arguments:\n"
-                "       output name:   {}\n"
-                "       duration:      {}\n"
-                "       dt:            {}\n"
-                "       cutoff_radius: {}\n"
-                "       write_freq:    {}\n"
-                "       particles:     {}\n"
-                "       benchmark:     {}\n"
-                "       override:      {}\n"
-                "       output_format: {}",
-                args.output_baseName, args.duration, args.dt, args.cutoff_radius, args.write_freq, args.env.size(), args.benchmark ? "true" : "false",
+                "       output name:         {}\n"
+                "       duration:            {}\n"
+                "       dt:                  {}\n"
+                "       cutoff_radius:       {}\n"
+                "       write_freq:          {}\n"
+                "       gravitational force: {}\n"
+                "       particles:           {}\n"
+                "       benchmark:           {}\n"
+                "       override:            {}\n"
+                "       output_format:       {}",
+                args.output_baseName, args.duration, args.dt, args.cutoff_radius, args.write_freq, args.gravitational_force ,args.env.size(), args.benchmark ? "true" : "false",
                 args.override ? "true" : "false", args.output_format == OutputFormat::XYZ ? "XYZ" : "VTK");
     }
 

@@ -17,7 +17,7 @@ namespace md::Integrator {
          * @param step
          * @param dt Δt The time increment for each simulation step.
          */
-        void simulation_step(unsigned step, double dt) override;
+        void simulation_step(unsigned step, double dt, double& modifications) override;
     };
 
 }  // namespace md::Integrator
