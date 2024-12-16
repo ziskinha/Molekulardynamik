@@ -22,13 +22,8 @@ export PATH=/usr/bin:$PATH
 echo "PATH: $PATH"
 echo "Current working directory: $(pwd)"
 
-if command -v perf >/dev/null 2>&1; then
     echo "Running perf profiling..."
     /usr/bin/perf record -g ../build/MolSim
-else
-    echo "Error: 'perf' command not found or not accessible."
-    exit 1
-fi
 
 echo "Running gprof profiling..."
 ../build/MolSim
