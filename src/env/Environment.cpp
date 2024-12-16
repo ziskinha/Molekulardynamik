@@ -174,7 +174,7 @@ namespace md::env {
         }
         for (int i = 0; i < 3; i++) {
             if (boundary.origin[i] == CENTER_BOUNDARY_ORIGIN) {
-                boundary.extent[i] = -boundary.extent[i] / 2;
+                boundary.origin[i] = -boundary.extent[i] / 2;
             }
         }
         for (Particle & particle : particle_storage) {
@@ -203,6 +203,7 @@ namespace md::env {
         if (grid_constant == GRID_CONSTANT_AUTO) {
             if (boundary.extent[0] == MAX_EXTENT && boundary.extent[1] == MAX_EXTENT && boundary.extent[2] == MAX_EXTENT) {
                 grid_constant = MAX_EXTENT;
+                SPDLOG_DEBUG("Using GRID_CONSTANT_AUTO. Grid constant set to MAX_EXTENT", grid_constant);
             } else {
                 grid_constant = forces.cutoff();
                 SPDLOG_DEBUG("Using GRID_CONSTANT_AUTO. Grid constant set to force cutoff: {}", grid_constant);
@@ -254,9 +255,14 @@ namespace md::env {
         return forces.evaluate(diff, p1, p2);
     }
 
-    size_t Environment::size(Particle::State) const {
-        // todo: query number of particles in a given state
-        return particle_storage.size();
+    size_t Environment::size(const Particle::State state) const {
+        if (state == Particle::ALIVE)
+            return grid.particle_count();
+        if (state == Particle::DEAD)
+            return particle_storage.size() - grid.particle_count();
+        if(state & Particle::DEAD && state & Particle::ALIVE)
+            return particle_storage.size();
+        throw std::invalid_argument("invalid particle state");
     }
 
     const std::vector<CellPair> & Environment::linked_cells() {

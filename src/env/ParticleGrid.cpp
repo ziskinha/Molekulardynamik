@@ -227,6 +227,14 @@ void ParticleGrid::build(const Boundary & boundary, const double grid_const, std
         return border_cells;
     }
 
+    size_t ParticleGrid::particle_count() const {
+        size_t count = 0;
+        for (const auto& cell : cells | std::views::values) {
+            count += cell.particles.size();
+        }
+        return count;
+    }
+
     void ParticleGrid::update_cells(Particle* particle, const int3& old_cell, const int3& new_cell) {
         if (old_cell != new_cell) {
             auto& old = cells.at(old_cell);

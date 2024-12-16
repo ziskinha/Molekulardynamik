@@ -261,6 +261,8 @@ namespace md::env {
          */
         const std::vector<GridCell*> & boundary_cells();
 
+        size_t particle_count() const;
+
         /**
          * @brief Updates the relevant grid cells when a particle moves from one cell to another.
          * @param particle Pointer to the particle which moves.
