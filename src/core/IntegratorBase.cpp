@@ -45,14 +45,14 @@ namespace md::Integrator {
         : env(environment), thermostat(thermostat), temp_adjust_freq(0),
         writer(std::move(writer)), checkpoint_writer(std::move(checkpoint_writer)) {}
 
-    void IntegratorBase::simulate(const double start_time, const double end_time, const double dt, double& modifications,
+    void IntegratorBase::simulate(const double start_time, const double end_time, const double dt,
                                   const unsigned int write_freq, const unsigned int temp_adj_freq) {
         temp_adjust_freq = temp_adj_freq;
         int step = 0;
         const int total_steps = static_cast<int>((end_time - start_time) / dt);
 
         for (double t = start_time; t < end_time; t += dt, step++) {
-            simulation_step(step, dt, modifications);
+            simulation_step(step, dt);
 
             if (step % write_freq == 0 && writer) {
                 SPDLOG_DEBUG("Plotting particles @ iteration {}, time {}", step, t);
@@ -67,20 +67,16 @@ namespace md::Integrator {
         SPDLOG_INFO("Simulation ended");
     }
 
-    /// -----------------------------------------
-    /// \brief Benchmark functions
-    /// -----------------------------------------
-
     void IntegratorBase::benchmark(double start_time, double end_time, double dt, unsigned int temp_adj_freq) {
         temp_adjust_freq = temp_adj_freq;
 
         unsigned long long total_micros = 0;
-        // TODO delete
-        double modifications=0;
+        size_t modifications = 0;
         int step = 0;
         for (double t = start_time; t < end_time; t += dt, step++) {
+            modifications += env.size(env::Particle::ALIVE);
             auto start = std::chrono::high_resolution_clock::now();
-            simulation_step(step, dt, modifications);
+            simulation_step(step, dt);
             auto end = std::chrono::high_resolution_clock::now();
             total_micros += std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
         }
@@ -90,5 +86,7 @@ namespace md::Integrator {
         std::cout << "Total execution time:" << total_micros/1000.0 << " ms" << std::endl;
         std::cout << "Average execution time per step: " << avg_step_time/1000.0 << " ms" << std::endl;
         std::cout << "Number of particles: " << env.size() << std::endl;
+        std::cout << "Particle modifications: " << modifications << std::endl;
+        std::cout << "MUPS/s \n" << modifications/(total_micros/1000/1000) << std::endl;
     }
 }  // namespace md::Integrator
