@@ -12,13 +12,30 @@
 #SBATCH --time=08:00:00
 
 module load gcc/13.2.0
-module load xerces-c/3.2.1 
+module load xerces-c/3.2.1
 module load slurm_setup
- 
-echo "Running perf profiling..."
-perf record -g ../build/MolSim 
+
+# Ensure /usr/bin is in PATH
+export PATH=/usr/bin:$PATH
+
+# Check the environment for debugging
+echo "PATH: $PATH"
+echo "Current working directory: $(pwd)"
+
+if command -v perf >/dev/null 2>&1; then
+    echo "Running perf profiling..."
+    /usr/bin/perf record -g ../build/MolSim
+else
+    echo "Error: 'perf' command not found or not accessible."
+    exit 1
+fi
 
 echo "Running gprof profiling..."
-
 ../build/MolSim
-gprof ../build/MolSim ../build/gmon.out > profile_report_gprof.txt
+if [[ -f ../build/gmon.out ]]; then
+    gprof ../build/MolSim ../build/gmon.out > profile_report_gprof.txt
+    echo "gprof profiling completed. Output saved to profile_report_gprof.txt."
+else
+    echo "Error: gmon.out not found. Ensure your program is compiled with '-pg' for gprof."
+    exit 1
+fi
