@@ -18,7 +18,7 @@ void run_mol_sim(const int argc, char* argv[]) {
 
     auto writer = io::create_writer(args.output_baseName, args.output_format, args.override);
     auto checkpoint_writer = io::create_checkpoint_writer();
-    Integrator::StoermerVerlet simulator(args.env, std::move(writer), std::move(checkpoint_writer));
+    Integrator::StoermerVerlet simulator(args.env, std::move(writer), std::move(checkpoint_writer), args.thermostat);
 
     const auto start = std::chrono::system_clock::now();
 
@@ -35,8 +35,8 @@ void run_mol_sim(const int argc, char* argv[]) {
 
 
 int main(const int argc, char* argv[]) {
-    // run_mol_sim(argc, argv);
-    ws4_task2_small();
+    run_mol_sim(argc, argv);
+
     return 0;
 }
 

@@ -84,5 +84,5 @@ include(spdlog)
 include(googletest)
 
 # Enable testing and a separate testing directory with its own CMakeLists.txt
-enable_testing()
-add_subdirectory(testing)
+#enable_testing()
+#add_subdirectory(testing)

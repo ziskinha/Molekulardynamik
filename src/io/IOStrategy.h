@@ -5,6 +5,7 @@
 #include <string>
 
 #include "env/Environment.h"
+#include "env/Thermostat.h"
 #include "io/Logger/Logger.h"
 #include "io/Output/CheckpointWriter.h"
 
@@ -21,42 +22,38 @@ namespace md::io {
      * @brief Struct used to return arguments read from the terminal.
      */
     struct ProgramArguments {
+        env::Environment env;
         env::Boundary boundary;
-        std::string output_baseName;
+        env::Thermostat thermostat;
         OutputFormat output_format;
+        std::string output_baseName;
+        std::string force;
         bool benchmark;
         bool override;
         double duration;
         double dt;
         double cutoff_radius;
         int write_freq;
-        double gravitational_force;
         unsigned int temp_adj_freq;
-        double init_T;
-        double target_T;
-        double temp_dT;
-        env::Environment env;
-        std::string force;
     };
 
     /**
-     * @brief Logs the parsed program arguments.
+     * @brief Logs the general simulation info.
      * @param args
      */
     inline void log_arguments(const ProgramArguments& args) {
         SPDLOG_INFO(
-                "Parsed Arguments:\n"
+                "General simulation info:\n"
                 "       output name:         {}\n"
                 "       duration:            {}\n"
                 "       dt:                  {}\n"
-                "       cutoff_radius:       {}\n"
                 "       write_freq:          {}\n"
-                "       gravitational force: {}\n"
                 "       particles:           {}\n"
                 "       benchmark:           {}\n"
                 "       override:            {}\n"
                 "       output_format:       {}",
-                args.output_baseName, args.duration, args.dt, args.cutoff_radius, args.write_freq, args.gravitational_force ,args.env.size(), args.benchmark ? "true" : "false",
+                args.output_baseName, args.duration, args.dt, args.write_freq,
+                args.env.size(), args.benchmark ? "true" : "false",
                 args.override ? "true" : "false", args.output_format == OutputFormat::XYZ ? "XYZ" : "VTK");
     }
 

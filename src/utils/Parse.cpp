@@ -17,11 +17,8 @@ namespace md::parse {
             "Usage:\n"
             "  ./MolSim <xml_file> <output_format>\n"
             "  ./MolSim -h | --help\n"
-            "  ./MolSim -f\n"
-            "  ./MolSim -b\n"
             "Arguments:\n"
-            "  xml_file         file with input parameters important for the simulation. For more information about "
-            "the structure see ../io/molSimSchema.xsd\n"
+            "  input_file       XML or TXT file with input parameters important for the simulation.\n"
             "  output_format    Output format: either 'XYZ' or 'VTK'.\n\n"
             "Flags:\n"
             "  -h, --help       Show this help message and exit.\n"
@@ -55,7 +52,7 @@ namespace md::parse {
         // else expecting 3 arguments (filename, xml file, output_format)
         if ((flag_exists("-b") && parameters.empty()) || parameters.size() < 2) {
             RETURN_PARSE_ERROR(
-                fmt::format("Error: Not enough arguments provided. Received {} arguments.", parameters.size()));
+                fmt::format("Not enough arguments provided. Received {} arguments", parameters.size()));
         }
 
         io::read_file(arguments[1], args);
@@ -70,11 +67,11 @@ namespace md::parse {
         }
 
         if (parameters[2] != "XYZ" && parameters[2] != "VTK") {
-            RETURN_PARSE_ERROR(fmt::format("Error: invalid file output format: {}", parameters[2]));
+            RETURN_PARSE_ERROR(fmt::format("Invalid file output format: {}", parameters[2]));
         }
         args.output_format = parameters[2] == "XYZ" ? io::OutputFormat::XYZ : io::OutputFormat::VTK;
 
-        SPDLOG_INFO("Arguments parsed successfully");
+        SPDLOG_INFO("Arguments successfully parsed");
         io::log_arguments(args);
         return OK;
     }
