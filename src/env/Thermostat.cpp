@@ -25,7 +25,6 @@ namespace md::env {
         }
     }
     void Thermostat::adjust_temperature(Environment& env, double& modifications) const {
-        SPDLOG_INFO("THERMO: {}, {}, {}", init_temp, target_temp, max_temp_change);
         if (target_temp == NO_TEMP) return;
 
         const double current_temp = env.temperature();
