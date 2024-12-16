@@ -21,7 +21,6 @@ namespace md::io {
      * @brief Struct used to return arguments read from the terminal.
      */
     struct ProgramArguments {
-        env::Environment env;
         env::Boundary boundary;
         std::string output_baseName;
         double duration;
@@ -29,7 +28,7 @@ namespace md::io {
         double cutoff_radius;
         int write_freq;
         double gravitational_force;
-        unsigned int temp_adj_freq= std::numeric_limits<unsigned int>::max();    
+        unsigned int temp_adj_freq;
         double init_T;
         double target_T;
         double temp_dT;
