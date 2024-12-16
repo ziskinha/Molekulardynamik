@@ -24,6 +24,8 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif ()
 
 if (CMAKE_BUILD_TYPE STREQUAL "Benchmark")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg") 
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg") 
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 endif ()
 
@@ -57,10 +59,13 @@ target_include_directories(MolSim
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+find_package(XercesC REQUIRED)
+
 target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
-        xerces-c
+        #xerces-c
+        XercesC::XercesC
 )
 
 # activate all compiler warnings. Clean up your code :P

@@ -51,7 +51,7 @@ TEST(testParicleContainerAdd,test){
 }
 
 //test for checking if adding a cuboid succeeds
-TEST(testParticleContainerAddCuboid,test){
+TEST(testParticleContainerAddCuboid, AddCuboid){
     auto part=  md::env::CuboidCreateInfo ({0,0,0},{1,1,1},{2,1,1},2,1,5,2);
     md::env::Environment env;
     env.add_cuboid({part});
