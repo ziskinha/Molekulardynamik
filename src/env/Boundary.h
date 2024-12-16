@@ -110,9 +110,6 @@ namespace md::env {
 
         [[nodiscard]] const std::array<BoundaryRule, 6> & boundary_rules() const;
 
-        // TODO set to private
-        vec3 extent{MAX_EXTENT, MAX_EXTENT, MAX_EXTENT}; ///< Dimensions of the boundary [width, height, depth].
-        vec3 origin{CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN}; ///< origin of the boundary.
 
         /**
          * @brief Creates a Lennard-Jones boundary force.
@@ -135,6 +132,8 @@ namespace md::env {
         [[nodiscard]] bool requires_force_function() const;
         [[nodiscard]] bool has_force_function() const;
 
+        vec3 extent{MAX_EXTENT, MAX_EXTENT, MAX_EXTENT}; ///< Dimensions of the boundary [width, height, depth].
+        vec3 origin{CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN}; ///< origin of the boundary.
     private:
         /**
          * @brief Applies a boundary rule to a particle based on the boundary face it interacts with.

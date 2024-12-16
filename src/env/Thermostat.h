@@ -39,7 +39,7 @@ namespace md::env {
          * @brief Adjusts the current temperature of the environment towards the target temperature.
          * @param env The environment containing the particles.
          */
-        void adjust_temperature(Environment & env, double& modifications) const;
+        void adjust_temperature(Environment & env) const;
 
     private:
         double init_temp;        ///< The initial temperature.

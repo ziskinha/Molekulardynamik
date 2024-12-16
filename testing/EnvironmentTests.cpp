@@ -14,6 +14,7 @@ TEST(EnvironmentTest, size_test) {
     env.add_particle({1, 5, 4}, {3, 3, 3}, 5, 0);
     env.add_particle({3, 2, 1}, {0, 0, 0}, 5, 0);
     env.add_particle({10, -1, 4}, {5, 0, 0}, 10, 0);
+    env.build();
 
     EXPECT_TRUE(env.size() == 3);
 }
@@ -22,6 +23,8 @@ TEST(EnvironmentTest, index_test) {
     auto part = md::env::ParticleCreateInfo({1, 5, 4}, {3, 3, 3}, 5, 0);
     md::env::Environment env;
     env.add_particles({part});
+    env.build();
+
     EXPECT_TRUE(env[0].position[0] == 1);
     EXPECT_TRUE(env[0].position[1] == 5);
     EXPECT_TRUE(env[0].position[2] == 4);
@@ -37,6 +40,7 @@ TEST(EnvironmentTest, paricle_add_test) {
     auto part = md::env::ParticleCreateInfo({7, 7, 7}, {3, 2, 1}, 1, 0);
     md::env::Environment env;
     env.add_particles({part});
+    env.build();
 
     EXPECT_TRUE(env[0].position[0] == 7);
     EXPECT_TRUE(env[0].position[1] == 7);
@@ -60,6 +64,7 @@ TEST(EnvironmentTest, add_cuboid_test) {
     md::vec3 cns1 = {bltzm[0] + 1, bltzm[1] + 1, bltzm[2] + 1};
     bltzm = maxwellBoltzmannDistributedVelocity(2, 2);
     md::vec3 cns2 = {bltzm[0] + 1, bltzm[1] + 1, bltzm[2] + 1};
+    env.build();
 
     ASSERT_TRUE(env.size() == 2);
     EXPECT_TRUE(env[0].position[0] == 0);

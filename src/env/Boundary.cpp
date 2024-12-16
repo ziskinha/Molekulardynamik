@@ -72,12 +72,12 @@ namespace md::env {
             "Exactly one component of face_normal must have magnitude 1."
         );
 
-        if (face_normal[0] == -1) return Boundary::LEFT;
-        if (face_normal[0] == 1)  return Boundary::RIGHT;
-        if (face_normal[1] == 1)  return Boundary::TOP;
-        if (face_normal[1] == -1) return Boundary::BOTTOM;
-        if (face_normal[2] == 1)  return Boundary::FRONT;
-        if (face_normal[2] == -1) return Boundary::BACK;
+        if (face_normal[0] == -1) return LEFT;
+        if (face_normal[0] == 1)  return RIGHT;
+        if (face_normal[1] == 1)  return TOP;
+        if (face_normal[1] == -1) return BOTTOM;
+        if (face_normal[2] == 1)  return FRONT;
+        if (face_normal[2] == -1) return BACK;
         throw std::invalid_argument("Invalid face normal");
     }
 
@@ -86,7 +86,7 @@ namespace md::env {
         const double coord = particle.position[axis] - cell.origin[axis];
         if ( normal[axis] == 1) return cell.size[axis] - coord;
         if ( normal[axis] == -1) return coord;
-        throw std::invalid_argument("???");
+        throw std::invalid_argument("invalid normal");
     }
 
 
@@ -96,7 +96,7 @@ namespace md::env {
     /// -----------------------------------------
     Boundary::Boundary() {
         set_boundary_rule(OUTFLOW);
-    };
+    }
 
     void Boundary::set_boundary_rule(const BoundaryRule rule) {
         for (size_t i = 0; i < rules.size(); i++) {

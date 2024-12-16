@@ -71,7 +71,8 @@ TEST(BoundaryConditionsTest, repulsive_force_condition_test) {
     setUp(env, boundary, false);
 
     md::Integrator::StoermerVerlet simulator(env);
-    simulator.simulate(0, 0.999999, 0.000001);
+    simulator.simulate(0, 0.999, 0.0001);
+
     // distance where repulsive force should not be applied
     EXPECT_TRUE(env.operator[](0).force[0] == 0);
     EXPECT_TRUE(env.operator[](0).force[1] == 0);

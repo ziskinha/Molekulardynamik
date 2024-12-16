@@ -15,7 +15,6 @@ void setup(md::env::Environment &env) {
     env.set_grid_constant(100);
     env.set_boundary(boundary);
     env.build();
-    env.build();
 }
 
 // tests if the velocity of particles stays constant with no change in temperature.
