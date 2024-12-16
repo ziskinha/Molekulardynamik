@@ -18,15 +18,15 @@ void run_mol_sim(const int argc, char* argv[]) {
 
     auto writer = io::create_writer(args.output_baseName, args.output_format, args.override);
     auto checkpoint_writer = io::create_checkpoint_writer();
-    Integrator::StoermerVerlet simulator(args.env, std::move(writer), std::move(checkpoint_writer));
+    Integrator::StoermerVerlet simulator(args.env, std::move(writer), std::move(checkpoint_writer), args.thermostat);
 
     auto start = std::chrono::system_clock::now();
-    double particle_modifications = 0;
+    double particle_modifications=0;
 
     if (!args.benchmark) {
-        simulator.simulate(0, args.duration, args.dt, particle_modifications ,args.write_freq);
+        simulator.simulate(0, args.duration, args.dt, particle_modifications, args.write_freq, args.temp_adj_freq);
     } else {
-        simulator.benchmark(0, args.duration, args.dt);
+        simulator.benchmark(0, args.duration, args.dt, args.temp_adj_freq);
     }
     auto end = std::chrono::system_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);

@@ -49,7 +49,7 @@ namespace md::io {
     }
 
     /// -----------------------------------------
-    /// \brief Parse article information
+    /// \brief Parse particle information
     /// -----------------------------------------
     void parse_particle(const std::string& line, Environment& env) {
         SPDLOG_DEBUG("Reading Particle:    {}", line);
@@ -152,7 +152,8 @@ namespace md::io {
                 "       Thermal Velocity:    {}\n"
                 "       Dimension:           {}\n"
                 "       Type:                {}",
-                origin[0], origin[1], origin[2], init_v[0], init_v[1], init_v[2], radius, width, mass, thermal_v, dimension, type);
+                origin[0], origin[1], origin[2], init_v[0], init_v[1], init_v[2], radius, width, mass, thermal_v,
+                dimension, type);
     }
 
     /// -----------------------------------------
@@ -183,12 +184,12 @@ namespace md::io {
                 force = LennardJones(vals[0], vals[1], args.cutoff_radius);
                 // TODO: Set boundary force with parrticle type
                 args.boundary.set_boundary_force(Boundary::LennardJonesForce(vals[0], vals[1]));
-                SPDLOG_INFO("Force - For Particle Type {} using Lennard Jones with parameters: epsilon = {}, sigma = {}, "
-                            "cutoff_radius = {}", vals[2], vals[0], vals[1], args.cutoff_radius);
-            } else if (force_name == "inverse square") {
+                SPDLOG_INFO("Parsed boundary force: Lennard Jones with epsilon = {}, sigma = {}", vals[0], vals[1]);
+            }
+            else if (force_name == "inverse square") {
+                // TODO
                 force = InverseSquare(vals[0], vals[1]);
-                SPDLOG_INFO("Force - For Particle Type {} using inverse square force with parameter: pre_factor = {}",
-                            vals[1], vals[0]);
+                SPDLOG_INFO("Parsed boundary force: Inverse Square with cutoff = {}, pre factor = {}", vals[1], vals[0]);
             }
         } catch (std::out_of_range& e) {
             SPDLOG_ERROR("Parameter error in force parsing: {}. Line: {}", e.what(), line);
@@ -212,10 +213,10 @@ namespace md::io {
         args.env.set_grid_constant(vals[6]);
         args.env.set_gravity_constant(vals[7]);
 
-        SPDLOG_INFO("Environment - Boundary origin set to: [{}, {}, {}]", vals[0], vals[1], vals[2]);
-        SPDLOG_INFO("Environment - Boundary extent set to: [{}, {}, {}]", vals[3], vals[4], vals[5]);
-        SPDLOG_INFO("Environment - Grid constant set to: {}", vals[6]);
-        SPDLOG_INFO("Environment - Gravity constant set to: {}", vals[7]);
+        SPDLOG_DEBUG("Parsed boundary origin: [{}, {}, {}]", vals[0], vals[1], vals[2]);
+        SPDLOG_DEBUG("Parsed boundary extent: [{}, {}, {}]", vals[3], vals[4], vals[5]);
+        SPDLOG_DEBUG("Parsed grid constant: {}", vals[6]);
+        SPDLOG_DEBUG("Parsed gravity constant: {}", vals[7]);
 
         // Read boundary rules
         std::array<env::BoundaryRule, 6> rules = {OUTFLOW, PERIODIC, REPULSIVE_FORCE, VELOCITY_REFLECTION};
@@ -244,9 +245,9 @@ namespace md::io {
         double target_T = vals[2];
         double dT = vals[3] == -1 ? std::numeric_limits<double>::infinity() : vals[3];
 
-        env::Thermostat thermostat(init_T, target_T, dT);
-        thermostat.set_initial_temperature(args.env);
-        SPDLOG_INFO("Thermostat - Initial temperature: {}, n_thermostat: {}, Target temperature: {}, delta T: {}",
+        args.thermostat.init(init_T, target_T, dT);
+        args.thermostat.set_initial_temperature(args.env);
+        SPDLOG_DEBUG("Parsed Thermostat - Initial temperature: {}, n_thermostat: {}, Target temperature: {}, delta T: {}",
                     init_T, args.temp_adj_freq, target_T, dT);
     }
 
