@@ -4,9 +4,9 @@
 #SBATCH -D ./
 #SBATCH --get-user-env
 #SBATCH --clusters=cm4
-#SBATCH --partition=cm4_std
-#SBATCH --qos=cm4_std
-#SBATCH --nodes=4
+#SBATCH --partition=cm4_tiny
+#SBATCH --qos=cm4_tiny
+#SBATCH --nodes=1
 #SBATCH --ntasks-per-node=112
 #SBATCH --export=NONE
 #SBATCH --time=08:00:00
