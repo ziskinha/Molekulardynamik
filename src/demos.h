@@ -325,21 +325,15 @@ inline void ws4_task2_big() {
 
 
 inline void test2() {
-    io::ProgramArguments args;
-    args.output_format = io::OutputFormat::VTK;
-    args.benchmark = false;
-    args.override = true;
-    args.output_baseName = "output";
+   io::ProgramArguments args;
 
-    args.duration = 70;
+    args.duration = 5;
     args.dt = 0.0005;
-    args.write_freq = 100;
-
-    //env::Environment env;
+    args.temp_adj_freq = 1000;
 
     env::Boundary boundary;
     // boundary size
-    boundary.extent = {8000, 5000, 1};
+    boundary.extent = {110, 110, 1};
     boundary.origin = {0, 0, 0};
 
     //boundary conditions
@@ -353,13 +347,8 @@ inline void test2() {
     args.env.set_boundary(boundary);
 
     // Liquid 1, type = 0
-    //env.add_particle({57.7125, 11.8433, 0}, {16.5933, -12.6987, 0}, 1, 0, {424.457, 165.615, 0});
-    args.env.add_cuboid({50, 50, 1}, {1, 1, 1}, {150, 50, 1}, 1, 50, 2, 2, 0);
+    args.env.add_cuboid({5, 5, 0}, {1, 1, 0}, {100, 100, 1}, 0, 1, 2, 2, 0);
     args.env.set_force(env::LennardJones(1, 1.2, 3), 0);
-    // Liquid 2, type = 1
-    //env.add_particle({1.85969, 4.46527e-05, 0}, {-12.7911, -0.00474062, 0}, 1, 0, {-5222.53, -306.117, 0});
-    //env.set_force(env::LennardJones(1, 1.1, 3), 1);
-    args.env.add_cuboid({0, 0, 1}, {-1, -1, -1}, {150, 50, 1}, 1, 50, 2, 2, 1);
 
     args.env.set_grid_constant(3);
     args.env.set_gravity_constant(-12.44);
@@ -369,5 +358,5 @@ inline void test2() {
     thermostat.set_initial_temperature(args.env);
     io::log_arguments(args);
     Integrator::StoermerVerlet simulator(args.env, nullptr, nullptr, thermostat);
-    simulator.benchmark(0, args.duration, args.dt, args.write_freq);
+    simulator.benchmark(0, args.duration, args.dt, args.temp_adj_freq);
 }

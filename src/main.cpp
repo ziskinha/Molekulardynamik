@@ -31,7 +31,7 @@ void run_mol_sim(const int argc, char* argv[]) {
 
 int main(const int argc, char* argv[]) {
     //run_mol_sim(argc, argv);
-    periodic_force_mixing_test();
+    test2();
     return 0;
 }
 
