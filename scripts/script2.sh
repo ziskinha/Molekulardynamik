@@ -17,14 +17,12 @@ module load xerces-c/3.2.1
 
 
 echo "Running perf profiling..."
-/usr/bin/perf record -g ../build/MolSim
+    perf record -g ./MolSim
 
 echo "Running gprof profiling..."
-../build/MolSim
-if [[ -f ../build/gmon.out ]]; then
-    gprof ../build/MolSim ../build/gmon.out > profile_report_gprof.txt
+    ./MolSim
+
+    gprof ./MolSim ./gmon.out > profile_report_gprof.txt
     echo "gprof profiling completed. Output saved to profile_report_gprof.txt."
-else
-    echo "Error: gmon.out not found. Ensure your program is compiled with '-pg' for gprof."
-    exit 1
+
 fi
