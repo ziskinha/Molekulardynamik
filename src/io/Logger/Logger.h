@@ -3,6 +3,10 @@
 
 // #include <memory>
 
+#ifndef DEFAULT_LOG_LEVEL
+    #define DEFAULT_LOG_LEVEL spdlog::level::info
+#endif
+
 #include "env/Common.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
