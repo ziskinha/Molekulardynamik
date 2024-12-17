@@ -40,7 +40,6 @@ inline void four_particle_lennard_jones_test() {
     env.set_grid_constant(0.1);
 
     env.build();
-
     Integrator::StoermerVerlet simulator(env, create_writer(args.output_baseName, args.output_format, args.override));
     simulator.simulate(0, args.duration, args.dt, args.write_freq);
 }
@@ -369,7 +368,6 @@ inline void test2() {
     env::Thermostat thermostat(40, -1, -1);
     thermostat.set_initial_temperature(args.env);
     io::log_arguments(args);
-    auto writer = create_writer(args.output_baseName, args.output_format, args.override);
     Integrator::StoermerVerlet simulator(args.env, nullptr, nullptr, thermostat);
-    simulator.simulate(0, args.duration, args.dt, args.write_freq);
+    simulator.benchmark(0, args.duration, args.dt, args.write_freq);
 }
