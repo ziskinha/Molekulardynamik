@@ -3,8 +3,8 @@
 #SBATCH -o ./%x.%j.%N.out
 #SBATCH -D ./
 #SBATCH --get-user-env
-#SBATCH --clusters=cm4
-#SBATCH --partition=cm4_inter
+#SBATCH --clusters=serial
+#SBATCH --partition=serial_std
 #SBATCH --mem=10000mb
 #SBATCH --cpus-per-task=10
 #SBATCH --export=NONE
