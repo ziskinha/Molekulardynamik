@@ -88,7 +88,7 @@ namespace md::env {
 
     void Environment::add_particle(const vec3& position, const vec3& velocity, double mass, int type, const vec3& force) {
         WARN_IF_INIT("add particles");
-        particle_storage.emplace_back(particle_storage.size(), grid, position, velocity, mass, type, force);
+        particle_storage.emplace_back(particle_storage.size(), *this, grid, position, velocity, mass, type, force);
         SPDLOG_TRACE("Particle added to env. Position: [{}, {}, {}], Velocity: [{}, {}, {}], Mass: {}, Type: {}",
                      position[0], position[1], position[2], velocity[0], velocity[1], velocity[2], mass, type);
     }
@@ -225,7 +225,12 @@ namespace md::env {
             }
         }
 
+
         grid.build(boundary, grid_constant, particle_storage);
+        for (auto &p : particle_storage) {
+            update_particles(p);
+            alive_particles_ref.insert(&p);
+        }
         initialized = true;
         SPDLOG_INFO("Environment successfully built.");
     }
@@ -277,8 +282,8 @@ namespace md::env {
 
     double Environment::temperature() const {
         double energy = 0;
-        for (auto & particle : particles(GridCell::INSIDE, Particle::ALIVE)) {
-            energy +=  particle.mass * ArrayUtils::L2NormSquared(particle.velocity);
+        for (auto * particle : alive_particles()) {
+            energy +=  particle->mass * ArrayUtils::L2NormSquared(particle->velocity);
         }
         return energy/static_cast<double>(dim()*size());
     }
@@ -291,6 +296,18 @@ namespace md::env {
     Particle& Environment::operator[](const size_t id) { return particle_storage[id]; }
 
     const Particle& Environment::operator[](const size_t id) const { return particle_storage[id]; }
+
+    void Environment::update_particles(Particle& particle) {
+        if (particle.state == Particle::DEAD) {
+            alive_particles_ref.erase(&particle);
+            if (boundary_particles_ref.contains(&particle)) boundary_particles_ref.erase(&particle);
+            return;
+        }
+        const GridCell & cell = grid.get_cell(particle.cell);
+        if (cell.type & GridCell::BOUNDARY || cell.type & GridCell::OUTSIDE) {
+            boundary_particles_ref.insert(&particle);
+        }
+    }
 
     bool Environment::filter_particles(const Particle& particle, const Particle::State state,
                                        const GridCell::Type type) const {

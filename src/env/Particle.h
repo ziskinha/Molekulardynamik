@@ -12,6 +12,7 @@ namespace md::env {
      * @brief A class representing the particle grid.
      */
     class ParticleGrid;
+    class Environment;
 
     /**
      * @brief Structure representing a particle.
@@ -35,14 +36,8 @@ namespace md::env {
          * @param force The initial force of the particle.
          * @param type The type of the particle (default: {0, 0, 0}.
          */
-        Particle(size_t id, ParticleGrid& grid, const vec3& position, const vec3& velocity, double mass, int type,
-                 vec3 force  = {0, 0, 0});
-
-        /**
-         * @brief Copy constructor for Particle.
-         * @param other The particle to copy from.
-         */
-        Particle(const Particle& other);
+        Particle(size_t id, Environment & env, ParticleGrid& grid, const vec3& position, const vec3& velocity, double mass, int type,
+                 const vec3& force  = {0, 0, 0});
 
         /**
          * @brief Updates the position of the particle.
@@ -58,7 +53,7 @@ namespace md::env {
         /**
          * @brief Updates the particle's grid cell.
          */
-        void update_grid();
+        void update_status();
 
         /**
          * @brief Compares the particle to another regarding equality.
@@ -87,6 +82,7 @@ namespace md::env {
 
        private:
         ParticleGrid& grid;  ///< The grid to which the particle belongs to.
+        Environment& env;
     };
 
     /**

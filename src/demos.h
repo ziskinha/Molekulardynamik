@@ -321,7 +321,7 @@ inline void ws4_task2_big() {
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
     Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, thermostat);
-    simulator.benchmark(0, args.duration, args.dt, 1000);
+    simulator.simulate(0, args.duration, args.dt, 1000, 1000);
 }
 
 

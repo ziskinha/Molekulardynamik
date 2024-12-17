@@ -76,10 +76,10 @@ namespace md::env {
          * @param width Distance between the particles.
          * @param mass The mass of the particles.
          * @param dimension Dimension of the sphere.
-         * @param type The type of each particles (dafault: 0).
+         * @param type The type of each particle (default: 0).
          */
-        SphereCreateInfo(const vec3& origin, const vec3& initial_v, const double thermal_v, int radius, double width,
-                         double mass, const uint8_t dimension, int type = 0);
+        SphereCreateInfo(const vec3& origin, const vec3& initial_v, double thermal_v, int radius, double width,
+                         double mass, uint8_t dimension, int type = 0);
         vec3 origin;
         vec3 initial_v;
         double thermal_v;
@@ -293,6 +293,19 @@ namespace md::env {
         Environment(const Environment&) = delete;
         Environment& operator=(const Environment&) = delete;
 
+        void update_particles(Particle & particle);
+
+        std::unordered_set<Particle*> & boundary_particles() {
+            return boundary_particles_ref;
+        }
+
+        std::unordered_set<Particle*> & alive_particles() {
+            return alive_particles_ref;
+        }
+
+        const std::unordered_set<Particle*> & alive_particles() const {
+            return alive_particles_ref;
+        }
     private:
         /**
          * @brief Filters particles based on their state and location within the grid.
@@ -303,11 +316,9 @@ namespace md::env {
          */
         [[nodiscard]] bool filter_particles(const Particle& particle, Particle::State state, GridCell::Type type) const;
 
-        std::vector<CuboidCreateInfo> cuboids;
-        std::vector<SphereCreateInfo> spheres;
-
-        // TODO replace vector with a vector wrapper that emulates a vector of fixed size
         std::vector<Particle> particle_storage; ///< vector with all particles
+        std::unordered_set<Particle*> boundary_particles_ref;
+        std::unordered_set<Particle*> alive_particles_ref;
 
         Boundary boundary;     ///< Boundary conditions of the environment.
         ParticleGrid grid;     ///< Grid of the environment.

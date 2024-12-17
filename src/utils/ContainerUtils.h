@@ -1,18 +1,6 @@
 #pragma once
-#include <vector>
 
 namespace md::utils {
-    template <typename T>
-    class FixedVector {
-       public:
-        // void emplace_back(T value) {container.emplace_back(value);}
-        size_t size() const { return container.size(); }
-        void lock();
-
-       private:
-        std::vector<T> container{};
-        bool locked = false;
-    };
 
     template <typename Container>
     class PairIterator final {

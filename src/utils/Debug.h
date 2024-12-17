@@ -2,7 +2,7 @@
 
 #ifdef DEBUG
 
-#define ASSERT(Expr, Msg) _md_Assert_(#Expr, (Expr), __FILE__, __LINE__, (Msg))
+#define ASSERT(Expr, Msg) md_Assert_(#Expr, (Expr), __FILE__, __LINE__, (Msg))
 #include <iostream>
 #include <stdexcept>
 

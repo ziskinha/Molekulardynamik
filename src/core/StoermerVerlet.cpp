@@ -11,15 +11,14 @@ namespace md::Integrator {
     void StoermerVerlet::simulation_step(unsigned step, const double dt) {
 
         // update position
-        for (auto& p : env.particles()) {
-            p.update_position(dt * p.velocity + pow(dt, 2) / (2 * p.mass) * p.force);
-            p.update_grid();
-            p.reset_force();
+        for (auto* p : env.alive_particles()) {
+            p->update_position(dt * p->velocity + pow(dt, 2) / (2 * p->mass) * p->force);
+            p->update_status();
+            p->reset_force();
         }
 
-
-        for (auto & particle : env.particles(env::GridCell::BOUNDARY | env::GridCell::OUTSIDE)) {
-            env.apply_boundary(particle);
+        for (auto * particle : env.boundary_particles()) {
+            env.apply_boundary(*particle);
         }
         
         // calculate forces
@@ -33,13 +32,13 @@ namespace md::Integrator {
         }
 
         // apply gravity
-        for (auto& p : env.particles()) {
-            p.force = p.force + env.gravity_force(p);
+        for (auto* p : env.alive_particles()) {
+            p->force = p->force + env.gravity_force(*p);
         }
 
         // update velocities
-        for (auto& p : env.particles()) {
-            p.velocity = p.velocity + dt / 2 / p.mass * (p.force + p.old_force);
+        for (auto& p : env.alive_particles()) {
+            p->velocity = p->velocity + dt / 2 / p->mass * (p->force + p->old_force);
         }
 
         // apply thermostat

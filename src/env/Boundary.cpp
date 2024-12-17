@@ -221,7 +221,7 @@ namespace md::env {
         // the particle is outside or inside
         if (previous_cell.type == GridCell::OUTSIDE) {
             particle.state = Particle::DEAD;
-            particle.update_grid();
+            particle.update_status();
         }
     }
 
@@ -232,7 +232,7 @@ namespace md::env {
             if (normal[axis] == 1) dx[axis] = - extent[axis];
             else if (normal[axis] == -1) dx[axis] = extent[axis];
             particle.position = particle.position + dx;
-            particle.update_grid();
+            particle.update_status();
         }
     }
 
@@ -264,7 +264,7 @@ namespace md::env {
 
         particle.velocity[axis] = - particle.velocity[axis];
         particle.position = reflected + intersection;
-        particle.update_grid();
+        particle.update_status();
     }
 }
 

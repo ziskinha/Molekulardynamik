@@ -36,8 +36,8 @@ namespace md::env {
 
         if (new_temp == current_temp) return;
 
-        for (auto & particle : env.particles(GridCell::INSIDE, Particle::ALIVE)) {
-            particle.velocity = beta * particle.velocity;
+        for (auto * particle : env.alive_particles()) {
+            particle->velocity = beta * particle->velocity;
         }
     }
 }
