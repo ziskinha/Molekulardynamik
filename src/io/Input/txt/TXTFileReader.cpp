@@ -181,21 +181,22 @@ namespace md::io {
         }
         try {
             if (force_name == "lennard jones") {
-                force = LennardJones(vals[0], vals[1], args.cutoff_radius);
+                args.env.set_force(LennardJones(vals[0], vals[1], args.cutoff_radius), vals[2]);
                 // TODO: Set boundary force with parrticle type
                 args.boundary.set_boundary_force(Boundary::LennardJonesForce(vals[0], vals[1]));
-                SPDLOG_INFO("Parsed boundary force: Lennard Jones with epsilon = {}, sigma = {}", vals[0], vals[1]);
+                SPDLOG_DEBUG("Parsed force for particle type {}: Lennard Jones with epsilon = {}, sigma = {}, "
+                             "cutoff radius = {}", vals[2], vals[0], vals[1], args.cutoff_radius);
             }
             else if (force_name == "inverse square") {
-                // TODO
-                force = InverseSquare(vals[0], vals[1]);
-                SPDLOG_INFO("Parsed boundary force: Inverse Square with cutoff = {}, pre factor = {}", vals[1], vals[0]);
+                args.env.set_force(InverseSquare(vals[0], args.cutoff_radius), vals[1]);
+                force = InverseSquare(vals[0], args.cutoff_radius);
+                SPDLOG_DEBUG("Parsed force for particle type {}: Inverse Square with pre factor = {}, cutoff radius = {}",
+                             vals[1], vals[0], args.cutoff_radius);
             }
         } catch (std::out_of_range& e) {
             SPDLOG_ERROR("Parameter error in force parsing: {}. Line: {}", e.what(), line);
             exit(-1);
         }
-        args.env.set_force(force, vals[2]);
     }
 
     /// -----------------------------------------

@@ -15,7 +15,7 @@ namespace md::parse {
     void displayHelp();
 
     /**
-     * @brief Parses the arguments and executes the program.
+     * @brief Parses command-line arguments and invokes the file reader.
      * @param argc
      * @param argv
      * @param args arguments.

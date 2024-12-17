@@ -1,8 +1,6 @@
 #pragma once
 #include <spdlog/sinks/basic_file_sink.h>
 
-// #include <memory>
-
 #include "env/Common.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
@@ -19,7 +17,6 @@ struct fmt::formatter<md::int3> {
      */
     constexpr auto parse(fmt::format_parse_context& ctx) { return ctx.begin(); }
 
-    // Formats the int3 into the output iterator
     /**
      * @brief Formats the md::int3 into the output iterator.
      * @tparam FormatContext

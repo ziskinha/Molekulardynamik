@@ -146,11 +146,11 @@ namespace md::env {
         void add_force(const ForceType& force, int particle_type);
 
         /**
-         * @brief TODO: description
-         * @param diff
+         * @brief Evaluates the force between two particles.
+         * @param diff The difference of the particles.
          * @param p1
          * @param p2
-         * @return
+         * @return The force acting between the two particles.
          */
         vec3 evaluate(const vec3 &diff, const Particle& p1, const Particle& p2) const;
 
@@ -163,8 +163,7 @@ namespace md::env {
     private:
         /**
          * @brief Combines two forces into a single force object for two different types of forces.
-         * For Lennard-Jones type, Lorentz-Berthelot mixing rule is used.
-         * For Inverse-Squared, TODO?
+         * The Lorentz-Berthelot mixing rule is used.
          *
          * @param force1 The first force to combine.
          * @param force2 The second force to combine.
