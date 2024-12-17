@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J profiling_molSim
 #SBATCH -o ./%x.%j.%N.out
-#SBATCH -D ./
+#SBATCH -D ../build
 #SBATCH --get-user-env
 #SBATCH --clusters=cm4
 #SBATCH --partition=cm4_tiny
