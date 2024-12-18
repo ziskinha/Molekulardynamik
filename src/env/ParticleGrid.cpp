@@ -25,7 +25,9 @@ namespace md::env {
     /// \brief Grid cell methods
     /// -----------------------------------------
     GridCell::GridCell(const vec3& coord, const vec3& size, Type type, const int3& idx)
-        : type(type), origin(coord), size(size), idx(idx), id(count++) {}
+        : type(type), origin(coord), size(size), idx(idx), id(count++) {
+        particles.max_load_factor(1.0);
+    }
 
     std::string GridCell::to_string() const {
         std::stringstream stream;
@@ -58,6 +60,10 @@ namespace md::env {
 
     std::pair<int, int> CellPair::id() const { return {cell1.id, cell2.id}; }
 
+    ParticleGrid::ParticleGrid() {
+        cells.max_load_factor(0.4);
+    }
+
     /// -----------------------------------------
     /// \brief ParticleGrid initilization methods
     /// -----------------------------------------
@@ -74,6 +80,7 @@ void ParticleGrid::build(const Boundary & boundary, const double grid_const, std
         const auto num_z = static_cast<UINT_T>(std::max(1.0, floor(extent[2] / grid_constant)));
         cell_count = uint3{num_x, num_y, num_z};
         cell_size = {extent[0] / num_x, extent[1] / num_y, extent[2] / num_z};
+        size_t num_cells = num_x * num_y * num_z;
 
         // create cells
         for (size_t x = 0; x < num_x; x++) {
@@ -96,8 +103,9 @@ void ParticleGrid::build(const Boundary & boundary, const double grid_const, std
                                      cell_size,
                                      type,
                                      idx};
-
+                    cell.particles.reserve(4*particles.size()/num_cells);
                     cells.emplace(idx, cell);
+
 
                     if (type == GridCell::BOUNDARY) border_cells.push_back(&cells.at(idx));
 

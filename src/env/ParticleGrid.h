@@ -20,7 +20,9 @@ namespace md::env {
      * @brief Structure representing a cell of the particle grid.
      */
     struct GridCell {
-        using particle_container = ankerl::unordered_dense::set<Particle*>;
+        // using particle_container = ankerl::unordered_dense::set<Particle*>;
+        using particle_container = std::unordered_set<Particle*, ankerl::unordered_dense::hash<Particle*>>;
+
         /**
          * @brief Enumeration of the type of the grid cell.
          */
@@ -201,7 +203,7 @@ namespace md::env {
      */
     class ParticleGrid {
        public:
-        ParticleGrid() = default;
+        ParticleGrid();
 
         /**
          * @brief Builds the particle grid with the given parameters.
@@ -291,7 +293,8 @@ namespace md::env {
         */
         void build_cell_pairs(const std::array<BoundaryRule, 6> & rules);
 
-        std::unordered_map<int3, GridCell, Int3Hasher> cells {}; ///< A hash map storing the cells in the grid.
+        // std::unordered_map<int3, GridCell, Int3Hasher> cells {}; ///< A hash map storing the cells in the grid.
+        ankerl::unordered_dense::map<int3, GridCell, Int3Hasher> cells{};
         std::vector<CellPair> cell_pairs{};                  ///< A vector of linked cell pairs.
         std::vector<GridCell*> border_cells;                     ///< A vector of cells at the domain boundary
 
