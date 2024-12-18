@@ -283,7 +283,7 @@ inline void ws4_task2_big() {
     args.override = true;
     args.output_baseName = "output";
 
-    args.duration = 50;
+    args.duration = 5;
     args.dt = 0.0005;
     args.write_freq = 100;
 
@@ -316,14 +316,33 @@ inline void ws4_task2_big() {
     env.set_gravity_constant(-12.44);
     env.build();
 
-    env::Thermostat thermostat(40, 25, 0.0005);
+    env::Thermostat thermostat(40);
     thermostat.set_initial_temperature(env);
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
     Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, thermostat);
+    // simulator.simulate(0, args.duration, args.dt, args.write_freq, 1000);
     simulator.benchmark(0, args.duration, args.dt, 1000);
+
 }
 
+// Total execution time:45531.1 ms
+// Average execution time per step: 4.5522 ms
+// Number of particles: 10000
+// Particle modifications: 100010000
+// MUPS/s
+// 2222444
+// Average execution time per step: 4.38718 ms
+// Number of particles: 10000
+// Particle modifications: 100010000
+// MUPS/s
+// 2325813
+// Total execution time:43904.7 ms
+// Average execution time per step: 4.38959 ms
+// Number of particles: 10000
+// Particle modifications: 100010000
+// MUPS/s
+// 2325813
 
 inline void test2() {
     io::ProgramArguments args;
