@@ -327,6 +327,7 @@ inline void ws4_task2_big() {
 
 }
 
+// with particle filtering optimization
 // Total execution time:43838.1 ms
 // Average execution time per step: 4.38293 ms
 // Number of particles: 10000
@@ -345,6 +346,25 @@ inline void ws4_task2_big() {
 // Particle modifications: 100010000
 // MUPS/s
 // 2272954
+
+// without particle filtering optimization
+// Total execution time:45531.1 ms
+// Average execution time per step: 4.5522 ms
+// Number of particles: 10000
+// Particle modifications: 100010000
+// MUPS/s
+// 2222444
+// Average execution time per step: 4.38718 ms
+// Number of particles: 10000
+// Particle modifications: 100010000
+// MUPS/s
+// 2325813
+// Total execution time:43904.7 ms
+// Average execution time per step: 4.38959 ms
+// Number of particles: 10000
+// Particle modifications: 100010000
+// MUPS/s
+// 2325813
 
 inline void test2() {
     io::ProgramArguments args;
