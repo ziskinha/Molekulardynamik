@@ -24,11 +24,19 @@ namespace md::Integrator {
         
         // calculate forces
         for (auto& cell_pair : env.linked_cells()) {
+            auto it = cell_pair.particles();
             for (auto [p1, p2] : cell_pair.particles()) {
-                vec3 new_F = env.force(*p1, *p2, cell_pair);
-
-                p2->force = p2->force + new_F;
-                p1->force = p1->force - new_F;
+                // std::cout << p1->id << " " << p2->id << std::endl;
+                // if (p1 == 0x7fb483d25e10 && p2 == 0x39003900390039) {
+                //
+                // }
+                if (p1->id == 672 && p2->id == 686) {
+                    int i = 0;
+                }
+                // vec3 new_F = env.force(*p1, *p2, cell_pair);
+                //
+                // p2->force = p2->force + new_F;
+                // p1->force = p1->force - new_F;
             }
         }
 

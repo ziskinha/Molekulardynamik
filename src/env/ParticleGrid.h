@@ -5,6 +5,8 @@
 #include <unordered_set>
 #include <vector>
 
+#include "ankerl/unordered_dense.h"
+
 #include "env/Common.h"
 #include "env/Particle.h"
 #include "env/Boundary.h"
@@ -18,6 +20,7 @@ namespace md::env {
      * @brief Structure representing a cell of the particle grid.
      */
     struct GridCell {
+        using particle_container = ankerl::unordered_dense::set<Particle*>;
         /**
          * @brief Enumeration of the type of the grid cell.
          */
@@ -62,7 +65,7 @@ namespace md::env {
         const int3 idx;    ///< The index of the grid cell
         int id;            ///< The id of the grid cell.
 
-        std::unordered_set<Particle*> particles{};   ///< The set of particles inside the grid cell.
+        particle_container particles{}; ///< The set of particles inside the grid cell.
     private:
         static int count;  ///< A counter for generating unique ids for grid cells.
     };
@@ -118,7 +121,7 @@ namespace md::env {
             PERIODIC_Z       = 0x4,  ///< Periodicity in the z-direction.
         };
 
-        using ParticlePairIterator = utils::DualPairIterator<std::unordered_set<Particle*>>;
+        using ParticlePairIterator = utils::DualPairIterator<GridCell::particle_container>;
 
         /**
          * @brief Constructs a new GridCellPair of two grid cells.
