@@ -273,7 +273,8 @@ inline void ws4_task2_small() {
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
     Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, thermostat);
-    simulator.simulate(0, args.duration, args.dt, 100, 1000);
+    // simulator.simulate(0, args.duration, args.dt, 100, 1000);
+    // simulator.benchmark(0, args.duration, args.dt, 1000);
 }
 
 inline void ws4_task2_big() {
@@ -283,7 +284,7 @@ inline void ws4_task2_big() {
     args.override = true;
     args.output_baseName = "output";
 
-    args.duration = 50;
+    args.duration = 5;
     args.dt = 0.0005;
     args.write_freq = 100;
 
@@ -322,6 +323,7 @@ inline void ws4_task2_big() {
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
     Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, thermostat);
     simulator.simulate(0, args.duration, args.dt, 100, 1000);
+    // simulator.benchmark(0, args.duration, args.dt, 1000);
 }
 
 
