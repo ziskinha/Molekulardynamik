@@ -25,4 +25,4 @@ echo "Running gprof profiling..."
     gprof ./MolSim ./gmon.out > profile_report_gprof.txt
     echo "gprof profiling completed. Output saved to profile_report_gprof.txt."
 
-fi
+

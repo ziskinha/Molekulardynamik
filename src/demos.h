@@ -330,6 +330,7 @@ inline void test2() {
     args.duration = 5;
     args.dt = 0.0005;
     args.temp_adj_freq = 1000;
+    args.write_freq= 100;
 
     env::Boundary boundary;
     // boundary size
