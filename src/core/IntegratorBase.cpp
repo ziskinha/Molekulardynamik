@@ -45,7 +45,9 @@ namespace md::Integrator {
         : env(environment), thermostat(thermostat), temp_adjust_freq(0),
         writer(std::move(writer)), checkpoint_writer(std::move(checkpoint_writer)) {}
 
-    void IntegratorBase::simulate(const double start_time, const double end_time, const double dt,
+   
+
+ void IntegratorBase::simulate(const double start_time, const double end_time, const double dt,
                                   const unsigned int write_freq, const unsigned int temp_adj_freq) {
         temp_adjust_freq = temp_adj_freq;
         int step = 0;
@@ -66,6 +68,9 @@ namespace md::Integrator {
         }
         SPDLOG_INFO("Simulation ended");
     }
+    /// -----------------------------------------
+    /// \brief Benchmark functions
+    /// -----------------------------------------
 
     void IntegratorBase::benchmark(double start_time, double end_time, double dt, unsigned int temp_adj_freq) {
         temp_adjust_freq = temp_adj_freq;

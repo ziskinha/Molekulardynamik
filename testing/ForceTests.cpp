@@ -62,15 +62,3 @@ TEST(ForceTest, mixed_force_test) {
     EXPECT_NEAR(calculated_force[1], 0.02748428, 0.001);
     EXPECT_NEAR(calculated_force[2], 0.02748428, 0.001);
 }
-
-// Code used for calculating the values
-//auto grid2 = md::env::ParticleGrid();
-//auto particle3 = md::env::Particle(0, grid2, {1, 5, 4}, {3, 3, 3}, 5, 0);
-//auto particle4 = md::env::Particle(0, grid2, {3, 2, 1}, {0, 0, 0}, 5, 0);
-//md::env::ForceManager force_manager2 = md::env::ForceManager();
-//force_manager2.add_force(md::env::LennardJones(sqrt(2), 2.0, 5), 0);
-//force_manager2.init();
-//md::vec3 diff = particle4.position - particle3.position;
-//md::vec3 calculated_force = force_manager2.evaluate(diff, particle3, particle4);
-//
-//std::cout << calculated_force[0] << " " << calculated_force[1] << " " << calculated_force[2] << std::endl;

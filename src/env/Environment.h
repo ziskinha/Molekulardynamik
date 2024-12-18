@@ -91,7 +91,7 @@ namespace md::env {
     };
 
     /**
-     * @brief Number of dimensions for the simulation
+     * @brief Number of dimensions for the simulation.
      */
     enum class Dimension {
         TWO = 2,
@@ -117,13 +117,13 @@ namespace md::env {
 
 
         /**
-         * @brief Sets the grid constant, the desired side length of a cell
+         * @brief Sets the grid constant, the desired side length of a cell.
          * @param g New grid constant.
          */
         void set_grid_constant(double g);
 
         /**
-         * @brief Sets the force with which particles interact of a given type interact
+         * @brief Sets the force with which particles interact of a given type interact.
          * @param force The type force to be used.
          * @param particle_type
          */

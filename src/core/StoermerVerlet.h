@@ -12,7 +12,8 @@ namespace md::Integrator {
         using IntegratorBase::IntegratorBase;
 
        private:
-        /**
+       
+         /**
          * @brief Performs a single step of the Stoermer-Verlet.
          * @param step
          * @param dt Δt The time increment for each simulation step.

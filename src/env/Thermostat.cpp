@@ -24,6 +24,7 @@ namespace md::env {
             particle.velocity = maxwellBoltzmannDistributedVelocity(sqrt(init_temp/particle.mass), env.dim());
         }
     }
+
     void Thermostat::adjust_temperature(Environment& env) const {
         if (target_temp == NO_TEMP) return;
 
@@ -40,4 +41,5 @@ namespace md::env {
             particle.velocity = beta * particle.velocity;
         }
     }
+
 }

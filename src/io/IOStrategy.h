@@ -19,7 +19,7 @@ namespace md::io {
     enum class OutputFormat { VTK, XYZ };
 
     /**
-     * @brief Struct used to return arguments read from the terminal.
+     * @brief Struct used to manage arguments read from the input file.
      */
     struct ProgramArguments {
         env::Environment env;
@@ -34,11 +34,11 @@ namespace md::io {
         double dt;
         double cutoff_radius;
         int write_freq;
-        unsigned int temp_adj_freq;
+        unsigned int temp_adj_freq = std::numeric_limits<unsigned int>::max();
     };
 
     /**
-     * @brief Logs the general simulation info.
+     * @brief Logs general simulation info read from the input file.
      * @param args
      */
     inline void log_arguments(const ProgramArguments& args) {
@@ -83,7 +83,7 @@ namespace md::io {
     };
 
     /**
-     * @brief Checks if the filename ends with the specific extension.
+     * @brief Checks if the filename ends with the specific extension, used to differentiate between xml and txt input.
      * @param filename The filename of the file to check.
      * @param extension The file extension to check for, e.g., ".txt" or ".xml"
      * @return true if the filename ends with the specific extension, false otherwise.

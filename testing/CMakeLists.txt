@@ -20,7 +20,7 @@ function(add_test_executable test_name)
 
     target_link_libraries(${test_name}
             PUBLIC
-            xerces-c
+            XercesC::XercesC
             gtest
             gtest_main
             PRIVATE

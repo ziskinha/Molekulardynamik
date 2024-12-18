@@ -23,7 +23,6 @@ struct fmt::formatter<md::int3> {
      */
     constexpr auto parse(fmt::format_parse_context& ctx) { return ctx.begin(); }
 
-    // Formats the int3 into the output iterator
     /**
      * @brief Formats the md::int3 into the output iterator.
      * @tparam FormatContext

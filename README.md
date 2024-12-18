@@ -25,7 +25,7 @@ After building, you can run the simulation with the following commands:
 ./MolSim -h | --help
 ```
 ### Arguments:
-- **xml_file** XML or TXT file with input parameters important for the simulation.
+- **input_file** XML or TXT file with input parameters important for the simulation.
 - **output_format** Output format: either 'XYZ' or 'VTK'
 
 ### Flags

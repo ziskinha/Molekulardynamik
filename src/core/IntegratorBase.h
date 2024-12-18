@@ -38,6 +38,8 @@ namespace md::Integrator {
          */
         void simulate(double start_time, double end_time, double dt, unsigned int write_freq = 1000, unsigned int temp_adj_freq = NEVER  );
 
+
+     
         /**
          * @brief Benchmarks the performance of the simulation. Calculates the total execution time and the average
          * execution time per step.
@@ -55,6 +57,9 @@ namespace md::Integrator {
          * @param dt Δt The time increment for each simulation step.
          */
         virtual void simulation_step(unsigned int step, double dt) = 0;
+
+
+      
 
         env::Environment& env;            ///< Reference to the environment.
         const env::Thermostat thermostat; ///< Thermostat to adjust temperature of the environment
