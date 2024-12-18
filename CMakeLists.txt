@@ -27,7 +27,7 @@ elseif (CMAKE_BUILD_TYPE STREQUAL "Benchmark")
 elseif (CMAKE_BUILD_TYPE STREQUAL "Profile")
     # gprof profiling
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -pg")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -flto -pg")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg -flto")
     add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_OFF)
 endif()
 
@@ -37,7 +37,6 @@ endif()
 # -flto: Enable link-time optimization
 # -funroll-loops: Unroll loops for better performance
 # -finline-functions: Aggressively inline small and medium-sized functions
-# -NDEBUG: Disable assert statements
 
 # collect all cpp files
 file(GLOB_RECURSE MY_SRC

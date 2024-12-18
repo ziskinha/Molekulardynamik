@@ -1,5 +1,7 @@
 #pragma once
 
+
+#undef DEBUG
 #ifdef DEBUG
 
 #define ASSERT(Expr, Msg) _md_Assert_(#Expr, (Expr), __FILE__, __LINE__, (Msg))
