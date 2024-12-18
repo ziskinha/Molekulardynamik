@@ -5,14 +5,14 @@
 namespace md::env {
 
     Force::Force()
-        : cutoff_radius(FORCE_CUTOFF_AUTO), force_func([](const vec3&, const Particle&, const Particle&) {
-            return vec3{0, 0, 0};
+        : cutoff_radius(FORCE_CUTOFF_AUTO), force_func([](const SIMDVec3&, const Particle&, const Particle&) {
+            return SIMDVec3();
         }) {}
 
     Force::Force(ForceFunc force_func, const double cutoff)
         : cutoff_radius(cutoff), force_func(std::move(force_func)) {}
 
-    vec3 Force::operator()(const vec3& diff, const Particle& p1, const Particle& p2) const {
+    SIMDVec3 Force::operator()(const SIMDVec3& diff, const Particle& p1, const Particle& p2) const {
         return force_func(diff, p1, p2);
     }
 
@@ -24,10 +24,10 @@ namespace md::env {
     Force InverseSquareForce(const double pre_factor, double cutoff_radius) {
         if (cutoff_radius == FORCE_CUTOFF_AUTO) cutoff_radius = 10 * pre_factor;
 
-        const Force::ForceFunc force_func = [=](const vec3& diff, const Particle& p1, const Particle& p2) {
-            const double dist = ArrayUtils::L2Norm(diff);
+        const Force::ForceFunc force_func = [=](const SIMDVec3& diff, const Particle& p1, const Particle& p2) {
+            const double dist = diff.l2Norm();
             if (dist > cutoff_radius) {
-                return vec3{0.0, 0.0, 0.0};
+                return SIMDVec3();
             }
             const double f_mag = p1.mass * p2.mass / std::pow(dist, 3);
             return -pre_factor * f_mag * diff;
@@ -40,9 +40,9 @@ namespace md::env {
     Force LennardJonesForce(const double epsilon, const double sigma, double cutoff_radius) {
         if (cutoff_radius == FORCE_CUTOFF_AUTO) cutoff_radius = 3 * sigma;
 
-        const Force::ForceFunc force_func = [=](const vec3& diff, const Particle&, const Particle&) {
-            const double dist_squared = ArrayUtils::L2NormSquared(diff);
-            if (dist_squared > cutoff_radius * cutoff_radius) return vec3{0.0, 0.0, 0.0};
+        const Force::ForceFunc force_func = [=](const SIMDVec3& diff, const Particle&, const Particle&) {
+            const double dist_squared = diff.l2NormSquared();
+            if (dist_squared > cutoff_radius * cutoff_radius) return SIMDVec3();
 
             const double inv_r2 = 1.0 / dist_squared;
             const double sigma_r2 = (sigma * sigma) * inv_r2;
@@ -81,7 +81,7 @@ namespace md::env {
         force_types[particle_type] = force;
     }
 
-    vec3 ForceManager::evaluate(const vec3& diff, const Particle& p1, const Particle& p2) const {
+    SIMDVec3 ForceManager::evaluate(const SIMDVec3& diff, const Particle& p1, const Particle& p2) const {
         return forces.at({p1.type, p2.type})(diff, p1, p2);
     }
 

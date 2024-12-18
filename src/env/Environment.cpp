@@ -82,8 +82,8 @@ namespace md::env {
         g_grav = g;
     }
 
-    vec3 Environment::gravity_force(const Particle& particle) const {
-        return vec3{0, particle.mass * g_grav, 0};
+    SIMDVec3 Environment::gravity_force(const Particle& particle) const {
+        return SIMDVec3(0, particle.mass * g_grav, 0);
     }
 
     void Environment::add_particle(const vec3& position, const vec3& velocity, double mass, int type, const vec3& force) {
@@ -178,7 +178,7 @@ namespace md::env {
             }
         }
         for (Particle & particle : particle_storage) {
-            const vec3 pos = particle.position - boundary.origin;
+            const SIMDVec3 pos = particle.position - SIMDVec3(boundary.origin);
             if (pos[0] < 0 || pos[1] < 0 || pos[2] < 0 ||
                 pos[0] > boundary.extent[0] || pos[1] > boundary.extent[1] || pos[2] > boundary.extent[2]) {
                 SPDLOG_ERROR("Particle is being initialized outside of the boundary. Particle position: {}", particle.position);
@@ -238,8 +238,8 @@ namespace md::env {
         return (x2 + n) - x1;
     }
 
-    vec3 Environment::force(const Particle& p1, const Particle& p2, const CellPair & pair) const {
-        vec3 diff = p2.position - p1.position;
+    SIMDVec3 Environment::force(const Particle& p1, const Particle& p2, const CellPair & pair) const {
+        vec3 diff = (p2.position - p1.position).toArray();
 
         // handle force wrap around
         if (pair.periodicity & CellPair::PERIODIC_X) {
@@ -252,7 +252,7 @@ namespace md::env {
             diff[2] = wrap_around_diff(p1.position[2], p2.position[2], boundary.extent[2]);
         }
 
-        return forces.evaluate(diff, p1, p2);
+        return forces.evaluate(SIMDVec3(diff), p1, p2);
     }
 
     size_t Environment::size(const Particle::State state) const {
@@ -278,7 +278,7 @@ namespace md::env {
     double Environment::temperature() const {
         double energy = 0;
         for (auto & particle : particles(GridCell::INSIDE, Particle::ALIVE)) {
-            energy +=  particle.mass * ArrayUtils::L2NormSquared(particle.velocity);
+            energy +=  particle.mass * particle.velocity.l2NormSquared();
         }
         return energy/static_cast<double>(dim()*size());
     }

@@ -12,6 +12,7 @@ if (NOT CMAKE_BUILD_TYPE)
             "Choose build type: Debug, Release, or Benchmark." FORCE)
 endif()
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx2 -march=native")
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     # Enable AddressSanitizer for Debug mode
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fsanitize=undefined -D DEBUG")
@@ -47,7 +48,8 @@ file(GLOB_RECURSE MY_SRC
 )
 
 # create make target
-add_executable(MolSim ${MY_SRC})
+add_executable(MolSim ${MY_SRC}
+        src/utils/VectorUtils.hpp)
 
 # set cxx standard. You may raise this if you want.
 set(CMAKE_CXX_STANDARD 20)
@@ -76,6 +78,8 @@ target_link_libraries(MolSim
 
 # activate all compiler warnings. Clean up your code :P
 # depending on the compiler different flags are used
+set(IGNORE_WARNING ${CMAKE_CURRENT_SOURCE_DIR}/src/io/Input/xml/molSimSchema.hxx)
+set_source_files_properties(${IGNORE_WARNING} PROPERTIES COMPILE_OPTIONS "-w")
 target_compile_options(MolSim
         PRIVATE
         $<$<CXX_COMPILER_ID:GNU>:-Wall -Wextra -Wpedantic>

@@ -21,7 +21,7 @@ struct fmt::formatter<md::int3> {
      * @param ctx The format parse context.
      * @return The iterator pointing to the beginning of the parse context.
      */
-    constexpr auto parse(fmt::format_parse_context& ctx) { return ctx.begin(); }
+    constexpr auto parse(format_parse_context& ctx) { return ctx.begin(); }
 
     /**
      * @brief Formats the md::int3 into the output iterator.
@@ -46,7 +46,7 @@ struct fmt::formatter<md::vec3> {
      * @param ctx The format parse context.
      * @return The iterator pointing to the beginning of the parse context.
      */
-    constexpr auto parse(fmt::format_parse_context& ctx) { return ctx.begin(); }
+    constexpr auto parse(format_parse_context& ctx) { return ctx.begin(); }
 
     /**
      * @brief Formats the md::vec3 into the output iterator.
@@ -57,6 +57,29 @@ struct fmt::formatter<md::vec3> {
      */
     template <typename FormatContext>
     auto format(const md::vec3& vec, FormatContext& ctx) {
+        return fmt::format_to(ctx.out(), "{{{}, {}, {}}}", vec[0], vec[1], vec[2]);
+    }
+};
+
+
+template <>
+struct fmt::formatter<md::SIMDVec3> {
+    /**
+     * @brief Parses the format specifier.
+     * @param ctx The format parse context.
+     * @return The iterator pointing to the beginning of the parse context.
+     */
+    constexpr auto parse(format_parse_context& ctx) { return ctx.begin(); }
+
+    /**
+     * @brief Formats the md::SIMDVec3 into the output iterator.
+     * @tparam FormatContext
+     * @param vec The md::SIMDVec3 object to format.
+     * @param ctx The format context.
+     * @return The formatted string, written to the output iterator.
+     */
+    template <typename FormatContext>
+    auto format(const md::SIMDVec3& vec, FormatContext& ctx) {
         return fmt::format_to(ctx.out(), "{{{}, {}, {}}}", vec[0], vec[1], vec[2]);
     }
 };

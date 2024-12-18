@@ -210,7 +210,7 @@ namespace md::env {
          * @param p2 The second particle.
          * @return The force between the two particles.
          */
-        [[nodiscard]] vec3 force(const Particle& p1, const Particle& p2, const CellPair & pair) const;
+        [[nodiscard]] SIMDVec3 force(const Particle& p1, const Particle& p2, const CellPair & pair) const;
 
         /**
          * Returns the number of particles of a certain state in the environment.
@@ -262,7 +262,7 @@ namespace md::env {
          * @param particle The particle for which it is being calculated.
          * @return The gravitational force acting on the particle.
          */
-        vec3 gravity_force(const Particle& particle) const;
+        SIMDVec3 gravity_force(const Particle& particle) const;
 
         /**
          * @brief Calculate temperature of the system.

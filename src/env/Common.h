@@ -3,24 +3,7 @@
 #include <array>
 #include <cstdint>
 #include <functional>
-
-
-#define UINT_T uint32_t
-#define INT_T int32_t
-// #define INF std::numeric_limits<double>::infinity()
-
-/**
- * @brief Contains fundamental types and utilities
- */
-namespace md {
-    using vec3 = std::array<double, 3>;
-    using uint3 = std::array<UINT_T, 3>;
-    using int3 = std::array<INT_T, 3>;
-
-    namespace env {
-
-    }
-}  // namespace md
+#include "utils/VectorUtils.hpp"
 
 /**
  * @brief Combines two hash values into a single hash value.

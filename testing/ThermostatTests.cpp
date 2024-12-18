@@ -37,7 +37,7 @@ TEST(ThermostatTests, holding_temperature_test) {
     md::Integrator::StoermerVerlet holding_simulator(env, nullptr, nullptr, holding_thermostat);
 
     // v <- beta * v (beta = 1)
-    md::vec3 expected_velocity = env.operator[](0).velocity;
+    md::SIMDVec3 expected_velocity = env.operator[](0).velocity;
     holding_simulator.simulate(0, 3, 0.001, 10, 100);
 
     EXPECT_NEAR(expected_velocity[0], env.operator[](0).velocity[0], 0.1);
@@ -58,7 +58,7 @@ TEST(ThermostatTest, cooling_test) {
 
     // v <- beta * v
     double beta = sqrt(30.0 / 40.0);
-    md::vec3 expected_velocity = beta * env.operator[](0).velocity;
+    md::SIMDVec3 expected_velocity = beta * env.operator[](0).velocity;
 
     cooling_simulator.simulate(0, 5, 0.001, 10, 10);
 
@@ -80,7 +80,7 @@ TEST(ThermostatTest, heating_test) {
 
     // v <- beta * v
     double beta = sqrt(50.0 / 40.0);
-    md::vec3 expected_velocity = beta * env.operator[](0).velocity;
+    md::SIMDVec3 expected_velocity = beta * env.operator[](0).velocity;
 
     heating_simulator.simulate(0, 5, 0.001, 10, 100);
 

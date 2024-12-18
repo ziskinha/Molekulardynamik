@@ -192,8 +192,8 @@ void ParticleGrid::build(const Boundary & boundary, const double grid_const, std
 
     GridCell& ParticleGrid::get_cell(const Particle& particle) { return cells.at(what_cell(particle.position)); }
 
-    int3 ParticleGrid::what_cell(const vec3& position) const {
-        const vec3 pos = position_in_grid(position);
+    int3 ParticleGrid::what_cell(const SIMDVec3& position) const {
+        const vec3 pos = position_in_grid(position.toArray());
         // boundary is axis aligned
         if (pos[0] < 0 || pos[1] < 0 || pos[2] < 0) {
             return OUTSIDE_CELL;
@@ -254,11 +254,5 @@ void ParticleGrid::build(const Boundary & boundary, const double grid_const, std
 
     vec3 ParticleGrid::position_in_grid(const vec3& abs_position) const {
         return abs_position - boundary_origin;
-    }
-
-    vec3 ParticleGrid::position_in_cell(const vec3& abs_position) const {
-        const vec3 grid_pos = position_in_grid(abs_position);
-        const GridCell & cell = cells.at(what_cell(abs_position));
-        return grid_pos - cell.origin;
     }
 } //namespace md::env

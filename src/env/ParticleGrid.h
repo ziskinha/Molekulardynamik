@@ -241,7 +241,7 @@ namespace md::env {
          * @param position The position to check.
          * @return The index of the grid cell containing the position.
          */
-        [[nodiscard]] int3 what_cell(const vec3& position) const;
+        [[nodiscard]] int3 what_cell(const SIMDVec3& position) const;
 
         /**
          * @brief Retrieves all the grid cells indices.
@@ -272,8 +272,6 @@ namespace md::env {
         void update_cells(Particle* particle, const int3& old_cell, const int3& new_cell);
 
         vec3 position_in_grid(const vec3& abs_position) const;
-        vec3 position_in_cell(const vec3& abs_position) const;
-
     private:
         /**
         * @brief Builds the grid cells based on the given extent and grid constant.

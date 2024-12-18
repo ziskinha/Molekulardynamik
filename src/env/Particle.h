@@ -36,19 +36,19 @@ namespace md::env {
          * @param type The type of the particle (default: {0, 0, 0}.
          */
         Particle(size_t id, ParticleGrid& grid, const vec3& position, const vec3& velocity, double mass, int type,
-                 vec3 force  = {0, 0, 0});
+                 const vec3& force  = {0, 0, 0});
 
         /**
          * @brief Copy constructor for Particle.
          * @param other The particle to copy from.
          */
-        Particle(const Particle& other);
+        // Particle(const Particle& other);
 
         /**
          * @brief Updates the position of the particle.
          * @param dx
          */
-        void update_position(const vec3 & dx);
+        void update_position(const SIMDVec3 & dx);
 
         /**
          * @brief Resets the force to zero.
@@ -73,11 +73,11 @@ namespace md::env {
          */
         [[nodiscard]] std::string to_string() const;
 
-        vec3 position;      ///< The current position of the particle.
-        vec3 old_position;  ///< The previous position of the particle. Useful for applying boundary conditions
-        vec3 velocity;      ///< The current velocity of the particle.
-        vec3 force;         ///< The current force acting on the particle.
-        vec3 old_force;     ///< The previous force acting on the particle.
+        SIMDVec3 position;      ///< The current position of the particle.
+        SIMDVec3 old_position;  ///< The previous position of the particle. Useful for applying boundary conditions
+        SIMDVec3 velocity;      ///< The current velocity of the particle.
+        SIMDVec3 force;         ///< The current force acting on the particle.
+        SIMDVec3 old_force;     ///< The previous force acting on the particle.
         int3 cell;          ///< The current cell of the particle.
 
         double mass;      ///< The mass of the particle.

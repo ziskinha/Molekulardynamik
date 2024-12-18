@@ -66,7 +66,7 @@ namespace md::env {
 
     class Force {
     public:
-        using ForceFunc = std::function<vec3(const vec3&, const Particle&, const Particle&)>;
+        using ForceFunc = std::function<SIMDVec3(const SIMDVec3&, const Particle&, const Particle&)>;
 
         /**
          * @brief Default constructor.
@@ -87,7 +87,7 @@ namespace md::env {
          * @param p2 The second particle.
          * @return The force between the two particles.
          */
-        vec3 operator()(const vec3& diff, const Particle& p1, const Particle& p2) const;
+        SIMDVec3 operator()(const SIMDVec3& diff, const Particle& p1, const Particle& p2) const;
 
         /**
          * @brief Retrieves the cutoff radius.
@@ -152,7 +152,7 @@ namespace md::env {
          * @param p2
          * @return The force acting between the two particles.
          */
-        vec3 evaluate(const vec3 &diff, const Particle& p1, const Particle& p2) const;
+        SIMDVec3 evaluate(const SIMDVec3 & diff, const Particle& p1, const Particle& p2) const;
 
         /**
          * @brief Retrieves the cutoff radius.

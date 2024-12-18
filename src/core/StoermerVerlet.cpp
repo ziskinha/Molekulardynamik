@@ -25,21 +25,20 @@ namespace md::Integrator {
         // calculate forces
         for (auto& cell_pair : env.linked_cells()) {
             for (auto [p1, p2] : cell_pair.particles()) {
-                vec3 new_F = env.force(*p1, *p2, cell_pair);
-
-                p2->force = p2->force + new_F;
-                p1->force = p1->force - new_F;
+                auto new_F = env.force(*p1, *p2, cell_pair);
+                p2->force += new_F;
+                p1->force -= new_F;
             }
         }
 
         // apply gravity
         for (auto& p : env.particles()) {
-            p.force = p.force + env.gravity_force(p);
+            p.force += env.gravity_force(p);
         }
 
         // update velocities
         for (auto& p : env.particles()) {
-            p.velocity = p.velocity + dt / 2 / p.mass * (p.force + p.old_force);
+            p.velocity += dt / 2 / p.mass * (p.force + p.old_force);
         }
 
         // apply thermostat

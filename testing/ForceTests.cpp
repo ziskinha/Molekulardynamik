@@ -12,10 +12,10 @@ md::env::ForceManager force_manager1 = md::env::ForceManager();
 
 md::vec3 perform_calculation(md::env::ForceManager force_manager, md::env::Particle p1, md::env::Particle p2) {
     force_manager.init();
-    md::vec3 diff = p2.position - p1.position;
-    md::vec3 calculated_force = force_manager.evaluate(diff, p1, p2);
+    md::SIMDVec3 diff = (p2.position - p1.position);
+    md::SIMDVec3 calculated_force = force_manager.evaluate(diff, p1, p2);
 
-    return calculated_force;
+    return calculated_force.toArray();
 }
 
 // check the correctness of InverseSquare calculation

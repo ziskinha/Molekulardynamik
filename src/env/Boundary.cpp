@@ -120,8 +120,8 @@ namespace md::env {
 
             // calculate which face particle traveled through if the cell has more than one face
             if (normals.size() > 1) {
-                const vec3 diff = particle.position - particle.old_position;
-                const vec3 pos = particle.old_position - origin;
+                const SIMDVec3 diff = particle.position - particle.old_position;
+                const SIMDVec3 pos = particle.old_position - SIMDVec3(origin);
 
                 const vec3 y = {
                     diff[0] < 0 ? 0 /*left*/ : extent[0] /*right*/,
@@ -144,7 +144,7 @@ namespace md::env {
                 for (const auto& normal : possible_normals) {
                     const int axis = axis_from_normal(normal);
                     const auto non_axis = non_axis_indices(axis);
-                    const vec3 intersection = t[axis] * diff + pos; // intersection of the particles path with the boundary
+                    const SIMDVec3 intersection = t[axis] * diff + pos; // intersection of the particles path with the boundary
 
                     // check if intersection point is valid. if so apply rule
                     if (intersection[non_axis[0]] >= 0 && intersection[non_axis[0]] <= extent[non_axis[0]] &&
@@ -231,7 +231,7 @@ namespace md::env {
             vec3 dx = {0,0,0};
             if (normal[axis] == 1) dx[axis] = - extent[axis];
             else if (normal[axis] == -1) dx[axis] = extent[axis];
-            particle.position = particle.position + dx;
+            particle.position = particle.position + SIMDVec3(dx);
             particle.update_grid();
         }
     }
@@ -243,7 +243,7 @@ namespace md::env {
             vec3 df = {};
             const int axis = axis_from_normal(normal);
             df[axis] = force(dist) * normal[axis];
-            particle.force = particle.force - df;
+            particle.force = particle.force - SIMDVec3(df);
         }
     }
 
@@ -251,19 +251,22 @@ namespace md::env {
         if (cell.type != GridCell::OUTSIDE) return;
 
         // TODO implement double reflection
-        const vec3 pos = particle.old_position - origin;
-        const vec3 diff = particle.position - particle.old_position;
+        const SIMDVec3 pos = particle.old_position - SIMDVec3(origin);
+        const SIMDVec3 diff = particle.position - particle.old_position;
         const int axis = axis_from_normal(normal);
 
         const double y = normal[axis] < 0 ? 0 : extent[axis];
         const double t = (y - pos[axis]) / diff[axis];
 
-        const vec3 intersection = t * diff + pos;
-        vec3 reflected = particle.position - intersection;
+        const SIMDVec3 intersection = t * diff + pos;
+        vec3 reflected = particle.position.toArray() - intersection.toArray();
         reflected[axis] = - reflected[axis];
 
-        particle.velocity[axis] = - particle.velocity[axis];
-        particle.position = reflected + intersection;
+        vec3 vel = particle.velocity.toArray();
+        vel[axis] = - vel[axis];
+
+        particle.velocity = vel;
+        particle.position = SIMDVec3(reflected) + intersection;
         particle.update_grid();
     }
 }

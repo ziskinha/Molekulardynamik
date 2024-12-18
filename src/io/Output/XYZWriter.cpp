@@ -30,7 +30,7 @@ namespace md::io {
              << std::endl;
 
         for (auto& particle : env.particles()) {
-            std::array<double, 3> x = particle.position;
+            std::array<double, 3> x = particle.position.toArray();
             file << "Ar ";
             file.setf(std::ios_base::showpoint);
 
