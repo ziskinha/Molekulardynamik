@@ -3,10 +3,11 @@
 #include "../src/env/Environment.h"
 #include "../src/utils/MaxwellBoltzmannDistribution.h"
 
+auto env = md::env::Environment();
 auto grid = md::env::ParticleGrid();
-auto particle1 = md::env::Particle(0, grid, {1, 5, 4}, {3, 3, 3}, 5, 0);
-auto particle2 = md::env::Particle(0, grid, {3, 2, 1}, {0, 0, 0}, 5, 0);
-auto particle3 = md::env::Particle(0, grid, {10, -1, 4}, {5, 0, 0}, 10, 0);
+auto particle1 = md::env::Particle(0, env, grid, {1, 5, 4}, {3, 3, 3}, 5, 0);
+auto particle2 = md::env::Particle(0, env, grid, {3, 2, 1}, {0, 0, 0}, 5, 0);
+auto particle3 = md::env::Particle(0, env, grid, {10, -1, 4}, {5, 0, 0}, 10, 0);
 
 // check if the size() method works as it should
 TEST(EnvironmentTest, size_test) {

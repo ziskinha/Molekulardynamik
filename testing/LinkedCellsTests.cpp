@@ -4,14 +4,15 @@
 #include "../src/env/Environment.h"
 #include "../src/env/ParticleGrid.h"
 
+md::env::Environment env;
 md::env::ParticleGrid grid;
 md::env::Boundary boundary;
 std::vector<md::env::Particle> particle_storage;
 
-auto particle1 = md::env::Particle(0, grid, {7.5, 7.5, 0}, {0.0, 0.0, 0.0}, 100.0, 0);
-auto particle2 = md::env::Particle(0, grid, {4.5, 7.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
-auto particle3 = md::env::Particle(0, grid, {7.5, 4.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
-auto particle4 = md::env::Particle(0, grid, {13.5, 13.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
+auto particle1 = md::env::Particle(0, env, grid, {7.5, 7.5, 0}, {0.0, 0.0, 0.0}, 100.0, 0);
+auto particle2 = md::env::Particle(0, env, grid, {4.5, 7.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
+auto particle3 = md::env::Particle(0, env, grid, {7.5, 4.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
+auto particle4 = md::env::Particle(0, env, grid, {13.5, 13.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
 
 void init_grid() {
     boundary.origin = {0, 0, 0};

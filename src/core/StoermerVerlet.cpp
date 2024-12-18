@@ -1,11 +1,11 @@
 #include "StoermerVerlet.h"
 
 #include <iostream>
+#include <ostream>
 #include <utility>
 
 #include "io/Logger/Logger.h"
 #include "utils/ArrayUtils.h"
-
 namespace md::Integrator {
 
     void StoermerVerlet::simulation_step(unsigned step, const double dt) {
@@ -17,6 +17,9 @@ namespace md::Integrator {
             p->reset_force();
         }
 
+        if (step == 499) {
+            int i = 0;
+        }
         for (auto * particle : env.boundary_particles()) {
             env.apply_boundary(*particle);
         }

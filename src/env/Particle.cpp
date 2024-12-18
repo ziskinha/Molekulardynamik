@@ -40,7 +40,7 @@ namespace md::env {
 
     void Particle::update_status() {
         const int3 temp = grid.what_cell(position);
-        grid.update_cells(this, cell, temp);
+        grid.update_cells(*this, cell, temp);
         cell = temp;
 
         env.update_particles(*this);

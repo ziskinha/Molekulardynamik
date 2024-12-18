@@ -4,9 +4,12 @@
 #include "../src/env/Force.h"
 #include "../src/env/Common.h"
 
+
+
+auto env = md::env::Environment();
 auto grid = md::env::ParticleGrid();
-auto particle1 = md::env::Particle(0, grid, {1, 5, 4}, {3, 3, 3}, 5, 0);
-auto particle2 = md::env::Particle(0, grid, {3, 2, 1}, {0, 0, 0}, 5, 0);
+auto particle1 = md::env::Particle(0, env, grid, {1, 5, 4}, {3, 3, 3}, 5, 0);
+auto particle2 = md::env::Particle(1, env, grid, {3, 2, 1}, {0, 0, 0}, 5, 0);
 md::env::ForceManager force_manager1 = md::env::ForceManager();
 
 
@@ -51,8 +54,8 @@ TEST(ForceTest, lennard_jones_cutoff_radius_test) {
 // chek the correctness of mixed forces
 TEST(ForceTest, mixed_force_test) {
     auto grid2 = md::env::ParticleGrid();
-    auto particle3 = md::env::Particle(0, grid2, {1, 5, 4}, {3, 3, 3}, 5, 0);
-    auto particle4 = md::env::Particle(0, grid2, {3, 2, 1}, {0, 0, 0}, 5, 1);
+    auto particle3 = md::env::Particle(0, env, grid2, {1, 5, 4}, {3, 3, 3}, 5, 0);
+    auto particle4 = md::env::Particle(0, env, grid2, {3, 2, 1}, {0, 0, 0}, 5, 1);
     md::env::ForceManager force_manager2 = md::env::ForceManager();
     force_manager2.add_force(md::env::LennardJones(1.0, 1.0, 5), 0);
     force_manager2.add_force(md::env::LennardJones(2.0, 3.0, 5), 1);

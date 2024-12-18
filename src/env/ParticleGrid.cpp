@@ -232,20 +232,20 @@ void ParticleGrid::build(const Boundary & boundary, const double grid_const, std
         return count;
     }
 
-    void ParticleGrid::update_cells(Particle* particle, const int3& old_cell, const int3& new_cell) {
+    void ParticleGrid::update_cells(Particle & particle, const int3& old_cell, const int3& new_cell) {
         if (old_cell != new_cell) {
             auto& old = cells.at(old_cell);
             auto& current = cells.at(new_cell);
 
-            old.particles.erase(particle);
-            current.particles.insert(particle);
+            old.particles.erase(&particle);
+            current.particles.insert(&particle);
 
-            SPDLOG_TRACE("Particle at {} changed cells from {} to {}", particle->position, old_cell, new_cell);
+            SPDLOG_TRACE("Particle at {} changed cells from {} to {}", particle.position, old_cell, new_cell);
         }
 
-        if (particle->state == Particle::DEAD) {
+        if (particle.state == Particle::DEAD) {
             auto& cell = cells.at(old_cell);
-            cell.particles.erase(particle);
+            cell.particles.erase(&particle);
         }
     }
 

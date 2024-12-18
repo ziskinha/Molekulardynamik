@@ -99,6 +99,10 @@ namespace md::env {
         INFER = -1
     };
 
+    class ParticleIterator {
+
+    };
+
     /**
      * @brief Class representing the simulation environment, which manages particles, forces, boundaries, and the grid.
      */

@@ -269,7 +269,7 @@ namespace md::env {
          * @param old_cell The index of the old cell (before moving).
          * @param new_cell The index of the new cell (after moving).
          */
-        void update_cells(Particle* particle, const int3& old_cell, const int3& new_cell);
+        void update_cells(Particle& particle, const int3& old_cell, const int3& new_cell);
 
         vec3 position_in_grid(const vec3& abs_position) const;
 
