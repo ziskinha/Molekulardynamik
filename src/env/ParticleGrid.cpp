@@ -26,7 +26,7 @@ namespace md::env {
     /// -----------------------------------------
     GridCell::GridCell(const vec3& coord, const vec3& size, Type type, const int3& idx)
         : type(type), origin(coord), size(size), idx(idx), id(count++) {
-        particles.max_load_factor(1.0);
+        particles.max_load_factor(0.8);
     }
 
     std::string GridCell::to_string() const {
