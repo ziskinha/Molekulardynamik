@@ -322,9 +322,29 @@ inline void ws4_task2_big() {
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
     Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, thermostat);
-    simulator.simulate(0, args.duration, args.dt, args.write_freq, 1000);
+    // simulator.simulate(0, args.duration, args.dt, args.write_freq, 1000);
+    simulator.benchmark(0, args.duration, args.dt, 1000);
+
 }
 
+// Total execution time:43838.1 ms
+// Average execution time per step: 4.38293 ms
+// Number of particles: 10000
+// Particle modifications: 100010000
+// MUPS/s
+// 2325813
+// Total execution time:44065.7 ms
+// Average execution time per step: 4.40569 ms
+// Number of particles: 10000
+// Particle modifications: 100010000
+// MUPS/s
+// 2272954
+// Total execution time:44169.3 ms
+// Average execution time per step: 4.41605 ms
+// Number of particles: 10000
+// Particle modifications: 100010000
+// MUPS/s
+// 2272954
 
 inline void test2() {
     io::ProgramArguments args;
