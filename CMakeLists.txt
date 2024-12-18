@@ -21,13 +21,13 @@ elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2 -D DEBUG" CACHE STRING "Optimization for Release" FORCE)
 elseif (CMAKE_BUILD_TYPE STREQUAL "Benchmark")
     # Aggressive optimization and profiling flags for Benchmark
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -march=native -mtune=native -flto -funroll-loops -finline-functions")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -flto")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -pg -march=native -mtune=native -flto -funroll-loops -finline-functions")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg -flto")
     add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_OFF)
 elseif (CMAKE_BUILD_TYPE STREQUAL "Profile")
     # gprof profiling
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -pg")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -flto -pg")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg -flto")
     add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_OFF)
 endif()
 
