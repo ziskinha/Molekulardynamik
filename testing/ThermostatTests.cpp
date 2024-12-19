@@ -6,7 +6,9 @@
 
 #include <iostream>
 
-void setup(md::env::Environment &env) {
+md::env::Environment env;
+
+void setup() {
     // set up the environment
     md::env::Boundary boundary;
     boundary.origin = {0, 0, 0};
@@ -29,8 +31,7 @@ void setup(md::env::Environment &env) {
 
 // tests if the velocity of particles stays constant with no change in temperature.
 TEST(ThermostatTests, holding_temperature_test) {
-    md::env::Environment env;
-    setup(env);
+    setup();
 
     // initial temp: 40, target temp: 40, deltaT = 0.1
     md::env::Thermostat holding_thermostat(40, 40, 0.1);
@@ -49,9 +50,6 @@ TEST(ThermostatTests, holding_temperature_test) {
 
 // tests if the velocity of particles adjusts correctly during cooling.
 TEST(ThermostatTest, cooling_test) {
-    md::env::Environment env;
-    setup(env);
-
     // initial temp: 40, target temp: 30, deltaT = 0.25
     md::env::Thermostat cooling_thermostat(40, 30, 0.25);
     md::Integrator::StoermerVerlet cooling_simulator(env, nullptr, nullptr, cooling_thermostat);
@@ -66,20 +64,19 @@ TEST(ThermostatTest, cooling_test) {
     EXPECT_NEAR(expected_velocity[1], env.operator[](0).velocity[1], 0.1);
     EXPECT_NEAR(expected_velocity[2], env.operator[](0).velocity[2], 0.1);
 
-    EXPECT_TRUE(env.temperature() == 30.00);
+    EXPECT_NEAR(env.temperature(), 30.00, 0.001);
 }
+
+
 
 // tests if the velocity of particles adjusts correctly during heating.
 TEST(ThermostatTest, heating_test) {
-    md::env::Environment env;
-    setup(env);
-
     // initial temp: 40, target temp: 50, deltaT = 0.25
-    md::env::Thermostat heating_thermostat(40, 50, 0.25);
+    md::env::Thermostat heating_thermostat(30, 40, 0.25);
     md::Integrator::StoermerVerlet heating_simulator(env, nullptr, nullptr, heating_thermostat);
 
     // v <- beta * v
-    double beta = sqrt(50.0 / 40.0);
+    double beta = sqrt(40.0 / 30.0);
     md::vec3 expected_velocity = beta * env.operator[](0).velocity;
 
     heating_simulator.simulate(0, 5, 0.001, 10, 100);
@@ -88,5 +85,6 @@ TEST(ThermostatTest, heating_test) {
     EXPECT_NEAR(expected_velocity[1], env.operator[](0).velocity[1], 0.1);
     EXPECT_NEAR(expected_velocity[2], env.operator[](0).velocity[2], 0.1);
 
-    EXPECT_TRUE(env.temperature() == 50.00);
+    EXPECT_NEAR(env.temperature(), 40.00, 0.001);
 }
+

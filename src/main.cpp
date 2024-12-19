@@ -28,7 +28,6 @@ void run_mol_sim(const int argc, char* argv[]) {
 
 }
 
-
 int main(const int argc, char* argv[]) {
     ws4_task2_big();
 
