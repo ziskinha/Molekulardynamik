@@ -284,7 +284,7 @@ inline void ws4_task2_big() {
     args.override = true;
     args.output_baseName = "output";
 
-    args.duration = 5;
+    args.duration = 0.5;
     args.dt = 0.0005;
     args.write_freq = 100;
 
