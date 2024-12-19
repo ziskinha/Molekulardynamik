@@ -128,8 +128,8 @@ inline void four_particle_reflective_velocity_test() {
     env::Environment env;
     env.add_particle({2.8, 2.9, 0}, {4, 2, 0}, 1, 1);
     env.add_particle({0.1, 0.15, 0}, {-6, 1, 0}, 1, 1);
-    // env.add_particle({2.5, 0.1, 0}, {-1, 1, 0}, 1, 1);
-    // env.add_particle({0.2, 2.6, 0}, {6, 2, 0}, 1, 1);
+    env.add_particle({2.5, 0.1, 0}, {-1, 1, 0}, 1, 1);
+    env.add_particle({0.2, 2.6, 0}, {6, 2, 0}, 1, 1);
 
     env::Boundary boundary;
     boundary.extent = {3, 3, 1};
@@ -140,7 +140,7 @@ inline void four_particle_reflective_velocity_test() {
 
     env.set_boundary(boundary);
     env.set_force(env::LennardJones(5, 0.1, 0.5), 1);
-    env.set_grid_constant(3);
+    env.set_grid_constant(0.5);
 
     env.build();
 
@@ -267,7 +267,7 @@ inline void ws4_task2_small() {
     env.set_gravity_constant(-12.44);
     env.build();
 
-    env::Thermostat thermostat(40);
+    env::Thermostat thermostat(40, 25);
     thermostat.set_initial_temperature(env);
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
