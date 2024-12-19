@@ -1,0 +1,35 @@
+1st
+Total execution time:133118 ms
+Average execution time per step: 13.3091 ms
+Number of particles: 10000
+Particle modifications: 100010000
+MUPS/s 
+751954
+2nd
+Total execution time:133181 ms
+Average execution time per step: 13.3154 ms
+Number of particles: 10000
+Particle modifications: 100010000
+MUPS/s 
+751954
+3rd
+Total execution time:133158 ms
+Average execution time per step: 13.3132 ms
+Number of particles: 10000
+Particle modifications: 100010000
+MUPS/s 
+751954
+4th
+Total execution time:133416 ms
+Average execution time per step: 13.3389 ms
+Number of particles: 10000
+Particle modifications: 100010000
+MUPS/s 
+751954
+5th
+Total execution time:133250 ms
+Average execution time per step: 13.3223 ms
+Number of particles: 10000
+Particle modifications: 100010000
+MUPS/s 
+751954

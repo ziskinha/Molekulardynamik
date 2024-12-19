@@ -1,0 +1,23 @@
+Running perf profiling...
+/var/slurmd-cm4/job06568/slurm_script: line 20: perf: command not found
+Running gprof profiling...
+[2024-12-18 00:40:28.256] [info] [Environment.cpp:168] Start building the environment.
+[2024-12-18 00:40:28.259] [info] [Environment.cpp:230] Environment successfully built.
+[2024-12-18 00:40:28.260] [info] [IOStrategy.h:45] General simulation info:
+       output name:         
+       duration:            5
+       dt:                  0.0005
+       write_freq:          879493748
+       particles:           10000
+       benchmark:           false
+       override:            false
+       output_format:       VTK
+Total execution time:235336 ms
+Average execution time per step: 23.5289 ms
+Number of particles: 10000
+Particle modifications: 100010000
+MUPS/s 
+425574
+gprof profiling completed. Output saved to profile_report_gprof.txt.
+/var/slurmd-cm4/job06568/slurm_script: line 28: syntax error near unexpected token `fi'
+/var/slurmd-cm4/job06568/slurm_script: line 28: `fi'

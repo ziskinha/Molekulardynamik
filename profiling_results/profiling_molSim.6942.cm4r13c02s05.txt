@@ -1,0 +1,10 @@
+Running perf profiling...
+/var/slurmd-cm4/job06942/slurm_script: line 20: perf: command not found
+Running gprof profiling...
+Total execution time:1.48881e+06 ms
+Average execution time per step: 14.888 ms
+Number of particles: 10000
+Particle modifications: 1000000000
+MUPS/s 
+672043
+gprof profiling completed. Output saved to profile_report_gprof.txt.
