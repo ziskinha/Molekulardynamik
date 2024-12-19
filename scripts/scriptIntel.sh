@@ -13,6 +13,7 @@
 
 module load slurm_setup
 module load intel-toolkit/2023.2.0
+module load gcc/13.2.0
 module load xerces-c/3.2.1
 
 
