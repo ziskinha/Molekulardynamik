@@ -21,4 +21,4 @@ environment:
 
 thermostats:
 # T_init     n_thermos     T_target(for no target: -1)      delta_T(for no delta_t: -1)
-40             1000                   -1                              -1
+40             1000                   40                              -1
