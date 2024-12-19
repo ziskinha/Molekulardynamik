@@ -1,0 +1,813 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls   s/call   s/call  name    
+ 29.56     20.92    20.92    10001     0.00     0.01  md::Integrator::StoermerVerlet::simulation_step(unsigned int, double)
+ 15.57     31.94    11.02 400050000     0.00     0.00  md::env::ParticleGrid::get_cell(md::env::Particle const&) const
+ 11.69     40.21     8.27 2998844862     0.00     0.00  md::env::ForceManager::evaluate(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&) const
+ 11.11     48.07     7.86 2998844862     0.00     0.00  std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_invoke(std::_Any_data const&, std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)
+  8.79     54.29     6.22 2998844862     0.00     0.00  md::env::Environment::force(md::env::Particle const&, md::env::Particle const&, md::env::CellPair const&) const
+  8.05     59.99     5.70 701731514     0.00     0.00  md::env::ParticleGrid::what_cell(std::array<double, 3ul> const&) const
+  5.37     63.79     3.80                             _init
+  2.08     65.27     1.48 200020000     0.00     0.00  md::env::ParticleGrid::get_cell(std::array<int, 3ul> const&)
+  1.41     66.27     1.00       12     0.08     0.08  std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+  1.21     67.12     0.86 100009994     0.00     0.00  md::env::Particle::update_position(std::array<double, 3ul> const&)
+  0.75     67.65     0.53 400050000     0.00     0.00  md::env::Environment::filter_particles(md::env::Particle const&, md::env::Particle::State, md::env::GridCell::Type) const
+  0.72     68.16     0.51        2     0.26     0.26  md::env::ForceManager::ForceManager()
+  0.64     68.61     0.45                             md::env::wrap_around_diff(double, double, double)
+  0.61     69.04     0.43 100010000     0.00     0.00  md::env::Boundary::apply_boundary(md::env::Particle&, md::env::GridCell const&, md::env::GridCell const&) const
+  0.33     69.27     0.23 100010000     0.00     0.00  md::env::type_to_normals(md::env::GridCell::Type)
+  0.31     69.49     0.22 100830757     0.00     0.00  md::env::ParticleGrid::update_cells(md::env::Particle*, std::array<int, 3ul> const&, std::array<int, 3ul> const&)
+  0.28     69.69     0.20 376335158     0.00     0.00  std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::CrossPairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_invoke(std::_Any_data const&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)
+  0.17     69.81     0.12 100009994     0.00     0.00  md::env::Particle::reset_force()
+  0.16     69.92     0.11 100830757     0.00     0.00  md::env::Particle::update_grid()
+  0.14     70.02     0.10    10002     0.00     0.00  md::env::ParticleGrid::particle_count() const
+  0.13     70.11     0.10 100010000     0.00     0.00  md::env::Environment::apply_boundary(md::env::Particle&)
+  0.13     70.21     0.10 83423232     0.00     0.00  std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::UniquePairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_invoke(std::_Any_data const&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)
+  0.11     70.29     0.08 21078773     0.00     0.00  std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::UniquePairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+  0.11     70.37     0.08                             md::env::ParticleGrid::get_cell(md::env::Particle const&)
+  0.10     70.44     0.07  1871315     0.00     0.00  std::enable_if<ArrayUtils::is_container<std::array<double, 3ul> >::value, std::ostream&>::type operator<< <std::array<double, 3ul> >(std::ostream&, std::array<double, 3ul> const&)
+  0.10     70.51     0.07                             md::env::Environment::operator[](unsigned long) const
+  0.09     70.57     0.07 100009994     0.00     0.00  md::env::Environment::gravity_force(md::env::Particle const&) const
+  0.04     70.60     0.03  2461220     0.00     0.00  md::env::axis_from_normal(std::array<int, 3ul> const&)
+  0.04     70.63     0.03                             md::env::GridCell::to_string[abi:cxx11]() const
+  0.04     70.66     0.03        1     0.03     0.03  md::env::Environment::set_gravity_constant(double)
+  0.03     70.68     0.02 65929927     0.00     0.00  std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::CrossPairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+  0.03     70.70     0.02                             md::env::Boundary::velocity_reflection_rule(md::env::Particle&, std::array<int, 3ul> const&, md::env::GridCell const&) const
+  0.02     70.71     0.02    10001     0.00     0.00  md::env::Environment::linked_cells()
+  0.02     70.73     0.02     5000     0.00     0.00  md::env::Particle::Particle(md::env::Particle const&)
+  0.02     70.74     0.02                             md::env::ParticleGrid::get_cell(std::array<int, 3ul> const&) const
+  0.01     70.75     0.01 87008700     0.00     0.00  md::env::CellPair::particles() const
+  0.01     70.76     0.01  1879514     0.00     0.00  std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<md::env::Particle*, false>*, unsigned long)
+  0.01     70.77     0.01                             md::env::CellPair::empty() const
+  0.00     70.77     0.00   820763     0.00     0.00  md::env::Boundary::apply_rule(std::array<int, 3ul> const&, md::env::Particle&, md::env::GridCell const&) const
+  0.00     70.77     0.00    20000     0.00     0.00  std::vector<std::array<int, 3ul>, std::allocator<std::array<int, 3ul> > >::~vector()
+  0.00     70.77     0.00    10002     0.00     0.00  md::env::Environment::size(md::env::Particle::State) const
+  0.00     70.77     0.00    10001     0.00     0.00  md::env::ParticleGrid::linked_cells()
+  0.00     70.77     0.00    10000     0.00     0.00  md::env::Environment::add_particle(std::array<double, 3ul> const&, std::array<double, 3ul> const&, double, int, std::array<double, 3ul> const&)
+  0.00     70.77     0.00    10000     0.00     0.00  md::env::Particle::Particle(unsigned long, md::env::ParticleGrid&, std::array<double, 3ul> const&, std::array<double, 3ul> const&, double, int, std::array<double, 3ul>)
+  0.00     70.77     0.00    10000     0.00     0.00  md::env::Environment::dim() const
+  0.00     70.77     0.00     2058     0.00     0.00  std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_rehash(unsigned long, unsigned long const&)
+  0.00     70.77     0.00     1801     0.00     0.00  std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<std::array<int, 3ul> const, md::env::GridCell>, true>*, unsigned long)
+  0.00     70.77     0.00       13     0.00     0.00  void fmt::v10::detail::buffer<char>::append<char>(char const*, char const*)
+  0.00     70.77     0.00       11     0.00     0.00  md::env::Thermostat::adjust_temperature(md::env::Environment&) const
+  0.00     70.77     0.00        8     0.00     0.00  std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&)
+  0.00     70.77     0.00        8     0.00     0.00  std::__detail::_Map_base<std::pair<int, int>, std::pair<std::pair<int, int> const, md::env::Force>, std::allocator<std::pair<std::pair<int, int> const, md::env::Force> >, std::__detail::_Select1st, std::equal_to<std::pair<int, int> >, md::env::ForceManager::ForceKeyHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](std::pair<int, int>&&)
+  0.00     70.77     0.00        8     0.00     0.00  std::__detail::_Map_base<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true>, true>::operator[](int&&)
+  0.00     70.77     0.00        5     0.00     0.00  spdlog::details::fmt_helper::pad2(int, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&)
+  0.00     70.77     0.00        5     0.00     0.00  std::_Function_handler<double (double), md::env::Boundary::LennardJonesForce(double, double)::{lambda(double)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+  0.00     70.77     0.00        5     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_dispose()
+  0.00     70.77     0.00        4     0.00     0.17  md::env::ForceManager::mix_forces(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, std::variant<md::env::LennardJones, md::env::InverseSquare> const&)
+  0.00     70.77     0.00        4     0.00     0.17  md::env::LennardJonesForce(double, double, double)
+  0.00     70.77     0.00        4     0.00     0.00  md::env::Boundary::set_boundary_rule(md::env::BoundaryRule, std::array<int, 3ul> const&)
+  0.00     70.77     0.00        4     0.00     0.00  md::env::Boundary::Boundary()
+  0.00     70.77     0.00        4     0.00     0.00  std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::Force::Force()::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+  0.00     70.77     0.00        3     0.00     0.00  xsd::cxx::tree::string<char, xsd::cxx::tree::simple_type<char, xsd::cxx::tree::_type> >::string(char const*)
+  0.00     70.77     0.00        3     0.00     0.00  void spdlog::logger::log_<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(spdlog::source_loc, spdlog::level::level_enum, fmt::v10::basic_string_view<char>, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+  0.00     70.77     0.00        3     0.00     0.00  void spdlog::details::fmt_helper::append_int<int>(int, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&)
+  0.00     70.77     0.00        2     0.00     0.00  md::env::Thermostat::Thermostat(double, double, double)
+  0.00     70.77     0.00        2     0.00     0.01  md::env::Environment::add_cuboid(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::array<unsigned int, 3ul> const&, double, double, double, unsigned char, int)
+  0.00     70.77     0.00        2     0.00     0.00  md::env::Environment::set_force(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, int)
+  0.00     70.77     0.00        2     0.00     0.26  md::env::Environment::Environment()
+  0.00     70.77     0.00        2     0.00     0.00  md::env::ForceManager::add_force(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, int)
+  0.00     70.77     0.00        2     0.00     0.00  spdlog::pattern_formatter::format(spdlog::details::log_msg const&, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&)
+  0.00     70.77     0.00        2     0.00     0.00  spdlog::pattern_formatter::pattern_formatter(spdlog::pattern_time_type, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)
+  0.00     70.77     0.00        2     0.00     0.00  spdlog::pattern_formatter::~pattern_formatter()
+  0.00     70.77     0.00        2     0.00     0.00  spdlog::default_logger_raw()
+  0.00     70.77     0.00        2     0.00     0.00  spdlog::sinks::ansicolor_sink<spdlog::details::console_mutex>::log(spdlog::details::log_msg const&)
+  0.00     70.77     0.00        2     0.00     0.00  spdlog::logger::log_it_(spdlog::details::log_msg const&, bool, bool)
+  0.00     70.77     0.00        2     0.00     0.00  spdlog::logger::sink_it_(spdlog::details::log_msg const&)
+  0.00     70.77     0.00        2     0.00     0.00  void spdlog::details::fmt_helper::pad3<unsigned int>(unsigned int, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&)
+  0.00     70.77     0.00        2     0.00     0.00  spdlog::details::full_formatter::format(spdlog::details::log_msg const&, tm const&, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&)
+  0.00     70.77     0.00        2     0.00     0.00  spdlog::details::full_formatter::~full_formatter()
+  0.00     70.77     0.00        2     0.00     0.00  spdlog::details::log_msg::log_msg(spdlog::source_loc, fmt::v10::basic_string_view<char>, spdlog::level::level_enum, fmt::v10::basic_string_view<char>)
+  0.00     70.77     0.00        2     0.00     0.00  spdlog::details::registry::instance()
+  0.00     70.77     0.00        2     0.00     0.00  spdlog::details::backtracer::enabled() const
+  0.00     70.77     0.00        2     0.00     0.00  std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::~_Hashtable()
+  0.00     70.77     0.00        2     0.00     0.00  std::_Hashtable<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, false>*, unsigned long)
+  0.00     70.77     0.00        2     0.00     0.00  std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release()
+  0.00     70.77     0.00        2     0.00     0.00  std::_Function_handler<void (spdlog::details::log_msg const&), spdlog::logger::dump_backtrace_()::{lambda(spdlog::details::log_msg const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+  0.00     70.77     0.00        1     0.00    66.30  ws4_task2_big()
+  0.00     70.77     0.00        1     0.00    64.75  md::Integrator::IntegratorBase::benchmark(double, double, double, unsigned int)
+  0.00     70.77     0.00        1     0.00     0.00  md::Integrator::IntegratorBase::IntegratorBase(md::env::Environment&, std::unique_ptr<md::io::OutputWriterBase, std::default_delete<md::io::OutputWriterBase> >, std::unique_ptr<md::io::CheckpointWriter, std::default_delete<md::io::CheckpointWriter> >, md::env::Thermostat const&)
+  0.00     70.77     0.00        1     0.00     0.00  md::io::create_writer(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, md::io::OutputFormat, bool)
+  0.00     70.77     0.00        1     0.00     0.00  md::io::OutputWriterBase::OutputWriterBase(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool)
+  0.00     70.77     0.00        1     0.00     0.00  md::io::create_checkpoint_writer()
+  0.00     70.77     0.00        1     0.00     0.00  md::io::VTKWriter::VTKWriter(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool)
+  0.00     70.77     0.00        1     0.00     0.00  md::io::VTKWriter::~VTKWriter()
+  0.00     70.77     0.00        1     0.00     0.00  md::io::VTKWriter::~VTKWriter()
+  0.00     70.77     0.00        1     0.00     0.00  md::env::Environment::set_boundary(md::env::Boundary const&)
+  0.00     70.77     0.00        1     0.00     0.00  md::env::Environment::set_grid_constant(double)
+  0.00     70.77     0.00        1     0.00     0.67  md::env::Environment::build()
+  0.00     70.77     0.00        1     0.00     0.67  md::env::ForceManager::init()
+  0.00     70.77     0.00        1     0.00     0.00  md::env::ParticleGrid::build_cells(std::array<double, 3ul> const&, double, std::vector<md::env::Particle, std::allocator<md::env::Particle> >&)
+  0.00     70.77     0.00        1     0.00     0.00  md::env::ParticleGrid::build_cell_pairs(std::array<md::env::BoundaryRule, 6ul> const&)
+  0.00     70.77     0.00        1     0.00     0.00  md::env::ParticleGrid::build(md::env::Boundary const&, double, std::vector<md::env::Particle, std::allocator<md::env::Particle> >&)
+  0.00     70.77     0.00        1     0.00     0.00  md::env::Boundary::LennardJonesForce(double, double)
+  0.00     70.77     0.00        1     0.00     0.00  md::env::Boundary::set_boundary_rule(md::env::BoundaryRule)
+  0.00     70.77     0.00        1     0.00     0.00  md::env::Boundary::set_boundary_force(std::function<double (double)> const&)
+  0.00     70.77     0.00        1     0.00     0.00  spdlog::sinks::ansicolor_sink<spdlog::details::console_mutex>::ansicolor_sink(_IO_FILE*, spdlog::color_mode)
+  0.00     70.77     0.00        1     0.00     0.00  spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>::ansicolor_stdout_sink(spdlog::color_mode)
+  0.00     70.77     0.00        1     0.00     0.00  spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>::~ansicolor_stdout_sink()
+  0.00     70.77     0.00        1     0.00     0.00  spdlog::details::os::in_terminal(_IO_FILE*)
+  0.00     70.77     0.00        1     0.00     0.00  spdlog::details::registry::registry()
+  0.00     70.77     0.00        1     0.00     0.00  md::env::Thermostat::set_initial_temperature(md::env::Environment&) const
+  0.00     70.77     0.00        1     0.00     0.00  md::env::ForceManager::cutoff() const
+  0.00     70.77     0.00        1     0.00     0.00  md::env::Boundary::boundary_rules() const
+  0.00     70.77     0.00        1     0.00     0.00  md::env::Boundary::requires_force_function() const
+  0.00     70.77     0.00        1     0.00     0.00  std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> > >, std::__detail::_Select1st, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, true>*, unsigned long)
+  0.00     70.77     0.00        1     0.00     0.00  std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> > >, std::__detail::_Select1st, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&)
+  0.00     70.77     0.00        1     0.00     0.00  std::_Hashtable<std::pair<int, int>, std::pair<std::pair<int, int> const, md::env::Force>, std::allocator<std::pair<std::pair<int, int> const, md::env::Force> >, std::__detail::_Select1st, std::equal_to<std::pair<int, int> >, md::env::ForceManager::ForceKeyHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&)
+  0.00     70.77     0.00        1     0.00     0.00  std::_Hashtable<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::_M_rehash(unsigned long, unsigned long const&)
+  0.00     70.77     0.00        1     0.00     0.00  std::_Sp_counted_ptr_inplace<spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_destroy()
+  0.00     70.77     0.00        1     0.00     0.00  std::_Sp_counted_ptr_inplace<spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_dispose()
+  0.00     70.77     0.00        1     0.00     0.00  std::_Sp_counted_ptr_inplace<spdlog::logger, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_destroy()
+  0.00     70.77     0.00        1     0.00     0.00  std::_Sp_counted_ptr_inplace<spdlog::logger, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_dispose()
+  0.00     70.77     0.00        1     0.00     0.00  std::__detail::_Map_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> > >, std::__detail::_Select1st, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2024 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.01% of 70.77 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     93.7    0.00   66.30                 main [1]
+                0.00   66.30       1/1           ws4_task2_big() [2]
+-----------------------------------------------
+                0.00   66.30       1/1           main [1]
+[2]     93.7    0.00   66.30       1         ws4_task2_big() [2]
+                0.00   64.75       1/1           md::Integrator::IntegratorBase::benchmark(double, double, double, unsigned int) [3]
+                0.00    0.67       1/1           md::env::Environment::build() [18]
+                0.00    0.51       2/2           md::env::Environment::Environment() [22]
+                0.33    0.00       4/12          std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [15]
+                0.03    0.00       1/1           md::env::Environment::set_gravity_constant(double) [38]
+                0.00    0.02       2/2           md::env::Environment::add_cuboid(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::array<unsigned int, 3ul> const&, double, double, double, unsigned char, int) [43]
+                0.00    0.00       1/1           md::env::Thermostat::set_initial_temperature(md::env::Environment&) const [48]
+                0.00    0.00       4/4           md::env::Boundary::set_boundary_rule(md::env::BoundaryRule, std::array<int, 3ul> const&) [74]
+                0.00    0.00       3/5           std::_Function_handler<double (double), md::env::Boundary::LennardJonesForce(double, double)::{lambda(double)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [72]
+                0.00    0.00       2/4           md::env::Boundary::Boundary() [75]
+                0.00    0.00       2/2           md::env::Thermostat::Thermostat(double, double, double) [80]
+                0.00    0.00       2/2           md::env::ForceManager::add_force(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, int) [82]
+                0.00    0.00       2/2           md::env::Environment::set_force(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, int) [81]
+                0.00    0.00       2/2           std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::~_Hashtable() [96]
+                0.00    0.00       1/1           md::env::Boundary::set_boundary_rule(md::env::BoundaryRule) [111]
+                0.00    0.00       1/1           md::env::Boundary::LennardJonesForce(double, double) [110]
+                0.00    0.00       1/1           md::env::Boundary::set_boundary_force(std::function<double (double)> const&) [112]
+                0.00    0.00       1/1           md::env::Environment::set_boundary(md::env::Boundary const&) [107]
+                0.00    0.00       1/1           md::env::Environment::set_grid_constant(double) [108]
+                0.00    0.00       1/1           md::io::create_writer(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, md::io::OutputFormat, bool) [101]
+                0.00    0.00       1/1           md::Integrator::IntegratorBase::IntegratorBase(md::env::Environment&, std::unique_ptr<md::io::OutputWriterBase, std::default_delete<md::io::OutputWriterBase> >, std::unique_ptr<md::io::CheckpointWriter, std::default_delete<md::io::CheckpointWriter> >, md::env::Thermostat const&) [100]
+                0.00    0.00       1/1           md::io::VTKWriter::~VTKWriter() [105]
+-----------------------------------------------
+                0.00   64.75       1/1           ws4_task2_big() [2]
+[3]     91.5    0.00   64.75       1         md::Integrator::IntegratorBase::benchmark(double, double, double, unsigned int) [3]
+               20.92   43.72   10001/10001       md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+                0.10    0.00   10002/10002       md::env::ParticleGrid::particle_count() const [29]
+                0.00    0.00   10002/10002       md::env::Environment::size(md::env::Particle::State) const [59]
+                0.00    0.00      11/11          md::env::Thermostat::adjust_temperature(md::env::Environment&) const [67]
+-----------------------------------------------
+               20.92   43.72   10001/10001       md::Integrator::IntegratorBase::benchmark(double, double, double, unsigned int) [3]
+[4]     91.3   20.92   43.72   10001         md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+                6.22   16.13 2998844862/2998844862     md::env::Environment::force(md::env::Particle const&, md::env::Particle const&, md::env::CellPair const&) const [5]
+                0.53   14.27 400040000/400050000     md::env::Environment::filter_particles(md::env::Particle const&, md::env::Particle::State, md::env::GridCell::Type) const [7]
+                0.10    2.29 100010000/100010000     md::env::Environment::apply_boundary(md::env::Particle&) [12]
+                0.11    1.92 100009994/100830757     md::env::Particle::update_grid() [13]
+                0.86    0.00 100009994/100009994     md::env::Particle::update_position(std::array<double, 3ul> const&) [16]
+                0.43    0.28 100010000/100010000     md::env::Boundary::apply_boundary(md::env::Particle&, md::env::GridCell const&, md::env::GridCell const&) const [17]
+                0.20    0.00 376335158/376335158     std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::CrossPairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_invoke(std::_Any_data const&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&) [27]
+                0.12    0.00 100009994/100009994     md::env::Particle::reset_force() [28]
+                0.10    0.00 83423232/83423232     std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::UniquePairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_invoke(std::_Any_data const&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&) [30]
+                0.08    0.00 21078773/21078773     std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::UniquePairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [31]
+                0.07    0.00 100009994/100009994     md::env::Environment::gravity_force(md::env::Particle const&) const [35]
+                0.02    0.00 65929927/65929927     std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::CrossPairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [39]
+                0.02    0.00   10001/10001       md::env::Environment::linked_cells() [41]
+                0.01    0.00 87008700/87008700     md::env::CellPair::particles() const [45]
+                0.00    0.00   10001/10001       md::env::ParticleGrid::linked_cells() [60]
+-----------------------------------------------
+                6.22   16.13 2998844862/2998844862     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+[5]     31.6    6.22   16.13 2998844862         md::env::Environment::force(md::env::Particle const&, md::env::Particle const&, md::env::CellPair const&) const [5]
+                8.27    7.86 2998844862/2998844862     md::env::ForceManager::evaluate(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&) const [6]
+-----------------------------------------------
+                8.27    7.86 2998844862/2998844862     md::env::Environment::force(md::env::Particle const&, md::env::Particle const&, md::env::CellPair const&) const [5]
+[6]     22.8    8.27    7.86 2998844862         md::env::ForceManager::evaluate(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&) const [6]
+                7.86    0.00 2998844862/2998844862     std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_invoke(std::_Any_data const&, std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&) [9]
+-----------------------------------------------
+                0.00    0.00   10000/400050000     md::env::Thermostat::set_initial_temperature(md::env::Environment&) const [48]
+                0.53   14.27 400040000/400050000     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+[7]     20.9    0.53   14.27 400050000         md::env::Environment::filter_particles(md::env::Particle const&, md::env::Particle::State, md::env::GridCell::Type) const [7]
+               11.02    3.25 400050000/400050000     md::env::ParticleGrid::get_cell(md::env::Particle const&) const [8]
+-----------------------------------------------
+               11.02    3.25 400050000/400050000     md::env::Environment::filter_particles(md::env::Particle const&, md::env::Particle::State, md::env::GridCell::Type) const [7]
+[8]     20.2   11.02    3.25 400050000         md::env::ParticleGrid::get_cell(md::env::Particle const&) const [8]
+                3.25    0.00 400050000/701731514     md::env::ParticleGrid::what_cell(std::array<double, 3ul> const&) const [10]
+-----------------------------------------------
+                7.86    0.00 2998844862/2998844862     md::env::ForceManager::evaluate(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&) const [6]
+[9]     11.1    7.86    0.00 2998844862         std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_invoke(std::_Any_data const&, std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&) [9]
+-----------------------------------------------
+                0.00    0.00   10000/701731514     md::env::ParticleGrid::build_cells(std::array<double, 3ul> const&, double, std::vector<md::env::Particle, std::allocator<md::env::Particle> >&) [49]
+                0.81    0.00 100010000/701731514     md::env::Environment::apply_boundary(md::env::Particle&) [12]
+                1.64    0.00 201661514/701731514     md::env::Particle::update_grid() [13]
+                3.25    0.00 400050000/701731514     md::env::ParticleGrid::get_cell(md::env::Particle const&) const [8]
+[10]     8.1    5.70    0.00 701731514         md::env::ParticleGrid::what_cell(std::array<double, 3ul> const&) const [10]
+-----------------------------------------------
+                                                 <spontaneous>
+[11]     5.4    3.80    0.00                 _init [11]
+-----------------------------------------------
+                0.10    2.29 100010000/100010000     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+[12]     3.4    0.10    2.29 100010000         md::env::Environment::apply_boundary(md::env::Particle&) [12]
+                1.48    0.00 200020000/200020000     md::env::ParticleGrid::get_cell(std::array<int, 3ul> const&) [14]
+                0.81    0.00 100010000/701731514     md::env::ParticleGrid::what_cell(std::array<double, 3ul> const&) const [10]
+-----------------------------------------------
+                0.00    0.02  820763/100830757     md::env::Boundary::apply_boundary(md::env::Particle&, md::env::GridCell const&, md::env::GridCell const&) const [17]
+                0.11    1.92 100009994/100830757     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+[13]     2.9    0.11    1.94 100830757         md::env::Particle::update_grid() [13]
+                1.64    0.00 201661514/701731514     md::env::ParticleGrid::what_cell(std::array<double, 3ul> const&) const [10]
+                0.22    0.08 100830757/100830757     md::env::ParticleGrid::update_cells(md::env::Particle*, std::array<int, 3ul> const&, std::array<int, 3ul> const&) [25]
+-----------------------------------------------
+                1.48    0.00 200020000/200020000     md::env::Environment::apply_boundary(md::env::Particle&) [12]
+[14]     2.1    1.48    0.00 200020000         md::env::ParticleGrid::get_cell(std::array<int, 3ul> const&) [14]
+-----------------------------------------------
+                0.33    0.00       4/12          ws4_task2_big() [2]
+                0.67    0.00       8/12          md::env::LennardJonesForce(double, double, double) [20]
+[15]     1.4    1.00    0.00      12         std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [15]
+-----------------------------------------------
+                0.86    0.00 100009994/100009994     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+[16]     1.2    0.86    0.00 100009994         md::env::Particle::update_position(std::array<double, 3ul> const&) [16]
+-----------------------------------------------
+                0.43    0.28 100010000/100010000     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+[17]     1.0    0.43    0.28 100010000         md::env::Boundary::apply_boundary(md::env::Particle&, md::env::GridCell const&, md::env::GridCell const&) const [17]
+                0.23    0.00 100010000/100010000     md::env::type_to_normals(md::env::GridCell::Type) [26]
+                0.03    0.00 2461220/2461220     md::env::axis_from_normal(std::array<int, 3ul> const&) [36]
+                0.00    0.02  820763/100830757     md::env::Particle::update_grid() [13]
+                0.00    0.00  820763/820763      md::env::Boundary::apply_rule(std::array<int, 3ul> const&, md::env::Particle&, md::env::GridCell const&) const [57]
+-----------------------------------------------
+                0.00    0.67       1/1           ws4_task2_big() [2]
+[18]     0.9    0.00    0.67       1         md::env::Environment::build() [18]
+                0.00    0.67       1/1           md::env::ForceManager::init() [21]
+                0.00    0.00       1/1           md::env::ParticleGrid::build(md::env::Boundary const&, double, std::vector<md::env::Particle, std::allocator<md::env::Particle> >&) [50]
+                0.00    0.00       2/2           spdlog::default_logger_raw() [86]
+                0.00    0.00       2/2           spdlog::details::backtracer::enabled() const [95]
+                0.00    0.00       2/2           spdlog::details::log_msg::log_msg(spdlog::source_loc, fmt::v10::basic_string_view<char>, spdlog::level::level_enum, fmt::v10::basic_string_view<char>) [93]
+                0.00    0.00       2/2           spdlog::logger::log_it_(spdlog::details::log_msg const&, bool, bool) [88]
+                0.00    0.00       1/1           md::env::Boundary::requires_force_function() const [120]
+                0.00    0.00       1/1           md::env::ParticleGrid::build_cell_pairs(std::array<md::env::BoundaryRule, 6ul> const&) [109]
+                0.00    0.00       1/1           md::env::ForceManager::cutoff() const [118]
+-----------------------------------------------
+                0.00    0.67       4/4           md::env::ForceManager::init() [21]
+[19]     0.9    0.00    0.67       4         md::env::ForceManager::mix_forces(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, std::variant<md::env::LennardJones, md::env::InverseSquare> const&) [19]
+                0.00    0.67       4/4           md::env::LennardJonesForce(double, double, double) [20]
+-----------------------------------------------
+                0.00    0.67       4/4           md::env::ForceManager::mix_forces(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, std::variant<md::env::LennardJones, md::env::InverseSquare> const&) [19]
+[20]     0.9    0.00    0.67       4         md::env::LennardJonesForce(double, double, double) [20]
+                0.67    0.00       8/12          std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [15]
+-----------------------------------------------
+                0.00    0.67       1/1           md::env::Environment::build() [18]
+[21]     0.9    0.00    0.67       1         md::env::ForceManager::init() [21]
+                0.00    0.67       4/4           md::env::ForceManager::mix_forces(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, std::variant<md::env::LennardJones, md::env::InverseSquare> const&) [19]
+                0.00    0.00       8/8           std::__detail::_Map_base<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true>, true>::operator[](int&&) [70]
+                0.00    0.00       8/8           std::__detail::_Map_base<std::pair<int, int>, std::pair<std::pair<int, int> const, md::env::Force>, std::allocator<std::pair<std::pair<int, int> const, md::env::Force> >, std::__detail::_Select1st, std::equal_to<std::pair<int, int> >, md::env::ForceManager::ForceKeyHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](std::pair<int, int>&&) [69]
+                0.00    0.00       4/4           std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::Force::Force()::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [76]
+-----------------------------------------------
+                0.00    0.51       2/2           ws4_task2_big() [2]
+[22]     0.7    0.00    0.51       2         md::env::Environment::Environment() [22]
+                0.51    0.00       2/2           md::env::ForceManager::ForceManager() [23]
+                0.00    0.00       2/4           md::env::Boundary::Boundary() [75]
+-----------------------------------------------
+                0.51    0.00       2/2           md::env::Environment::Environment() [22]
+[23]     0.7    0.51    0.00       2         md::env::ForceManager::ForceManager() [23]
+-----------------------------------------------
+                                                 <spontaneous>
+[24]     0.6    0.45    0.00                 md::env::wrap_around_diff(double, double, double) [24]
+-----------------------------------------------
+                0.22    0.08 100830757/100830757     md::env::Particle::update_grid() [13]
+[25]     0.4    0.22    0.08 100830757         md::env::ParticleGrid::update_cells(md::env::Particle*, std::array<int, 3ul> const&, std::array<int, 3ul> const&) [25]
+                0.07    0.00 1869514/1871315     std::enable_if<ArrayUtils::is_container<std::array<double, 3ul> >::value, std::ostream&>::type operator<< <std::array<double, 3ul> >(std::ostream&, std::array<double, 3ul> const&) [33]
+                0.01    0.00 1869514/1879514     std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<md::env::Particle*, false>*, unsigned long) [46]
+-----------------------------------------------
+                0.23    0.00 100010000/100010000     md::env::Boundary::apply_boundary(md::env::Particle&, md::env::GridCell const&, md::env::GridCell const&) const [17]
+[26]     0.3    0.23    0.00 100010000         md::env::type_to_normals(md::env::GridCell::Type) [26]
+-----------------------------------------------
+                0.20    0.00 376335158/376335158     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+[27]     0.3    0.20    0.00 376335158         std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::CrossPairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_invoke(std::_Any_data const&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&) [27]
+-----------------------------------------------
+                0.12    0.00 100009994/100009994     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+[28]     0.2    0.12    0.00 100009994         md::env::Particle::reset_force() [28]
+-----------------------------------------------
+                0.10    0.00   10002/10002       md::Integrator::IntegratorBase::benchmark(double, double, double, unsigned int) [3]
+[29]     0.1    0.10    0.00   10002         md::env::ParticleGrid::particle_count() const [29]
+-----------------------------------------------
+                0.10    0.00 83423232/83423232     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+[30]     0.1    0.10    0.00 83423232         std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::UniquePairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_invoke(std::_Any_data const&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&) [30]
+-----------------------------------------------
+                0.08    0.00 21078773/21078773     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+[31]     0.1    0.08    0.00 21078773         std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::UniquePairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [31]
+-----------------------------------------------
+                                                 <spontaneous>
+[32]     0.1    0.08    0.00                 md::env::ParticleGrid::get_cell(md::env::Particle const&) [32]
+-----------------------------------------------
+                0.00    0.00    1801/1871315     md::env::ParticleGrid::build_cells(std::array<double, 3ul> const&, double, std::vector<md::env::Particle, std::allocator<md::env::Particle> >&) [49]
+                0.07    0.00 1869514/1871315     md::env::ParticleGrid::update_cells(md::env::Particle*, std::array<int, 3ul> const&, std::array<int, 3ul> const&) [25]
+[33]     0.1    0.07    0.00 1871315         std::enable_if<ArrayUtils::is_container<std::array<double, 3ul> >::value, std::ostream&>::type operator<< <std::array<double, 3ul> >(std::ostream&, std::array<double, 3ul> const&) [33]
+-----------------------------------------------
+                                                 <spontaneous>
+[34]     0.1    0.07    0.00                 md::env::Environment::operator[](unsigned long) const [34]
+-----------------------------------------------
+                0.07    0.00 100009994/100009994     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+[35]     0.1    0.07    0.00 100009994         md::env::Environment::gravity_force(md::env::Particle const&) const [35]
+-----------------------------------------------
+                              820763             md::env::axis_from_normal(std::array<int, 3ul> const&) [36]
+                0.03    0.00 2461220/2461220     md::env::Boundary::apply_boundary(md::env::Particle&, md::env::GridCell const&, md::env::GridCell const&) const [17]
+[36]     0.0    0.03    0.00 2461220+820763  md::env::axis_from_normal(std::array<int, 3ul> const&) [36]
+                              820763             md::env::axis_from_normal(std::array<int, 3ul> const&) [36]
+-----------------------------------------------
+                                                 <spontaneous>
+[37]     0.0    0.03    0.00                 md::env::GridCell::to_string[abi:cxx11]() const [37]
+-----------------------------------------------
+                0.03    0.00       1/1           ws4_task2_big() [2]
+[38]     0.0    0.03    0.00       1         md::env::Environment::set_gravity_constant(double) [38]
+-----------------------------------------------
+                0.02    0.00 65929927/65929927     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+[39]     0.0    0.02    0.00 65929927         std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::CrossPairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [39]
+-----------------------------------------------
+                                                 <spontaneous>
+[40]     0.0    0.02    0.00                 md::env::Boundary::velocity_reflection_rule(md::env::Particle&, std::array<int, 3ul> const&, md::env::GridCell const&) const [40]
+-----------------------------------------------
+                0.02    0.00   10001/10001       md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+[41]     0.0    0.02    0.00   10001         md::env::Environment::linked_cells() [41]
+-----------------------------------------------
+                0.02    0.00    5000/5000        md::env::Environment::add_cuboid(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::array<unsigned int, 3ul> const&, double, double, double, unsigned char, int) [43]
+[42]     0.0    0.02    0.00    5000         md::env::Particle::Particle(md::env::Particle const&) [42]
+-----------------------------------------------
+                0.00    0.02       2/2           ws4_task2_big() [2]
+[43]     0.0    0.00    0.02       2         md::env::Environment::add_cuboid(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::array<unsigned int, 3ul> const&, double, double, double, unsigned char, int) [43]
+                0.02    0.00    5000/5000        md::env::Particle::Particle(md::env::Particle const&) [42]
+                0.00    0.00   20000/20000       std::vector<std::array<int, 3ul>, std::allocator<std::array<int, 3ul> > >::~vector() [58]
+                0.00    0.00   10000/10000       md::env::Environment::add_particle(std::array<double, 3ul> const&, std::array<double, 3ul> const&, double, int, std::array<double, 3ul> const&) [61]
+-----------------------------------------------
+                                                 <spontaneous>
+[44]     0.0    0.02    0.00                 md::env::ParticleGrid::get_cell(std::array<int, 3ul> const&) const [44]
+-----------------------------------------------
+                0.01    0.00 87008700/87008700     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+[45]     0.0    0.01    0.00 87008700         md::env::CellPair::particles() const [45]
+-----------------------------------------------
+                0.00    0.00   10000/1879514     md::env::ParticleGrid::build_cells(std::array<double, 3ul> const&, double, std::vector<md::env::Particle, std::allocator<md::env::Particle> >&) [49]
+                0.01    0.00 1869514/1879514     md::env::ParticleGrid::update_cells(md::env::Particle*, std::array<int, 3ul> const&, std::array<int, 3ul> const&) [25]
+[46]     0.0    0.01    0.00 1879514         std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<md::env::Particle*, false>*, unsigned long) [46]
+                0.00    0.00    2058/2058        std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_rehash(unsigned long, unsigned long const&) [64]
+-----------------------------------------------
+                                                 <spontaneous>
+[47]     0.0    0.01    0.00                 md::env::CellPair::empty() const [47]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[48]     0.0    0.00    0.00       1         md::env::Thermostat::set_initial_temperature(md::env::Environment&) const [48]
+                0.00    0.00   10000/400050000     md::env::Environment::filter_particles(md::env::Particle const&, md::env::Particle::State, md::env::GridCell::Type) const [7]
+                0.00    0.00   10000/10000       md::env::Environment::dim() const [63]
+-----------------------------------------------
+                0.00    0.00       1/1           md::env::ParticleGrid::build(md::env::Boundary const&, double, std::vector<md::env::Particle, std::allocator<md::env::Particle> >&) [50]
+[49]     0.0    0.00    0.00       1         md::env::ParticleGrid::build_cells(std::array<double, 3ul> const&, double, std::vector<md::env::Particle, std::allocator<md::env::Particle> >&) [49]
+                0.00    0.00   10000/701731514     md::env::ParticleGrid::what_cell(std::array<double, 3ul> const&) const [10]
+                0.00    0.00    1801/1871315     std::enable_if<ArrayUtils::is_container<std::array<double, 3ul> >::value, std::ostream&>::type operator<< <std::array<double, 3ul> >(std::ostream&, std::array<double, 3ul> const&) [33]
+                0.00    0.00   10000/1879514     std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<md::env::Particle*, false>*, unsigned long) [46]
+                0.00    0.00    1801/1801        std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<std::array<int, 3ul> const, md::env::GridCell>, true>*, unsigned long) [65]
+-----------------------------------------------
+                0.00    0.00       1/1           md::env::Environment::build() [18]
+[50]     0.0    0.00    0.00       1         md::env::ParticleGrid::build(md::env::Boundary const&, double, std::vector<md::env::Particle, std::allocator<md::env::Particle> >&) [50]
+                0.00    0.00       1/1           md::env::ParticleGrid::build_cells(std::array<double, 3ul> const&, double, std::vector<md::env::Particle, std::allocator<md::env::Particle> >&) [49]
+                0.00    0.00       1/1           md::env::Boundary::boundary_rules() const [119]
+-----------------------------------------------
+                0.00    0.00  820763/820763      md::env::Boundary::apply_boundary(md::env::Particle&, md::env::GridCell const&, md::env::GridCell const&) const [17]
+[57]     0.0    0.00    0.00  820763         md::env::Boundary::apply_rule(std::array<int, 3ul> const&, md::env::Particle&, md::env::GridCell const&) const [57]
+-----------------------------------------------
+                0.00    0.00   20000/20000       md::env::Environment::add_cuboid(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::array<unsigned int, 3ul> const&, double, double, double, unsigned char, int) [43]
+[58]     0.0    0.00    0.00   20000         std::vector<std::array<int, 3ul>, std::allocator<std::array<int, 3ul> > >::~vector() [58]
+-----------------------------------------------
+                0.00    0.00   10002/10002       md::Integrator::IntegratorBase::benchmark(double, double, double, unsigned int) [3]
+[59]     0.0    0.00    0.00   10002         md::env::Environment::size(md::env::Particle::State) const [59]
+-----------------------------------------------
+                0.00    0.00   10001/10001       md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [4]
+[60]     0.0    0.00    0.00   10001         md::env::ParticleGrid::linked_cells() [60]
+-----------------------------------------------
+                0.00    0.00   10000/10000       md::env::Environment::add_cuboid(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::array<unsigned int, 3ul> const&, double, double, double, unsigned char, int) [43]
+[61]     0.0    0.00    0.00   10000         md::env::Environment::add_particle(std::array<double, 3ul> const&, std::array<double, 3ul> const&, double, int, std::array<double, 3ul> const&) [61]
+                0.00    0.00   10000/10000       md::env::Particle::Particle(unsigned long, md::env::ParticleGrid&, std::array<double, 3ul> const&, std::array<double, 3ul> const&, double, int, std::array<double, 3ul>) [62]
+-----------------------------------------------
+                0.00    0.00   10000/10000       md::env::Environment::add_particle(std::array<double, 3ul> const&, std::array<double, 3ul> const&, double, int, std::array<double, 3ul> const&) [61]
+[62]     0.0    0.00    0.00   10000         md::env::Particle::Particle(unsigned long, md::env::ParticleGrid&, std::array<double, 3ul> const&, std::array<double, 3ul> const&, double, int, std::array<double, 3ul>) [62]
+-----------------------------------------------
+                0.00    0.00   10000/10000       md::env::Thermostat::set_initial_temperature(md::env::Environment&) const [48]
+[63]     0.0    0.00    0.00   10000         md::env::Environment::dim() const [63]
+-----------------------------------------------
+                0.00    0.00    2058/2058        std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<md::env::Particle*, false>*, unsigned long) [46]
+[64]     0.0    0.00    0.00    2058         std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_rehash(unsigned long, unsigned long const&) [64]
+-----------------------------------------------
+                0.00    0.00    1801/1801        md::env::ParticleGrid::build_cells(std::array<double, 3ul> const&, double, std::vector<md::env::Particle, std::allocator<md::env::Particle> >&) [49]
+[65]     0.0    0.00    0.00    1801         std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<std::array<int, 3ul> const, md::env::GridCell>, true>*, unsigned long) [65]
+                0.00    0.00       8/8           std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&) [68]
+-----------------------------------------------
+                0.00    0.00       2/13          spdlog::pattern_formatter::format(spdlog::details::log_msg const&, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [83]
+                0.00    0.00       2/13          spdlog::sinks::ansicolor_sink<spdlog::details::console_mutex>::log(spdlog::details::log_msg const&) [87]
+                0.00    0.00       3/13          void spdlog::details::fmt_helper::append_int<int>(int, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [79]
+                0.00    0.00       6/13          spdlog::details::full_formatter::format(spdlog::details::log_msg const&, tm const&, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [91]
+[66]     0.0    0.00    0.00      13         void fmt::v10::detail::buffer<char>::append<char>(char const*, char const*) [66]
+-----------------------------------------------
+                0.00    0.00      11/11          md::Integrator::IntegratorBase::benchmark(double, double, double, unsigned int) [3]
+[67]     0.0    0.00    0.00      11         md::env::Thermostat::adjust_temperature(md::env::Environment&) const [67]
+-----------------------------------------------
+                0.00    0.00       8/8           std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<std::array<int, 3ul> const, md::env::GridCell>, true>*, unsigned long) [65]
+[68]     0.0    0.00    0.00       8         std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&) [68]
+-----------------------------------------------
+                0.00    0.00       8/8           md::env::ForceManager::init() [21]
+[69]     0.0    0.00    0.00       8         std::__detail::_Map_base<std::pair<int, int>, std::pair<std::pair<int, int> const, md::env::Force>, std::allocator<std::pair<std::pair<int, int> const, md::env::Force> >, std::__detail::_Select1st, std::equal_to<std::pair<int, int> >, md::env::ForceManager::ForceKeyHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](std::pair<int, int>&&) [69]
+                0.00    0.00       1/1           std::_Hashtable<std::pair<int, int>, std::pair<std::pair<int, int> const, md::env::Force>, std::allocator<std::pair<std::pair<int, int> const, md::env::Force> >, std::__detail::_Select1st, std::equal_to<std::pair<int, int> >, md::env::ForceManager::ForceKeyHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&) [123]
+-----------------------------------------------
+                0.00    0.00       8/8           md::env::ForceManager::init() [21]
+[70]     0.0    0.00    0.00       8         std::__detail::_Map_base<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true>, true>::operator[](int&&) [70]
+-----------------------------------------------
+                0.00    0.00       5/5           spdlog::details::full_formatter::format(spdlog::details::log_msg const&, tm const&, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [91]
+[71]     0.0    0.00    0.00       5         spdlog::details::fmt_helper::pad2(int, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [71]
+-----------------------------------------------
+                0.00    0.00       1/5           md::env::Boundary::set_boundary_force(std::function<double (double)> const&) [112]
+                0.00    0.00       1/5           md::env::Environment::set_boundary(md::env::Boundary const&) [107]
+                0.00    0.00       3/5           ws4_task2_big() [2]
+[72]     0.0    0.00    0.00       5         std::_Function_handler<double (double), md::env::Boundary::LennardJonesForce(double, double)::{lambda(double)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [72]
+-----------------------------------------------
+                0.00    0.00       5/5           spdlog::details::registry::registry() [117]
+[73]     0.0    0.00    0.00       5         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_dispose() [73]
+-----------------------------------------------
+                0.00    0.00       4/4           ws4_task2_big() [2]
+[74]     0.0    0.00    0.00       4         md::env::Boundary::set_boundary_rule(md::env::BoundaryRule, std::array<int, 3ul> const&) [74]
+-----------------------------------------------
+                0.00    0.00       2/4           md::env::Environment::Environment() [22]
+                0.00    0.00       2/4           ws4_task2_big() [2]
+[75]     0.0    0.00    0.00       4         md::env::Boundary::Boundary() [75]
+-----------------------------------------------
+                0.00    0.00       4/4           md::env::ForceManager::init() [21]
+[76]     0.0    0.00    0.00       4         std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::Force::Force()::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [76]
+-----------------------------------------------
+                0.00    0.00       3/3           _GLOBAL__sub_I__ZN15DataArrayList_tC2Ev [130]
+[77]     0.0    0.00    0.00       3         xsd::cxx::tree::string<char, xsd::cxx::tree::simple_type<char, xsd::cxx::tree::_type> >::string(char const*) [77]
+                0.00    0.00       3/3           void spdlog::logger::log_<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(spdlog::source_loc, spdlog::level::level_enum, fmt::v10::basic_string_view<char>, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [78]
+-----------------------------------------------
+                0.00    0.00       3/3           xsd::cxx::tree::string<char, xsd::cxx::tree::simple_type<char, xsd::cxx::tree::_type> >::string(char const*) [77]
+[78]     0.0    0.00    0.00       3         void spdlog::logger::log_<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(spdlog::source_loc, spdlog::level::level_enum, fmt::v10::basic_string_view<char>, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [78]
+-----------------------------------------------
+                0.00    0.00       3/3           spdlog::details::full_formatter::format(spdlog::details::log_msg const&, tm const&, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [91]
+[79]     0.0    0.00    0.00       3         void spdlog::details::fmt_helper::append_int<int>(int, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [79]
+                0.00    0.00       3/13          void fmt::v10::detail::buffer<char>::append<char>(char const*, char const*) [66]
+-----------------------------------------------
+                0.00    0.00       2/2           ws4_task2_big() [2]
+[80]     0.0    0.00    0.00       2         md::env::Thermostat::Thermostat(double, double, double) [80]
+-----------------------------------------------
+                0.00    0.00       2/2           ws4_task2_big() [2]
+[81]     0.0    0.00    0.00       2         md::env::Environment::set_force(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, int) [81]
+-----------------------------------------------
+                0.00    0.00       2/2           ws4_task2_big() [2]
+[82]     0.0    0.00    0.00       2         md::env::ForceManager::add_force(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, int) [82]
+                0.00    0.00       2/2           std::_Hashtable<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, false>*, unsigned long) [97]
+-----------------------------------------------
+                0.00    0.00       2/2           spdlog::sinks::ansicolor_sink<spdlog::details::console_mutex>::log(spdlog::details::log_msg const&) [87]
+[83]     0.0    0.00    0.00       2         spdlog::pattern_formatter::format(spdlog::details::log_msg const&, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [83]
+                0.00    0.00       2/13          void fmt::v10::detail::buffer<char>::append<char>(char const*, char const*) [66]
+                0.00    0.00       2/2           spdlog::details::full_formatter::format(spdlog::details::log_msg const&, tm const&, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [91]
+-----------------------------------------------
+                0.00    0.00       1/2           spdlog::details::registry::registry() [117]
+                0.00    0.00       1/2           spdlog::sinks::ansicolor_sink<spdlog::details::console_mutex>::ansicolor_sink(_IO_FILE*, spdlog::color_mode) [113]
+[84]     0.0    0.00    0.00       2         spdlog::pattern_formatter::pattern_formatter(spdlog::pattern_time_type, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [84]
+                0.00    0.00       2/2           std::_Function_handler<void (spdlog::details::log_msg const&), spdlog::logger::dump_backtrace_()::{lambda(spdlog::details::log_msg const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [99]
+-----------------------------------------------
+                0.00    0.00       1/2           std::_Sp_counted_ptr_inplace<spdlog::logger, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_dispose() [128]
+                0.00    0.00       1/2           spdlog::details::registry::~registry() [1182]
+[85]     0.0    0.00    0.00       2         spdlog::pattern_formatter::~pattern_formatter() [85]
+                0.00    0.00       2/2           spdlog::details::full_formatter::~full_formatter() [92]
+-----------------------------------------------
+                0.00    0.00       2/2           md::env::Environment::build() [18]
+[86]     0.0    0.00    0.00       2         spdlog::default_logger_raw() [86]
+                0.00    0.00       2/2           spdlog::details::registry::instance() [94]
+-----------------------------------------------
+                0.00    0.00       2/2           spdlog::logger::sink_it_(spdlog::details::log_msg const&) [89]
+[87]     0.0    0.00    0.00       2         spdlog::sinks::ansicolor_sink<spdlog::details::console_mutex>::log(spdlog::details::log_msg const&) [87]
+                0.00    0.00       2/13          void fmt::v10::detail::buffer<char>::append<char>(char const*, char const*) [66]
+                0.00    0.00       2/2           spdlog::pattern_formatter::format(spdlog::details::log_msg const&, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [83]
+-----------------------------------------------
+                0.00    0.00       2/2           md::env::Environment::build() [18]
+[88]     0.0    0.00    0.00       2         spdlog::logger::log_it_(spdlog::details::log_msg const&, bool, bool) [88]
+                0.00    0.00       2/2           spdlog::logger::sink_it_(spdlog::details::log_msg const&) [89]
+-----------------------------------------------
+                0.00    0.00       2/2           spdlog::logger::log_it_(spdlog::details::log_msg const&, bool, bool) [88]
+[89]     0.0    0.00    0.00       2         spdlog::logger::sink_it_(spdlog::details::log_msg const&) [89]
+                0.00    0.00       2/2           spdlog::sinks::ansicolor_sink<spdlog::details::console_mutex>::log(spdlog::details::log_msg const&) [87]
+-----------------------------------------------
+                0.00    0.00       2/2           spdlog::details::full_formatter::format(spdlog::details::log_msg const&, tm const&, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [91]
+[90]     0.0    0.00    0.00       2         void spdlog::details::fmt_helper::pad3<unsigned int>(unsigned int, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [90]
+-----------------------------------------------
+                0.00    0.00       2/2           spdlog::pattern_formatter::format(spdlog::details::log_msg const&, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [83]
+[91]     0.0    0.00    0.00       2         spdlog::details::full_formatter::format(spdlog::details::log_msg const&, tm const&, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [91]
+                0.00    0.00       6/13          void fmt::v10::detail::buffer<char>::append<char>(char const*, char const*) [66]
+                0.00    0.00       5/5           spdlog::details::fmt_helper::pad2(int, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [71]
+                0.00    0.00       3/3           void spdlog::details::fmt_helper::append_int<int>(int, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [79]
+                0.00    0.00       2/2           void spdlog::details::fmt_helper::pad3<unsigned int>(unsigned int, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [90]
+-----------------------------------------------
+                0.00    0.00       2/2           spdlog::pattern_formatter::~pattern_formatter() [85]
+[92]     0.0    0.00    0.00       2         spdlog::details::full_formatter::~full_formatter() [92]
+-----------------------------------------------
+                0.00    0.00       2/2           md::env::Environment::build() [18]
+[93]     0.0    0.00    0.00       2         spdlog::details::log_msg::log_msg(spdlog::source_loc, fmt::v10::basic_string_view<char>, spdlog::level::level_enum, fmt::v10::basic_string_view<char>) [93]
+-----------------------------------------------
+                0.00    0.00       2/2           spdlog::default_logger_raw() [86]
+[94]     0.0    0.00    0.00       2         spdlog::details::registry::instance() [94]
+                0.00    0.00       1/1           spdlog::details::registry::registry() [117]
+-----------------------------------------------
+                0.00    0.00       2/2           md::env::Environment::build() [18]
+[95]     0.0    0.00    0.00       2         spdlog::details::backtracer::enabled() const [95]
+-----------------------------------------------
+                0.00    0.00       2/2           ws4_task2_big() [2]
+[96]     0.0    0.00    0.00       2         std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::~_Hashtable() [96]
+-----------------------------------------------
+                0.00    0.00       2/2           md::env::ForceManager::add_force(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, int) [82]
+[97]     0.0    0.00    0.00       2         std::_Hashtable<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, false>*, unsigned long) [97]
+                0.00    0.00       1/1           std::_Hashtable<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::_M_rehash(unsigned long, unsigned long const&) [124]
+-----------------------------------------------
+                0.00    0.00       1/2           spdlog::details::registry::~registry() [1182]
+                0.00    0.00       1/2           spdlog::details::registry::registry() [117]
+[98]     0.0    0.00    0.00       2         std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release() [98]
+-----------------------------------------------
+                0.00    0.00       2/2           spdlog::pattern_formatter::pattern_formatter(spdlog::pattern_time_type, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [84]
+[99]     0.0    0.00    0.00       2         std::_Function_handler<void (spdlog::details::log_msg const&), spdlog::logger::dump_backtrace_()::{lambda(spdlog::details::log_msg const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [99]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[100]    0.0    0.00    0.00       1         md::Integrator::IntegratorBase::IntegratorBase(md::env::Environment&, std::unique_ptr<md::io::OutputWriterBase, std::default_delete<md::io::OutputWriterBase> >, std::unique_ptr<md::io::CheckpointWriter, std::default_delete<md::io::CheckpointWriter> >, md::env::Thermostat const&) [100]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[101]    0.0    0.00    0.00       1         md::io::create_writer(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, md::io::OutputFormat, bool) [101]
+                0.00    0.00       1/1           md::io::create_checkpoint_writer() [103]
+                0.00    0.00       1/1           md::io::VTKWriter::VTKWriter(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool) [104]
+                0.00    0.00       1/1           md::io::VTKWriter::~VTKWriter() [106]
+-----------------------------------------------
+                0.00    0.00       1/1           md::io::VTKWriter::VTKWriter(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool) [104]
+[102]    0.0    0.00    0.00       1         md::io::OutputWriterBase::OutputWriterBase(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool) [102]
+-----------------------------------------------
+                0.00    0.00       1/1           md::io::create_writer(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, md::io::OutputFormat, bool) [101]
+[103]    0.0    0.00    0.00       1         md::io::create_checkpoint_writer() [103]
+-----------------------------------------------
+                0.00    0.00       1/1           md::io::create_writer(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, md::io::OutputFormat, bool) [101]
+[104]    0.0    0.00    0.00       1         md::io::VTKWriter::VTKWriter(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool) [104]
+                0.00    0.00       1/1           md::io::OutputWriterBase::OutputWriterBase(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool) [102]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[105]    0.0    0.00    0.00       1         md::io::VTKWriter::~VTKWriter() [105]
+-----------------------------------------------
+                0.00    0.00       1/1           md::io::create_writer(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, md::io::OutputFormat, bool) [101]
+[106]    0.0    0.00    0.00       1         md::io::VTKWriter::~VTKWriter() [106]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[107]    0.0    0.00    0.00       1         md::env::Environment::set_boundary(md::env::Boundary const&) [107]
+                0.00    0.00       1/5           std::_Function_handler<double (double), md::env::Boundary::LennardJonesForce(double, double)::{lambda(double)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [72]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[108]    0.0    0.00    0.00       1         md::env::Environment::set_grid_constant(double) [108]
+-----------------------------------------------
+                0.00    0.00       1/1           md::env::Environment::build() [18]
+[109]    0.0    0.00    0.00       1         md::env::ParticleGrid::build_cell_pairs(std::array<md::env::BoundaryRule, 6ul> const&) [109]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[110]    0.0    0.00    0.00       1         md::env::Boundary::LennardJonesForce(double, double) [110]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[111]    0.0    0.00    0.00       1         md::env::Boundary::set_boundary_rule(md::env::BoundaryRule) [111]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[112]    0.0    0.00    0.00       1         md::env::Boundary::set_boundary_force(std::function<double (double)> const&) [112]
+                0.00    0.00       1/5           std::_Function_handler<double (double), md::env::Boundary::LennardJonesForce(double, double)::{lambda(double)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [72]
+-----------------------------------------------
+                0.00    0.00       1/1           spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>::ansicolor_stdout_sink(spdlog::color_mode) [114]
+[113]    0.0    0.00    0.00       1         spdlog::sinks::ansicolor_sink<spdlog::details::console_mutex>::ansicolor_sink(_IO_FILE*, spdlog::color_mode) [113]
+                0.00    0.00       1/2           spdlog::pattern_formatter::pattern_formatter(spdlog::pattern_time_type, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [84]
+                0.00    0.00       1/1           spdlog::details::os::in_terminal(_IO_FILE*) [116]
+-----------------------------------------------
+                0.00    0.00       1/1           spdlog::details::registry::registry() [117]
+[114]    0.0    0.00    0.00       1         spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>::ansicolor_stdout_sink(spdlog::color_mode) [114]
+                0.00    0.00       1/1           spdlog::sinks::ansicolor_sink<spdlog::details::console_mutex>::ansicolor_sink(_IO_FILE*, spdlog::color_mode) [113]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Sp_counted_ptr_inplace<spdlog::logger, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_dispose() [128]
+[115]    0.0    0.00    0.00       1         spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>::~ansicolor_stdout_sink() [115]
+-----------------------------------------------
+                0.00    0.00       1/1           spdlog::sinks::ansicolor_sink<spdlog::details::console_mutex>::ansicolor_sink(_IO_FILE*, spdlog::color_mode) [113]
+[116]    0.0    0.00    0.00       1         spdlog::details::os::in_terminal(_IO_FILE*) [116]
+-----------------------------------------------
+                0.00    0.00       1/1           spdlog::details::registry::instance() [94]
+[117]    0.0    0.00    0.00       1         spdlog::details::registry::registry() [117]
+                0.00    0.00       5/5           std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_dispose() [73]
+                0.00    0.00       1/2           spdlog::pattern_formatter::pattern_formatter(spdlog::pattern_time_type, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [84]
+                0.00    0.00       1/1           spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>::ansicolor_stdout_sink(spdlog::color_mode) [114]
+                0.00    0.00       1/2           std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release() [98]
+                0.00    0.00       1/1           std::__detail::_Map_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> > >, std::__detail::_Select1st, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [129]
+-----------------------------------------------
+                0.00    0.00       1/1           md::env::Environment::build() [18]
+[118]    0.0    0.00    0.00       1         md::env::ForceManager::cutoff() const [118]
+-----------------------------------------------
+                0.00    0.00       1/1           md::env::ParticleGrid::build(md::env::Boundary const&, double, std::vector<md::env::Particle, std::allocator<md::env::Particle> >&) [50]
+[119]    0.0    0.00    0.00       1         md::env::Boundary::boundary_rules() const [119]
+-----------------------------------------------
+                0.00    0.00       1/1           md::env::Environment::build() [18]
+[120]    0.0    0.00    0.00       1         md::env::Boundary::requires_force_function() const [120]
+-----------------------------------------------
+                0.00    0.00       1/1           std::__detail::_Map_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> > >, std::__detail::_Select1st, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [129]
+[121]    0.0    0.00    0.00       1         std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> > >, std::__detail::_Select1st, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, true>*, unsigned long) [121]
+                0.00    0.00       1/1           std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> > >, std::__detail::_Select1st, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&) [122]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> > >, std::__detail::_Select1st, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, true>*, unsigned long) [121]
+[122]    0.0    0.00    0.00       1         std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> > >, std::__detail::_Select1st, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&) [122]
+-----------------------------------------------
+                0.00    0.00       1/1           std::__detail::_Map_base<std::pair<int, int>, std::pair<std::pair<int, int> const, md::env::Force>, std::allocator<std::pair<std::pair<int, int> const, md::env::Force> >, std::__detail::_Select1st, std::equal_to<std::pair<int, int> >, md::env::ForceManager::ForceKeyHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](std::pair<int, int>&&) [69]
+[123]    0.0    0.00    0.00       1         std::_Hashtable<std::pair<int, int>, std::pair<std::pair<int, int> const, md::env::Force>, std::allocator<std::pair<std::pair<int, int> const, md::env::Force> >, std::__detail::_Select1st, std::equal_to<std::pair<int, int> >, md::env::ForceManager::ForceKeyHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&) [123]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Hashtable<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, false>*, unsigned long) [97]
+[124]    0.0    0.00    0.00       1         std::_Hashtable<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::_M_rehash(unsigned long, unsigned long const&) [124]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Sp_counted_ptr_inplace<spdlog::logger, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_dispose() [128]
+[125]    0.0    0.00    0.00       1         std::_Sp_counted_ptr_inplace<spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_destroy() [125]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Sp_counted_ptr_inplace<spdlog::logger, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_dispose() [128]
+[126]    0.0    0.00    0.00       1         std::_Sp_counted_ptr_inplace<spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_dispose() [126]
+-----------------------------------------------
+                0.00    0.00       1/1           spdlog::details::registry::~registry() [1182]
+[127]    0.0    0.00    0.00       1         std::_Sp_counted_ptr_inplace<spdlog::logger, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_destroy() [127]
+-----------------------------------------------
+                0.00    0.00       1/1           spdlog::details::registry::~registry() [1182]
+[128]    0.0    0.00    0.00       1         std::_Sp_counted_ptr_inplace<spdlog::logger, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_dispose() [128]
+                0.00    0.00       1/2           spdlog::pattern_formatter::~pattern_formatter() [85]
+                0.00    0.00       1/1           spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>::~ansicolor_stdout_sink() [115]
+                0.00    0.00       1/1           std::_Sp_counted_ptr_inplace<spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_dispose() [126]
+                0.00    0.00       1/1           std::_Sp_counted_ptr_inplace<spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_destroy() [125]
+-----------------------------------------------
+                0.00    0.00       1/1           spdlog::details::registry::registry() [117]
+[129]    0.0    0.00    0.00       1         std::__detail::_Map_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> > >, std::__detail::_Select1st, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [129]
+                0.00    0.00       1/1           std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> > >, std::__detail::_Select1st, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, true>*, unsigned long) [121]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2024 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+   [2] ws4_task2_big()        [28] md::env::Particle::reset_force() [57] md::env::Boundary::apply_rule(std::array<int, 3ul> const&, md::env::Particle&, md::env::GridCell const&) const
+   [3] md::Integrator::IntegratorBase::benchmark(double, double, double, unsigned int) [13] md::env::Particle::update_grid() [17] md::env::Boundary::apply_boundary(md::env::Particle&, md::env::GridCell const&, md::env::GridCell const&) const
+ [100] md::Integrator::IntegratorBase::IntegratorBase(md::env::Environment&, std::unique_ptr<md::io::OutputWriterBase, std::default_delete<md::io::OutputWriterBase> >, std::unique_ptr<md::io::CheckpointWriter, std::default_delete<md::io::CheckpointWriter> >, md::env::Thermostat const&) [16] md::env::Particle::update_position(std::array<double, 3ul> const&) [119] md::env::Boundary::boundary_rules() const
+   [4] md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [42] md::env::Particle::Particle(md::env::Particle const&) [120] md::env::Boundary::requires_force_function() const
+ [101] md::io::create_writer(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, md::io::OutputFormat, bool) [62] md::env::Particle::Particle(unsigned long, md::env::ParticleGrid&, std::array<double, 3ul> const&, std::array<double, 3ul> const&, double, int, std::array<double, 3ul>) [40] md::env::Boundary::velocity_reflection_rule(md::env::Particle&, std::array<int, 3ul> const&, md::env::GridCell const&) const
+ [102] md::io::OutputWriterBase::OutputWriterBase(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool) [66] void fmt::v10::detail::buffer<char>::append<char>(char const*, char const*) [47] md::env::CellPair::empty() const
+ [103] md::io::create_checkpoint_writer() [77] xsd::cxx::tree::string<char, xsd::cxx::tree::simple_type<char, xsd::cxx::tree::_type> >::string(char const*) [45] md::env::CellPair::particles() const
+ [104] md::io::VTKWriter::VTKWriter(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool) [83] spdlog::pattern_formatter::format(spdlog::details::log_msg const&, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [37] md::env::GridCell::to_string[abi:cxx11]() const
+ [105] md::io::VTKWriter::~VTKWriter() [84] spdlog::pattern_formatter::pattern_formatter(spdlog::pattern_time_type, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [95] spdlog::details::backtracer::enabled() const
+ [106] md::io::VTKWriter::~VTKWriter() [85] spdlog::pattern_formatter::~pattern_formatter() [121] std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> > >, std::__detail::_Select1st, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, true>*, unsigned long)
+  [80] md::env::Thermostat::Thermostat(double, double, double) [86] spdlog::default_logger_raw() [122] std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> > >, std::__detail::_Select1st, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&)
+  [43] md::env::Environment::add_cuboid(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::array<unsigned int, 3ul> const&, double, double, double, unsigned char, int) [87] spdlog::sinks::ansicolor_sink<spdlog::details::console_mutex>::log(spdlog::details::log_msg const&) [46] std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<md::env::Particle*, false>*, unsigned long)
+  [61] md::env::Environment::add_particle(std::array<double, 3ul> const&, std::array<double, 3ul> const&, double, int, std::array<double, 3ul> const&) [113] spdlog::sinks::ansicolor_sink<spdlog::details::console_mutex>::ansicolor_sink(_IO_FILE*, spdlog::color_mode) [64] std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_rehash(unsigned long, unsigned long const&)
+  [41] md::env::Environment::linked_cells() [114] spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>::ansicolor_stdout_sink(spdlog::color_mode) [123] std::_Hashtable<std::pair<int, int>, std::pair<std::pair<int, int> const, md::env::Force>, std::allocator<std::pair<std::pair<int, int> const, md::env::Force> >, std::__detail::_Select1st, std::equal_to<std::pair<int, int> >, md::env::ForceManager::ForceKeyHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&)
+ [107] md::env::Environment::set_boundary(md::env::Boundary const&) [115] spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>::~ansicolor_stdout_sink() [65] std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<std::array<int, 3ul> const, md::env::GridCell>, true>*, unsigned long)
+  [12] md::env::Environment::apply_boundary(md::env::Particle&) [78] void spdlog::logger::log_<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(spdlog::source_loc, spdlog::level::level_enum, fmt::v10::basic_string_view<char>, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [68] std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_rehash(unsigned long, unsigned long const&)
+ [108] md::env::Environment::set_grid_constant(double) [88] spdlog::logger::log_it_(spdlog::details::log_msg const&, bool, bool) [96] std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::~_Hashtable()
+  [38] md::env::Environment::set_gravity_constant(double) [89] spdlog::logger::sink_it_(spdlog::details::log_msg const&) [97] std::_Hashtable<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, false>*, unsigned long)
+  [18] md::env::Environment::build() [79] void spdlog::details::fmt_helper::append_int<int>(int, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [124] std::_Hashtable<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::_M_rehash(unsigned long, unsigned long const&)
+  [81] md::env::Environment::set_force(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, int) [71] spdlog::details::fmt_helper::pad2(int, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [98] std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release()
+  [22] md::env::Environment::Environment() [90] void spdlog::details::fmt_helper::pad3<unsigned int>(unsigned int, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [15] std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+  [19] md::env::ForceManager::mix_forces(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, std::variant<md::env::LennardJones, md::env::InverseSquare> const&) [91] spdlog::details::full_formatter::format(spdlog::details::log_msg const&, tm const&, fmt::v10::basic_memory_buffer<char, 250ul, std::allocator<char> >&) [9] std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_invoke(std::_Any_data const&, std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)
+  [21] md::env::ForceManager::init() [92] spdlog::details::full_formatter::~full_formatter() [76] std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::Force::Force()::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+  [82] md::env::ForceManager::add_force(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, int) [116] spdlog::details::os::in_terminal(_IO_FILE*) [72] std::_Function_handler<double (double), md::env::Boundary::LennardJonesForce(double, double)::{lambda(double)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+  [23] md::env::ForceManager::ForceManager() [93] spdlog::details::log_msg::log_msg(spdlog::source_loc, fmt::v10::basic_string_view<char>, spdlog::level::level_enum, fmt::v10::basic_string_view<char>) [99] std::_Function_handler<void (spdlog::details::log_msg const&), spdlog::logger::dump_backtrace_()::{lambda(spdlog::details::log_msg const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+  [49] md::env::ParticleGrid::build_cells(std::array<double, 3ul> const&, double, std::vector<md::env::Particle, std::allocator<md::env::Particle> >&) [94] spdlog::details::registry::instance() [39] std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::CrossPairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+  [60] md::env::ParticleGrid::linked_cells() [117] spdlog::details::registry::registry() [27] std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::CrossPairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_invoke(std::_Any_data const&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)
+  [25] md::env::ParticleGrid::update_cells(md::env::Particle*, std::array<int, 3ul> const&, std::array<int, 3ul> const&) [67] md::env::Thermostat::adjust_temperature(md::env::Environment&) const [31] std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::UniquePairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+ [109] md::env::ParticleGrid::build_cell_pairs(std::array<md::env::BoundaryRule, 6ul> const&) [48] md::env::Thermostat::set_initial_temperature(md::env::Environment&) const [30] std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::UniquePairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_invoke(std::_Any_data const&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)
+  [50] md::env::ParticleGrid::build(md::env::Boundary const&, double, std::vector<md::env::Particle, std::allocator<md::env::Particle> >&) [35] md::env::Environment::gravity_force(md::env::Particle const&) const [125] std::_Sp_counted_ptr_inplace<spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_destroy()
+  [32] md::env::ParticleGrid::get_cell(md::env::Particle const&) [7] md::env::Environment::filter_particles(md::env::Particle const&, md::env::Particle::State, md::env::GridCell::Type) const [126] std::_Sp_counted_ptr_inplace<spdlog::sinks::ansicolor_stdout_sink<spdlog::details::console_mutex>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_dispose()
+  [14] md::env::ParticleGrid::get_cell(std::array<int, 3ul> const&) [63] md::env::Environment::dim() const [127] std::_Sp_counted_ptr_inplace<spdlog::logger, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_destroy()
+  [26] md::env::type_to_normals(md::env::GridCell::Type) [59] md::env::Environment::size(md::env::Particle::State) const [128] std::_Sp_counted_ptr_inplace<spdlog::logger, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_dispose()
+  [36] md::env::axis_from_normal(std::array<int, 3ul> const&) [5] md::env::Environment::force(md::env::Particle const&, md::env::Particle const&, md::env::CellPair const&) const [58] std::vector<std::array<int, 3ul>, std::allocator<std::array<int, 3ul> > >::~vector()
+  [24] md::env::wrap_around_diff(double, double, double) [34] md::env::Environment::operator[](unsigned long) const [73] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_dispose()
+  [20] md::env::LennardJonesForce(double, double, double) [118] md::env::ForceManager::cutoff() const [129] std::__detail::_Map_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::shared_ptr<spdlog::logger> > >, std::__detail::_Select1st, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+ [110] md::env::Boundary::LennardJonesForce(double, double) [6] md::env::ForceManager::evaluate(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&) const [69] std::__detail::_Map_base<std::pair<int, int>, std::pair<std::pair<int, int> const, md::env::Force>, std::allocator<std::pair<std::pair<int, int> const, md::env::Force> >, std::__detail::_Select1st, std::equal_to<std::pair<int, int> >, md::env::ForceManager::ForceKeyHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](std::pair<int, int>&&)
+ [111] md::env::Boundary::set_boundary_rule(md::env::BoundaryRule) [29] md::env::ParticleGrid::particle_count() const [70] std::__detail::_Map_base<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true>, true>::operator[](int&&)
+  [74] md::env::Boundary::set_boundary_rule(md::env::BoundaryRule, std::array<int, 3ul> const&) [8] md::env::ParticleGrid::get_cell(md::env::Particle const&) const [33] std::enable_if<ArrayUtils::is_container<std::array<double, 3ul> >::value, std::ostream&>::type operator<< <std::array<double, 3ul> >(std::ostream&, std::array<double, 3ul> const&)
+ [112] md::env::Boundary::set_boundary_force(std::function<double (double)> const&) [44] md::env::ParticleGrid::get_cell(std::array<int, 3ul> const&) const [11] _init
+  [75] md::env::Boundary::Boundary() [10] md::env::ParticleGrid::what_cell(std::array<double, 3ul> const&) const

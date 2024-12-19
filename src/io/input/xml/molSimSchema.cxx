@@ -728,22 +728,28 @@ Forces (::std::auto_ptr< Forces_type > x)
   this->Forces_.set (x);
 }
 
-const simulation::Thermostat_type& simulation::
+const simulation::Thermostat_optional& simulation::
 Thermostat () const
 {
-  return this->Thermostat_.get ();
+  return this->Thermostat_;
 }
 
-simulation::Thermostat_type& simulation::
+simulation::Thermostat_optional& simulation::
 Thermostat ()
 {
-  return this->Thermostat_.get ();
+  return this->Thermostat_;
 }
 
 void simulation::
 Thermostat (const Thermostat_type& x)
 {
   this->Thermostat_.set (x);
+}
+
+void simulation::
+Thermostat (const Thermostat_optional& x)
+{
+  this->Thermostat_ = x;
 }
 
 void simulation::
@@ -2258,15 +2264,14 @@ simulation (const output_type& output,
             const parameters_type& parameters,
             const Boundary_type& Boundary,
             const GridConstant_type& GridConstant,
-            const Forces_type& Forces,
-            const Thermostat_type& Thermostat)
+            const Forces_type& Forces)
 : ::xml_schema::type (),
   output_ (output, this),
   parameters_ (parameters, this),
   Boundary_ (Boundary, this),
   GridConstant_ (GridConstant, this),
   Forces_ (Forces, this),
-  Thermostat_ (Thermostat, this),
+  Thermostat_ (this),
   particles_ (this),
   cuboids_ (this),
   spheres_ (this)
@@ -2278,15 +2283,14 @@ simulation (::std::auto_ptr< output_type > output,
             ::std::auto_ptr< parameters_type > parameters,
             ::std::auto_ptr< Boundary_type > Boundary,
             const GridConstant_type& GridConstant,
-            ::std::auto_ptr< Forces_type > Forces,
-            ::std::auto_ptr< Thermostat_type > Thermostat)
+            ::std::auto_ptr< Forces_type > Forces)
 : ::xml_schema::type (),
   output_ (output, this),
   parameters_ (parameters, this),
   Boundary_ (Boundary, this),
   GridConstant_ (GridConstant, this),
   Forces_ (Forces, this),
-  Thermostat_ (Thermostat, this),
+  Thermostat_ (this),
   particles_ (this),
   cuboids_ (this),
   spheres_ (this)
@@ -2416,7 +2420,7 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       ::std::auto_ptr< Thermostat_type > r (
         Thermostat_traits::create (i, f, this));
 
-      if (!Thermostat_.present ())
+      if (!this->Thermostat_)
       {
         this->Thermostat_.set (r);
         continue;
@@ -2491,13 +2495,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
   {
     throw ::xsd::cxx::tree::expected_element< char > (
       "Forces",
-      "");
-  }
-
-  if (!Thermostat_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "Thermostat",
       "");
   }
 }
@@ -4775,13 +4772,14 @@ operator<< (::xercesc::DOMElement& e, const simulation& i)
 
   // Thermostat
   //
+  if (i.Thermostat ())
   {
     ::xercesc::DOMElement& s (
       ::xsd::cxx::xml::dom::create_element (
         "Thermostat",
         e));
 
-    s << i.Thermostat ();
+    s << *i.Thermostat ();
   }
 
   // particles

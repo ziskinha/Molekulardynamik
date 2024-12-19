@@ -1,0 +1,45 @@
+1st
+[2024-12-19 20:14:21.561] [info] [Environment.cpp:168] Start building the environment.
+[2024-12-19 20:14:21.564] [info] [Environment.cpp:230] Environment successfully built.
+Total execution time:109627 ms
+Average execution time per step: 10.9606 ms
+Number of particles: 10000
+Particle modifications: 100010000
+MUPS/s 
+917522
+2nd
+[2024-12-19 20:16:11.324] [info] [Environment.cpp:168] Start building the environment.
+[2024-12-19 20:16:11.326] [info] [Environment.cpp:230] Environment successfully built.
+Total execution time:109127 ms
+Average execution time per step: 10.9106 ms
+Number of particles: 10000
+Particle modifications: 100010000
+MUPS/s 
+917522
+3rd
+[2024-12-19 20:18:00.582] [info] [Environment.cpp:168] Start building the environment.
+[2024-12-19 20:18:00.584] [info] [Environment.cpp:230] Environment successfully built.
+Total execution time:109560 ms
+Average execution time per step: 10.9538 ms
+Number of particles: 10000
+Particle modifications: 100010000
+MUPS/s 
+917522
+4th
+[2024-12-19 20:19:50.274] [info] [Environment.cpp:168] Start building the environment.
+[2024-12-19 20:19:50.276] [info] [Environment.cpp:230] Environment successfully built.
+Total execution time:109628 ms
+Average execution time per step: 10.9606 ms
+Number of particles: 10000
+Particle modifications: 100010000
+MUPS/s 
+917522
+5th
+[2024-12-19 20:21:40.037] [info] [Environment.cpp:168] Start building the environment.
+[2024-12-19 20:21:40.039] [info] [Environment.cpp:230] Environment successfully built.
+Total execution time:109632 ms
+Average execution time per step: 10.961 ms
+Number of particles: 10000
+Particle modifications: 100010000
+MUPS/s 
+917522

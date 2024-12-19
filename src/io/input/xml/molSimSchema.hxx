@@ -933,16 +933,20 @@ class simulation: public ::xml_schema::type
   // Thermostat
   //
   typedef ::Thermostat Thermostat_type;
+  typedef ::xsd::cxx::tree::optional< Thermostat_type > Thermostat_optional;
   typedef ::xsd::cxx::tree::traits< Thermostat_type, char > Thermostat_traits;
 
-  const Thermostat_type&
+  const Thermostat_optional&
   Thermostat () const;
 
-  Thermostat_type&
+  Thermostat_optional&
   Thermostat ();
 
   void
   Thermostat (const Thermostat_type& x);
+
+  void
+  Thermostat (const Thermostat_optional& x);
 
   void
   Thermostat (::std::auto_ptr< Thermostat_type > p);
@@ -1004,15 +1008,13 @@ class simulation: public ::xml_schema::type
               const parameters_type&,
               const Boundary_type&,
               const GridConstant_type&,
-              const Forces_type&,
-              const Thermostat_type&);
+              const Forces_type&);
 
   simulation (::std::auto_ptr< output_type >,
               ::std::auto_ptr< parameters_type >,
               ::std::auto_ptr< Boundary_type >,
               const GridConstant_type&,
-              ::std::auto_ptr< Forces_type >,
-              ::std::auto_ptr< Thermostat_type >);
+              ::std::auto_ptr< Forces_type >);
 
   simulation (const ::xercesc::DOMElement& e,
               ::xml_schema::flags f = 0,
@@ -1045,7 +1047,7 @@ class simulation: public ::xml_schema::type
   ::xsd::cxx::tree::one< Boundary_type > Boundary_;
   ::xsd::cxx::tree::one< GridConstant_type > GridConstant_;
   ::xsd::cxx::tree::one< Forces_type > Forces_;
-  ::xsd::cxx::tree::one< Thermostat_type > Thermostat_;
+  Thermostat_optional Thermostat_;
   particles_sequence particles_;
   cuboids_sequence cuboids_;
   spheres_sequence spheres_;

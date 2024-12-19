@@ -1,0 +1,12 @@
+Running perf profiling...
+/var/slurmd-cm4/job07430/slurm_script: line 20: perf: command not found
+Running gprof profiling...
+[2024-12-19 18:58:35.799] [info] [Environment.cpp:168] Start building the environment.
+[2024-12-19 18:58:35.802] [info] [Environment.cpp:230] Environment successfully built.
+Total execution time:196739 ms
+Average execution time per step: 19.67 ms
+Number of particles: 10000
+Particle modifications: 100010000
+MUPS/s 
+510255
+gprof profiling completed. Output saved to profile_report_gprof.txt.
