@@ -6,8 +6,8 @@
     </output>
 
     <parameters>
-        <tEnd>5.0</tEnd>
-        <deltaT>0.0001</deltaT>
+        <tEnd>0.25</tEnd>
+        <deltaT>0.0005</deltaT>
         <cutoff_radius>3.0</cutoff_radius>
         <gravitational_force> 0 </gravitational_force>
     </parameters>
