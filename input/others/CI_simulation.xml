@@ -6,7 +6,7 @@
     </output>
 
     <parameters>
-        <tEnd>0.25</tEnd>
+        <tEnd>1</tEnd>
         <deltaT>0.0005</deltaT>
         <cutoff_radius>3.0</cutoff_radius>
         <gravitational_force> 0 </gravitational_force>
@@ -36,13 +36,6 @@
         <Force type="lennardJones" partType="0" arg1="1" arg2="1"/>
         <Force type="lennardJones" partType="1" arg1="1" arg2="1"/>
     </Forces>
-
-    <Thermostat>
-        <n_thermostats>100</n_thermostats>
-        <init_T>40</init_T>
-        <target_T>40</target_T>
-        <temp_dT>-1</temp_dT>
-    </Thermostat>
 
     <cuboids>
         <x>20</x>

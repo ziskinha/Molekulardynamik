@@ -183,23 +183,24 @@ namespace md::io {
             /// -----------------------------------------
             ///  Parse thermostats information
             /// -----------------------------------------
-            if(simulation->Thermostat().init_T()) {
-                args.temp_adj_freq = simulation->Thermostat().n_thermostats().get();
-                double delta_T = simulation->Thermostat().temp_dT().get() == -1 ?
-                        std::numeric_limits<double>::infinity() : simulation->Thermostat().temp_dT().get();
-                args.thermostat.init(simulation->Thermostat().init_T().get(), simulation->Thermostat().target_T().get(),
-                                     delta_T);
+            if (simulation->Thermostat()) {
+                SPDLOG_INFO("hallo");
+                args.temp_adj_freq = simulation->Thermostat()->n_thermostats().get();
+                double delta_T =
+                        simulation->Thermostat()->temp_dT().get() == -1 ? std::numeric_limits<double>::infinity() :
+                        simulation->Thermostat()->temp_dT().get();
+                args.thermostat.init(simulation->Thermostat()->init_T().get(),
+                                     simulation->Thermostat()->target_T().get(), delta_T);
                 SPDLOG_DEBUG(fmt::format(
                         "Parsed thermostat - Initial temperature: {}, n_thermostat: {}, Target temperature: {}, delta T: {}",
                         simulation->Thermostat().init_T().get(), simulation->Thermostat().n_thermostats().get(),
                         simulation->Thermostat().target_T().get(), delta_T));
-
                 args.thermostat.set_initial_temperature(args.env);
             }
 
             file.close();
-
-        } catch (const xml_schema::exception& e) {
+        }
+        catch (const xml_schema::exception& e) {
             file.close();
             SPDLOG_ERROR(fmt::format("XML parsing error: {}", e.what()));
             exit(-1);
