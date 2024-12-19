@@ -1,0 +1,437 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  Ks/call  Ks/call  name    
+ 73.51    755.15   755.15   100000     0.00     0.00  md::Integrator::StoermerVerlet::simulation_step(unsigned int, double)
+ 17.03    930.07   174.92 1472242939     0.00     0.00  std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_invoke(std::_Any_data const&, std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&) [clone .lto_priv.0]
+  5.60    987.62    57.55 7026976932     0.00     0.00  md::env::ParticleGrid::what_cell(std::array<double, 3ul> const&) const
+  1.54   1003.45    15.83                             _init
+  0.50   1008.58     5.14                             std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::InverseSquareForce(double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [clone .lto_priv.0]
+  0.38   1012.47     3.89 1012478466     0.00     0.00  md::env::Particle::update_grid()
+  0.33   1015.84     3.38 2112581100     0.00     0.00  md::env::Boundary::apply_rule(std::array<int, 3ul> const&, md::env::Particle&, md::env::GridCell const&) const
+  0.30   1018.89     3.05 1000000000     0.00     0.00  md::env::type_to_normals(md::env::GridCell::Type)
+  0.22   1021.18     2.29 3767915683     0.00     0.00  std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::CrossPairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_invoke(std::_Any_data const&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)
+  0.14   1022.62     1.44 27551903     0.00     0.00  std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_erase(std::integral_constant<bool, true>, md::env::Particle* const&) [clone .isra.0]
+  0.13   1023.92     1.30                             std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+  0.10   1024.97     1.05        1     0.00     1.00  ws4_task2_big()
+  0.07   1025.68     0.71 62353140     0.00     0.00  std::array<double, 3ul> ArrayUtils::elementWisePairOp<std::array<double, 3ul>, std::minus<void> >(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::minus<void>)
+  0.06   1026.33     0.65 823601530     0.00     0.00  std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::UniquePairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_invoke(std::_Any_data const&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)
+  0.05   1026.81     0.49 685755462     0.00     0.00  std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::CrossPairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+  0.02   1027.00     0.19 12478636     0.00     0.00  std::vector<std::array<int, 3ul>, std::allocator<std::array<int, 3ul> > >::~vector()
+  0.02   1027.16     0.16 27561903     0.00     0.00  std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<md::env::Particle*, false>*, unsigned long) [clone .constprop.0]
+  0.01   1027.22     0.06 184244538     0.00     0.00  std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::UniquePairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+  0.00   1027.24     0.02 24943925     0.00     0.00  std::array<double, 3ul> ArrayUtils::elementWisePairOp<std::array<double, 3ul>, std::plus<void> >(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::plus<void>)
+  0.00   1027.25     0.01     1801     0.00     0.00  std::pair<std::__detail::_Node_iterator<std::pair<std::array<int, 3ul> const, md::env::GridCell>, false, true>, bool> std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_emplace<std::array<int, 3ul>&, md::env::GridCell&>(std::integral_constant<bool, true>, std::array<int, 3ul>&, md::env::GridCell&) [clone .constprop.0]
+  0.00   1027.25     0.00    40000     0.00     0.00  double std::normal_distribution<double>::operator()<std::linear_congruential_engine<unsigned long, 16807ul, 0ul, 2147483647ul> >(std::linear_congruential_engine<unsigned long, 16807ul, 0ul, 2147483647ul>&, std::normal_distribution<double>::param_type const&) [clone .constprop.0] [clone .isra.0]
+  0.00   1027.25     0.00       12     0.00     0.00  std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [clone .lto_priv.0]
+  0.00   1027.25     0.00        8     0.00     0.00  std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, false> > >::_M_allocate_buckets(unsigned long) [clone .isra.0]
+  0.00   1027.25     0.00        8     0.00     0.00  std::__detail::_Map_base<std::pair<int, int>, std::pair<std::pair<int, int> const, md::env::Force>, std::allocator<std::pair<std::pair<int, int> const, md::env::Force> >, std::__detail::_Select1st, std::equal_to<std::pair<int, int> >, md::env::ForceManager::ForceKeyHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](std::pair<int, int>&&)
+  0.00   1027.25     0.00        8     0.00     0.00  std::__detail::_Map_base<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true>, true>::operator[](int&&)
+  0.00   1027.25     0.00        5     0.00     0.00  std::_Function_handler<double (double), md::env::Boundary::LennardJonesForce(double, double)::{lambda(double)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [clone .lto_priv.0]
+  0.00   1027.25     0.00        4     0.00     0.00  md::env::Boundary::normal_to_face(std::array<int, 3ul> const&)
+  0.00   1027.25     0.00        4     0.00     0.00  md::env::Boundary::Boundary()
+  0.00   1027.25     0.00        4     0.00     0.00  std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::Force::Force()::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+  0.00   1027.25     0.00        4     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_dispose()
+  0.00   1027.25     0.00        3     0.00     0.00  xsd::cxx::tree::string<char, xsd::cxx::tree::simple_type<char, xsd::cxx::tree::_type> >::string(char const*)
+  0.00   1027.25     0.00        3     0.00     0.00  std::filesystem::__cxx11::path::path<char [7], std::filesystem::__cxx11::path>(char const (&) [7], std::filesystem::__cxx11::path::format) [clone .constprop.0]
+  0.00   1027.25     0.00        3     0.00     0.00  std::filesystem::__cxx11::path::~path() [clone .lto_priv.0]
+  0.00   1027.25     0.00        2     0.00     0.00  md::env::Environment::add_cuboid(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::array<unsigned int, 3ul> const&, double, double, double, unsigned char, int) [clone .part.0] [clone .constprop.0]
+  0.00   1027.25     0.00        2     0.00     0.00  md::env::Environment::set_force(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, int) [clone .constprop.0]
+  0.00   1027.25     0.00        2     0.00     0.00  md::env::Environment::Environment()
+  0.00   1027.25     0.00        2     0.00     0.00  md::env::Environment::~Environment() [clone .lto_priv.0]
+  0.00   1027.25     0.00        2     0.00     0.00  md::env::ParticleGrid::~ParticleGrid()
+  0.00   1027.25     0.00        2     0.00     0.00  std::_Hashtable<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, false>*, unsigned long) [clone .constprop.0]
+  0.00   1027.25     0.00        2     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::append(char const*, unsigned long)
+  0.00   1027.25     0.00        2     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+  0.00   1027.25     0.00        2     0.00     0.00  std::function<double (double)>::operator=(std::function<double (double)> const&) [clone .isra.0]
+  0.00   1027.25     0.00        1     0.00     0.00  md::Integrator::IntegratorBase::~IntegratorBase() [clone .lto_priv.0]
+  0.00   1027.25     0.00        1     0.00     0.00  md::io::OutputWriterBase::OutputWriterBase(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool)
+  0.00   1027.25     0.00        1     0.00     0.00  md::io::ProgramArguments::~ProgramArguments() [clone .lto_priv.0]
+  0.00   1027.25     0.00        1     0.00     0.00  md::io::VTKWriter::~VTKWriter()
+  0.00   1027.25     0.00        1     0.00     0.00  md::io::VTKWriter::~VTKWriter()
+  0.00   1027.25     0.00        1     0.00     0.00  std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::~_Hashtable() [clone .lto_priv.0]
+  0.00   1027.25     0.00        1     0.00     0.00  std::vector<int, std::allocator<int> >::~vector() [clone .lto_priv.0]
+  0.00   1027.25     0.00        1     0.00     0.00  void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag)
+  0.00   1027.25     0.00        1     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::assign(char const*) [clone .isra.0]
+  0.00   1027.25     0.00        1     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [clone .isra.0]
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2024 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.00% of 1027.25 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     97.8    0.00 1004.98                 main [1]
+                1.05 1003.93       1/1           ws4_task2_big() [2]
+-----------------------------------------------
+                1.05 1003.93       1/1           main [1]
+[2]     97.8    1.05 1003.93       1         ws4_task2_big() [2]
+              755.15  248.77  100000/100000      md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [3]
+                0.01    0.00    1801/1801        std::pair<std::__detail::_Node_iterator<std::pair<std::array<int, 3ul> const, md::env::GridCell>, false, true>, bool> std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_emplace<std::array<int, 3ul>&, md::env::GridCell&>(std::integral_constant<bool, true>, std::array<int, 3ul>&, md::env::GridCell&) [clone .constprop.0] [21]
+                0.00    0.00   20000/7026976932     md::env::ParticleGrid::what_cell(std::array<double, 3ul> const&) const [5]
+                0.00    0.00   10000/27561903     std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<md::env::Particle*, false>*, unsigned long) [clone .constprop.0] [18]
+                0.00    0.00       1/12478636     std::vector<std::array<int, 3ul>, std::allocator<std::array<int, 3ul> > >::~vector() [17]
+                0.00    0.00   20000/40000       double std::normal_distribution<double>::operator()<std::linear_congruential_engine<unsigned long, 16807ul, 0ul, 2147483647ul> >(std::linear_congruential_engine<unsigned long, 16807ul, 0ul, 2147483647ul>&, std::normal_distribution<double>::param_type const&) [clone .constprop.0] [clone .isra.0] [29]
+                0.00    0.00       8/12          std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [clone .lto_priv.0] [30]
+                0.00    0.00       8/8           std::__detail::_Map_base<std::pair<int, int>, std::pair<std::pair<int, int> const, md::env::Force>, std::allocator<std::pair<std::pair<int, int> const, md::env::Force> >, std::__detail::_Select1st, std::equal_to<std::pair<int, int> >, md::env::ForceManager::ForceKeyHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](std::pair<int, int>&&) [32]
+                0.00    0.00       8/8           std::__detail::_Map_base<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true>, true>::operator[](int&&) [33]
+                0.00    0.00       4/4           md::env::Boundary::normal_to_face(std::array<int, 3ul> const&) [35]
+                0.00    0.00       4/4           std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::Force::Force()::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [37]
+                0.00    0.00       2/2           md::env::Environment::Environment() [44]
+                0.00    0.00       2/4           md::env::Boundary::Boundary() [36]
+                0.00    0.00       2/2           std::function<double (double)>::operator=(std::function<double (double)> const&) [clone .isra.0] [50]
+                0.00    0.00       2/5           std::_Function_handler<double (double), md::env::Boundary::LennardJonesForce(double, double)::{lambda(double)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [clone .lto_priv.0] [34]
+                0.00    0.00       2/2           md::env::Environment::set_force(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, int) [clone .constprop.0] [43]
+                0.00    0.00       2/2           md::env::Environment::add_cuboid(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::array<unsigned int, 3ul> const&, double, double, double, unsigned char, int) [clone .part.0] [clone .constprop.0] [42]
+                0.00    0.00       2/2           md::env::Environment::~Environment() [clone .lto_priv.0] [45]
+                0.00    0.00       2/4           std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_dispose() [38]
+                0.00    0.00       1/1           std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::assign(char const*) [clone .isra.0] [59]
+                0.00    0.00       1/1           std::vector<int, std::allocator<int> >::~vector() [clone .lto_priv.0] [57]
+                0.00    0.00       1/1           std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::~_Hashtable() [clone .lto_priv.0] [56]
+                0.00    0.00       1/1           md::io::VTKWriter::~VTKWriter() [54]
+                0.00    0.00       1/1           md::Integrator::IntegratorBase::~IntegratorBase() [clone .lto_priv.0] [51]
+                0.00    0.00       1/1           md::io::ProgramArguments::~ProgramArguments() [clone .lto_priv.0] [53]
+                0.00    0.00       1/1           std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [clone .isra.0] [60]
+                0.00    0.00       1/2           std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [49]
+                0.00    0.00       1/1           md::io::OutputWriterBase::OutputWriterBase(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool) [52]
+                0.00    0.00       1/1           void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [58]
+                0.00    0.00       1/1           md::io::VTKWriter::~VTKWriter() [55]
+-----------------------------------------------
+              755.15  248.77  100000/100000      ws4_task2_big() [2]
+[3]     97.7  755.15  248.77  100000         md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [3]
+              174.92    0.00 1472242939/1472242939     std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_invoke(std::_Any_data const&, std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&) [clone .lto_priv.0] [4]
+               40.97    0.00 5002000000/7026976932     md::env::ParticleGrid::what_cell(std::array<double, 3ul> const&) const [5]
+                3.89   18.18 1012478466/1012478466     md::env::Particle::update_grid() [6]
+                3.38    0.44 2112581100/2112581100     md::env::Boundary::apply_rule(std::array<int, 3ul> const&, md::env::Particle&, md::env::GridCell const&) const [9]
+                3.05    0.00 1000000000/1000000000     md::env::type_to_normals(md::env::GridCell::Type) [10]
+                2.29    0.00 3767915683/3767915683     std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::CrossPairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_invoke(std::_Any_data const&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&) [11]
+                0.65    0.00 823601530/823601530     std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::UniquePairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_invoke(std::_Any_data const&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&) [15]
+                0.49    0.00 685755462/685755462     std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::CrossPairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [16]
+                0.28    0.00 24957270/62353140     std::array<double, 3ul> ArrayUtils::elementWisePairOp<std::array<double, 3ul>, std::minus<void> >(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::minus<void>) [14]
+                0.19    0.00 12478635/12478636     std::vector<std::array<int, 3ul>, std::allocator<std::array<int, 3ul> > >::~vector() [17]
+                0.06    0.00 184244538/184244538     std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::UniquePairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [19]
+-----------------------------------------------
+              174.92    0.00 1472242939/1472242939     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [3]
+[4]     17.0  174.92    0.00 1472242939         std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_invoke(std::_Any_data const&, std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&) [clone .lto_priv.0] [4]
+-----------------------------------------------
+                0.00    0.00   20000/7026976932     ws4_task2_big() [2]
+               16.58    0.00 2024956932/7026976932     md::env::Particle::update_grid() [6]
+               40.97    0.00 5002000000/7026976932     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [3]
+[5]      5.6   57.55    0.00 7026976932         md::env::ParticleGrid::what_cell(std::array<double, 3ul> const&) const [5]
+-----------------------------------------------
+                3.89   18.18 1012478466/1012478466     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [3]
+[6]      2.1    3.89   18.18 1012478466         md::env::Particle::update_grid() [6]
+               16.58    0.00 2024956932/7026976932     md::env::ParticleGrid::what_cell(std::array<double, 3ul> const&) const [5]
+                1.44    0.00 27551903/27551903     std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_erase(std::integral_constant<bool, true>, md::env::Particle* const&) [clone .isra.0] [12]
+                0.16    0.00 27551903/27561903     std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<md::env::Particle*, false>*, unsigned long) [clone .constprop.0] [18]
+-----------------------------------------------
+                                                 <spontaneous>
+[7]      1.5   15.83    0.00                 _init [7]
+-----------------------------------------------
+                                                 <spontaneous>
+[8]      0.5    5.14    0.00                 std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::InverseSquareForce(double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [clone .lto_priv.0] [8]
+-----------------------------------------------
+                3.38    0.44 2112581100/2112581100     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [3]
+[9]      0.4    3.38    0.44 2112581100         md::env::Boundary::apply_rule(std::array<int, 3ul> const&, md::env::Particle&, md::env::GridCell const&) const [9]
+                0.42    0.00 37395870/62353140     std::array<double, 3ul> ArrayUtils::elementWisePairOp<std::array<double, 3ul>, std::minus<void> >(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::minus<void>) [14]
+                0.02    0.00 24943925/24943925     std::array<double, 3ul> ArrayUtils::elementWisePairOp<std::array<double, 3ul>, std::plus<void> >(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::plus<void>) [20]
+-----------------------------------------------
+                3.05    0.00 1000000000/1000000000     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [3]
+[10]     0.3    3.05    0.00 1000000000         md::env::type_to_normals(md::env::GridCell::Type) [10]
+-----------------------------------------------
+                2.29    0.00 3767915683/3767915683     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [3]
+[11]     0.2    2.29    0.00 3767915683         std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::CrossPairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_invoke(std::_Any_data const&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&) [11]
+-----------------------------------------------
+                1.44    0.00 27551903/27551903     md::env::Particle::update_grid() [6]
+[12]     0.1    1.44    0.00 27551903         std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_erase(std::integral_constant<bool, true>, md::env::Particle* const&) [clone .isra.0] [12]
+-----------------------------------------------
+                                                 <spontaneous>
+[13]     0.1    1.30    0.00                 std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [13]
+-----------------------------------------------
+                0.28    0.00 24957270/62353140     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [3]
+                0.42    0.00 37395870/62353140     md::env::Boundary::apply_rule(std::array<int, 3ul> const&, md::env::Particle&, md::env::GridCell const&) const [9]
+[14]     0.1    0.71    0.00 62353140         std::array<double, 3ul> ArrayUtils::elementWisePairOp<std::array<double, 3ul>, std::minus<void> >(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::minus<void>) [14]
+-----------------------------------------------
+                0.65    0.00 823601530/823601530     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [3]
+[15]     0.1    0.65    0.00 823601530         std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::UniquePairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_invoke(std::_Any_data const&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&) [15]
+-----------------------------------------------
+                0.49    0.00 685755462/685755462     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [3]
+[16]     0.0    0.49    0.00 685755462         std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::CrossPairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [16]
+-----------------------------------------------
+                0.00    0.00       1/12478636     ws4_task2_big() [2]
+                0.19    0.00 12478635/12478636     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [3]
+[17]     0.0    0.19    0.00 12478636         std::vector<std::array<int, 3ul>, std::allocator<std::array<int, 3ul> > >::~vector() [17]
+-----------------------------------------------
+                0.00    0.00   10000/27561903     ws4_task2_big() [2]
+                0.16    0.00 27551903/27561903     md::env::Particle::update_grid() [6]
+[18]     0.0    0.16    0.00 27561903         std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<md::env::Particle*, false>*, unsigned long) [clone .constprop.0] [18]
+-----------------------------------------------
+                0.06    0.00 184244538/184244538     md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [3]
+[19]     0.0    0.06    0.00 184244538         std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::UniquePairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [19]
+-----------------------------------------------
+                0.02    0.00 24943925/24943925     md::env::Boundary::apply_rule(std::array<int, 3ul> const&, md::env::Particle&, md::env::GridCell const&) const [9]
+[20]     0.0    0.02    0.00 24943925         std::array<double, 3ul> ArrayUtils::elementWisePairOp<std::array<double, 3ul>, std::plus<void> >(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::plus<void>) [20]
+-----------------------------------------------
+                0.01    0.00    1801/1801        ws4_task2_big() [2]
+[21]     0.0    0.01    0.00    1801         std::pair<std::__detail::_Node_iterator<std::pair<std::array<int, 3ul> const, md::env::GridCell>, false, true>, bool> std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_emplace<std::array<int, 3ul>&, md::env::GridCell&>(std::integral_constant<bool, true>, std::array<int, 3ul>&, md::env::GridCell&) [clone .constprop.0] [21]
+                0.00    0.00       8/8           std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, false> > >::_M_allocate_buckets(unsigned long) [clone .isra.0] [31]
+-----------------------------------------------
+                0.00    0.00   20000/40000       ws4_task2_big() [2]
+                0.00    0.00   20000/40000       md::env::Environment::add_cuboid(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::array<unsigned int, 3ul> const&, double, double, double, unsigned char, int) [clone .part.0] [clone .constprop.0] [42]
+[29]     0.0    0.00    0.00   40000         double std::normal_distribution<double>::operator()<std::linear_congruential_engine<unsigned long, 16807ul, 0ul, 2147483647ul> >(std::linear_congruential_engine<unsigned long, 16807ul, 0ul, 2147483647ul>&, std::normal_distribution<double>::param_type const&) [clone .constprop.0] [clone .isra.0] [29]
+-----------------------------------------------
+                0.00    0.00       4/12          md::env::Environment::~Environment() [clone .lto_priv.0] [45]
+                0.00    0.00       8/12          ws4_task2_big() [2]
+[30]     0.0    0.00    0.00      12         std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [clone .lto_priv.0] [30]
+-----------------------------------------------
+                0.00    0.00       8/8           std::pair<std::__detail::_Node_iterator<std::pair<std::array<int, 3ul> const, md::env::GridCell>, false, true>, bool> std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_emplace<std::array<int, 3ul>&, md::env::GridCell&>(std::integral_constant<bool, true>, std::array<int, 3ul>&, md::env::GridCell&) [clone .constprop.0] [21]
+[31]     0.0    0.00    0.00       8         std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, false> > >::_M_allocate_buckets(unsigned long) [clone .isra.0] [31]
+-----------------------------------------------
+                0.00    0.00       8/8           ws4_task2_big() [2]
+[32]     0.0    0.00    0.00       8         std::__detail::_Map_base<std::pair<int, int>, std::pair<std::pair<int, int> const, md::env::Force>, std::allocator<std::pair<std::pair<int, int> const, md::env::Force> >, std::__detail::_Select1st, std::equal_to<std::pair<int, int> >, md::env::ForceManager::ForceKeyHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](std::pair<int, int>&&) [32]
+-----------------------------------------------
+                0.00    0.00       8/8           ws4_task2_big() [2]
+[33]     0.0    0.00    0.00       8         std::__detail::_Map_base<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true>, true>::operator[](int&&) [33]
+-----------------------------------------------
+                0.00    0.00       1/5           md::env::Environment::~Environment() [clone .lto_priv.0] [45]
+                0.00    0.00       2/5           ws4_task2_big() [2]
+                0.00    0.00       2/5           std::function<double (double)>::operator=(std::function<double (double)> const&) [clone .isra.0] [50]
+[34]     0.0    0.00    0.00       5         std::_Function_handler<double (double), md::env::Boundary::LennardJonesForce(double, double)::{lambda(double)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [clone .lto_priv.0] [34]
+-----------------------------------------------
+                0.00    0.00       4/4           ws4_task2_big() [2]
+[35]     0.0    0.00    0.00       4         md::env::Boundary::normal_to_face(std::array<int, 3ul> const&) [35]
+-----------------------------------------------
+                0.00    0.00       2/4           md::env::Environment::Environment() [44]
+                0.00    0.00       2/4           ws4_task2_big() [2]
+[36]     0.0    0.00    0.00       4         md::env::Boundary::Boundary() [36]
+-----------------------------------------------
+                0.00    0.00       4/4           ws4_task2_big() [2]
+[37]     0.0    0.00    0.00       4         std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::Force::Force()::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [37]
+-----------------------------------------------
+                0.00    0.00       2/4           md::io::ProgramArguments::~ProgramArguments() [clone .lto_priv.0] [53]
+                0.00    0.00       2/4           ws4_task2_big() [2]
+[38]     0.0    0.00    0.00       4         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_dispose() [38]
+-----------------------------------------------
+                0.00    0.00       3/3           _sub_I_65535_0.0 [559]
+[39]     0.0    0.00    0.00       3         xsd::cxx::tree::string<char, xsd::cxx::tree::simple_type<char, xsd::cxx::tree::_type> >::string(char const*) [39]
+-----------------------------------------------
+                0.00    0.00       3/3           md::io::OutputWriterBase::OutputWriterBase(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool) [52]
+[40]     0.0    0.00    0.00       3         std::filesystem::__cxx11::path::path<char [7], std::filesystem::__cxx11::path>(char const (&) [7], std::filesystem::__cxx11::path::format) [clone .constprop.0] [40]
+-----------------------------------------------
+                0.00    0.00       3/3           md::io::OutputWriterBase::OutputWriterBase(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool) [52]
+[41]     0.0    0.00    0.00       3         std::filesystem::__cxx11::path::~path() [clone .lto_priv.0] [41]
+-----------------------------------------------
+                0.00    0.00       2/2           ws4_task2_big() [2]
+[42]     0.0    0.00    0.00       2         md::env::Environment::add_cuboid(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::array<unsigned int, 3ul> const&, double, double, double, unsigned char, int) [clone .part.0] [clone .constprop.0] [42]
+                0.00    0.00   20000/40000       double std::normal_distribution<double>::operator()<std::linear_congruential_engine<unsigned long, 16807ul, 0ul, 2147483647ul> >(std::linear_congruential_engine<unsigned long, 16807ul, 0ul, 2147483647ul>&, std::normal_distribution<double>::param_type const&) [clone .constprop.0] [clone .isra.0] [29]
+-----------------------------------------------
+                0.00    0.00       2/2           ws4_task2_big() [2]
+[43]     0.0    0.00    0.00       2         md::env::Environment::set_force(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, int) [clone .constprop.0] [43]
+                0.00    0.00       2/2           std::_Hashtable<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, false>*, unsigned long) [clone .constprop.0] [47]
+-----------------------------------------------
+                0.00    0.00       2/2           ws4_task2_big() [2]
+[44]     0.0    0.00    0.00       2         md::env::Environment::Environment() [44]
+                0.00    0.00       2/4           md::env::Boundary::Boundary() [36]
+-----------------------------------------------
+                0.00    0.00       2/2           ws4_task2_big() [2]
+[45]     0.0    0.00    0.00       2         md::env::Environment::~Environment() [clone .lto_priv.0] [45]
+                0.00    0.00       4/12          std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [clone .lto_priv.0] [30]
+                0.00    0.00       2/2           md::env::ParticleGrid::~ParticleGrid() [46]
+                0.00    0.00       1/5           std::_Function_handler<double (double), md::env::Boundary::LennardJonesForce(double, double)::{lambda(double)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [clone .lto_priv.0] [34]
+-----------------------------------------------
+                0.00    0.00       2/2           md::env::Environment::~Environment() [clone .lto_priv.0] [45]
+[46]     0.0    0.00    0.00       2         md::env::ParticleGrid::~ParticleGrid() [46]
+-----------------------------------------------
+                0.00    0.00       2/2           md::env::Environment::set_force(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, int) [clone .constprop.0] [43]
+[47]     0.0    0.00    0.00       2         std::_Hashtable<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, false>*, unsigned long) [clone .constprop.0] [47]
+-----------------------------------------------
+                0.00    0.00       2/2           std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [clone .isra.0] [60]
+[48]     0.0    0.00    0.00       2         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::append(char const*, unsigned long) [48]
+-----------------------------------------------
+                0.00    0.00       1/2           md::io::OutputWriterBase::OutputWriterBase(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool) [52]
+                0.00    0.00       1/2           ws4_task2_big() [2]
+[49]     0.0    0.00    0.00       2         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [49]
+-----------------------------------------------
+                0.00    0.00       2/2           ws4_task2_big() [2]
+[50]     0.0    0.00    0.00       2         std::function<double (double)>::operator=(std::function<double (double)> const&) [clone .isra.0] [50]
+                0.00    0.00       2/5           std::_Function_handler<double (double), md::env::Boundary::LennardJonesForce(double, double)::{lambda(double)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [clone .lto_priv.0] [34]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[51]     0.0    0.00    0.00       1         md::Integrator::IntegratorBase::~IntegratorBase() [clone .lto_priv.0] [51]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[52]     0.0    0.00    0.00       1         md::io::OutputWriterBase::OutputWriterBase(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool) [52]
+                0.00    0.00       3/3           std::filesystem::__cxx11::path::path<char [7], std::filesystem::__cxx11::path>(char const (&) [7], std::filesystem::__cxx11::path::format) [clone .constprop.0] [40]
+                0.00    0.00       3/3           std::filesystem::__cxx11::path::~path() [clone .lto_priv.0] [41]
+                0.00    0.00       1/2           std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [49]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[53]     0.0    0.00    0.00       1         md::io::ProgramArguments::~ProgramArguments() [clone .lto_priv.0] [53]
+                0.00    0.00       2/4           std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_dispose() [38]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[54]     0.0    0.00    0.00       1         md::io::VTKWriter::~VTKWriter() [54]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[55]     0.0    0.00    0.00       1         md::io::VTKWriter::~VTKWriter() [55]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[56]     0.0    0.00    0.00       1         std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::~_Hashtable() [clone .lto_priv.0] [56]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[57]     0.0    0.00    0.00       1         std::vector<int, std::allocator<int> >::~vector() [clone .lto_priv.0] [57]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[58]     0.0    0.00    0.00       1         void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [58]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[59]     0.0    0.00    0.00       1         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::assign(char const*) [clone .isra.0] [59]
+-----------------------------------------------
+                0.00    0.00       1/1           ws4_task2_big() [2]
+[60]     0.0    0.00    0.00       1         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [clone .isra.0] [60]
+                0.00    0.00       2/2           std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::append(char const*, unsigned long) [48]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2024 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+   [2] ws4_task2_big()        [39] xsd::cxx::tree::string<char, xsd::cxx::tree::simple_type<char, xsd::cxx::tree::_type> >::string(char const*) [15] std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::UniquePairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_invoke(std::_Any_data const&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)
+  [20] std::array<double, 3ul> ArrayUtils::elementWisePairOp<std::array<double, 3ul>, std::plus<void> >(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::plus<void>) [5] md::env::ParticleGrid::what_cell(std::array<double, 3ul> const&) const [29] double std::normal_distribution<double>::operator()<std::linear_congruential_engine<unsigned long, 16807ul, 0ul, 2147483647ul> >(std::linear_congruential_engine<unsigned long, 16807ul, 0ul, 2147483647ul>&, std::normal_distribution<double>::param_type const&) [clone .constprop.0] [clone .isra.0]
+  [14] std::array<double, 3ul> ArrayUtils::elementWisePairOp<std::array<double, 3ul>, std::minus<void> >(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::minus<void>) [9] md::env::Boundary::apply_rule(std::array<int, 3ul> const&, md::env::Particle&, md::env::GridCell const&) const [17] std::vector<std::array<int, 3ul>, std::allocator<std::array<int, 3ul> > >::~vector()
+  [51] md::Integrator::IntegratorBase::~IntegratorBase() [clone .lto_priv.0] [18] std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<md::env::Particle*, false>*, unsigned long) [clone .constprop.0] [57] std::vector<int, std::allocator<int> >::~vector() [clone .lto_priv.0]
+   [3] md::Integrator::StoermerVerlet::simulation_step(unsigned int, double) [12] std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_erase(std::integral_constant<bool, true>, md::env::Particle* const&) [clone .isra.0] [38] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_dispose()
+  [52] md::io::OutputWriterBase::OutputWriterBase(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool) [56] std::_Hashtable<md::env::Particle*, md::env::Particle*, std::allocator<md::env::Particle*>, std::__detail::_Identity, std::equal_to<md::env::Particle*>, std::hash<md::env::Particle*>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::~_Hashtable() [clone .lto_priv.0] [58] void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag)
+  [53] md::io::ProgramArguments::~ProgramArguments() [clone .lto_priv.0] [21] std::pair<std::__detail::_Node_iterator<std::pair<std::array<int, 3ul> const, md::env::GridCell>, false, true>, bool> std::_Hashtable<std::array<int, 3ul>, std::pair<std::array<int, 3ul> const, md::env::GridCell>, std::allocator<std::pair<std::array<int, 3ul> const, md::env::GridCell> >, std::__detail::_Select1st, std::equal_to<std::array<int, 3ul> >, Int3Hasher, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_emplace<std::array<int, 3ul>&, md::env::GridCell&>(std::integral_constant<bool, true>, std::array<int, 3ul>&, md::env::GridCell&) [clone .constprop.0] [48] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::append(char const*, unsigned long)
+  [54] md::io::VTKWriter::~VTKWriter() [47] std::_Hashtable<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, false>*, unsigned long) [clone .constprop.0] [59] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::assign(char const*) [clone .isra.0]
+  [55] md::io::VTKWriter::~VTKWriter() [40] std::filesystem::__cxx11::path::path<char [7], std::filesystem::__cxx11::path>(char const (&) [7], std::filesystem::__cxx11::path::format) [clone .constprop.0] [13] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+  [42] md::env::Environment::add_cuboid(std::array<double, 3ul> const&, std::array<double, 3ul> const&, std::array<unsigned int, 3ul> const&, double, double, double, unsigned char, int) [clone .part.0] [clone .constprop.0] [41] std::filesystem::__cxx11::path::~path() [clone .lto_priv.0] [49] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+  [43] md::env::Environment::set_force(std::variant<md::env::LennardJones, md::env::InverseSquare> const&, int) [clone .constprop.0] [30] std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [clone .lto_priv.0] [31] std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, false> > >::_M_allocate_buckets(unsigned long) [clone .isra.0]
+  [44] md::env::Environment::Environment() [4] std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::LennardJonesForce(double, double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_invoke(std::_Any_data const&, std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&) [clone .lto_priv.0] [32] std::__detail::_Map_base<std::pair<int, int>, std::pair<std::pair<int, int> const, md::env::Force>, std::allocator<std::pair<std::pair<int, int> const, md::env::Force> >, std::__detail::_Select1st, std::equal_to<std::pair<int, int> >, md::env::ForceManager::ForceKeyHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](std::pair<int, int>&&)
+  [45] md::env::Environment::~Environment() [clone .lto_priv.0] [8] std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::InverseSquareForce(double, double)::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [clone .lto_priv.0] [33] std::__detail::_Map_base<int, std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> >, std::allocator<std::pair<int const, std::variant<md::env::LennardJones, md::env::InverseSquare> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true>, true>::operator[](int&&)
+  [46] md::env::ParticleGrid::~ParticleGrid() [37] std::_Function_handler<std::array<double, 3ul> (std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&), md::env::Force::Force()::{lambda(std::array<double, 3ul> const&, md::env::Particle const&, md::env::Particle const&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [50] std::function<double (double)>::operator=(std::function<double (double)> const&) [clone .isra.0]
+  [10] md::env::type_to_normals(md::env::GridCell::Type) [34] std::_Function_handler<double (double), md::env::Boundary::LennardJonesForce(double, double)::{lambda(double)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [clone .lto_priv.0] [60] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [clone .isra.0]
+  [35] md::env::Boundary::normal_to_face(std::array<int, 3ul> const&) [16] std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::CrossPairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [7] _init
+  [36] md::env::Boundary::Boundary() [11] std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::CrossPairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_invoke(std::_Any_data const&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)
+   [6] md::env::Particle::update_grid() [19] std::_Function_handler<void (std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&), md::utils::PairIterator<std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> > >::UniquePairIterator(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&)::{lambda(std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::unordered_set<md::env::Particle*, std::hash<md::env::Particle*>, std::equal_to<md::env::Particle*>, std::allocator<md::env::Particle*> >&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&, std::__detail::_Node_iterator<md::env::Particle*, true, false>&)#1}>::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)

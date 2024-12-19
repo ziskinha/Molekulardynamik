@@ -1,10 +1,9 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
-#include <unordered_set>
 #include <vector>
 
+#include "ankerl/unordered_dense.h"
 #include "env/Common.h"
 #include "env/Particle.h"
 #include "env/Boundary.h"
@@ -14,10 +13,17 @@
  * @brief Contains classes and structures for managing the environment of the simulation.
  */
 namespace md::env {
+    struct PointerHash {
+        size_t operator()(const void* ptr) const noexcept {
+            return reinterpret_cast<uintptr_t>(ptr) >> 3; // Right shift to improve distribution
+        }
+    };
     /**
      * @brief Structure representing a cell of the particle grid.
      */
     struct GridCell {
+        using particle_container = ankerl::unordered_dense::set<Particle*, PointerHash>;
+
         /**
          * @brief Enumeration of the type of the grid cell.
          */
@@ -62,7 +68,7 @@ namespace md::env {
         const int3 idx;    ///< The index of the grid cell
         int id;            ///< The id of the grid cell.
 
-        std::unordered_set<Particle*> particles{};   ///< The set of particles inside the grid cell.
+        particle_container particles{}; ///< The set of particles inside the grid cell.
     private:
         static int count;  ///< A counter for generating unique ids for grid cells.
     };
@@ -118,7 +124,7 @@ namespace md::env {
             PERIODIC_Z       = 0x4,  ///< Periodicity in the z-direction.
         };
 
-        using ParticlePairIterator = utils::DualPairIterator<std::unordered_set<Particle*>>;
+        using ParticlePairIterator = utils::DualPairIterator<GridCell::particle_container>;
 
         /**
          * @brief Constructs a new GridCellPair of two grid cells.
@@ -153,7 +159,6 @@ namespace md::env {
         [[nodiscard]] std::pair<int, int> id() const;
 
         const Periodicity periodicity;
-       private:
         GridCell& cell1;  ///< The first grid cell in the pair.
         GridCell& cell2;  ///< The second grid cell in the pair.
     };
@@ -198,7 +203,7 @@ namespace md::env {
      */
     class ParticleGrid {
        public:
-        ParticleGrid() = default;
+        ParticleGrid();
 
         /**
          * @brief Builds the particle grid with the given parameters.
@@ -288,7 +293,8 @@ namespace md::env {
         */
         void build_cell_pairs(const std::array<BoundaryRule, 6> & rules);
 
-        std::unordered_map<int3, GridCell, Int3Hasher> cells {}; ///< A hash map storing the cells in the grid.
+        // std::unordered_map<int3, GridCell, Int3Hasher> cells {}; ///< A hash map storing the cells in the grid.
+        ankerl::unordered_dense::map<int3, GridCell, Int3Hasher> cells{};
         std::vector<CellPair> cell_pairs{};                  ///< A vector of linked cell pairs.
         std::vector<GridCell*> border_cells;                     ///< A vector of cells at the domain boundary
 

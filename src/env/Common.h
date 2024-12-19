@@ -4,10 +4,8 @@
 #include <cstdint>
 #include <functional>
 
-
 #define UINT_T uint32_t
 #define INT_T int32_t
-// #define INF std::numeric_limits<double>::infinity()
 
 /**
  * @brief Contains fundamental types and utilities

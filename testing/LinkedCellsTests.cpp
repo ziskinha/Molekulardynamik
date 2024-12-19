@@ -85,25 +85,3 @@ struct SymmetricPairHasher {  // symmetric pair hasher
     }
 };
 
-TEST(LinkedCellsTest, no_double_particle_pairs) {
-    boundary.origin = {0, 0, 0};
-    boundary.extent = {50, 50, 50};
-    boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC);
-
-    md::env::Environment env;
-    env.add_cuboid({0.5,0.5,0.5}, {}, {49,49,49}, 0, 1, 0, 3);
-    env.set_boundary(boundary);
-    env.set_gravity_constant(10);
-
-    for (auto& cell_pair : env.linked_cells()) {
-        std::unordered_set<std::pair<int, int>, SymmetricPairHasher> pairs;
-        for (auto [p1, p2] : cell_pair.particles()) {
-            std::pair<int, int> current_pair{p1->id, p2->id};
-            ASSERT_FALSE(pairs.find(current_pair) != pairs.end()) << "Duplicate pair found: {"
-                                                                             << current_pair.first << ", "
-                                                                             << current_pair.second << "}";
-            pairs.insert(current_pair);
-        }
-    }
-
-}

@@ -16,21 +16,11 @@ module load gcc/13.2.0
 module load xerces-c/3.2.1
 
 
-#echo "Running perf profiling..."
- #   perf record -g ./MolSim
+echo "Running perf profiling..."
+    perf record -g ./MolSim
 
-#echo "Running gprof profiling..."
-    echo "1st"
-    ./MolSim
-    echo "2nd"
-    ./MolSim
-    echo "3rd"
-    ./MolSim
-    echo "4th"
-    ./MolSim
-    echo "5th"
+echo "Running gprof profiling..."
     ./MolSim
 
-
- #   gprof ./MolSim ./gmon.out > profile_report_gprof.txt
-#  echo "gprof profiling completed. Output saved to profile_report_gprof.txt."
+    gprof ./MolSim ./gmon.out > profile_report_gprof.txt
+    echo "gprof profiling completed. Output saved to profile_report_gprof.txt."

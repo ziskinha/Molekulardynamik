@@ -15,7 +15,7 @@ namespace md::parse {
         SPDLOG_INFO(
             "Displaying help information.\n"
             "Usage:\n"
-            "  ./MolSim <xml_file> <output_format>\n"
+            "  ./MolSim <input_file> <output_format>\n"
             "  ./MolSim -h | --help\n"
             "Arguments:\n"
             "  input_file       XML or TXT file with input parameters important for the simulation.\n"
@@ -27,7 +27,7 @@ namespace md::parse {
     }
 
     ParseStatus parse_args(int argc, char** argv, io::ProgramArguments& args) {
-        SPDLOG_INFO("Start parsing arguments");
+        SPDLOG_INFO("Start parsing arguments.");
         std::vector<std::string> arguments(argv, argv + argc);
 
         // split arguments into flags & parameters
@@ -71,7 +71,7 @@ namespace md::parse {
         }
         args.output_format = parameters[2] == "XYZ" ? io::OutputFormat::XYZ : io::OutputFormat::VTK;
 
-        SPDLOG_INFO("Arguments successfully parsed");
+        SPDLOG_INFO("Arguments successfully parsed.");
         io::log_arguments(args);
         return OK;
     }

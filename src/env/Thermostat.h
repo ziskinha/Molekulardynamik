@@ -1,7 +1,7 @@
 #pragma once
 
 #include <limits>
-#define INF_TEMP std::numeric_limits<double>::infinity()
+#define INF_TEMP std::numeric_limits<double>::max()
 #define NO_TEMP (-1)
 
 namespace md::env {

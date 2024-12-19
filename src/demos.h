@@ -258,60 +258,10 @@ inline void test_10000_particles() {
     args.env.set_gravity_constant(-12.44);
     args.env.build();
 
-    env::Thermostat thermostat(40, -1, -1);
+    env::Thermostat thermostat(40, 25);
     thermostat.set_initial_temperature(args.env);
-    io::log_arguments(args);
-    Integrator::StoermerVerlet simulator(args.env, nullptr, nullptr, thermostat);
-    simulator.benchmark(0, args.duration, args.dt, args.temp_adj_freq);
-}
-
-
-inline void ws4_task2_big() {
-    io::ProgramArguments args;
-    args.output_format = io::OutputFormat::VTK;
-    args.benchmark = false;
-    args.override = true;
-    args.output_baseName = "output";
-
-    args.duration = 5;
-    args.dt = 0.0005;
-    args.write_freq = 100;
-
-    env::Environment env;
-
-    env::Boundary boundary;
-    // boundary size
-    boundary.extent = {300, 54, 1};
-    boundary.origin = {0, 0, 0};
-
-    //boundary conditions
-    boundary.set_boundary_rule(env::BoundaryRule::OUTFLOW);
-    boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::LEFT);
-    boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::RIGHT);
-    boundary.set_boundary_rule(env::BoundaryRule::VELOCITY_REFLECTION, env::BoundaryNormal::TOP);
-    boundary.set_boundary_rule(env::BoundaryRule::VELOCITY_REFLECTION, env::BoundaryNormal::BOTTOM);
-
-    boundary.set_boundary_force(env::Boundary::LennardJonesForce(1, 1.2));
-
-    env.set_boundary(boundary);
-
-    // Liquid 1, type = 0
-    env.add_cuboid({0.6, 2, 0}, {0, 0, 0}, {250, 20, 1}, 0, 1.2, 1, 2, 0);
-    env.set_force(env::LennardJones(1, 1.2, 3), 0);
-    // Liquid 2, type = 1
-    env.add_cuboid({0.6, 27, 0}, {0, 0, 0}, {250, 20, 1}, 0, 1.2, 2, 2, 1);
-    env.set_force(env::LennardJones(1, 1.1, 3), 1);
-
-    env.set_grid_constant(3);
-    env.set_gravity_constant(-12.44);
-    env.build();
-
-    env::Thermostat thermostat(40);
-    thermostat.set_initial_temperature(env);
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
-    Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, thermostat);
-    // simulator.simulate(0, args.duration, args.dt, args.write_freq, 1000);
+    Integrator::StoermerVerlet simulator(args.env, std::move(writer), nullptr, thermostat);
     simulator.benchmark(0, args.duration, args.dt, 1000);
-
 }

@@ -44,17 +44,17 @@ namespace md::io {
     inline void log_arguments(const ProgramArguments& args) {
         SPDLOG_INFO(
                 "General simulation info:\n"
-                "       output name:         {}\n"
                 "       duration:            {}\n"
-                "       dt:                  {}\n"
-                "       write_freq:          {}\n"
-                "       particles:           {}\n"
+                "       Δt:                  {}\n"
+                "       write frequency:     {}\n"
+                "       #particles:          {}\n"
                 "       benchmark:           {}\n"
                 "       override:            {}\n"
-                "       output_format:       {}",
-                args.output_baseName, args.duration, args.dt, args.write_freq,
-                args.env.size(), args.benchmark ? "true" : "false",
-                args.override ? "true" : "false", args.output_format == OutputFormat::XYZ ? "XYZ" : "VTK");
+                "       output format:       {}\n"
+                "       output name:         {}",
+                args.duration, args.dt, args.write_freq, args.env.size(), args.benchmark ? "true" : "false",
+                args.override ? "true" : "false", args.output_format == OutputFormat::XYZ ? "XYZ" : "VTK",
+                args.output_baseName);
     }
 
     /**
@@ -72,7 +72,7 @@ namespace md::io {
         virtual ~OutputWriterBase() = default;
 
         /**
-         * @brief Outputs particle data at a given iteration.
+         * @brief Plots particle data at a given iteration.
          * @param environment
          * @param iteration The current simulation iteration.
          */

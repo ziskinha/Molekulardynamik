@@ -182,7 +182,6 @@ namespace md::io {
         try {
             if (force_name == "lennard jones") {
                 args.env.set_force(LennardJones(vals[0], vals[1], args.cutoff_radius), vals[2]);
-                // TODO: Set boundary force with parrticle type
                 args.boundary.set_boundary_force(Boundary::LennardJonesForce(vals[0], vals[1]));
                 SPDLOG_DEBUG("Parsed force for particle type {}: Lennard Jones with epsilon = {}, sigma = {}, "
                              "cutoff radius = {}", vals[2], vals[0], vals[1], args.cutoff_radius);
@@ -262,6 +261,7 @@ namespace md::io {
         std::vector<double> vals;
         double num;
 
+        // Required values: 1 (duration) + 1 (delta_t) + 1 (write_freq) + 1 (cutoff_radius) + 1 string (output_name)
         for (int i = 0; i < 4; ++i) {
             if (!(data_stream >> num)) {
                 SPDLOG_ERROR("Not enough numbers in line: {}", line);
