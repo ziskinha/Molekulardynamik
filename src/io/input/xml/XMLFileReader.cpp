@@ -193,8 +193,7 @@ namespace md::io {
                                      simulation->Thermostat()->target_T().get(), delta_T);
                 SPDLOG_DEBUG(fmt::format(
                         "Parsed thermostat - Initial temperature: {}, n_thermostat: {}, Target temperature: {}, delta T: {}",
-                        simulation->Thermostat().init_T().get(), simulation->Thermostat().n_thermostats().get(),
-                        simulation->Thermostat().target_T().get(), delta_T));
+                        simulation->Thermostat()->init_T().get(), args.temp_adj_freq, simulation->Thermostat()->target_T().get(), delta_T));
                 args.thermostat.set_initial_temperature(args.env);
             }
 
