@@ -175,7 +175,7 @@ namespace md::io {
             }
 
             args.env.set_grid_constant(simulation->GridConstant());
-            SPDLOG_DEBUG(fmt::format("Parsed grid constant: ", simulation->GridConstant())),
+            SPDLOG_DEBUG(fmt::format("Parsed grid constant: {}", simulation->GridConstant())),
 
             args.env.set_boundary(boundary);
             args.env.build();
@@ -184,7 +184,6 @@ namespace md::io {
             ///  Parse thermostats information
             /// -----------------------------------------
             if (simulation->Thermostat()) {
-                SPDLOG_INFO("hallo");
                 args.temp_adj_freq = simulation->Thermostat()->n_thermostats().get();
                 double delta_T =
                         simulation->Thermostat()->temp_dT().get() == -1 ? std::numeric_limits<double>::infinity() :

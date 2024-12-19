@@ -30,7 +30,7 @@
         force_arg2="1.2"
     />
   
-    <GridConstant>3 </GridConstant>
+    <GridConstant> 3 </GridConstant>
 
     <Forces>
         <Force type="lennardJones" partType="0" arg1="1" arg2="1.2"/>
