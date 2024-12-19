@@ -1,8 +1,6 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
-#include <unordered_set>
 #include <vector>
 
 #include "ankerl/unordered_dense.h"
@@ -16,12 +14,16 @@
  * @brief Contains classes and structures for managing the environment of the simulation.
  */
 namespace md::env {
+    struct PointerHash {
+        size_t operator()(const void* ptr) const noexcept {
+            return reinterpret_cast<uintptr_t>(ptr) >> 3; // Right shift to improve distribution
+        }
+    };
     /**
      * @brief Structure representing a cell of the particle grid.
      */
     struct GridCell {
-        // using particle_container = ankerl::unordered_dense::set<Particle*>;
-        using particle_container = std::unordered_set<Particle*, ankerl::unordered_dense::hash<Particle*>>;
+        using particle_container = ankerl::unordered_dense::set<Particle*, PointerHash>;
 
         /**
          * @brief Enumeration of the type of the grid cell.
@@ -158,7 +160,6 @@ namespace md::env {
         [[nodiscard]] std::pair<int, int> id() const;
 
         const Periodicity periodicity;
-       private:
         GridCell& cell1;  ///< The first grid cell in the pair.
         GridCell& cell2;  ///< The second grid cell in the pair.
     };

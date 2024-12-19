@@ -13,6 +13,7 @@ function(add_test_executable test_name)
 
     target_include_directories(${test_name}
             PUBLIC
+            ${CMAKE_SOURCE_DIR}/libs/ankerl
             ${CMAKE_SOURCE_DIR}/libs/libxsd
             PRIVATE
             ${CMAKE_SOURCE_DIR}/src

@@ -7,6 +7,7 @@
 #include "Common.h"
 #include "utils/ArrayUtils.h"
 #include "Particle.h"
+#include "ankerl/unordered_dense.h"
 
 #define NO_FORCE_CUTOFF std::numeric_limits<double>::max()
 #define FORCE_CUTOFF_AUTO std::numeric_limits<double>::min()
@@ -175,7 +176,7 @@ namespace md::env {
         static Force mix_forces(const ForceType& force1, const ForceType& force2);
 
         std::unordered_map<ParticleType, ForceType> force_types;   ///< Map of particle types to force configurations.
-        std::unordered_map<ForceKey, Force, ForceKeyHash> forces;  ///< Map of force key pairs to mixed forces.
+        ankerl::unordered_dense::map<ForceKey, Force, ForceKeyHash> forces;  ///< Map of force key pairs to mixed forces.
         double cutoff_radius;  ///< The cutoff radius.
     };
 
