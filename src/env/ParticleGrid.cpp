@@ -6,7 +6,7 @@
 #include <string>
 
 #include "io/Logger/Logger.h"
-#include "io/Input/xml/molSimSchema.hxx"
+#include "io/input/xml/molSimSchema.hxx"
 #include "utils/ArrayUtils.h"
 
 #define DOUBLE_MIN std::numeric_limits<double>::min()

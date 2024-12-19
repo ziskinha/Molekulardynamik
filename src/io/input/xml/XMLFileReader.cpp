@@ -5,7 +5,7 @@
 #include <string>
 
 #include "env/Environment.h"
-#include "io/Input/xml/molSimSchema.hxx"
+#include "io/input/xml/molSimSchema.hxx"
 #include "io/Logger/Logger.h"
 #include "utils/Parse.h"
 
