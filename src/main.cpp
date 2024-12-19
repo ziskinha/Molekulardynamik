@@ -31,7 +31,7 @@ void run_mol_sim(const int argc, char* argv[]) {
 
 int main(const int argc, char* argv[]) {
     //run_mol_sim(argc, argv);
-    test2();
+    ws4_task2_big();
     return 0;
 }
 
