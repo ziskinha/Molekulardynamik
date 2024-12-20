@@ -85,6 +85,21 @@ namespace md::env {
         return vec3{0, particle.mass * g_grav, 0};
     }
 
+    vec3 Environment::average_velocity() {
+        vec3 v = {};
+        for (const auto& p: particle_storage) {
+            v = v + p.velocity;
+        }
+        return 1/size(Particle::ALIVE) * v;
+    }
+
+    void Environment::scale_thermal_velocity(double scalar, vec3 mean_v) {
+        for (auto & particle : particles(GridCell::INSIDE, Particle::ALIVE)) {
+            // combined with thermostat we perform the subtraction twice -> maybe rewrite code to only do this once?
+            particle.velocity = scalar * (particle.velocity - mean_v) + mean_v;
+        }
+    }
+
     void Environment::add_particle(const vec3& position, const vec3& velocity, double mass, int type, const vec3& force) {
         WARN_IF_INIT("add particles");
         particle_storage.emplace_back(particle_storage.size(), grid, position, velocity, mass, type, force);
@@ -274,10 +289,10 @@ namespace md::env {
         boundary.apply_boundary(particle, current, previous);
     }
 
-    double Environment::temperature() const {
+    double Environment::temperature(vec3 avg_vel) const {
         double energy = 0;
         for (auto & particle : particles(GridCell::INSIDE, Particle::ALIVE)) {
-            energy +=  particle.mass * ArrayUtils::L2NormSquared(particle.velocity);
+            energy +=  particle.mass * ArrayUtils::L2NormSquared(particle.velocity - avg_vel);
         }
         return energy/static_cast<double>(dim()*size());
     }

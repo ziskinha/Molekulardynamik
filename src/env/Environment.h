@@ -120,54 +120,46 @@ namespace md::env {
          * @param g New grid constant.
          */
         void set_grid_constant(double g);
-
         /**
          * @brief Sets the force with which particles interact of a given type interact.
          * @param force The type force to be used.
          * @param particle_type
          */
         void set_force(const ForceType& force, int particle_type);
-
         /**
          * @brief Sets the boundary conditions for the environment.
          * @param boundary The boundary condition to be used.
          */
         void set_boundary(const Boundary& boundary);
-
         /**
         * @brief Sets the dimension of the environment.
         * @param dim
         */
         void set_dimension(Dimension dim);
-
         /**
         * @brief Set the gravitational force strength.
         * @param g gravitational acceleration.
         */
         void set_gravity_constant(double g);
-
         /**
          * @brief Adds a single particle to the environment.
          * @param position Position of the particle.
          * @param velocity Velocity of the particle.
          * @param mass Mass of the particle.
          * @param type Type of the particle.
+         * @param force
          */
-        void add_particle(const vec3& position, const vec3& velocity, double mass, int type = 0,
-                          const vec3& force = {0, 0, 0});
-
+        void add_particle(const vec3& position, const vec3& velocity, double mass, int type = 0, const vec3& force = {});
         /**
          * @brief Adds multiple particles to the environment.
          * @param particles A ParticleCreateInfo vector describing the particles.
          */
         void add_particles(const std::vector<ParticleCreateInfo>& particles);
-
         /**
          * @brief Adds a cuboid to the environment.
          * @param cuboid A CuboidCreateInfo describing the cuboid.
          */
         void add_cuboid(const CuboidCreateInfo& cuboid);
-
         /**
          * @brief Adds a cuboid to the environment.
          * @param origin Coordinate of the lower left front-side corner.
@@ -181,13 +173,11 @@ namespace md::env {
          */
         void add_cuboid(const vec3& origin, const vec3& initial_v, const uint3& num_particles, double thermal_v,
                         double width, double mass, uint8_t dimension, int type = 0);
-
         /**
          * @brief Adds a sphere to the environment.
          * @param sphere
          */
         void add_sphere(const SphereCreateInfo& sphere);
-
         /**
          * @brief Adds a sphere to the environment.
          * @param origin Coordinates of the center.
@@ -203,6 +193,7 @@ namespace md::env {
                         double mass, uint8_t dimension, int type = 0);
 
 
+
         /**
          * @brief Computes the force between two particles.
          * @param p1 The first particle.
@@ -210,14 +201,12 @@ namespace md::env {
          * @return The force between the two particles.
          */
         [[nodiscard]] vec3 force(const Particle& p1, const Particle& p2, const CellPair & pair) const;
-
         /**
          * Returns the number of particles of a certain state in the environment.
          * @param state The state of the particles to count (default: Particle::ALIVE).
          * @return The number of particles.
          */
         [[nodiscard]] size_t size(Particle::State state = Particle::ALIVE) const;
-
         /**
          * @brief Provides access to particles filtered by grid cell type and state.
          * @param type The type to filter (default: GridCell::Inside).
@@ -229,7 +218,6 @@ namespace md::env {
                 return filter_particles(particle, state, type);
             });
         }
-
         /**
         * @brief Provides access to particles filtered by grid cell type and state (const version).
         * @param type The type to filter (default: GridCell::Inside).
@@ -242,7 +230,6 @@ namespace md::env {
                 return filter_particles(particle, state, type);
             });
         }
-
         /**
          * @brief Retrieves the linked grid cells in the simulation.
          * @return A const reference to the vector of the linked cell pairs.
@@ -255,7 +242,6 @@ namespace md::env {
          * @param particle The particle to which the conditions will be applied.
          */
         void apply_boundary(Particle& particle);
-
         /**
          * @brief Calculates the gravitational force acting on a given particle.
          * @param particle The particle for which it is being calculated.
@@ -263,11 +249,12 @@ namespace md::env {
          */
         vec3 gravity_force(const Particle& particle) const;
 
+        vec3 average_velocity();
         /**
          * @brief Calculate temperature of the system.
          */
-        double temperature() const;
-
+        double temperature(vec3 avg_vel = {}) const;
+        void scale_thermal_velocity(double scalar, vec3 mean_v={});
         /**
          * @brief Returns the dimension of the environment.
          * @return The dimension.
@@ -280,7 +267,6 @@ namespace md::env {
          * @return A reference to the particle.
          */
         Particle& operator[](size_t id);
-
         /**
          * @brief Accesses particle by its ID (const version).
          * @param id The ID of the particle.
@@ -302,10 +288,6 @@ namespace md::env {
          */
         [[nodiscard]] bool filter_particles(const Particle& particle, Particle::State state, GridCell::Type type) const;
 
-        std::vector<CuboidCreateInfo> cuboids;
-        std::vector<SphereCreateInfo> spheres;
-
-        // TODO replace vector with a vector wrapper that emulates a vector of fixed size
         std::vector<Particle> particle_storage; ///< vector with all particles
 
         Boundary boundary;     ///< Boundary conditions of the environment.
