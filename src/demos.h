@@ -157,41 +157,18 @@ inline void thermostat_test() {
     simulator.simulate(0, args.duration, args.dt, args.write_freq, 1000);
 }
 
-inline void test_10000_particles() {
-   io::ProgramArguments args;
 
-    args.duration = 5;
+inline void nano_scale_simulation() {
+    io::ProgramArguments args;
+    args.output_format = io::OutputFormat::VTK;
+    args.benchmark = false;
+    args.override = true;
+    args.output_baseName = "output";
+    args.duration = 20;
     args.dt = 0.0005;
-    args.temp_adj_freq = 1000;
-    args.write_freq= 100;
+    args.write_freq = 200;
 
-    env::Boundary boundary;
-    // boundary size
-    boundary.extent = {110, 110, 1};
-    boundary.origin = {0, 0, 0};
+    env::Environment env;
+    env.add_cuboid({2, 2, 0}, {0, 0, 0}, {30, 30, 1}, 0, 1.1225, 1);
 
-    //boundary conditions
-    boundary.set_boundary_rule(env::BoundaryRule::OUTFLOW);
-    boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::LEFT);
-    boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::RIGHT);
-    boundary.set_boundary_rule(env::BoundaryRule::VELOCITY_REFLECTION, env::BoundaryNormal::TOP);
-    boundary.set_boundary_rule(env::BoundaryRule::VELOCITY_REFLECTION, env::BoundaryNormal::BOTTOM);
-
-    //boundary.set_boundary_force(env::Boundary::LennardJonesForce(1, 1.2));
-    args.env.set_boundary(boundary);
-
-    // Liquid 1, type = 0
-    args.env.add_cuboid({5, 5, 0}, {1, 1, 0}, {100, 100, 1}, 0, 1, 2, 2, 0);
-    args.env.set_force(env::LennardJones(1, 1.2, 3), 0);
-
-    args.env.set_grid_constant(3);
-    args.env.set_gravity_constant(-12.44);
-    args.env.build();
-
-    env::Thermostat thermostat(40, 25);
-    thermostat.set_initial_temperature(args.env);
-
-    auto writer = create_writer(args.output_baseName, args.output_format, args.override);
-    Integrator::StoermerVerlet simulator(args.env, std::move(writer), nullptr, thermostat);
-    simulator.benchmark(0, args.duration, args.dt, 1000);
 }

@@ -55,9 +55,15 @@ namespace md::io {
             ///  Parse cuboid information
             /// -----------------------------------------
             for (const auto& cuboid : simulation->cuboids()) {
+                const auto dim = static_cast<uint32_t>(cuboid.dimension());
+                if (dim != 2 && dim != 3 && dim != -1) {
+                    SPDLOG_ERROR("Invalid dimension parameter {}", dim);
+                }
+                const auto dimension = static_cast<Dimension>(dim);
+
                 args.env.add_cuboid({cuboid.x(), cuboid.y(), cuboid.z()}, {cuboid.vel1(), cuboid.vel2(), cuboid.vel3()},
                                     {cuboid.numPartX(), cuboid.numPartY(), cuboid.numPartZ()}, cuboid.thermal_v(),
-                                    cuboid.width(), cuboid.mass(), cuboid.dimension(), cuboid.type());
+                                    cuboid.width(), cuboid.mass(), dimension, cuboid.type());
                 SPDLOG_DEBUG(fmt::format(
                         "Parsed Cuboid:\n"
                         "       Origin:              [{}, {}, {}]\n"
@@ -76,9 +82,14 @@ namespace md::io {
             ///  Parse sphere information
             /// -----------------------------------------
             for (const auto& sphere : simulation->spheres()) {
+                const auto dim = static_cast<uint32_t>(sphere.dimension());
+                if (dim != 2 && dim != 3) {
+                    SPDLOG_ERROR("Invalid dimension parameter {}", dim);
+                }
+                const auto dimension = static_cast<Dimension>(dim);
                 args.env.add_sphere({sphere.x(), sphere.y(), sphere.z()}, {sphere.vel1(), sphere.vel2(), sphere.vel3()},
                                     sphere.thermal_v(), sphere.radius(), sphere.width(), sphere.mass(),
-                                    sphere.dimension(), sphere.type());
+                                    dimension, sphere.type());
                 SPDLOG_DEBUG(fmt::format(
                         "Parsed Sphere:\n"
                         "       Origin:              [{}, {}, {}]\n"
@@ -139,7 +150,7 @@ namespace md::io {
             }
             else if (simulation->Boundary().Force_type().get() == "inverseSquare") {
                 boundary.set_boundary_force(env::Boundary::InverseDistanceForce(
-                    simulation.get()->parameters().cutoff_radius(), simulation->Boundary().force_arg1().get()));
+                    simulation->parameters().cutoff_radius(), simulation->Boundary().force_arg1().get()));
                 SPDLOG_DEBUG(fmt::format("Parsed boundary force: Inverse Square with cutoff = {}, pre factor = {}",
                              simulation.get()->parameters().cutoff_radius(), simulation->Boundary().force_arg1().get()));
             }
@@ -154,7 +165,7 @@ namespace md::io {
             /// -----------------------------------------
             args.cutoff_radius = simulation->parameters().cutoff_radius();
 
-            for (const auto& force : simulation.get()->Forces().Force()) {
+            for (const auto& force : simulation->Forces().Force()) {
                 if (force.type() == "lennardJones") {
                     args.env.set_force(env::LennardJones(force.arg1().get(), force.arg2().get(), args.cutoff_radius),
                                        force.partType());

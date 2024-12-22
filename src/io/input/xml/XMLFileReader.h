@@ -1,3 +1,4 @@
+#pragma once
 #include "utils/Parse.h"
 
 namespace md::io {

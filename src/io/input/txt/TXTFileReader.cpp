@@ -96,12 +96,13 @@ namespace md::io {
         const double width = vals[9];
         const double mass = vals[10];
         const double thermal_v = vals[11];
-        const auto dimension = static_cast<uint32_t>(vals[12]);
-        if (dimension != 2 && dimension != 3) {
+        const auto dim = static_cast<uint32_t>(vals[12]);
+        if (dim != 2 && dim != 3 && dim != -1) {
             SPDLOG_ERROR("Invalid dimension parameter {}", line);
         }
+        const auto dimension = static_cast<Dimension>(dim);
 
-        int type = vals.size() == 14 ? static_cast<int>(vals[13]) : 0;
+        const int type = vals.size() == 14 ? static_cast<int>(vals[13]) : 0;
         environment.add_cuboid(origin, init_v, num_particles, thermal_v, width, mass, dimension, type);
 
         SPDLOG_DEBUG(
@@ -129,18 +130,19 @@ namespace md::io {
 
         const vec3 origin = {vals[0], vals[1], vals[2]};
         const vec3 init_v = {vals[3], vals[4], vals[5]};
-        const uint radius = vals[6];
+        const uint radius = static_cast<uint> (vals[6]);
 
         const double width = vals[7];
         const double mass = vals[8];
         const double thermal_v = vals[9];
-        const auto dimension = static_cast<uint32_t>(vals[10]);
-        if (dimension != 2 && dimension != 3) {
+        const auto dim = static_cast<uint32_t>(vals[10]);
+        if (dim != 2 && dim != 3) {
             SPDLOG_ERROR("Invalid dimension parameter {}", line);
         }
+        const auto dimension = static_cast<Dimension>(dim);
 
         int type = vals.size() == 12 ? static_cast<int>(vals[11]) : 0;
-        environment.add_sphere(origin, init_v, thermal_v, (int) radius, width, mass, dimension, type);
+        environment.add_sphere(origin, init_v, thermal_v, static_cast<int>(radius), width, mass, dimension, type);
 
         SPDLOG_DEBUG(
                 "Parsed Sphere:\n"

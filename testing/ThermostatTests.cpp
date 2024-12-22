@@ -16,7 +16,7 @@ void setup() {
     boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC);
     boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::FRONT);
     boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::BACK);
-    env.add_cuboid({40, 40, 0}, {0, 0, 0}, {2, 2, 1}, 0, 1, 1, 0);
+    env.add_cuboid({40, 40, 0}, {0, 0, 0}, {2, 2, 1}, 0, 1, 1, md::env::Dimension::INFER);
     env.set_force(md::env::LennardJones(1, 1, 2.5), 0);
     env.set_grid_constant(20);
     env.set_boundary(boundary);

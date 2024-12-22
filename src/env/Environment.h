@@ -17,6 +17,16 @@
  * @brief Contains classes and structures for managing the environment of the simulation.
  */
 namespace md::env {
+
+    /**
+     * @brief Number of dimensions for the simulation.
+     */
+    enum class Dimension {
+        TWO = 2,
+        THREE = 3,
+        INFER = -1
+    };
+
     /**
      * @brief Structure containing information required to create a particle.
      */
@@ -51,14 +61,14 @@ namespace md::env {
          * @param type Type of each particle (default: 0).
          */
         CuboidCreateInfo(const vec3& origin, const vec3& initial_v, const uint3& num_particles, double thermal_v,
-                         double width, double mass, uint8_t dimension, int type = 0);
+                         double width, double mass, Dimension dimension, int type = 0);
         vec3 origin;
         vec3 initial_v;
         uint3 num_particles;
         double thermal_v{};
         double width{};
         double mass{};
-        uint8_t dimension{};
+        Dimension dimension = Dimension::INFER;
         int type = 0;
     };
 
@@ -77,26 +87,18 @@ namespace md::env {
          * @param dimension Dimension of the sphere.
          * @param type The type of each particles (dafault: 0).
          */
-        SphereCreateInfo(const vec3& origin, const vec3& initial_v, const double thermal_v, int radius, double width,
-                         double mass, const uint8_t dimension, int type = 0);
+        SphereCreateInfo(const vec3& origin, const vec3& initial_v, double thermal_v, int radius, double width,
+                         double mass, Dimension dimension, int type = 0);
         vec3 origin;
         vec3 initial_v;
         double thermal_v;
         int radius;
         double width;
         double mass;
-        uint8_t dimension{};
+        Dimension dimension = Dimension::INFER;
         int type;
     };
 
-    /**
-     * @brief Number of dimensions for the simulation.
-     */
-    enum class Dimension {
-        TWO = 2,
-        THREE = 3,
-        INFER = -1
-    };
 
     /**
      * @brief Class representing the simulation environment, which manages particles, forces, boundaries, and the grid.
@@ -172,7 +174,7 @@ namespace md::env {
          * @param type Type of each particle (default: 0).
          */
         void add_cuboid(const vec3& origin, const vec3& initial_v, const uint3& num_particles, double thermal_v,
-                        double width, double mass, uint8_t dimension, int type = 0);
+                        double width, double mass, Dimension dimension = Dimension::INFER, int type = 0);
         /**
          * @brief Adds a sphere to the environment.
          * @param sphere
@@ -190,7 +192,7 @@ namespace md::env {
          * @param type The type of each particle (default: 0).
          */
         void add_sphere(const vec3& origin, const vec3& initial_v, double thermal_v, int radius, double width,
-                        double mass, uint8_t dimension, int type = 0);
+                        double mass, Dimension dimension = Dimension::INFER, int type = 0);
 
 
 

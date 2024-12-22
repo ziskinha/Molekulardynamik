@@ -23,6 +23,7 @@ namespace md::env {
         enum State {
             ALIVE = 0x1,
             DEAD = 0x2,
+            STATIONARY = 0x4
         };
 
         /**

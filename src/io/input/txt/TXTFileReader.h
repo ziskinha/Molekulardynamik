@@ -8,7 +8,7 @@ namespace md::io {
     /**
      * @brief Reads a txt file with particle, cuboid, force and environment information.
      * @param file_name
-     * @param env
+     * @param args
      */
     void read_file_txt(const std::string& file_name, ProgramArguments &args);
 }  // namespace md::io

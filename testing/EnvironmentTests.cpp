@@ -56,7 +56,7 @@ TEST(EnvironmentTest, paricle_add_test) {
 
 // test for checking if adding a cuboid succeeds
 TEST(EnvironmentTest, add_cuboid_test) {
-    auto part = md::env::CuboidCreateInfo({0, 0, 0}, {1, 1, 1}, {2, 1, 1}, 2, 1, 5, 2);
+    auto part = md::env::CuboidCreateInfo({0, 0, 0}, {1, 1, 1}, {2, 1, 1}, 2, 1, 5, md::env::Dimension::TWO);
     md::env::Environment env;
     env.add_cuboid({part});
     resetRandomEngine();

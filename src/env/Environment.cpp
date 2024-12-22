@@ -26,7 +26,7 @@ namespace md::env {
 
     CuboidCreateInfo::CuboidCreateInfo(const vec3& origin, const vec3& initial_v, const uint3& num_particles,
                                        const double thermal_v, const double width, const double mass,
-                                       const uint8_t dimension, const int type)
+                                       const Dimension dimension, const int type)
         : origin(origin),
           initial_v(initial_v),
           num_particles(num_particles),
@@ -37,7 +37,7 @@ namespace md::env {
           type(type) {}
 
     SphereCreateInfo::SphereCreateInfo(const vec3 &origin, const vec3 &initial_v, const double thermal_v,
-                                       const int radius, const double width, const double mass, const uint8_t dimension, const int type)
+                                       const int radius, const double width, const double mass, const Dimension dimension, const int type)
         : origin(origin),
           initial_v(initial_v),
           thermal_v(thermal_v),
@@ -114,9 +114,18 @@ namespace md::env {
     }
 
     void Environment::add_cuboid(const vec3& origin, const vec3& initial_v, const uint3& num_particles,
-                                 const double thermal_v, const double width, const double mass, uint8_t const dimension,
+                                 const double thermal_v, const double width, const double mass, Dimension const dimension,
                                  const int type) {
         WARN_IF_INIT("add particles (cuboids)");
+        if (num_particles[0] == 0 || num_particles[1] == 0 || num_particles[2] == 0) {
+            SPDLOG_ERROR("num_particles contains 0 particles in at least one direction");
+            exit(3000);
+        }
+
+        uint8_t dim = static_cast<uint8_t>(dimension);
+        if  (dimension == Dimension::INFER) {
+            dim =  num_particles[2] == 1 ? 2 : 3;
+        }
 
         particle_storage.reserve(particle_storage.size() + num_particles[0] * num_particles[1] * num_particles[2]);
 
@@ -124,7 +133,7 @@ namespace md::env {
             for (unsigned int y = 0; y < num_particles[1]; ++y) {
                 for (unsigned int z = 0; z < num_particles[2]; ++z) {
                     vec3 pos = origin + vec3({x * width, y * width, z * width});
-                    vec3 vel = initial_v + maxwellBoltzmannDistributedVelocity(thermal_v, dimension);
+                    vec3 vel = initial_v + maxwellBoltzmannDistributedVelocity(thermal_v, dim);
                     add_particle(pos, vel, mass, type);
                 }
             }
@@ -137,14 +146,19 @@ namespace md::env {
     }
 
     void Environment::add_sphere(const vec3& origin, const vec3& initial_v, const double thermal_v, const int radius,
-                                 const double width, const double mass, const uint8_t dimension, const int type) {
+                                 const double width, const double mass, const Dimension dimension, const int type) {
         WARN_IF_INIT("add particles (sphere)");
+        if (dimension == Dimension::INFER) {
+            SPDLOG_ERROR("cannot infer dimension of particle sphere");
+            exit(3000);
+        }
         int num_particles = 0;
+        auto dim = static_cast<uint8_t>(dimension);
 
         //calculate the number of particles to be added
-        if (dimension == 3) {
+        if (dim == 3) {
             num_particles = static_cast<int>(std::ceil((4.0 / 3.0) * M_PI * std::pow(radius / width, 3)));
-        } else if (dimension == 2) {
+        } else if (dim == 2) {
             num_particles = static_cast<int>(std::ceil(M_PI * std::pow(radius / width, 2)));
         }
 
@@ -153,14 +167,14 @@ namespace md::env {
         for (int x = -radius; x <= radius; ++x) {
             for (int y = -radius; y <= radius; ++y) {
                 for (int z = - radius; z <= radius; ++z) {
-                    if (dimension == 2 && z != 0) continue;
+                    if (dim == 2 && z != 0) continue;
 
                     const vec3 current_pos = {x * width, y * width, z * width};
                     const double distance_to_origin = ArrayUtils::L2Norm(current_pos);
 
                     if (distance_to_origin <= radius * width) {
                         vec3 pos = origin + current_pos;
-                        vec3 vel = initial_v + maxwellBoltzmannDistributedVelocity(thermal_v, dimension);
+                        vec3 vel = initial_v + maxwellBoltzmannDistributedVelocity(thermal_v, dim);
                         add_particle(pos, vel, mass, type);
                     }
                 }
