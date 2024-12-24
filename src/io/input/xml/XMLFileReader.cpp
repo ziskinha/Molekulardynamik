@@ -55,7 +55,7 @@ namespace md::io {
             ///  Parse cuboid information
             /// -----------------------------------------
             for (const auto& cuboid : simulation->cuboids()) {
-                const auto dim = static_cast<uint32_t>(cuboid.dimension());
+                const auto dim = static_cast<int>(cuboid.dimension());
                 if (dim != 2 && dim != 3 && dim != -1) {
                     SPDLOG_ERROR("Invalid dimension parameter {}", dim);
                 }
@@ -82,7 +82,7 @@ namespace md::io {
             ///  Parse sphere information
             /// -----------------------------------------
             for (const auto& sphere : simulation->spheres()) {
-                const auto dim = static_cast<uint32_t>(sphere.dimension());
+                const auto dim = static_cast<int>(sphere.dimension());
                 if (dim != 2 && dim != 3) {
                     SPDLOG_ERROR("Invalid dimension parameter {}", dim);
                 }

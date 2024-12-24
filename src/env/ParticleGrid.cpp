@@ -121,6 +121,7 @@ void ParticleGrid::build(const Boundary & boundary, const double grid_const, std
 
         // fill cells with particles
         for (auto& p : particles) {
+            if (p.state == Particle::DEAD) continue;
             int3 idx = what_cell(p.position);
             cells.at(idx).particles.emplace(&p);
             p.cell = idx;

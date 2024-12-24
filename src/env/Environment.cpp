@@ -292,21 +292,18 @@ namespace md::env {
     }
 
     size_t Environment::size(const Particle::State state) const {
-        switch (state) {
-            case Particle::DEAD:
-                return particle_storage.size() - grid.particle_count();
-            case Particle::STATIONARY:
-                return num_stat_particles;
-            case Particle::ALIVE:
-                return grid.particle_count() - num_stat_particles;
-            case Particle::ALIVE | Particle::STATIONARY:
-                return grid.particle_count();
-            case Particle::DEAD | Particle::ALIVE | Particle::STATIONARY:
-                return particle_storage.size();
-            default:
-                SPDLOG_ERROR("Invalid or unsupported particle state in Environment::size: {}", static_cast<int>(state));
-                exit(3000);
-        }
+        if (state == Particle::DEAD)
+            return particle_storage.size() - grid.particle_count();
+        if (state == Particle::STATIONARY)
+            return num_stat_particles;
+        if (state == Particle::ALIVE)
+            return grid.particle_count() - num_stat_particles;
+        if (state == (Particle::ALIVE | Particle::STATIONARY))
+            return grid.particle_count();
+        if (state == (Particle::DEAD | Particle::ALIVE | Particle::STATIONARY))
+            return particle_storage.size();
+        SPDLOG_ERROR("invalid particle state or unsupported state combination in Environment::size: {}", static_cast<int>(state));
+        exit(3000);
     }
 
     const std::vector<CellPair>& Environment::linked_cells() {

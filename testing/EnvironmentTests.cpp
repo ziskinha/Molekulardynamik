@@ -11,12 +11,26 @@ auto particle3 = md::env::Particle(0, grid, {10, -1, 4}, {5, 0, 0}, 10, 0);
 // check if the size() method works as it should
 TEST(EnvironmentTest, size_test) {
     md::env::Environment env;
+    md::env::Boundary boundary;
+    boundary.extent = {20,20,20};
+    boundary.origin = {-10,-10, -10};
+
     env.add_particle({1, 5, 4}, {3, 3, 3}, 5, 0);
     env.add_particle({3, 2, 1}, {0, 0, 0}, 5, 0);
-    env.add_particle({10, -1, 4}, {5, 0, 0}, 10, 0);
+    env.add_particle({9, -1, 4}, {5, 0, 0}, 10, 0);
+    env.add_particle({3, 8, 1}, {0, 0, 0}, 3, 0,  md::env::Particle::STATIONARY);
+    env.add_particle({-4, .3, 2}, {0, 0, 0}, 7, 0, md::env::Particle::STATIONARY);
+    env.add_particle({8, 1, 2}, {0, -20, 0}, 200, 0, md::env::Particle::DEAD);
+
+    env.set_boundary(boundary);
+    env.set_grid_constant(1);
     env.build();
 
-    EXPECT_TRUE(env.size(md::env::Particle::ALIVE) == 3);
+    EXPECT_EQ(env.size(md::env::Particle::ALIVE), 3);
+    EXPECT_EQ(env.size(md::env::Particle::DEAD), 1);
+    EXPECT_EQ(env.size(md::env::Particle::STATIONARY), 2);
+    EXPECT_EQ(env.size(md::env::Particle::ALIVE | md::env::Particle::STATIONARY), 5);
+    EXPECT_EQ(env.size(md::env::Particle::ALIVE | md::env::Particle::STATIONARY | md::env::Particle::DEAD), 6);
 }
 // check if container returns correct particle from the container
 TEST(EnvironmentTest, index_test) {
