@@ -16,7 +16,7 @@ TEST(EnvironmentTest, size_test) {
     env.add_particle({10, -1, 4}, {5, 0, 0}, 10, 0);
     env.build();
 
-    EXPECT_TRUE(env.size() == 3);
+    EXPECT_TRUE(env.size(md::env::Particle::ALIVE) == 3);
 }
 // check if container returns correct particle from the container
 TEST(EnvironmentTest, index_test) {
@@ -56,9 +56,10 @@ TEST(EnvironmentTest, paricle_add_test) {
 
 // test for checking if adding a cuboid succeeds
 TEST(EnvironmentTest, add_cuboid_test) {
-    auto part = md::env::CuboidCreateInfo({0, 0, 0}, {1, 1, 1}, {2, 1, 1}, 2, 1, 5, md::env::Dimension::TWO);
+    auto part = md::env::CuboidCreateInfo({0, 0, 0}, {1, 1, 1}, {2, 1, 1}, 1, 5, 2, 0, md::env::Dimension::TWO);
+
     md::env::Environment env;
-    env.add_cuboid({part});
+    env.add_cuboid(part);
     resetRandomEngine();
     md::vec3 bltzm = maxwellBoltzmannDistributedVelocity(2, 2);
     md::vec3 cns1 = {bltzm[0] + 1, bltzm[1] + 1, bltzm[2] + 1};
@@ -66,7 +67,7 @@ TEST(EnvironmentTest, add_cuboid_test) {
     md::vec3 cns2 = {bltzm[0] + 1, bltzm[1] + 1, bltzm[2] + 1};
     env.build();
 
-    ASSERT_TRUE(env.size() == 2);
+    ASSERT_TRUE(env.size(md::env::Particle::ALIVE) == 2);
     EXPECT_TRUE(env[0].position[0] == 0);
     EXPECT_TRUE(env[0].position[1] == 0);
     EXPECT_TRUE(env[0].position[2] == 0);

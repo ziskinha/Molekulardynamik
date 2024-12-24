@@ -1,14 +1,13 @@
 #include "StoermerVerlet.h"
 
 #include <iostream>
-#include <utility>
 
 #include "io/Logger/Logger.h"
 #include "utils/ArrayUtils.h"
 
 namespace md::Integrator {
 
-    void StoermerVerlet::simulation_step(unsigned step, const double dt) {
+    void StoermerVerlet::simulation_step(const unsigned step, const double dt) {
 
         // update position
         for (auto& p : env.particles()) {
@@ -37,12 +36,12 @@ namespace md::Integrator {
                         p1->force = p1->force - new_F;
                     }
                 }
-            } else {
-                // if different cells iterate over all pairs with particles from differing cells
+            }
+            // if different cells iterate over all pairs with particles from differing cells
+            else {
                 for (auto * p1 : cell_pair.cell1.particles) {
                     for (auto * p2 : cell_pair.cell2.particles) {
                         vec3 new_F = env.force(*p1, *p2, cell_pair);
-
                         p2->force = p2->force + new_F;
                         p1->force = p1->force - new_F;
                     }

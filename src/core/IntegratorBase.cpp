@@ -90,7 +90,7 @@ namespace md::Integrator {
         // Using std::cout instead of logging, as logging should be disabled during benchmarking.
         std::cout << "Total execution time:" << total_micros/1000.0 << " ms" << std::endl;
         std::cout << "Average execution time per step: " << avg_step_time/1000.0 << " ms" << std::endl;
-        std::cout << "Number of particles: " << env.size() << std::endl;
+        std::cout << "Number of particles: " << env.size(env::Particle::STATIONARY | env::Particle::ALIVE) << std::endl;
         std::cout << "Particle modifications: " << modifications << std::endl;
         std::cout << "MUPS/s \n" << modifications/(total_micros/1000/1000) << std::endl;
     }

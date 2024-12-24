@@ -79,6 +79,7 @@ namespace md::env {
         if (face_normal[2] == 1)  return FRONT;
         if (face_normal[2] == -1) return BACK;
         ASSERT(false, "Invalid face normal");
+        return {};
     }
 
     double distance_to_boundary(const Particle & particle, const int3 & normal, const GridCell & cell) {

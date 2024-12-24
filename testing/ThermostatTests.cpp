@@ -4,8 +4,6 @@
 #include "env/Environment.h"
 #include "core/StoermerVerlet.h"
 
-#include <iostream>
-
 md::env::Environment env;
 
 void setup() {
@@ -16,7 +14,7 @@ void setup() {
     boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC);
     boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::FRONT);
     boundary.set_boundary_rule(md::env::BoundaryRule::OUTFLOW, md::env::BoundaryNormal::BACK);
-    env.add_cuboid({40, 40, 0}, {0, 0, 0}, {2, 2, 1}, 0, 1, 1, md::env::Dimension::INFER);
+    env.add_cuboid({40, 40, 0}, {0, 0, 0}, {2, 2, 1}, 1, 1, 0);
     env.set_force(md::env::LennardJones(1, 1, 2.5), 0);
     env.set_grid_constant(20);
     env.set_boundary(boundary);
@@ -50,6 +48,8 @@ TEST(ThermostatTests, holding_temperature_test) {
 
 // tests if the velocity of particles adjusts correctly during cooling.
 TEST(ThermostatTest, cooling_test) {
+    setup();
+
     // initial temp: 40, target temp: 30, deltaT = 0.25
     md::env::Thermostat cooling_thermostat(40, 30, 0.25);
     md::Integrator::StoermerVerlet cooling_simulator(env, nullptr, nullptr, cooling_thermostat);
@@ -71,13 +71,15 @@ TEST(ThermostatTest, cooling_test) {
 
 // tests if the velocity of particles adjusts correctly during heating.
 TEST(ThermostatTest, heating_test) {
+    setup();
+
     // initial temp: 40, target temp: 50, deltaT = 0.25
     md::env::Thermostat heating_thermostat(30, 40, 0.25);
     md::Integrator::StoermerVerlet heating_simulator(env, nullptr, nullptr, heating_thermostat);
 
     // v <- beta * v
-    double beta = sqrt(40.0 / 30.0);
-    md::vec3 expected_velocity = beta * env.operator[](0).velocity;
+    const double beta = sqrt(40.0 / 30.0);
+    const md::vec3 expected_velocity = beta * env.operator[](0).velocity;
 
     heating_simulator.simulate(0, 5, 0.001, 10, 100);
 

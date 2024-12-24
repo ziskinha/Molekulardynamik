@@ -62,8 +62,8 @@ namespace md::io {
                 const auto dimension = static_cast<Dimension>(dim);
 
                 args.env.add_cuboid({cuboid.x(), cuboid.y(), cuboid.z()}, {cuboid.vel1(), cuboid.vel2(), cuboid.vel3()},
-                                    {cuboid.numPartX(), cuboid.numPartY(), cuboid.numPartZ()}, cuboid.thermal_v(),
-                                    cuboid.width(), cuboid.mass(), dimension, cuboid.type());
+                                    {cuboid.numPartX(), cuboid.numPartY(), cuboid.numPartZ()},
+                                    cuboid.width(), cuboid.mass(), cuboid.thermal_v(), cuboid.type(), dimension, Particle::ALIVE); // TODO read particle type from XML
                 SPDLOG_DEBUG(fmt::format(
                         "Parsed Cuboid:\n"
                         "       Origin:              [{}, {}, {}]\n"
@@ -88,8 +88,8 @@ namespace md::io {
                 }
                 const auto dimension = static_cast<Dimension>(dim);
                 args.env.add_sphere({sphere.x(), sphere.y(), sphere.z()}, {sphere.vel1(), sphere.vel2(), sphere.vel3()},
-                                    sphere.thermal_v(), sphere.radius(), sphere.width(), sphere.mass(),
-                                    dimension, sphere.type());
+                    sphere.radius(), sphere.width(), sphere.mass(), sphere.thermal_v(),
+                                    sphere.type(), dimension, Particle::ALIVE);  // TODO read particle type from XML
                 SPDLOG_DEBUG(fmt::format(
                         "Parsed Sphere:\n"
                         "       Origin:              [{}, {}, {}]\n"
@@ -138,6 +138,7 @@ namespace md::io {
             boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeTOP()), env::BoundaryNormal::TOP);
             boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeLEFT()), env::BoundaryNormal::LEFT);
             boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeBOTTOM()), env::BoundaryNormal::BOTTOM);
+
             SPDLOG_DEBUG(fmt::format("Parsed boundary rules - FRONT: {}, BACK: {}, RIGHT: {}, TOP: {}, LEFT: {}, BOTTOM: {}",
                          boundary_xml.typeFRONT(), boundary_xml.typeBACK(), boundary_xml.typeRIGHT(),
                          boundary_xml.typeTOP(), boundary_xml.typeLEFT(), boundary_xml.typeBOTTOM()));

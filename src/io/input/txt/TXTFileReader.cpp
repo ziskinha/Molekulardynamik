@@ -67,7 +67,7 @@ namespace md::io {
             force = {vals[8], vals[9], vals[10]};
         }
 
-        env.add_particle({origin[0], origin[1], origin[2]}, {init_v[0], init_v[1], init_v[2]}, mass, type, force);
+        env.add_particle({origin[0], origin[1], origin[2]}, {init_v[0], init_v[1], init_v[2]}, mass, type, Particle::ALIVE, force);
 
         SPDLOG_DEBUG(
             "Parsed Particle:\n"
@@ -102,8 +102,8 @@ namespace md::io {
         }
         const auto dimension = static_cast<Dimension>(dim);
 
-        const int type = vals.size() == 14 ? static_cast<int>(vals[13]) : 0;
-        environment.add_cuboid(origin, init_v, num_particles, thermal_v, width, mass, dimension, type);
+        const int type = vals.size() == 14 ? static_cast<int>(vals[13]) : 0; // TODO read out particle state
+        environment.add_cuboid(origin, init_v, num_particles, width, mass, thermal_v, type, dimension, Particle::ALIVE);
 
         SPDLOG_DEBUG(
             "Parsed Cuboid:\n"
@@ -116,7 +116,7 @@ namespace md::io {
             "       Dimension:           {}\n"
             "       Type:                {}",
             origin[0], origin[1], origin[2], init_v[0], init_v[1], init_v[2], num_particles[0], num_particles[1],
-            num_particles[2], width, mass, thermal_v, dimension, type);
+            num_particles[2], width, mass, thermal_v, dim, type);
     }
 
     /// -----------------------------------------
@@ -141,8 +141,8 @@ namespace md::io {
         }
         const auto dimension = static_cast<Dimension>(dim);
 
-        int type = vals.size() == 12 ? static_cast<int>(vals[11]) : 0;
-        environment.add_sphere(origin, init_v, thermal_v, static_cast<int>(radius), width, mass, dimension, type);
+        int type = vals.size() == 12 ? static_cast<int>(vals[11]) : 0; // TODO read out particle state
+        environment.add_sphere(origin, init_v, static_cast<int>(radius), width, mass, thermal_v, type, dimension, Particle::ALIVE);
 
         SPDLOG_DEBUG(
                 "Parsed Sphere:\n"
@@ -155,7 +155,7 @@ namespace md::io {
                 "       Dimension:           {}\n"
                 "       Type:                {}",
                 origin[0], origin[1], origin[2], init_v[0], init_v[1], init_v[2], radius, width, mass, thermal_v,
-                dimension, type);
+                dim, type);
     }
 
     /// -----------------------------------------

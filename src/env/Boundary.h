@@ -133,7 +133,7 @@ namespace md::env {
         [[nodiscard]] bool has_force_function() const;
 
         vec3 extent{MAX_EXTENT, MAX_EXTENT, MAX_EXTENT}; ///< Dimensions of the boundary [width, height, depth].
-        vec3 origin{CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN}; ///< origin of the boundary.
+        vec3 origin{0, 0, 0}; ///< origin of the boundary.
     private:
         /**
          * @brief Applies a boundary rule to a particle based on the boundary face it interacts with.

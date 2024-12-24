@@ -1,7 +1,6 @@
 #pragma once
 
 #include <array>
-#include <cstdint>
 #include <ranges>
 #include <vector>
 
@@ -37,12 +36,14 @@ namespace md::env {
          * @param velocity Velocity vector of the particle.
          * @param mass Mass of particle (default: 0).
          * @param type Type of particle (default: 0).
+         * @param state
          */
-        ParticleCreateInfo(const vec3& position, const vec3& velocity, double mass, int type = 0);
+        ParticleCreateInfo(const vec3& position, const vec3& velocity, double mass, int type = 0,  Particle::State state = Particle::ALIVE);
         vec3 position{};
         vec3 velocity{};
         double mass = 0;
         int type = 0;
+        Particle::State state = Particle::ALIVE;
     };
 
     /**
@@ -59,17 +60,20 @@ namespace md::env {
          * @param mass Mass of each particle.
          * @param dimension Dimension of the cuboid.
          * @param type Type of each particle (default: 0).
+         * @param state
          */
-        CuboidCreateInfo(const vec3& origin, const vec3& initial_v, const uint3& num_particles, double thermal_v,
-                         double width, double mass, Dimension dimension, int type = 0);
+        CuboidCreateInfo(const vec3& origin, const vec3& initial_v, const uint3& num_particles, double width,
+            double mass, double thermal_v = 0, int type = 0, Dimension dimension = Dimension::INFER,
+            Particle::State state = Particle::ALIVE);
         vec3 origin;
         vec3 initial_v;
         uint3 num_particles;
         double thermal_v{};
         double width{};
         double mass{};
-        Dimension dimension = Dimension::INFER;
         int type = 0;
+        Dimension dimension = Dimension::INFER;
+        Particle::State state = Particle::ALIVE;
     };
 
     /**
@@ -85,18 +89,21 @@ namespace md::env {
          * @param width Distance between the particles.
          * @param mass The mass of the particles.
          * @param dimension Dimension of the sphere.
-         * @param type The type of each particles (dafault: 0).
+         * @param type The type of each particle (default: 0).
+         * @param state
          */
-        SphereCreateInfo(const vec3& origin, const vec3& initial_v, double thermal_v, int radius, double width,
-                         double mass, Dimension dimension, int type = 0);
+        SphereCreateInfo(const vec3& origin, const vec3& initial_v, int radius, double width, double mass,
+            double thermal_v = 0, int type = 0, Dimension dimension = Dimension::INFER,
+            Particle::State state = Particle::ALIVE);
         vec3 origin;
         vec3 initial_v;
         double thermal_v;
         int radius;
         double width;
         double mass;
-        Dimension dimension = Dimension::INFER;
         int type;
+        Dimension dimension = Dimension::INFER;
+        Particle::State state = Particle::ALIVE;
     };
 
 
@@ -151,7 +158,7 @@ namespace md::env {
          * @param type Type of the particle.
          * @param force
          */
-        void add_particle(const vec3& position, const vec3& velocity, double mass, int type = 0, const vec3& force = {});
+        void add_particle(const vec3& position, const vec3& velocity, double mass, int type = 0, Particle::State state = Particle::ALIVE, const vec3& force = {});
         /**
          * @brief Adds multiple particles to the environment.
          * @param particles A ParticleCreateInfo vector describing the particles.
@@ -171,10 +178,12 @@ namespace md::env {
          * @param width Distance between the particles.
          * @param mass Mass of each particle.
          * @param dimension Dimension of the cuboid.
+         * @param state
          * @param type Type of each particle (default: 0).
          */
-        void add_cuboid(const vec3& origin, const vec3& initial_v, const uint3& num_particles, double thermal_v,
-                        double width, double mass, Dimension dimension = Dimension::INFER, int type = 0);
+        void add_cuboid(const vec3& origin, const vec3& initial_v, const uint3& num_particles, double width,
+            double mass, double thermal_v = 0, int type = 0, Dimension dimension = Dimension::INFER,
+            Particle::State state = Particle::ALIVE);
         /**
          * @brief Adds a sphere to the environment.
          * @param sphere
@@ -189,10 +198,12 @@ namespace md::env {
          * @param width Distance between the particles.
          * @param mass The mass of the particles.
          * @param dimension Dimension of the sphere.
+         * @param state
          * @param type The type of each particle (default: 0).
          */
-        void add_sphere(const vec3& origin, const vec3& initial_v, double thermal_v, int radius, double width,
-                        double mass, Dimension dimension = Dimension::INFER, int type = 0);
+        void add_sphere(const vec3& origin, const vec3& initial_v, int radius, double width, double mass,
+            double thermal_v = 0, int type = 0, Dimension dimension = Dimension::INFER,
+            Particle::State state = Particle::ALIVE);
 
 
 
@@ -200,15 +211,10 @@ namespace md::env {
          * @brief Computes the force between two particles.
          * @param p1 The first particle.
          * @param p2 The second particle.
+         * @param pair
          * @return The force between the two particles.
          */
         [[nodiscard]] vec3 force(const Particle& p1, const Particle& p2, const CellPair & pair) const;
-        /**
-         * Returns the number of particles of a certain state in the environment.
-         * @param state The state of the particles to count (default: Particle::ALIVE).
-         * @return The number of particles.
-         */
-        [[nodiscard]] size_t size(Particle::State state = Particle::ALIVE) const;
         /**
          * @brief Provides access to particles filtered by grid cell type and state.
          * @param type The type to filter (default: GridCell::Inside).
@@ -256,12 +262,21 @@ namespace md::env {
          * @brief Calculate temperature of the system.
          */
         double temperature(vec3 avg_vel = {}) const;
+
         void scale_thermal_velocity(double scalar, vec3 mean_v={});
+
+
+        /**
+         * Returns the number of particles of a certain state in the environment.
+         * @param state The state of the particles to count (default: Particle::ALIVE).
+         * @return The number of particles.
+         */
+        [[nodiscard]] size_t size(Particle::State state = Particle::ALIVE) const;
         /**
          * @brief Returns the dimension of the environment.
          * @return The dimension.
          */
-        int dim() const;
+        [[nodiscard]] int dim() const;
 
         /**
          * @brief Accesses particle by its ID.
@@ -300,5 +315,6 @@ namespace md::env {
         double grid_constant; ///< Used grid Constant in the environment.
         bool initialized;     ///< Indicates whether the environment has been initialized.
         double g_grav;        ///< Gravitational force strength.
+        unsigned num_stat_particles;
     };
 } // namespace md::env

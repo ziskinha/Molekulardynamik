@@ -52,9 +52,9 @@ namespace md::io {
                 "       override:            {}\n"
                 "       output format:       {}\n"
                 "       output name:         {}",
-                args.duration, args.dt, args.write_freq, args.env.size(), args.benchmark ? "true" : "false",
-                args.override ? "true" : "false", args.output_format == OutputFormat::XYZ ? "XYZ" : "VTK",
-                args.output_baseName);
+                args.duration, args.dt, args.write_freq, args.env.size(env::Particle::ALIVE | env::Particle::STATIONARY),
+                args.benchmark ? "true" : "false", args.override ? "true" : "false",
+                args.output_format == OutputFormat::XYZ ? "XYZ" : "VTK", args.output_baseName);
     }
 
     /**

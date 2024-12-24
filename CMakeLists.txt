@@ -18,7 +18,8 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
 elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
     # Standard release optimization
-    set(CMAKE_CXX_FLAGS_RELEASE "-O2 -D DEBUG" CACHE STRING "Optimization for Release" FORCE)
+    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -mtune=native -flto -funroll-loops -finline-functions -D DEBUG" CACHE STRING "Optimization for Release" FORCE)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg -flto")
 elseif (CMAKE_BUILD_TYPE STREQUAL "Benchmark")
     # Aggressive optimization and profiling flags for Benchmark
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -march=native -mtune=native -flto -funroll-loops -finline-functions")

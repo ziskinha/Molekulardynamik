@@ -35,9 +35,10 @@ namespace md::env {
          * @param mass The initial mass of the particle.
          * @param force The initial force of the particle.
          * @param type The type of the particle (default: {0, 0, 0}.
+         * @param state
          */
         Particle(size_t id, ParticleGrid& grid, const vec3& position, const vec3& velocity, double mass, int type,
-                 vec3 force  = {0, 0, 0});
+            State state = ALIVE, const vec3& force  = {0, 0, 0});
 
         /**
          * @brief Copy constructor for Particle.
