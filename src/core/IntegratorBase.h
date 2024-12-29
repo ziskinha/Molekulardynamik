@@ -9,22 +9,12 @@
 
 namespace md::Integrator {
 
-    struct IntegratorCreateInfo {
-        explicit IntegratorCreateInfo(env::Environment & env) : environment(env) {}
-        env::Environment & environment;
-        std::unique_ptr<io::OutputWriterBase> writer = nullptr;
-        std::unique_ptr<io::CheckpointWriter> checkpoint_writer = nullptr;
-        env::Thermostat thermostat = env::Thermostat();
-        std::vector<env::ConstantForce> external_forces = {};
-    };
 
     /**
      * @brief Manages the main simulation loop.
      */
     class IntegratorBase {
        public:
-
-        explicit IntegratorBase(IntegratorCreateInfo create_info);
 
         /**
          * @brief Constructs a IntegratorBase object with a reference to a ParticleContainer and OutputWriter.

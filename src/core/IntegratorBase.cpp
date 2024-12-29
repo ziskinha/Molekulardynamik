@@ -37,15 +37,6 @@
 #endif
 
 namespace md::Integrator {
-    IntegratorBase::IntegratorBase(IntegratorCreateInfo create_info)
-        : IntegratorBase(
-            create_info.environment,
-            std::move(create_info.writer),
-            std::move(create_info.checkpoint_writer),
-            create_info.thermostat,
-            create_info.external_forces) {
-    }
-
     IntegratorBase::IntegratorBase(
         env::Environment& environment,
         std::unique_ptr<io::OutputWriterBase> writer,

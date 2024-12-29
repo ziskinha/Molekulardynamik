@@ -2,8 +2,6 @@
 
 #include <ranges>
 
-#include "../../build-profile/_deps/spdlog-src/include/spdlog/spdlog.h"
-
 namespace md::env {
 
     Force::Force()
