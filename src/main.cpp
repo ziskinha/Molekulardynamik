@@ -30,7 +30,7 @@ int main(const int argc, char* argv[]) {
     //
     // return 0;
 
-    nano_scale_simulation();
+    membrane_simulation();
 }
 
  

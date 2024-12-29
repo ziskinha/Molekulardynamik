@@ -17,6 +17,9 @@ namespace md::env {
      * @brief Structure representing a particle.
      */
     struct Particle {
+        using Type = int;
+        using ID = size_t;
+
         /**
          * @brief Enumeration of the possible states of a particle.
          */
@@ -83,8 +86,8 @@ namespace md::env {
         int3 cell;          ///< The current cell of the particle.
 
         double mass;      ///< The mass of the particle.
-        int type;         ///< The type of the particle.
-        const size_t id;  ///< The id of the particle.
+        Type type;         ///< The type of the particle.
+        const ID id;  ///< The id of the particle.
         State state;      ///< The state of the particle.
 
        private:

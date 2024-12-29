@@ -196,3 +196,30 @@ inline void nano_scale_simulation() {
     Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, thermostat);
     simulator.simulate(0, args.duration, args.dt, args.write_freq, 10);
 }
+
+
+inline void membrane_simulation() {
+    io::ProgramArguments args;
+    args.output_format = io::OutputFormat::VTK;
+    args.benchmark = false;
+    args.override = true;
+    args.output_baseName = "output";
+    args.duration = 500;
+    args.dt = 0.01;
+    args.write_freq = 20;
+
+    env::Boundary boundary;
+    boundary.extent = {148, 148, 148};
+    boundary.set_boundary_rule(env::BoundaryRule::VELOCITY_REFLECTION);
+
+    env::Environment env;
+    env.set_gravity_constant(-0.001);
+    env.set_boundary(boundary);
+    env.add_membrane({15, 15, 1.5}, {0,0,0}, {50,50,1}, 2.2, 1, 300, 4*1.1225);
+    env.set_force(env::LennardJones(1, 1, 1.1225), 0);
+    env.build();
+
+    auto writer = create_writer(args.output_baseName, args.output_format, args.override);
+    Integrator::StoermerVerlet simulator(env, std::move(writer));
+    simulator.simulate(0, args.duration, args.dt, args.write_freq);
+}

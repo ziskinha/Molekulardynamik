@@ -62,7 +62,17 @@ namespace md::env {
     };
 
 
-    using ForceType = std::variant<LennardJones, InverseSquare>;
+    struct Harmonic : ForceBase {
+        Harmonic() = default;
+
+        Harmonic(const double k, const double r0, const double cutoff):
+        ForceBase(cutoff), k(k), r0(r0) {}
+        double k{};
+        double r0{};
+    };
+
+
+    using ForceType = std::variant<LennardJones, InverseSquare, Harmonic>;
 
 
     class Force {
@@ -106,8 +116,10 @@ namespace md::env {
      * @brief Manages forces of particles with different types.
      */
     class ForceManager {
-        using ParticleType = int;
-        using ForceKey = std::pair<ParticleType, ParticleType>;
+        using ParticleType = Particle::Type;
+        using ParticleID = Particle::ID;
+        using ParticleTypePair = std::pair<ParticleType, ParticleType>;
+        using ParticleIDPair = std::pair<ParticleID, ParticleID>;
 
         /**
          * @brief Hash to use pairs of particles types as keys.
@@ -145,6 +157,7 @@ namespace md::env {
          * @param particle_type The type of particle for which the force should apply.
          */
         void add_force(const ForceType& force, int particle_type);
+        void add_force(const ForceType& force,  const ParticleIDPair& particle_ids);
 
         /**
          * @brief Evaluates the force between two particles.
@@ -175,8 +188,10 @@ namespace md::env {
          */
         static Force mix_forces(const ForceType& force1, const ForceType& force2);
 
-        std::unordered_map<ParticleType, ForceType> force_types;   ///< Map of particle types to force configurations.
-        ankerl::unordered_dense::map<ForceKey, Force, ForceKeyHash> forces;  ///< Map of force key pairs to mixed forces.
+        std::unordered_map<ParticleType, ForceType> global_force_types;
+        std::unordered_map<ParticleIDPair, ForceType, ForceKeyHash> localized_force_types;   ///< Map of particle types to force configurations.
+        ankerl::unordered_dense::map<ParticleTypePair, Force, ForceKeyHash> global_forces;  ///< forces between particle types
+        ankerl::unordered_dense::map<ParticleIDPair, Force, ForceKeyHash> localized_forces;  ///< forces between specific particles
         double cutoff_radius;  ///< The cutoff radius.
     };
 

@@ -156,9 +156,10 @@ namespace md::env {
          * @param velocity Velocity of the particle.
          * @param mass Mass of the particle.
          * @param type Type of the particle.
+         * @param state
          * @param force
          */
-        void add_particle(const vec3& position, const vec3& velocity, double mass, int type = 0, Particle::State state = Particle::ALIVE, const vec3& force = {});
+        size_t add_particle(const vec3& position, const vec3& velocity, double mass, int type = 0, Particle::State state = Particle::ALIVE, const vec3& force = {});
         /**
          * @brief Adds multiple particles to the environment.
          * @param particles A ParticleCreateInfo vector describing the particles.
@@ -172,7 +173,7 @@ namespace md::env {
         /**
          * @brief Adds a cuboid to the environment.
          * @param origin Coordinate of the lower left front-side corner.
-         * @param initial_v Initial velocity for all particles.
+         * @param velocity Initial velocity for all particles.
          * @param num_particles Number of particles along each dimension: N1 x N2 x N3.
          * @param thermal_v Thermal velocity of the particles.
          * @param width Distance between the particles.
@@ -181,7 +182,7 @@ namespace md::env {
          * @param state
          * @param type Type of each particle (default: 0).
          */
-        void add_cuboid(const vec3& origin, const vec3& initial_v, const uint3& num_particles, double width,
+        void add_cuboid(const vec3& origin, const vec3& velocity, const uint3& num_particles, double width,
             double mass, double thermal_v = 0, int type = 0, Dimension dimension = Dimension::INFER,
             Particle::State state = Particle::ALIVE);
         /**
@@ -192,7 +193,7 @@ namespace md::env {
         /**
          * @brief Adds a sphere to the environment.
          * @param origin Coordinates of the center.
-         * @param initial_v Initial velocity of all particles.
+         * @param velocity Initial velocity of all particles.
          * @param thermal_v Thermal velocity of the particles.
          * @param radius The radius in terms of the number of molecules along the radius.
          * @param width Distance between the particles.
@@ -201,9 +202,12 @@ namespace md::env {
          * @param state
          * @param type The type of each particle (default: 0).
          */
-        void add_sphere(const vec3& origin, const vec3& initial_v, int radius, double width, double mass,
+        void add_sphere(const vec3& origin, const vec3& velocity, int radius, double width, double mass,
             double thermal_v = 0, int type = 0, Dimension dimension = Dimension::INFER,
             Particle::State state = Particle::ALIVE);
+
+        void add_membrane(const vec3& origin, const vec3& velocity, const uint3& num_particles, double width,
+            double mass, double k, double cutoff, int type = 0);
 
 
 
@@ -261,7 +265,7 @@ namespace md::env {
         /**
          * @brief Calculate temperature of the system.
          */
-        double temperature(vec3 avg_vel = {}) const;
+        double temperature(const vec3& avg_vel = {}) const;
 
         void scale_thermal_velocity(double scalar, vec3 mean_v={});
 

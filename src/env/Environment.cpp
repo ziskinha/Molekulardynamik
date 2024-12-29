@@ -10,8 +10,8 @@
 #define WARN_IF_INIT(msg)                                                                                     \
     do {                                                                                                      \
         if (initialized) {                                                                                    \
-            SPDLOG_WARN("You are trying to {} in an initialized environment. Request will be ignored.", msg); \
-            return;                                                                                           \
+            SPDLOG_ERROR("You are trying to {} in an initialized environment.", msg); \
+            exit(-1);                                                                                           \
         }                                                                                                     \
     } while (0)
 
@@ -102,13 +102,16 @@ namespace md::env {
         }
     }
 
-    void Environment::add_particle(const vec3& position, const vec3& velocity, double mass, int type,
+    size_t Environment::add_particle(const vec3& position, const vec3& velocity, double mass, int type,
                                    const Particle::State state, const vec3& force) {
         WARN_IF_INIT("add particles");
-        particle_storage.emplace_back(particle_storage.size(), grid, position, velocity, mass, type, state, force);
+
+        size_t id = particle_storage.size();
+        particle_storage.emplace_back(id, grid, position, velocity, mass, type, state, force);
         if (state == Particle::STATIONARY) num_stat_particles++;
         SPDLOG_TRACE("Particle added to env. Position: [{}, {}, {}], Velocity: [{}, {}, {}], Mass: {}, Type: {}",
                      position[0], position[1], position[2], velocity[0], velocity[1], velocity[2], mass, type);
+        return id;
     }
 
     void Environment::add_particles(const std::vector<ParticleCreateInfo>& particles) {
@@ -122,7 +125,7 @@ namespace md::env {
         cuboid.thermal_v, cuboid.type, cuboid.dimension, cuboid.state);
     }
 
-    void Environment::add_cuboid(const vec3& origin, const vec3& initial_v, const uint3& num_particles, const double width,
+    void Environment::add_cuboid(const vec3& origin, const vec3& velocity, const uint3& num_particles, const double width,
         const double mass, const double thermal_v, const int type, const Dimension dimension, const Particle::State state) {
         WARN_IF_INIT("add particles (cuboids)");
         if (num_particles[0] == 0 || num_particles[1] == 0 || num_particles[2] == 0) {
@@ -141,14 +144,14 @@ namespace md::env {
             for (unsigned int y = 0; y < num_particles[1]; ++y) {
                 for (unsigned int z = 0; z < num_particles[2]; ++z) {
                     vec3 pos = origin + vec3({x * width, y * width, z * width});
-                    vec3 vel = initial_v + maxwellBoltzmannDistributedVelocity(thermal_v, dim);
+                    vec3 vel = velocity + maxwellBoltzmannDistributedVelocity(thermal_v, dim);
                     add_particle(pos, vel, mass, type, state);
                 }
             }
         }
     }
 
-    void Environment::add_sphere(const vec3& origin, const vec3& initial_v, const int radius, const double width, const double mass,
+    void Environment::add_sphere(const vec3& origin, const vec3& velocity, const int radius, const double width, const double mass,
         const double thermal_v, const int type, Dimension dimension, const Particle::State state) {
         WARN_IF_INIT("add particles (sphere)");
         if (dimension == Dimension::INFER) {
@@ -177,8 +180,57 @@ namespace md::env {
 
                     if (distance_to_origin <= radius * width) {
                         vec3 pos = origin + current_pos;
-                        vec3 vel = initial_v + maxwellBoltzmannDistributedVelocity(thermal_v, dim);
+                        vec3 vel = velocity + maxwellBoltzmannDistributedVelocity(thermal_v, dim);
                         add_particle(pos, vel, mass, type, state);
+                    }
+                }
+            }
+        }
+    }
+
+    void Environment::add_membrane(const vec3& origin, const vec3& velocity, const uint3& num_particles, const double width,
+        const double mass, double k, const double cutoff, const int type) {
+
+        if (num_particles[0] == 0 || num_particles[1] == 0 || num_particles[2] == 0) {
+            SPDLOG_ERROR("num_particles contains 0 particles in at least one direction");
+            exit(3000);
+        }
+        if (num_particles[2] != 1) {
+            SPDLOG_ERROR("Membrane should be 2D");
+            exit(3000);
+        }
+
+        particle_storage.reserve(particle_storage.size() + num_particles[0] * num_particles[1]);
+        std::vector<size_t> particle_ids(num_particles[0] * num_particles[1]);
+
+        auto index = [&](const unsigned int x, const unsigned int y) {
+            return x + num_particles[0] * y;
+        };
+
+        // add particles
+        for (unsigned int x = 0; x < num_particles[0]; ++x) {
+            for (unsigned int y = 0; y < num_particles[1]; ++y) {
+                vec3 pos = origin + vec3({x * width, y * width, 0});
+                size_t particle_id = add_particle(pos, velocity, mass, type);
+                particle_ids[index(x, y)] = particle_id;
+            }
+        }
+
+        // add forces
+        for (int x = 0; x < static_cast<int>(num_particles[0]); ++x) {
+            for (int y = 0; y < static_cast<int>(num_particles[1]); ++y) {
+                size_t id1 = particle_ids[index(x, y)];
+                for (int dx = -1; dx <= 1; ++dx) {
+                    for (int dy = -1; dy <= 1; ++dy) {
+                        if (dx == 0 && dy == 0) continue;
+                        const int nx = x + dx;
+                        const int ny = y + dy;
+
+                        if (nx >= 0 && nx < static_cast<int>(num_particles[0]) && ny >= 0 && ny < static_cast<int>(num_particles[1])) {
+                            size_t id2 = particle_ids[index(nx, ny)];
+                            const double r0 = ArrayUtils::L2Norm(particle_storage[id1].position - particle_storage[id2].position);
+                            forces.add_force(Harmonic(k, r0, cutoff), {id1, id2});
+                        }
                     }
                 }
             }
@@ -316,7 +368,7 @@ namespace md::env {
         boundary.apply_boundary(particle, current, previous);
     }
 
-    double Environment::temperature(vec3 avg_vel) const {
+    double Environment::temperature(const vec3& avg_vel) const {
         double energy = 0;
         for (auto& particle : particles(GridCell::INSIDE, Particle::ALIVE)) {
             energy += particle.mass * ArrayUtils::L2NormSquared(particle.velocity - avg_vel);
