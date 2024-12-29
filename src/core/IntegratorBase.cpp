@@ -8,7 +8,7 @@
 #include "io/Logger/Logger.h"
 #include <chrono>
 
-#if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_INFO
+#if SPDLOG_ACTIVE_LEVEL == SPDLOG_LEVEL_INFO
 #define SHOW_PROGRESS(current, total)                                                      \
  do {                                                                                      \
      constexpr int bar_width = 50;                                                         \
