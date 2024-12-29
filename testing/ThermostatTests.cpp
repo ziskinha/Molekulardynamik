@@ -194,7 +194,7 @@ TEST(ThermostatTests, heating_temperature_test_large) {
 
     Thermostat thermostat(20, 80, 1);
     thermostat.set_initial_temperature(env);
-    EXPECT_NEAR(env.temperature(env.average_velocity()), 20, 1);
+    EXPECT_NEAR(env.temperature(), 20, 1);
 
     md::Integrator::StoermerVerlet holding_simulator(env, nullptr, nullptr, thermostat);
     holding_simulator.simulate(0, 1, 0.001, -1, 10);
