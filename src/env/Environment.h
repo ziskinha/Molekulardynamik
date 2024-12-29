@@ -146,11 +146,6 @@ namespace md::env {
         */
         void set_dimension(Dimension dim);
         /**
-        * @brief Set the gravitational force strength.
-        * @param g gravitational acceleration.
-        */
-        void set_gravity_constant(double g);
-        /**
          * @brief Adds a single particle to the environment.
          * @param position Position of the particle.
          * @param velocity Velocity of the particle.
@@ -254,12 +249,6 @@ namespace md::env {
          * @param particle The particle to which the conditions will be applied.
          */
         void apply_boundary(Particle& particle);
-        /**
-         * @brief Calculates the gravitational force acting on a given particle.
-         * @param particle The particle for which it is being calculated.
-         * @return The gravitational force acting on the particle.
-         */
-        vec3 gravity_force(const Particle& particle) const;
 
         vec3 average_velocity();
         /**
@@ -318,7 +307,6 @@ namespace md::env {
         Dimension dimension;  ///< Dimension of the simulation
         double grid_constant; ///< Used grid Constant in the environment.
         bool initialized;     ///< Indicates whether the environment has been initialized.
-        double g_grav;        ///< Gravitational force strength.
         unsigned num_stat_particles;
     };
 } // namespace md::env

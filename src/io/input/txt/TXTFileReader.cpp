@@ -213,7 +213,8 @@ namespace md::io {
         args.boundary.extent = {vals[3], vals[4], vals[5]};
         args.env.set_boundary(args.boundary);
         args.env.set_grid_constant(vals[6]);
-        args.env.set_gravity_constant(vals[7]);
+        // TODO add gravity/constant forces
+        // args.env.set_gravity_constant(vals[7]);
 
         SPDLOG_DEBUG("Parsed boundary origin: [{}, {}, {}]", vals[0], vals[1], vals[2]);
         SPDLOG_DEBUG("Parsed boundary extent: [{}, {}, {}]", vals[3], vals[4], vals[5]);
@@ -221,7 +222,7 @@ namespace md::io {
         SPDLOG_DEBUG("Parsed gravity constant: {}", vals[7]);
 
         // Read boundary rules
-        std::array<env::BoundaryRule, 6> rules = {OUTFLOW, PERIODIC, REPULSIVE_FORCE, VELOCITY_REFLECTION};
+        std::array<BoundaryRule, 6> rules = {OUTFLOW, PERIODIC, REPULSIVE_FORCE, VELOCITY_REFLECTION};
         // {LEFT, RIGHT, TOP, BOTTOM, FRONT, BACK}
         std::array<std::array<int, 3>, 6> normals = {{{-1, 0, 0}, {1, 0, 0}, {0, 1, 0},
                                                       {0, -1, 0}, {0, 0, 1}, {0, 0, -1}}};

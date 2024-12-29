@@ -176,7 +176,6 @@ inline void nano_scale_simulation() {
     boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::BACK);
 
     env::Environment env;
-    env.set_gravity_constant(-0.8);
     env.set_boundary(boundary);
 
     // walls
@@ -189,11 +188,13 @@ inline void nano_scale_simulation() {
     env.set_force(env::LennardJones(1, 1, 2.5), 1);
     env.build();
 
+    env::ConstantForce gravity = env::Gravity(-0.001);
+
     env::Thermostat thermostat(40);
     thermostat.set_initial_temperature(env);
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
-    Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, thermostat);
+    Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, thermostat, {gravity});
     simulator.simulate(0, args.duration, args.dt, args.write_freq, 10);
 }
 

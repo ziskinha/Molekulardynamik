@@ -67,10 +67,8 @@ namespace md::Integrator {
        protected:
         /**
          * @brief Abstract method for performing a single simulation step.
-         * @param step current simulation step
-         * @param dt Δt The time increment for each simulation step.
          */
-        virtual void simulation_step(unsigned int step, double dt) {};
+        virtual void simulation_step(unsigned int, double) {};
 
         env::Environment& env;            ///< Reference to the environment.
         const env::Thermostat thermostat; ///< Thermostat to adjust temperature of the environment

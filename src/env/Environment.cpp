@@ -54,7 +54,7 @@ namespace md::env {
     /// Environment Class Methods
     /// -----------------------------------------
     Environment::Environment()
-        : dimension(Dimension::INFER), grid_constant(GRID_CONSTANT_AUTO), initialized(false), g_grav(0), num_stat_particles(0) {}
+        : dimension(Dimension::INFER), grid_constant(GRID_CONSTANT_AUTO), initialized(false), num_stat_particles(0) {}
 
     /// -----------------------------------------
     ///  Methods for environment setup
@@ -79,20 +79,12 @@ namespace md::env {
         dimension = dim;
     }
 
-    void Environment::set_gravity_constant(const double g) {
-        g_grav = g;
-    }
-
-    vec3 Environment::gravity_force(const Particle& particle) const {
-        return vec3{0, particle.mass * g_grav, 0};
-    }
-
     vec3 Environment::average_velocity() {
         vec3 v = {};
         for (const auto& p : particle_storage) {
             v = v + p.velocity;
         }
-        return 1 / size(Particle::ALIVE) * v;
+        return 1.0 / size(Particle::ALIVE) * v;
     }
 
     void Environment::scale_thermal_velocity(double scalar, vec3 mean_v) {

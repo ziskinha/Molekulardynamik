@@ -106,7 +106,8 @@ namespace md::io {
             /// -----------------------------------------
             ///  Parse environment and boundary information
             /// -----------------------------------------
-            args.env.set_gravity_constant(simulation->parameters().gravitational_force());
+            // TODO add gravity/constant forces
+            // args.env.set_gravity_constant(simulation->parameters().gravitational_force());
             SPDLOG_DEBUG(fmt::format("Parsed gravity constant: {}", simulation->parameters().gravitational_force()));
 
             std::string boundary_type;
