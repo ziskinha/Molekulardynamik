@@ -14,7 +14,7 @@
 #include "env/Force.h"
 #include "io/Logger/Logger.h"
 #include "utils/Parse.h"
-#include "env/Thermostat.h"
+#include "effects/Thermostat.h"
 
 namespace md::io {
     using namespace env;
@@ -96,7 +96,7 @@ namespace md::io {
         const double width = vals[9];
         const double mass = vals[10];
         const double thermal_v = vals[11];
-        const auto dim = static_cast<uint32_t>(vals[12]);
+        const auto dim = static_cast<int>(vals[12]);
         if (dim != 2 && dim != 3 && dim != -1) {
             SPDLOG_ERROR("Invalid dimension parameter {}", line);
         }

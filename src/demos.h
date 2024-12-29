@@ -206,20 +206,22 @@ inline void membrane_simulation() {
     args.output_baseName = "output";
     args.duration = 500;
     args.dt = 0.01;
-    args.write_freq = 20;
+    args.write_freq = 40;
 
     env::Boundary boundary;
     boundary.extent = {148, 148, 148};
     boundary.set_boundary_rule(env::BoundaryRule::VELOCITY_REFLECTION);
 
     env::Environment env;
-    env.set_gravity_constant(-0.001);
     env.set_boundary(boundary);
     env.add_membrane({15, 15, 1.5}, {0,0,0}, {50,50,1}, 2.2, 1, 300, 4*1.1225);
     env.set_force(env::LennardJones(1, 1, 1.1225), 0);
     env.build();
 
+    env::ConstantForce gravity = env::Gravity(-0.001);
+    env::ConstantForce pull_force ({0,0,1}, 0.8, env::MarkBox({15 + 17*2.2, 15 + 24*2.2, 0}, {15 + 18.1*2.2, 15 + 25.1*2.2, 2}), 0, 150);
+
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
-    Integrator::StoermerVerlet simulator(env, std::move(writer));
+    Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, env::Thermostat(), {gravity, pull_force});
     simulator.simulate(0, args.duration, args.dt, args.write_freq);
 }

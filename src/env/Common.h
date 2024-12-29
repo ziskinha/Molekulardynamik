@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ankerl/unordered_dense.h>
+
 #include <array>
 #include <cstdint>
 #include <functional>
@@ -33,7 +35,6 @@ inline size_t hash_combine(const size_t lhs, const size_t rhs) {
     return lhs ^ (rhs + 0x9e3779b9 + (lhs << 6) + (lhs >> 2));
 }
 
-// TODO: maybe move to ArrayUtils.h?
 /**
  * @brief Functor for creating a hash from an array<INT_T, 3>
  */

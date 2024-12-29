@@ -49,9 +49,11 @@ namespace md::Integrator {
             }
         }
 
-        // apply gravity
-        for (auto& p : env.particles()) {
-            p.force = p.force + env.gravity_force(p);
+        // apply constant forces
+        for (auto & f : external_forces) {
+            for (const size_t id : f.marked_particles()) {
+                f.apply_force(env[id], dt*step);
+            }
         }
 
         // update velocities

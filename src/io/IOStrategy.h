@@ -5,7 +5,7 @@
 #include <string>
 
 #include "env/Environment.h"
-#include "env/Thermostat.h"
+#include "effects/Thermostat.h"
 #include "io/Logger/Logger.h"
 #include "io/Output/CheckpointWriter.h"
 

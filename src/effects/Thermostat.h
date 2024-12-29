@@ -41,7 +41,6 @@ namespace md::env {
          */
         void adjust_temperature(Environment & env) const;
 
-
     private:
         double init_temp;        ///< The initial temperature.
         double target_temp;      ///< The target temperature.

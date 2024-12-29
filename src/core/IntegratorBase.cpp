@@ -8,7 +8,7 @@
 #include "io/Logger/Logger.h"
 #include <chrono>
 
-#if SPDLOG_ACTIVE_LEVEL == SPDLOG_LEVEL_INFO
+#if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_INFO
 #define SHOW_PROGRESS(current, total)                                                      \
  do {                                                                                      \
      constexpr int bar_width = 50;                                                         \
@@ -37,13 +37,31 @@
 #endif
 
 namespace md::Integrator {
+    IntegratorBase::IntegratorBase(IntegratorCreateInfo create_info)
+        : IntegratorBase(
+            create_info.environment,
+            std::move(create_info.writer),
+            std::move(create_info.checkpoint_writer),
+            create_info.thermostat,
+            create_info.external_forces) {
+    }
+
     IntegratorBase::IntegratorBase(
         env::Environment& environment,
         std::unique_ptr<io::OutputWriterBase> writer,
         std::unique_ptr<io::CheckpointWriter> checkpoint_writer,
-        const env::Thermostat & thermostat)
-        : env(environment), thermostat(thermostat), temp_adjust_freq(0),
-        writer(std::move(writer)), checkpoint_writer(std::move(checkpoint_writer)) {}
+        const env::Thermostat & thermostat,
+        const std::vector<env::ConstantForce> & external_forces) :
+    env(environment),
+    thermostat(thermostat),
+    temp_adjust_freq(0),
+    external_forces(external_forces),
+    writer(std::move(writer)),
+    checkpoint_writer(std::move(checkpoint_writer)) {
+        for (auto & f: this->external_forces) {
+            f.mark_particles(env);
+        }
+    }
 
    
 
