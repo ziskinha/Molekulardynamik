@@ -1,6 +1,7 @@
 #pragma once
 
 #include <limits>
+#include "Statistics.h"
 #include "env/Environment.h"
 #include "effects/Thermostat.h"
 #include "io/IOStrategy.h"
@@ -22,12 +23,15 @@ namespace md::Integrator {
          * @param checkpoint_writer
          * @param thermostat
          * @param external_forces
+         * @param stats
          * @param writer used to log/plot particle data.
          */
-        explicit IntegratorBase(env::Environment& environment, std::unique_ptr<io::OutputWriterBase> writer = nullptr,
+        explicit IntegratorBase(env::Environment& environment,
+                                std::unique_ptr<io::OutputWriterBase> writer = nullptr,
                                 std::unique_ptr<io::CheckpointWriter> checkpoint_writer = nullptr,
                                 const env::Thermostat & thermostat = env::Thermostat(),
-                                const std::vector<env::ConstantForce> & external_forces = {});
+                                const std::vector<env::ConstantForce> & external_forces = {},
+                                std::unique_ptr<core::Statistics> stats = nullptr);
 
         /**
          * @brief Virtual destructor.
@@ -68,5 +72,6 @@ namespace md::Integrator {
        private:
         std::unique_ptr<io::OutputWriterBase> writer;  ///< The output writer.
         std::unique_ptr<io::CheckpointWriter> checkpoint_writer;  ///< The output checkpoint writer.
+        std::unique_ptr<core::Statistics> stats;
     };
 }  // namespace md::Integrator

@@ -256,6 +256,10 @@ namespace md::env {
          */
         double temperature(const vec3& avg_vel = {}) const;
 
+        vec3 extent() const;
+
+        vec3 origin() const;
+
         void scale_thermal_velocity(double scalar, vec3 mean_v={});
 
 

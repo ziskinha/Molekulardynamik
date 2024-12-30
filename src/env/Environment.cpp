@@ -368,6 +368,13 @@ namespace md::env {
         return energy / static_cast<double>(dim() * size(Particle::ALIVE));
     }
 
+    vec3 Environment::extent() const {
+        return boundary.extent;
+    }
+    vec3 Environment::origin() const {
+        return boundary.origin;
+    }
+
     int Environment::dim() const {
         return static_cast<int>(dimension);
     }

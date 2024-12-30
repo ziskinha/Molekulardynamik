@@ -41,8 +41,8 @@ namespace md::env {
         };
     }
 
-    inline ConstantForce Gravity(const double g, const int dim = 3) {
-        return ConstantForce (dim == 2 ? vec3{0,1,0} : vec3{0,0,1}, g,MarkAll(), 0, std::numeric_limits<double>::max(), true );
+    inline ConstantForce Gravity(const double g, const vec3 & axis = vec3{0,0,1}) {
+        return ConstantForce (axis, g,MarkAll(), 0, std::numeric_limits<double>::max(), true );
     }
 }
 

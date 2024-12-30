@@ -42,13 +42,15 @@ namespace md::Integrator {
         std::unique_ptr<io::OutputWriterBase> writer,
         std::unique_ptr<io::CheckpointWriter> checkpoint_writer,
         const env::Thermostat & thermostat,
-        const std::vector<env::ConstantForce> & external_forces) :
+        const std::vector<env::ConstantForce> & external_forces,
+        std::unique_ptr<core::Statistics> stats) :
     env(environment),
     thermostat(thermostat),
     temp_adjust_freq(0),
     external_forces(external_forces),
     writer(std::move(writer)),
-    checkpoint_writer(std::move(checkpoint_writer)) {
+    checkpoint_writer(std::move(checkpoint_writer)),
+    stats(std::move(stats)) {
         for (auto & f: this->external_forces) {
             f.mark_particles(env);
         }
@@ -65,7 +67,11 @@ namespace md::Integrator {
         for (double t = start_time; t < end_time; t += dt, step++) {
             simulation_step(step, dt);
 
-            if (step % write_freq == 0 && writer) {
+            if (stats && step % stats->compute_freq == 0) {
+                stats->compute(env);
+            }
+
+            if (writer && step % write_freq == 0) {
                 SPDLOG_DEBUG("Plotting particles @ iteration {}, time {}", step, t);
                 writer->plot_particles(env, step);
             }
@@ -77,11 +83,8 @@ namespace md::Integrator {
         }
         SPDLOG_INFO("Simulation ended");
     }
-    /// -----------------------------------------
-    /// \brief Benchmark functions
-    /// -----------------------------------------
 
-    void IntegratorBase::benchmark(double start_time, double end_time, double dt, unsigned int temp_adj_freq) {
+    void IntegratorBase::benchmark(const double start_time, const double end_time, const double dt, const unsigned int temp_adj_freq) {
         temp_adjust_freq = temp_adj_freq;
 
         unsigned long long total_micros = 0;

@@ -27,7 +27,6 @@ int main(const int argc, char* argv[]) {
     } else {
         simulator.benchmark(0, args.duration, args.dt);
     }
-
     return 0;
 }
 

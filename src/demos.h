@@ -4,6 +4,7 @@
 #include "core/StoermerVerlet.h"
 #include "env/Environment.h"
 #include "env/Force.h"
+#include "core/Statistics.h"
 
 using namespace md;
 
@@ -188,13 +189,15 @@ inline void nano_scale_simulation() {
     env.set_force(env::LennardJones(1, 1, 2.5), 1);
     env.build();
 
-    env::ConstantForce gravity = env::Gravity(-0.001);
+    env::ConstantForce gravity = env::Gravity(-0.8, {0, 1, 0});
 
     env::Thermostat thermostat(40);
     thermostat.set_initial_temperature(env);
 
+    auto stats = std::make_unique<core::NanoFlowStatistics>(10000, 50);
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
-    Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, thermostat, {gravity});
+
+    Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, thermostat, {gravity}, std::move(stats));
     simulator.simulate(0, args.duration, args.dt, args.write_freq, 10);
 }
 
