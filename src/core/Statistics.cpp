@@ -1,6 +1,6 @@
 #include "Statistics.h"
 
-#include <spdlog/spdlog.h>
+#include "io/Logger/Logger.h"
 
 #include <cmath>
 
@@ -30,7 +30,7 @@ namespace md::core {
 
         // TODO write averages to csv file
 
-        SPDLOG_DEBUG("avg_velocity: {}", avg_velocity);
-        SPDLOG_DEBUG("avg_density: {}", avg_density);
+        SPDLOG_DEBUG("avg_velocity: [{}]", fmt::join(avg_velocity, ", "));
+        SPDLOG_DEBUG("avg_density: [{}]", fmt::join(avg_density, ", "));
     }
 }
