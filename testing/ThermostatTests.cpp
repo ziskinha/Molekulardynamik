@@ -64,6 +64,7 @@ TEST(ThermostatTests, initial_temperature_test3) {
     ASSERT_EQ(env.temperature(), 20);
 }
 
+// tests if the inittial temperature is set correctly
 TEST(ThermostatTests, set_initial_temperature_test) {
     Environment env;
     setup(env);

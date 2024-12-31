@@ -1,7 +1,3 @@
-//
-// Created by jdyma on 29/12/2024.
-//
-
 #include "ConstantForce.h"
 
 #include "env/Environment.h"
@@ -37,5 +33,5 @@ namespace md::env {
         return marked;
     }
 
-}
+} // namespace md::env
 

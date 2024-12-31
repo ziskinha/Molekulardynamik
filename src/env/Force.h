@@ -66,6 +66,9 @@ namespace md::env {
     struct Harmonic : ForceBase {
         Harmonic() = default;
 
+        /**
+        * @brief Harmonic force for membrane.
+        */
         Harmonic(const double k, const double r0, const double cutoff)
             : ForceBase(cutoff), k(k), r0(r0) {}
 

@@ -9,8 +9,6 @@
 #define NEVER std::numeric_limits<unsigned int>::max()
 
 namespace md::Integrator {
-
-
     /**
      * @brief Manages the main simulation loop.
      */
@@ -72,6 +70,6 @@ namespace md::Integrator {
        private:
         std::unique_ptr<io::OutputWriterBase> writer;  ///< The output writer.
         std::unique_ptr<io::CheckpointWriter> checkpoint_writer;  ///< The output checkpoint writer.
-        std::unique_ptr<core::Statistics> stats;
+        std::unique_ptr<core::Statistics> stats;  ///< To compute the statistics.
     };
 }  // namespace md::Integrator

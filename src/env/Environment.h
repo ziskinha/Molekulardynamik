@@ -151,8 +151,8 @@ namespace md::env {
          * @param velocity Velocity of the particle.
          * @param mass Mass of the particle.
          * @param type Type of the particle.
-         * @param state
-         * @param force
+         * @param state State of the particle (default: ALIVE).
+         * @param force Initial force of the particle (default: {0, 0, 0}).
          */
         size_t add_particle(const vec3& position, const vec3& velocity, double mass, int type = 0, Particle::State state = Particle::ALIVE, const vec3& force = {});
         /**
@@ -173,9 +173,9 @@ namespace md::env {
          * @param thermal_v Thermal velocity of the particles.
          * @param width Distance between the particles.
          * @param mass Mass of each particle.
-         * @param dimension Dimension of the cuboid.
-         * @param state
          * @param type Type of each particle (default: 0).
+         * @param dimension Dimension of the cuboid (default: INFER).
+         * @param state Initial state of the particles (default: ALIVE).
          */
         void add_cuboid(const vec3& origin, const vec3& velocity, const uint3& num_particles, double width,
             double mass, double thermal_v = 0, int type = 0, Dimension dimension = Dimension::INFER,
@@ -193,14 +193,24 @@ namespace md::env {
          * @param radius The radius in terms of the number of molecules along the radius.
          * @param width Distance between the particles.
          * @param mass The mass of the particles.
-         * @param dimension Dimension of the sphere.
-         * @param state
          * @param type The type of each particle (default: 0).
+         * @param dimension Dimension of the sphere (default: INFER).
+         * @param state Initial state of the particles (default: ALIVE).
          */
         void add_sphere(const vec3& origin, const vec3& velocity, int radius, double width, double mass,
             double thermal_v = 0, int type = 0, Dimension dimension = Dimension::INFER,
             Particle::State state = Particle::ALIVE);
-
+        /**
+         * @brief Adds a membrane to the environment.
+         * @param origin Coordinates of the origin.
+         * @param velocity Initial velocity of the particles.
+         * @param num_particles Number of particles of the membrane.
+         * @param width Distance between particles.
+         * @param mass Mass of the particles.
+         * @param k Stiffness constant.
+         * @param cutoff cutoff.
+         * @param type The type of the particles (default: 0).
+         */
         void add_membrane(const vec3& origin, const vec3& velocity, const uint3& num_particles, double width,
             double mass, double k, double cutoff, int type = 0);
 
@@ -250,16 +260,31 @@ namespace md::env {
          */
         void apply_boundary(Particle& particle);
 
+        /**
+         * @brief Computes the average velocity of the particles.
+         * @return The average velocity.
+         */
         vec3 average_velocity();
         /**
-         * @brief Calculate temperature of the system.
+         * @brief Calculates temperature of the system.
+         * @param avg_vel The average velocity of the environment particles (default: {0, 0, 0}).
          */
         double temperature(const vec3& avg_vel = {}) const;
-
+        /**
+         * @brief Returns the boundary extent of the environment.
+         * @return The boundary extent.
+         */
         vec3 extent() const;
-
+        /**
+         * @brief Returns the origin of the boundary of the environment (bottom left front corner).
+         * @return The origin of the boundary.
+         */
         vec3 origin() const;
-
+        /**
+         * @brief Scales the thermal velocity of the particles.
+         * @param scalar The scaling factor.
+         * @param mean_v Mean velocity.
+         */
         void scale_thermal_velocity(double scalar, vec3 mean_v={});
 
 
@@ -311,6 +336,6 @@ namespace md::env {
         Dimension dimension;  ///< Dimension of the simulation
         double grid_constant; ///< Used grid Constant in the environment.
         bool initialized;     ///< Indicates whether the environment has been initialized.
-        unsigned num_stat_particles;
+        unsigned num_stat_particles;   ///< Number of stationary particles.
     };
 } // namespace md::env
