@@ -68,4 +68,11 @@
         <dimension>2</dimension>
         <type>1</type>
     </spheres>
+
+    <Thermostat>
+        <n_thermostats>1000</n_thermostats>
+        <init_T>20</init_T>
+        <target_T>20</target_T>
+        <temp_dT>0.5</temp_dT>
+    </Thermostat>
 </simulation>
