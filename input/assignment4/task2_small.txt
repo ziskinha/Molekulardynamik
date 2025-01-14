@@ -13,11 +13,12 @@ force:
 # name           parameter   particle_type
 lennard_jones    1.0 1.0           0
 lennard_jones    1.0 0.9412        1
+gravity          -12.44
 
 environment:
 # (Boundary condition identification: 0: OUTFLOW, 1: PERIODIC, 2: REPULSIVE FORCE, 3: VELOCITY REFLECTION)
-# boundary_origin     boundary_extent     grid_constant   grav_const    boundary_conds(l, r, t, bo, f, ba)
-0 0 0                   63 36 1               2.5           -12.44             1 1 2 2 0 0
+# boundary_origin     boundary_extent     grid_constant     boundary_conds(l, r, t, bo, f, ba)
+0 0 0                   63 36 1               2.5                       1 1 2 2 0 0
 
 thermostats:
 # T_init     n_thermos     T_target(for no target: -1)      delta_T(for no delta_t: -1)

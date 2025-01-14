@@ -27,6 +27,10 @@ namespace md::env {
     GridCell::GridCell(const vec3& coord, const vec3& size, Type type, const int3& idx)
         : type(type), origin(coord), size(size), idx(idx), id(count++) {
         particles.max_load_factor(0.8);
+#ifdef _OPENMP
+        SPDLOG_DEBUG("Lock initialized for cell {}", id);
+        omp_init_lock(&lock);
+#endif
     }
 
     std::string GridCell::to_string() const {
@@ -37,6 +41,20 @@ namespace md::env {
     }
 
     bool GridCell::operator==(const GridCell& other) const { return id == other.id; }
+
+    void GridCell::lock_cell() {
+#ifdef _OPENMP
+        SPDLOG_DEBUG("Lock set for cell {}", id);
+        omp_set_lock(&lock);
+#endif
+    }
+
+    void GridCell::unlock_cell() {
+#ifdef _OPENMP
+        SPDLOG_DEBUG("Lock unset for cell {}", id);
+        omp_unset_lock(&lock);
+#endif
+    }
 
     /// -----------------------------------------
     /// \brief Grid cell pair methods

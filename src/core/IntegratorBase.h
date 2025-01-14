@@ -18,11 +18,11 @@ namespace md::Integrator {
         /**
          * @brief Constructs a IntegratorBase object with a reference to a ParticleContainer and OutputWriter.
          * @param environment physical system to be simulated.
+         * @param writer used to log/plot particle data.
          * @param checkpoint_writer
          * @param thermostat
          * @param external_forces
          * @param stats
-         * @param writer used to log/plot particle data.
          */
         explicit IntegratorBase(env::Environment& environment,
                                 std::unique_ptr<io::OutputWriterBase> writer = nullptr,
@@ -61,6 +61,8 @@ namespace md::Integrator {
          * @brief Abstract method for performing a single simulation step.
          */
         virtual void simulation_step(unsigned int, double) {};
+        // TODO
+        virtual void simulation_step_omp1(unsigned int, double) {};
 
         env::Environment& env;            ///< Reference to the environment.
         const env::Thermostat thermostat; ///< Thermostat to adjust temperature of the environment

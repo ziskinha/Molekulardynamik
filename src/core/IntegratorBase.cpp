@@ -1,12 +1,9 @@
-
-#include "IntegratorBase.h"
-
 #include <chrono>
 #include <iomanip>
 #include <iostream>
 
+#include "IntegratorBase.h"
 #include "io/Logger/Logger.h"
-#include <chrono>
 
 #if SPDLOG_ACTIVE_LEVEL == SPDLOG_LEVEL_INFO
 #define SHOW_PROGRESS(current, total)                                                      \
@@ -65,7 +62,7 @@ namespace md::Integrator {
         const int total_steps = static_cast<int>((end_time - start_time) / dt);
 
         for (double t = start_time; t < end_time; t += dt, step++) {
-            simulation_step(step, dt);
+            simulation_step_omp1(step, dt);
 
             if (stats && step % stats->compute_freq == 0) {
                 stats->compute(env);
@@ -93,17 +90,17 @@ namespace md::Integrator {
         for (double t = start_time; t < end_time; t += dt, step++) {
             modifications += env.size(env::Particle::ALIVE);
             auto start = std::chrono::high_resolution_clock::now();
-            simulation_step(step, dt);
+            simulation_step_omp1(step, dt);
             auto end = std::chrono::high_resolution_clock::now();
             total_micros += std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
         }
         const double avg_step_time = static_cast<double>(total_micros) / static_cast<double>(step+1);
 
         // Using std::cout instead of logging, as logging should be disabled during benchmarking.
-        std::cout << "Total execution time:" << total_micros/1000.0 << " ms" << std::endl;
+        std::cout << "Total execution time: " << total_micros/1000.0 << " ms" << std::endl;
         std::cout << "Average execution time per step: " << avg_step_time/1000.0 << " ms" << std::endl;
         std::cout << "Number of particles: " << env.size(env::Particle::STATIONARY | env::Particle::ALIVE) << std::endl;
         std::cout << "Particle modifications: " << modifications << std::endl;
-        std::cout << "MUPS/s \n" << modifications/(total_micros/1000/1000) << std::endl;
+        std::cout << "MUPS/s: " << modifications/(total_micros/1000/1000) << std::endl;
     }
 }  // namespace md::Integrator

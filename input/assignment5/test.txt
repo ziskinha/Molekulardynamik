@@ -1,0 +1,16 @@
+general:
+# duration   delta_t     write_freq   cutoff_radius   output_baseName
+5            5         100            2.5         output
+
+particles:
+# origin       velocity       mass       particle_type
+2.5 2.5 0       0 0 0           1              0
+
+force:
+# name           parameter   particle_type
+lennard_jones    1.0 1.0           0
+
+environment:
+# (Boundary condition identification: 0: OUTFLOW, 1: PERIODIC, 2: REPULSIVE FORCE, 3: VELOCITY REFLECTION)
+# boundary_origin     boundary_extent     grid_constant     boundary_conds(l, r, t, bo, f, ba)
+0 0 0                   5 5 1               2.5                       1 1 2 2 0 0

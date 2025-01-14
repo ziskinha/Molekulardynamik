@@ -17,7 +17,7 @@
 # * xyz-coordinates (3 double values)
 # * velocities (3 double values)
 # * mass (1 double value)
-# * Particle type (1 double value)
+# * Particle type (1 int value)
 #
 # Cuboid data consists of
 # * xyz-coordinates of lower left corner (3 double values)
@@ -27,6 +27,7 @@
 # * mass (1 double value)
 # * average thermal velocity
 # * dimension (either 2 or 3)
+# * Particle type (1 int value)
 #
 # Sphere data consists of
 # * xyz-coordinates of the center (3 double values)
@@ -36,12 +37,21 @@
 # * mass (1 double value)
 # * average thermal velocity
 # * dimension (either 2 or 3)
+# * Particle type (1 int value)
+#
+# Membrane data consists of
+# * xyz-coordinates of origin (3 double values)
+# * velocities (3 double values)
+# * number of particles in each dimension (3 integer values)
+# * width between each adjacent particle (1 double value)
+# * mass (1 double value)
+# * k (1 double value)
+# * Particle type (1 int value)
 #
 # Environment data consist of
 # * xyz-coordinates of lower left corner (3 double values)
 # * boundary extent (3 double values)
 # * grid_constant (1 double value)
-# * gravity_constant (1 double value)
 # * boundary conditions (6 int values -> (LEFT, RIGHT, TOP, BOTTOM, FRONT, BACK)) (0: OUTFLOW, 1: PERIODIC, 2: REPULSIVE FORCE, 3: VELOCITY REFLECTION)
 #
 # Thermostats data consist of
@@ -59,21 +69,29 @@ particles:
 - - -            - - -          -              -
 
 cuboids:
-# LL-cord       velocity        N            h           m       br_v    dim   particle_type
-- - -            - - -        - - -          -           -        -       -         -
+# origin       velocity        N            h           m       br_v    dim   particle_type
+- - -            - - -        - - -         -           -        -       -         -
 
 spheres:
 # origin         velocity      R      h      m      br_v     dim  particle_type
-- - -            - - -         -     -       -        -       -         -
+- - -            - - -         -      -      -        -       -         -
+
+membranes:
+# origin         velocity        N       h       m     k      particle_type
+- - -            - - -         - - -     -       -     -           -
 
 force:
 # name           parameter   particle_type
 lennard_jones    - -               -
+inverse_square   -                 -
+gravity          -
+pull_force
+
 
 environment:
 # (Boundary condition identification: 0: OUTFLOW, 1: PERIODIC, 2: REPULSIVE FORCE, 3: VELOCITY REFLECTION)
-# boundary_origin     boundary_extent     grid_constant   grav_const    boundary_conds(left, right, top, bottom, front, back)
-- - -                     - - -                -             -               - - - - - -
+# boundary_origin     boundary_extent     grid_constant    boundary_conds(left, right, top, bottom, front, back)
+- - -                     - - -                -                            - - - - - -
 
 thermostats:
 # T_init     n_thermos     T_target(for no target: -1)      delta_T(for no delta_t: -1)

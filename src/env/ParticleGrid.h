@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <omp.h>
 
 #include "ankerl/unordered_dense.h"
 #include "env/Common.h"
@@ -62,6 +63,9 @@ namespace md::env {
          */
         bool operator==(const GridCell& other) const;
 
+        void lock_cell();
+        void unlock_cell();
+
         const Type type;   ///< The type of the grid cell.
         const vec3 origin; ///< The coordinates of the origin of the grid cell.
         const vec3 size;   ///< The size of the grid cell.
@@ -71,6 +75,9 @@ namespace md::env {
         particle_container particles{}; ///< The set of particles inside the grid cell.
     private:
         static int count;  ///< A counter for generating unique ids for grid cells.
+#ifdef _OPENMP
+        omp_lock_t lock;
+#endif
     };
 
     /**
