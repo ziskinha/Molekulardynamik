@@ -75,7 +75,9 @@ namespace md::Integrator {
     void StoermerVerlet::simulation_step_omp1(const unsigned step, const double dt) {
 
         // update position
-        for (auto &p: env.particles()) {
+#pragma omp for
+        for (size_t i = 0; i < env.size(); i++) {
+            auto& p = env[i];
             p.update_position(dt * p.velocity + pow(dt, 2) / (2 * p.mass) * p.force);
             p.update_grid();
             p.reset_force();
