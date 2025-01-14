@@ -6,7 +6,6 @@
 using namespace md;
 
 int main(const int argc, char* argv[]) {
-
     io::Logger::initialize_logger();
 
     io::ProgramArguments args;
@@ -20,6 +19,7 @@ int main(const int argc, char* argv[]) {
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
     auto checkpoint_writer = io::create_checkpoint_writer();
+    //TODO Constant forces einbinden
     Integrator::StoermerVerlet simulator(args.env, std::move(writer), std::move(checkpoint_writer), args.thermostat);
 
     if (!args.benchmark) {

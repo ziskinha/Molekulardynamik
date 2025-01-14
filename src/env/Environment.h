@@ -170,9 +170,9 @@ namespace md::env {
          * @param origin Coordinate of the lower left front-side corner.
          * @param velocity Initial velocity for all particles.
          * @param num_particles Number of particles along each dimension: N1 x N2 x N3.
-         * @param thermal_v Thermal velocity of the particles.
          * @param width Distance between the particles.
          * @param mass Mass of each particle.
+         * @param thermal_v Thermal velocity of the particles.
          * @param type Type of each particle (default: 0).
          * @param dimension Dimension of the cuboid (default: INFER).
          * @param state Initial state of the particles (default: ALIVE).
@@ -189,10 +189,10 @@ namespace md::env {
          * @brief Adds a sphere to the environment.
          * @param origin Coordinates of the center.
          * @param velocity Initial velocity of all particles.
-         * @param thermal_v Thermal velocity of the particles.
          * @param radius The radius in terms of the number of molecules along the radius.
          * @param width Distance between the particles.
          * @param mass The mass of the particles.
+         * @param thermal_v Thermal velocity of the particles.
          * @param type The type of each particle (default: 0).
          * @param dimension Dimension of the sphere (default: INFER).
          * @param state Initial state of the particles (default: ALIVE).

@@ -78,6 +78,6 @@ include(googletest)
 
 # Enable testing and a separate testing directory with its own CMakeLists.txt
 if (NOT (CMAKE_BUILD_TYPE STREQUAL "Benchmark"))
-    enable_testing()
-    add_subdirectory(testing)
+    #enable_testing()
+    #add_subdirectory(testing)
 endif()

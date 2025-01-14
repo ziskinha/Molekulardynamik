@@ -140,8 +140,8 @@ namespace md::io {
             SPDLOG_ERROR("Invalid dimension parameter {}", line);
         }
         const auto dimension = static_cast<Dimension>(dim);
-
-        int type = vals.size() == 12 ? static_cast<int>(vals[11]) : 0; // TODO read out particle state
+        int type = vals.size() == 12 ? static_cast<int>(vals[11]) : 0;
+        // TODO read out particle state
         environment.add_sphere(origin, init_v, static_cast<int>(radius), width, mass, thermal_v, type, dimension, Particle::ALIVE);
 
         SPDLOG_DEBUG(
@@ -156,6 +156,40 @@ namespace md::io {
                 "       Type:                {}",
                 origin[0], origin[1], origin[2], init_v[0], init_v[1], init_v[2], radius, width, mass, thermal_v,
                 dim, type);
+    }
+
+    /// -----------------------------------------
+    /// \brief Parse membrane information
+    /// -----------------------------------------
+    void parse_membrane(const std::string& line, ProgramArguments &args) {
+        SPDLOG_DEBUG("Reading Membrane:     {}", line);
+
+        // Minimum required values: 3 (origin) + 3 (velocity) + 3 (num_particles) + 1 (width) + 1 (mass) + 1 (k)
+        auto vals = parse_values(line, 12);
+
+        const vec3 origin = {vals[0], vals[1], vals[2]};
+        const vec3 init_v = {vals[3], vals[4], vals[5]};
+        const uint3 num_particles = {static_cast<uint32_t>(vals[6]), static_cast<uint32_t>(vals[7]),
+                                     static_cast<uint32_t>(vals[8])};
+        const double width = vals[9];
+        const double mass = vals[10];
+        const double k = vals[11];
+        const int type = vals.size() == 13 ? static_cast<int>(vals[12]) : 0;
+        // TODO particle state
+
+        args.env.add_membrane(origin, init_v, num_particles, width, mass, k, args.cutoff_radius, type);
+
+        SPDLOG_DEBUG(
+                "Parsed Membrane:\n"
+                "       Origin:              [{}, {}, {}]\n"
+                "       Initial Velocity:    [{}, {}, {}]\n"
+                "       Number of particles: [{}, {}, {}]\n"
+                "       Width:               {}\n"
+                "       Mass:                {}\n"
+                "       k:                   {}\n"
+                "       Type:                {}",
+                origin[0], origin[1], origin[2], init_v[0], init_v[1], init_v[2], num_particles[0], num_particles[1],
+                num_particles[2], width, k, type);
     }
 
     /// -----------------------------------------
@@ -194,7 +228,19 @@ namespace md::io {
                 SPDLOG_DEBUG("Parsed force for particle type {}: Inverse Square with pre factor = {}, cutoff radius = {}",
                              vals[1], vals[0], args.cutoff_radius);
             }
-        } catch (std::out_of_range& e) {
+            else if (force_name == "gravity") {
+                //TODO
+                //args.external_force = true;
+                //args.gravity = env::Gravity(vals[0]);
+                SPDLOG_DEBUG("Parsed gravity force: {}", vals[0]);
+            }
+            else if (force_name == "pull_force") {
+                //args.external_force = true;
+                //TODO, initialize pull force
+                SPDLOG_DEBUG("Parsed pull force: ");
+            }
+        }
+        catch (std::out_of_range& e) {
             SPDLOG_ERROR("Parameter error in force parsing: {}. Line: {}", e.what(), line);
             exit(-1);
         }
@@ -213,13 +259,10 @@ namespace md::io {
         args.boundary.extent = {vals[3], vals[4], vals[5]};
         args.env.set_boundary(args.boundary);
         args.env.set_grid_constant(vals[6]);
-        // TODO add gravity/constant forces
-        // args.env.set_gravity_constant(vals[7]);
 
         SPDLOG_DEBUG("Parsed boundary origin: [{}, {}, {}]", vals[0], vals[1], vals[2]);
         SPDLOG_DEBUG("Parsed boundary extent: [{}, {}, {}]", vals[3], vals[4], vals[5]);
         SPDLOG_DEBUG("Parsed grid constant: {}", vals[6]);
-        SPDLOG_DEBUG("Parsed gravity constant: {}", vals[7]);
 
         // Read boundary rules
         std::array<BoundaryRule, 6> rules = {OUTFLOW, PERIODIC, REPULSIVE_FORCE, VELOCITY_REFLECTION};
@@ -227,7 +270,7 @@ namespace md::io {
         std::array<std::array<int, 3>, 6> normals = {{{-1, 0, 0}, {1, 0, 0}, {0, 1, 0},
                                                       {0, -1, 0}, {0, 0, 1}, {0, 0, -1}}};
         for (int i = 0; i < 6; ++i) {
-            args.boundary.set_boundary_rule(rules[vals[8 + i]], normals[i]);
+            args.boundary.set_boundary_rule(rules[vals[7 + i]], normals[i]);
         }
 
         args.env.set_boundary(args.boundary);
@@ -298,7 +341,7 @@ namespace md::io {
         SPDLOG_INFO("Start reading file {}", file_name);
 
         std::string line;
-        enum Section { NONE, GENERAL, PARTICLES, CUBOIDS, SPHERES, FORCE, ENVIRONMENT, THERMOSTATS} section = NONE;
+        enum Section { NONE, GENERAL, PARTICLES, CUBOIDS, SPHERES, FORCE, ENVIRONMENT, THERMOSTATS, MEMBRANE} section = NONE;
 
         std::unordered_map<std::string, Section> sectionMap = {
                 {"general:", GENERAL},
@@ -307,7 +350,8 @@ namespace md::io {
                 {"spheres:", SPHERES},
                 {"force:", FORCE},
                 {"environment:", ENVIRONMENT},
-                {"thermostats:", THERMOSTATS}
+                {"thermostats:", THERMOSTATS},
+                {"membranes:", MEMBRANE}
         };
 
         while (std::getline(infile, line)) {
@@ -338,6 +382,8 @@ namespace md::io {
                 parse_cuboid(line, args.env);
             else if (section == SPHERES)
                 parse_sphere(line, args.env);
+            else if (section == MEMBRANE)
+                parse_membrane(line, args);
             else if (section == FORCE)
                 parse_force(line, args);
             else if (section == ENVIRONMENT)
