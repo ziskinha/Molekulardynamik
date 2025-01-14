@@ -86,39 +86,8 @@ namespace md::Integrator {
         }
 
         // calculate forces
-//#pragma omp parallel for
-        for (size_t i = 20; i < env.linked_cells().size(); ++i) {
-            auto &cell_pair = env.linked_cells()[i];
-            cell_pair.cell1.lock_cell();
-
-            if (cell_pair.cell1.id == cell_pair.cell2.id) {
-                auto &particles = cell_pair.cell1.particles;
-                for (auto it1 = particles.begin(); it1 != particles.end(); ++it1) {
-                    for (auto it2 = std::next(it1); it2 != particles.end(); ++it2) {
-                        env::Particle *p1 = *it1;
-                        env::Particle *p2 = *it2;
-
-                        vec3 new_F = env.force(*p1, *p2, cell_pair);
-                        p2->force = p2->force + new_F;
-                        p1->force = p1->force - new_F;
-                    }
-                }
-            }
-            else {
-                cell_pair.cell2.lock_cell();
-                for (auto *p1 : cell_pair.cell1.particles) {
-                    for (auto *p2 : cell_pair.cell2.particles) {
-                        vec3 new_F = env.force(*p1, *p2, cell_pair);
-                        p2->force = p2->force + new_F;
-                        p1->force = p1->force - new_F;
-                    }
-                }
-                cell_pair.cell2.unlock_cell();
-            }
-            cell_pair.cell1.unlock_cell();
-        }
-
-        for (size_t i = 0; i < 20; ++i) {
+#pragma omp parallel for
+        for (size_t i = 0; i < env.linked_cells().size(); ++i) {
             auto &cell_pair = env.linked_cells()[i];
             cell_pair.cell1.lock_cell();
 
