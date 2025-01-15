@@ -28,6 +28,7 @@
 # * average thermal velocity
 # * dimension (either 2 or 3)
 # * Particle type (1 int value)
+# * Particle type (1 int value (0: STATIONARY, 1: ALIVE))
 #
 # Sphere data consists of
 # * xyz-coordinates of the center (3 double values)
@@ -38,6 +39,7 @@
 # * average thermal velocity
 # * dimension (either 2 or 3)
 # * Particle type (1 int value)
+# * Particle type (1 int value (0: STATIONARY, 1: ALIVE))
 #
 # Membrane data consists of
 # * xyz-coordinates of origin (3 double values)
@@ -69,12 +71,12 @@ particles:
 - - -            - - -          -              -
 
 cuboids:
-# origin       velocity        N            h           m       br_v    dim   particle_type
-- - -            - - -        - - -         -           -        -       -         -
+# origin       velocity        N            h           m       br_v    dim   particle_type  state(0: STATIONARY, 1: ALIVE)
+- - -            - - -        - - -         -           -        -       -         -           -
 
 spheres:
-# origin         velocity      R      h      m      br_v     dim  particle_type
-- - -            - - -         -      -      -        -       -         -
+# origin         velocity      R      h      m      br_v     dim  particle_type   state(0: STATIONARY, 1: ALIVE)
+- - -            - - -         -      -      -        -       -         -           -
 
 membranes:
 # origin         velocity        N       h       m     k      particle_type
@@ -84,8 +86,10 @@ force:
 # name           parameter   particle_type
 lennard_jones    - -               -
 inverse_square   -                 -
+# name          parameter
 gravity          -
-pull_force
+# name          direction    strength   MarkBox_bottom_left_corner  MarkBox_top_right_corner  start_t end_t  const_acc(default: false)
+pull_force      - - -           -                - - -                      - - -                -     -       -
 
 
 environment:

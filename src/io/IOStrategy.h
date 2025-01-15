@@ -6,6 +6,7 @@
 
 #include "env/Environment.h"
 #include "effects/Thermostat.h"
+#include "effects/ConstantForce.h"
 #include "io/Logger/Logger.h"
 #include "io/Output/CheckpointWriter.h"
 
@@ -35,6 +36,7 @@ namespace md::io {
         double cutoff_radius;
         int write_freq;
         unsigned int temp_adj_freq = std::numeric_limits<unsigned int>::max();
+        std::vector<env::ConstantForce> external_forces;
     };
 
     /**

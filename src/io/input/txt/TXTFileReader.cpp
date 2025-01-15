@@ -12,6 +12,7 @@
 #include "env/Environment.h"
 #include "env/Boundary.h"
 #include "env/Force.h"
+#include "effects/ConstantForce.h"
 #include "io/Logger/Logger.h"
 #include "utils/Parse.h"
 #include "effects/Thermostat.h"
@@ -85,8 +86,8 @@ namespace md::io {
     void parse_cuboid(const std::string& line, Environment& environment) {
         SPDLOG_DEBUG("Reading Cuboid:     {}", line);
 
-        // Minimum required values: 3 (x) + 3 (v) + 3 (#particles) + 1 (width) + 1 (mass) + 1 (thermal_v) + 1 (dim)
-        auto vals = parse_values(line, 13);
+        // Minimum required values: 3 (x) + 3 (v) + 3 (#particles) + 1 (width) + 1 (mass) + 1 (thermal_v) + 1 (dim) + 1 (type) + 1 (state)
+        auto vals = parse_values(line, 15);
 
         const vec3 origin = {vals[0], vals[1], vals[2]};
         const vec3 init_v = {vals[3], vals[4], vals[5]};
@@ -101,9 +102,10 @@ namespace md::io {
             SPDLOG_ERROR("Invalid dimension parameter {}", line);
         }
         const auto dimension = static_cast<Dimension>(dim);
+        const int type = vals[13];
+        Particle::State state = vals[14] == 1 ? Particle::ALIVE : Particle::STATIONARY;
 
-        const int type = vals.size() == 14 ? static_cast<int>(vals[13]) : 0; // TODO read out particle state
-        environment.add_cuboid(origin, init_v, num_particles, width, mass, thermal_v, type, dimension, Particle::ALIVE);
+        environment.add_cuboid(origin, init_v, num_particles, width, mass, thermal_v, type, dimension, state);
 
         SPDLOG_DEBUG(
             "Parsed Cuboid:\n"
@@ -125,8 +127,8 @@ namespace md::io {
     void parse_sphere(const std::string& line, Environment& environment) {
         SPDLOG_DEBUG("Reading Sphere:     {}", line);
 
-        // Minimum required values: 3 (x) + 3 (v) + 1 (radius) + 1 (width) + 1 (mass) + 1 (thermal_v) + 1 (dim)
-        auto vals = parse_values(line, 11);
+        // Minimum required values: 3 (x) + 3 (v) + 1 (radius) + 1 (width) + 1 (mass) + 1 (thermal_v) + 1 (dim) + 1 (type) + 1 (state)
+        auto vals = parse_values(line, 13);
 
         const vec3 origin = {vals[0], vals[1], vals[2]};
         const vec3 init_v = {vals[3], vals[4], vals[5]};
@@ -140,9 +142,10 @@ namespace md::io {
             SPDLOG_ERROR("Invalid dimension parameter {}", line);
         }
         const auto dimension = static_cast<Dimension>(dim);
-        int type = vals.size() == 12 ? static_cast<int>(vals[11]) : 0;
-        // TODO read out particle state
-        environment.add_sphere(origin, init_v, static_cast<int>(radius), width, mass, thermal_v, type, dimension, Particle::ALIVE);
+        int type = vals[11];
+        Particle::State state = vals[12] == 1 ? Particle::ALIVE : Particle::STATIONARY;
+
+        environment.add_sphere(origin, init_v, static_cast<int>(radius), width, mass, thermal_v, type, dimension, state);
 
         SPDLOG_DEBUG(
                 "Parsed Sphere:\n"
@@ -164,8 +167,8 @@ namespace md::io {
     void parse_membrane(const std::string& line, ProgramArguments &args) {
         SPDLOG_DEBUG("Reading Membrane:     {}", line);
 
-        // Minimum required values: 3 (origin) + 3 (velocity) + 3 (num_particles) + 1 (width) + 1 (mass) + 1 (k)
-        auto vals = parse_values(line, 12);
+        // Minimum required values: 3 (origin) + 3 (velocity) + 3 (num_particles) + 1 (width) + 1 (mass) + 1 (k) + 1 (type)
+        auto vals = parse_values(line, 13);
 
         const vec3 origin = {vals[0], vals[1], vals[2]};
         const vec3 init_v = {vals[3], vals[4], vals[5]};
@@ -174,8 +177,7 @@ namespace md::io {
         const double width = vals[9];
         const double mass = vals[10];
         const double k = vals[11];
-        const int type = vals.size() == 13 ? static_cast<int>(vals[12]) : 0;
-        // TODO particle state
+        const int type = vals[12];
 
         args.env.add_membrane(origin, init_v, num_particles, width, mass, k, args.cutoff_radius, type);
 
@@ -189,7 +191,7 @@ namespace md::io {
                 "       k:                   {}\n"
                 "       Type:                {}",
                 origin[0], origin[1], origin[2], init_v[0], init_v[1], init_v[2], num_particles[0], num_particles[1],
-                num_particles[2], width, k, type);
+                num_particles[2], width, mass, k, type);
     }
 
     /// -----------------------------------------
@@ -229,15 +231,26 @@ namespace md::io {
                              vals[1], vals[0], args.cutoff_radius);
             }
             else if (force_name == "gravity") {
-                //TODO
-                //args.external_force = true;
-                //args.gravity = env::Gravity(vals[0]);
+                env::ConstantForce gravity = env::Gravity(vals[0]);
+                args.external_forces.push_back(gravity);
                 SPDLOG_DEBUG("Parsed gravity force: {}", vals[0]);
             }
-            else if (force_name == "pull_force") {
-                //args.external_force = true;
-                //TODO, initialize pull force
-                SPDLOG_DEBUG("Parsed pull force: ");
+            else if (force_name == "pull force") {
+                bool const_acc = vals.size() == 13 ? static_cast<bool>(vals[12]) : false;
+                env::ConstantForce pull_force ({vals[0], vals[1], vals[2]}, vals[3],
+                                               env::MarkBox({vals[4], vals[5], vals[6]}, {vals[7], vals[8], vals[9]}),
+                                               vals[10], vals[11], const_acc);
+
+                args.external_forces.push_back(pull_force);
+                SPDLOG_DEBUG("Parsed pull force: \n"
+                             "       Direction:  [{}, {}, {}]\n"
+                             "       Strength:   {}\n"
+                             "       Markbox:    bottom left corner [{}, {}, {}] and top right corner [{}, {}, {}]\n"
+                             "       Start time: {}\n"
+                             "       End time:   {}\n"
+                             "       Constant acceleration: {}",
+                             vals[0], vals[1], vals[2], vals[3], vals[4], vals[5], vals[6], vals[7],
+                             vals[8], vals[9], vals[10], vals[11], const_acc ? "true" : "false");
             }
         }
         catch (std::out_of_range& e) {

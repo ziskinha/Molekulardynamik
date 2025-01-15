@@ -5,9 +5,9 @@ general:
 25            0.0005         100            3         output
 
 cuboids:
-# LL-cord       velocity         N            h           m       br_v    dim   type(optional)
-0.6 2 0.0      0.0 0.0 0.0    250 20 1       1.2         1.0       0       2       0
-0.6 27 0.0     0.0 0.0 0.0    250 20 1       1.2         2.0       0       2       1
+# LL-cord       velocity         N            h           m       br_v    dim   type  state(0: STATIONARY, 1: ALIVE)
+0.6 2 0.0      0.0 0.0 0.0    250 20 1       1.2         1.0       0       2       0      1
+0.6 27 0.0     0.0 0.0 0.0    250 20 1       1.2         2.0       0       2       1      1
 
 force:
 # name           parameter   particle_type
