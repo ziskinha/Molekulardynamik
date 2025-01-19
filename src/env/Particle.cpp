@@ -10,11 +10,12 @@ namespace md::env {
     /// -----------------------------------------
     /// \brief Particle Class Methods
     /// -----------------------------------------
-    Particle::Particle(const size_t id, ParticleGrid& grid, const vec3& position, const vec3& velocity, const double mass, const int type)
+    Particle::Particle(const size_t id, ParticleGrid& grid, const vec3& position, const vec3& velocity,
+                       const double mass, const int type, const vec3 force)
         : position(position),
           old_position(),
           velocity(velocity),
-          force(),
+          force(force),
           old_force(),
           cell(),
           mass(mass),

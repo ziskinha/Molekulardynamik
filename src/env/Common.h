@@ -3,12 +3,9 @@
 #include <array>
 #include <cstdint>
 #include <functional>
-#include <limits>
-
 
 #define UINT_T uint32_t
 #define INT_T int32_t
-#define PARTICLE_TYPE_DEAD std::numeric_limits<int>::max()
 
 /**
  * @brief Contains fundamental types and utilities
@@ -17,6 +14,10 @@ namespace md {
     using vec3 = std::array<double, 3>;
     using uint3 = std::array<UINT_T, 3>;
     using int3 = std::array<INT_T, 3>;
+
+    namespace env {
+
+    }
 }  // namespace md
 
 /**
@@ -38,9 +39,9 @@ inline size_t hash_combine(const size_t lhs, const size_t rhs) {
  */
 struct Int3Hasher {
     /**
-     * @brief hash int3
-     * @param arr array to be hashed
-     * @return hash
+     * @brief hash int3.
+     * @param arr array to be hashed.
+     * @return hash.
      */
     size_t operator()(const std::array<INT_T, 3>& arr) const {
         std::size_t seed = 0x123456789;  // initial value
@@ -50,3 +51,5 @@ struct Int3Hasher {
         return seed;
     }
 };
+
+

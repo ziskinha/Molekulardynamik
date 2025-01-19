@@ -14,7 +14,7 @@ namespace xsd
 {
   namespace cxx
   {
-    // Input streambuffer that does not copy the underlying
+    // input streambuffer that does not copy the underlying
     // buffer (zero copy).
     //
     template <typename C>
@@ -50,7 +50,7 @@ namespace xsd
     };
 
 
-    // Input string stream that does not copy the underlying string.
+    // input string stream that does not copy the underlying string.
     //
     template <typename C>
     class zc_istream_base

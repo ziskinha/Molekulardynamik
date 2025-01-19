@@ -3,14 +3,12 @@
 
 #include <string>
 
-#include "env/Environment.h"
-
 namespace md::io {
-
+    struct ProgramArguments;
     /**
      * @brief Reads a txt file with particle, cuboid, force and environment information.
      * @param file_name
      * @param env
      */
-    void read_file_txt(const std::string& file_name, env::Environment& env);
+    void read_file_txt(const std::string& file_name, ProgramArguments &args);
 }  // namespace md::io

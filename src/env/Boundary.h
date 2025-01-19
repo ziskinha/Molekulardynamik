@@ -4,7 +4,6 @@
 
 #include "Common.h"
 #include "Force.h"
-// #include "ParticleGrid.h"
 
 
 #define MAX_EXTENT std::numeric_limits<double>::max()
@@ -28,6 +27,7 @@ namespace md::env {
         static const int3 FRONT;   ///< Normal vector of the front face.
         static const int3 BACK;    ///< Normal vector of the back face.
     };
+
 
     /**
     * @brief Enumeration of possible boundary conditions.
@@ -54,6 +54,27 @@ namespace md::env {
             HEIGHT,  ///< Height of the simulation space.
             DEPTH    ///< Depth of the simulation space.
         };
+
+        /**
+         * @brief Enumeration of the faces of the boundary.
+         */
+        enum Face {
+            LEFT,
+            RIGHT,
+            TOP,
+            BOTTOM,
+            FRONT,
+            BACK
+       };
+
+        /**
+         * @brief Evaluates the corresponding face to a given face normal vector.
+         * @param normal The face normal vector.
+         * @return The corresponding "Face" value.
+         *
+         * @throws std::invalid_argument if the face normal vector is not valid (Program should never reach that point).
+         */
+        static Face normal_to_face(const int3 & normal);
 
         /**
          * @brief Constructs a default Boundary object.
@@ -87,9 +108,8 @@ namespace md::env {
          */
         void apply_boundary(Particle &particle, const GridCell &current_cell, const GridCell &previous_cell) const;
 
-        // TODO set to private
-        vec3 extent{MAX_EXTENT, MAX_EXTENT, MAX_EXTENT}; ///< Dimensions of the boundary [width, height, depth].
-        vec3 origin{CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN}; ///< origin of the boundary.
+        [[nodiscard]] const std::array<BoundaryRule, 6> & boundary_rules() const;
+
 
         /**
          * @brief Creates a Lennard-Jones boundary force.
@@ -108,10 +128,12 @@ namespace md::env {
          */
         static BoundaryForce InverseDistanceForce(double cutoff, double pre_factor, int exponent = 2);
 
-        // functions for querying whether the force has been set if required
+        // functions for querying whether the force has been set if required.
         [[nodiscard]] bool requires_force_function() const;
         [[nodiscard]] bool has_force_function() const;
 
+        vec3 extent{MAX_EXTENT, MAX_EXTENT, MAX_EXTENT}; ///< Dimensions of the boundary [width, height, depth].
+        vec3 origin{CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN, CENTER_BOUNDARY_ORIGIN}; ///< origin of the boundary.
     private:
         /**
          * @brief Applies a boundary rule to a particle based on the boundary face it interacts with.

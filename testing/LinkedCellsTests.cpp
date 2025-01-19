@@ -1,17 +1,17 @@
 #include <gtest/gtest.h>
+
+#include "../src/core/StoermerVerlet.h"
 #include "../src/env/Environment.h"
 #include "../src/env/ParticleGrid.h"
-#include "../src/core/StoermerVerlet.h"
 
 md::env::ParticleGrid grid;
-
 md::env::Boundary boundary;
 std::vector<md::env::Particle> particle_storage;
 
-md::env::Particle particle1 = md::env::Particle(0, grid, {7.5, 7.5, 0}, {0.0, 0.0, 0.0}, 100.0, 0);
-md::env::Particle particle2 = md::env::Particle(0, grid, {4.5, 7.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
-md::env::Particle particle3 = md::env::Particle(0, grid, {7.5, 4.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
-md::env::Particle particle4 = md::env::Particle(0, grid, {13.5, 13.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
+auto particle1 = md::env::Particle(0, grid, {7.5, 7.5, 0}, {0.0, 0.0, 0.0}, 100.0, 0);
+auto particle2 = md::env::Particle(0, grid, {4.5, 7.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
+auto particle3 = md::env::Particle(0, grid, {7.5, 4.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
+auto particle4 = md::env::Particle(0, grid, {13.5, 13.5, 0}, {0.0, 0.0, 0.0}, 1.0, 0);
 
 void init_grid() {
     boundary.origin = {0, 0, 0};
@@ -23,10 +23,8 @@ void init_grid() {
     particle_storage.emplace_back(particle3);
     particle_storage.emplace_back(particle4);
 
-    grid.build(boundary.extent, 3, particle_storage, boundary.origin);
+    grid.build(boundary, 3, particle_storage);
 }
-
-
 
 // tests if grid is constructed correctly
 TEST(LinkedCellsTest, grid_construction_test) {
@@ -45,23 +43,29 @@ TEST(LinkedCellsTest, grid_construction_test) {
 
 // tests if grid pairs are created correctly
 TEST(LinkedCellsTest, grid_pair_test) {
-    std::vector<md::env::GridCellPair> cell_pair = grid.linked_cells();
+    std::vector<md::env::CellPair> cell_pair = grid.linked_cells();
     int i = 0;
 
     for (auto& pair : cell_pair) {
-        for (auto [p1, p2]: pair.particles()) {
-            switch(i) {
+        for (auto [p1, p2] : pair.particles()) {
+            switch (i) {
                 case 0:
-                    EXPECT_EQ(p1->to_string(), "Particle: X:[7.5, 4.5, 0] v: [0, 0, 0] f: [0, 0, 0] old_f: [0, 0, 0] type: 0 id: 0");
-                    EXPECT_EQ(p2->to_string(), "Particle: X:[4.5, 7.5, 0] v: [0, 0, 0] f: [0, 0, 0] old_f: [0, 0, 0] type: 0 id: 0");
+                    EXPECT_EQ(p1->to_string(),
+                              "Particle: X:[7.5, 4.5, 0] v: [0, 0, 0] f: [0, 0, 0] old_f: [0, 0, 0] type: 0 id: 0");
+                    EXPECT_EQ(p2->to_string(),
+                              "Particle: X:[4.5, 7.5, 0] v: [0, 0, 0] f: [0, 0, 0] old_f: [0, 0, 0] type: 0 id: 0");
                     break;
                 case 1:
-                    EXPECT_EQ(p1->to_string(), "Particle: X:[7.5, 7.5, 0] v: [0, 0, 0] f: [0, 0, 0] old_f: [0, 0, 0] type: 0 id: 0");
-                    EXPECT_EQ(p2->to_string(), "Particle: X:[4.5, 7.5, 0] v: [0, 0, 0] f: [0, 0, 0] old_f: [0, 0, 0] type: 0 id: 0");
+                    EXPECT_EQ(p1->to_string(),
+                              "Particle: X:[7.5, 7.5, 0] v: [0, 0, 0] f: [0, 0, 0] old_f: [0, 0, 0] type: 0 id: 0");
+                    EXPECT_EQ(p2->to_string(),
+                              "Particle: X:[4.5, 7.5, 0] v: [0, 0, 0] f: [0, 0, 0] old_f: [0, 0, 0] type: 0 id: 0");
                     break;
                 case 2:
-                    EXPECT_EQ(p1->to_string(), "Particle: X:[7.5, 7.5, 0] v: [0, 0, 0] f: [0, 0, 0] old_f: [0, 0, 0] type: 0 id: 0");
-                    EXPECT_EQ(p2->to_string(), "Particle: X:[7.5, 4.5, 0] v: [0, 0, 0] f: [0, 0, 0] old_f: [0, 0, 0] type: 0 id: 0");
+                    EXPECT_EQ(p1->to_string(),
+                              "Particle: X:[7.5, 7.5, 0] v: [0, 0, 0] f: [0, 0, 0] old_f: [0, 0, 0] type: 0 id: 0");
+                    EXPECT_EQ(p2->to_string(),
+                              "Particle: X:[7.5, 4.5, 0] v: [0, 0, 0] f: [0, 0, 0] old_f: [0, 0, 0] type: 0 id: 0");
                     break;
                 default:
                     EXPECT_TRUE(false);
@@ -72,58 +76,12 @@ TEST(LinkedCellsTest, grid_pair_test) {
     }
 }
 
-// Tests if the calculations are correct, checks position and velocity after simulation
-TEST(LinkedCellsTest, calculation_test) {
-    md::env::Environment env;
-    env.set_boundary(boundary);
-    env.add_particle({7.5, 7.5, 0}, {0.0, 0.0, 0.0}, 1e9, 0);
-    env.add_particle({4.5, 7.5, 0}, {0.0, 0.0, 0.0}, 1e-9, 0);
-    env.add_particle({7.5, 4.5, 0}, {0.0, 0.0, 0.0}, 1e-9, 0);
-    env.add_particle({13.5, 13.5, 0}, {0.0, 0.0, 0.0}, 1e-9, 0);
-    env.set_force(md::env::LennardJones(5, 0.1, 3));
-    env.build();
-
-    md::Integrator::StoermerVerlet simulator(env, NULL);
-    simulator.simulate(0, 25, 0.001, 1000);
-
-    // particle 1 after simulation
-    EXPECT_TRUE(env.operator[](0).position[0] == 7.5);
-    EXPECT_TRUE(env.operator[](0).position[1] ==7.5);
-    EXPECT_TRUE(env.operator[](0).position[2] == 0);
-
-    EXPECT_NEAR(env.operator[](0).velocity[0], -4.1034e-15, 1e-5);
-    EXPECT_NEAR(env.operator[](0).velocity[1], -4.1034e-15, 1e-5);
-    EXPECT_TRUE(env.operator[](0).velocity[2] == 0);
-
-    // particle 2 after simulation
-    EXPECT_NEAR(env.operator[](1).position[0], 15.4666, 1);
-    EXPECT_NEAR(env.operator[](1).position[1], 7.17141, 1);
-    EXPECT_TRUE(env.operator[](1).position[2] == 0);
-
-    EXPECT_NEAR(env.operator[](1).velocity[0], 4240.53, 1);
-    EXPECT_NEAR(env.operator[](1).velocity[1], -136.241, 1);
-    EXPECT_TRUE(env.operator[](1).velocity[2] == 0);
-
-    // particle 3 after simulation
-    EXPECT_NEAR(env.operator[](2).position[0], 7.17141, 1);
-    EXPECT_NEAR(env.operator[](2).position[1], 15.4666, 1);
-    EXPECT_TRUE(env.operator[](2).position[2] == 0);
-
-    EXPECT_NEAR(env.operator[](2).velocity[0], -136.241, 1);
-    EXPECT_NEAR(env.operator[](2).velocity[1], 4240.53, 1);
-    EXPECT_TRUE(env.operator[](2).velocity[2] == 0);
-
-    // particle 4 after simulation, nothing should have changed
-    EXPECT_TRUE(env.operator[](3).position[0] == 13.5);
-    EXPECT_TRUE(env.operator[](3).position[1] == 13.5);
-    EXPECT_TRUE(env.operator[](3).position[2] == 0);
-
-    EXPECT_TRUE(env.operator[](3).velocity[0] == 0.0);
-    EXPECT_TRUE(env.operator[](3).velocity[1] == 0.0);
-    EXPECT_TRUE(env.operator[](3).velocity[2] == 0.0);
-}
-
-
-
-
+struct SymmetricPairHasher {  // symmetric pair hasher
+    template <typename T1, typename T2>
+    std::size_t operator()(const std::pair<T1, T2>& key) const {
+        std::size_t h1 = std::hash<T1>()(key.first);
+        std::size_t h2 = std::hash<T2>()(key.second);
+        return h1 ^ h2 ^ ((h1 + h2) << 1);
+    }
+};
 

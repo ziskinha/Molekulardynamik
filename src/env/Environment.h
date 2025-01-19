@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <array>
@@ -11,9 +10,6 @@
 #include "Force.h"
 #include "Particle.h"
 #include "ParticleGrid.h"
-#include "Force.h"
-#include "Boundary.h"
-#include <ranges>
 
 #define GRID_CONSTANT_AUTO 0
 
@@ -74,9 +70,11 @@ namespace md::env {
          * @brief Constructs a SphereCreateInfo.
          * @param origin Coordinates of the center.
          * @param initial_v Initial velocity of all particles.
+         * @param thermal_v Thermal velocity of the particles.
          * @param radius The radius in terms of the number of molecules along the radius.
          * @param width Distance between the particles.
          * @param mass The mass of the particles.
+         * @param dimension Dimension of the sphere.
          * @param type The type of each particles (dafault: 0).
          */
         SphereCreateInfo(const vec3& origin, const vec3& initial_v, const double thermal_v, int radius, double width,
@@ -92,10 +90,19 @@ namespace md::env {
     };
 
     /**
+     * @brief Number of dimensions for the simulation.
+     */
+    enum class Dimension {
+        TWO = 2,
+        THREE = 3,
+        INFER = -1
+    };
+
+    /**
      * @brief Class representing the simulation environment, which manages particles, forces, boundaries, and the grid.
      */
     class Environment {
-       public:
+    public:
         /**
          * @brief Constructs an empty environment.
          */
@@ -107,17 +114,19 @@ namespace md::env {
          */
         void build();
 
+
         /**
-         * @brief Sets the grid constant, the desired side length of a cell
+         * @brief Sets the grid constant, the desired side length of a cell.
          * @param g New grid constant.
          */
         void set_grid_constant(double g);
 
         /**
-         * @brief Sets the force with which particles interact
-         * @param force The force function to be used.
+         * @brief Sets the force with which particles interact of a given type interact.
+         * @param force The type force to be used.
+         * @param particle_type
          */
-        void set_force(const Force& force);
+        void set_force(const ForceType& force, int particle_type);
 
         /**
          * @brief Sets the boundary conditions for the environment.
@@ -126,13 +135,26 @@ namespace md::env {
         void set_boundary(const Boundary& boundary);
 
         /**
+        * @brief Sets the dimension of the environment.
+        * @param dim
+        */
+        void set_dimension(Dimension dim);
+
+        /**
+        * @brief Set the gravitational force strength.
+        * @param g gravitational acceleration.
+        */
+        void set_gravity_constant(double g);
+
+        /**
          * @brief Adds a single particle to the environment.
          * @param position Position of the particle.
          * @param velocity Velocity of the particle.
          * @param mass Mass of the particle.
          * @param type Type of the particle.
          */
-        void add_particle(const vec3& position, const vec3& velocity, double mass, int type = 0);
+        void add_particle(const vec3& position, const vec3& velocity, double mass, int type = 0,
+                          const vec3& force = {0, 0, 0});
 
         /**
          * @brief Adds multiple particles to the environment.
@@ -175,10 +197,11 @@ namespace md::env {
          * @param width Distance between the particles.
          * @param mass The mass of the particles.
          * @param dimension Dimension of the sphere.
-         * @param type The type of each particles (dafault: 0).
+         * @param type The type of each particle (default: 0).
          */
-        void add_sphere(const vec3& origin, const vec3& initial_v,  double thermal_v, int radius, double width,
+        void add_sphere(const vec3& origin, const vec3& initial_v, double thermal_v, int radius, double width,
                         double mass, uint8_t dimension, int type = 0);
+
 
         /**
          * @brief Computes the force between two particles.
@@ -186,7 +209,7 @@ namespace md::env {
          * @param p2 The second particle.
          * @return The force between the two particles.
          */
-        [[nodiscard]] vec3 force(const Particle& p1, const Particle& p2) const;
+        [[nodiscard]] vec3 force(const Particle& p1, const Particle& p2, const CellPair & pair) const;
 
         /**
          * Returns the number of particles of a certain state in the environment.
@@ -201,19 +224,20 @@ namespace md::env {
          * @param state The state to filter (default: (GridCell::ALIVE).
          * @return A range of particles matching the specified type and state.
          */
-        auto particles( GridCell::Type type = GridCell::INSIDE, Particle::State state = Particle::ALIVE) {
+        auto particles(GridCell::Type type = GridCell::INSIDE, Particle::State state = Particle::ALIVE) {
             return particle_storage | std::ranges::views::filter([this, state, type](const Particle& particle) {
                 return filter_particles(particle, state, type);
             });
         }
-        
+
         /**
         * @brief Provides access to particles filtered by grid cell type and state (const version).
         * @param type The type to filter (default: GridCell::Inside).
         * @param state The state to filter (default: (GridCell::ALIVE).
         * @return A const range of particles matching the specified type and state.
         */
-        [[nodiscard]] auto particles(GridCell::Type type = GridCell::INSIDE, Particle::State state = Particle::ALIVE) const {
+        [[nodiscard]] auto particles(GridCell::Type type = GridCell::INSIDE,
+                                     Particle::State state = Particle::ALIVE) const {
             return particle_storage | std::ranges::views::filter([this, state, type](const Particle& particle) {
                 return filter_particles(particle, state, type);
             });
@@ -223,14 +247,32 @@ namespace md::env {
          * @brief Retrieves the linked grid cells in the simulation.
          * @return A const reference to the vector of the linked cell pairs.
          */
-        const std::vector<GridCellPair> & linked_cells();
+        const std::vector<CellPair>& linked_cells();
 
 
         /**
          * @brief Applies the boundary conditions to a particle.
          * @param particle The particle to which the conditions will be applied.
          */
-        void apply_boundary(Particle & particle);
+        void apply_boundary(Particle& particle);
+
+        /**
+         * @brief Calculates the gravitational force acting on a given particle.
+         * @param particle The particle for which it is being calculated.
+         * @return The gravitational force acting on the particle.
+         */
+        vec3 gravity_force(const Particle& particle) const;
+
+        /**
+         * @brief Calculate temperature of the system.
+         */
+        double temperature() const;
+
+        /**
+         * @brief Returns the dimension of the environment.
+         * @return The dimension.
+         */
+        int dim() const;
 
         /**
          * @brief Accesses particle by its ID.
@@ -250,7 +292,7 @@ namespace md::env {
         Environment(const Environment&) = delete;
         Environment& operator=(const Environment&) = delete;
 
-       private:
+    private:
         /**
          * @brief Filters particles based on their state and location within the grid.
          * @param particle The particle to be filtered.
@@ -260,14 +302,19 @@ namespace md::env {
          */
         [[nodiscard]] bool filter_particles(const Particle& particle, Particle::State state, GridCell::Type type) const;
 
+        std::vector<CuboidCreateInfo> cuboids;
+        std::vector<SphereCreateInfo> spheres;
+
         // TODO replace vector with a vector wrapper that emulates a vector of fixed size
         std::vector<Particle> particle_storage; ///< vector with all particles
 
         Boundary boundary;     ///< Boundary conditions of the environment.
         ParticleGrid grid;     ///< Grid of the environment.
+        ForceManager forces;   ///< Forces with which the particles interact.
 
-        Force force_func;      ///< Used force function in the environment.
-        double grid_constant;  ///< Used grid Constant in the environment.
-        bool initialized;      ///< Indicates whether the environment has been initialized.
+        Dimension dimension;  ///< Dimension of the simulation
+        double grid_constant; ///< Used grid Constant in the environment.
+        bool initialized;     ///< Indicates whether the environment has been initialized.
+        double g_grav;        ///< Gravitational force strength.
     };
-}  // namespace md::env
+} // namespace md::env

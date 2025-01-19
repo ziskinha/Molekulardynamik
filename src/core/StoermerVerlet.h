@@ -12,11 +12,13 @@ namespace md::Integrator {
         using IntegratorBase::IntegratorBase;
 
        private:
-        /**
+       
+         /**
          * @brief Performs a single step of the Stoermer-Verlet.
+         * @param step
          * @param dt Δt The time increment for each simulation step.
          */
-        void simulation_step(double dt) override;
+        void simulation_step(unsigned step, double dt) override;
     };
 
 }  // namespace md::Integrator

@@ -21,13 +21,11 @@ The build target is called `MolSim`.
 ## Usage
 After building, you can run the simulation with the following commands:
 ```bash
-./MolSim <xml_file> <output_format>
+./MolSim <input_file> <output_format>
 ./MolSim -h | --help
-./MolSim -f
-./MolSim -b
 ```
 ### Arguments:
-- **xml_file** XML file with input parameters important for the simulation.
+- **input_file** XML or TXT file with input parameters important for the simulation.
 - **output_format** Output format: either 'XYZ' or 'VTK'
 
 ### Flags

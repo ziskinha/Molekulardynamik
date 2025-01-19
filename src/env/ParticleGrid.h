@@ -1,12 +1,12 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
-#include <unordered_set>
 #include <vector>
 
+#include "ankerl/unordered_dense.h"
 #include "env/Common.h"
 #include "env/Particle.h"
+#include "env/Boundary.h"
 #include "utils/ContainerUtils.h"
 
 /**
@@ -22,10 +22,17 @@
  * @brief Contains classes and structures for managing the environment of the simulation.
  */
 namespace md::env {
+    struct PointerHash {
+        size_t operator()(const void* ptr) const noexcept {
+            return reinterpret_cast<uintptr_t>(ptr) >> 3; // Right shift to improve distribution
+        }
+    };
     /**
      * @brief Structure representing a cell of the particle grid.
      */
     struct GridCell {
+        using particle_container = ankerl::unordered_dense::set<Particle*, PointerHash>;
+
         /**
          * @brief Enumeration of the type of the grid cell.
          */
@@ -70,7 +77,7 @@ namespace md::env {
         const int3 idx;    ///< The index of the grid cell
         int id;            ///< The id of the grid cell.
 
-        std::unordered_set<Particle*> particles{};   ///< The set of particles inside the grid cell.
+        particle_container particles{}; ///< The set of particles inside the grid cell.
     private:
         static int count;  ///< A counter for generating unique ids for grid cells.
     };
@@ -109,18 +116,32 @@ namespace md::env {
         return lhs;
     }
 
+
+
+
     /**
      * @brief Structure representing a pair of linked grid cells
      */
-    struct GridCellPair{
-        using ParticlePairIterator = utils::DualPairIterator<std::unordered_set<Particle*>>;
+    struct CellPair{
+        /**
+         * @brief Enumeration representing the periodicity, used for applying periodic boundary condition.
+         */
+        enum Periodicity {
+            PERIODIC_NONE    = 0x0,  ///< No periodicity.
+            PERIODIC_X       = 0x1,  ///< Periodicity in the x-direction.
+            PERIODIC_Y       = 0x2,  ///< Periodicity in the y-direction.
+            PERIODIC_Z       = 0x4,  ///< Periodicity in the z-direction.
+        };
+
+        using ParticlePairIterator = utils::DualPairIterator<GridCell::particle_container>;
 
         /**
          * @brief Constructs a new GridCellPair of two grid cells.
          * @param cell1 The fist grid cell.
          * @param cell2 The second grid cell.
+         * @param periodicity The periodicity.
          */
-        GridCellPair(GridCell& cell1, GridCell& cell2);
+        CellPair(GridCell& cell1, GridCell& cell2, Periodicity periodicity);
 
         /**
          * @brief Checks if the GridCellPair is empty.
@@ -146,26 +167,60 @@ namespace md::env {
          */
         [[nodiscard]] std::pair<int, int> id() const;
 
-       private:
+        const Periodicity periodicity;
         GridCell& cell1;  ///< The first grid cell in the pair.
         GridCell& cell2;  ///< The second grid cell in the pair.
     };
+
+    /**
+     * @brief Enables bitwise OR operation for combining periodicity flags.
+     * @param lhs
+     * @param rhs
+     * @return The combined periodicity condition.
+     */
+    inline CellPair::Periodicity operator|(const CellPair::Periodicity lhs, const CellPair::Periodicity rhs) {
+        using T = std::underlying_type_t<CellPair::Periodicity>;
+        return static_cast<CellPair::Periodicity>(static_cast<T>(lhs) | static_cast<T>(rhs));
+    }
+
+    /**
+     * @brief Enables bitwise OR assignment for periodicity flags.
+     * @param lhs
+     * @param rhs
+     * @return A reference to the modified periodicity condition.
+     */
+    inline CellPair::Periodicity& operator|=(CellPair::Periodicity &lhs, CellPair::Periodicity rhs) {
+        using T = std::underlying_type_t<CellPair::Periodicity>;
+        lhs = static_cast<CellPair::Periodicity>(static_cast<T>(lhs) | static_cast<T>(rhs));
+        return lhs;
+    }
+
+    /**
+     * @brief Enables bitwise AND operator for periodicity flags.
+     * @param lhs
+     * @param rhs
+     * @return The intersection of the periodicity conditions.
+     */
+    inline CellPair::Periodicity operator&(const CellPair::Periodicity lhs, const CellPair::Periodicity rhs) {
+        using T = std::underlying_type_t<CellPair::Periodicity>;
+        return static_cast<CellPair::Periodicity>(static_cast<T>(lhs) & static_cast<T>(rhs));
+    }
+
 
     /**
      * @brief A class representing the particle grid.
      */
     class ParticleGrid {
        public:
-        ParticleGrid() = default;
+        ParticleGrid();
 
         /**
          * @brief Builds the particle grid with the given parameters.
-         * @param extent The size of the simulation space.
+         * @param boundary
          * @param grid_const The constant used to define grid cell size.
          * @param particles The particles that fill the cells.
-         * @param origin The lower left corner of the domain.
          */
-        void build(const vec3& extent, double grid_const, std::vector<Particle>& particles, const vec3& origin);
+        void build(const Boundary & boundary, double grid_const, std::vector<Particle>& particles);
 
         /**
          * @brief Retrieves the grid cell corresponding the index.
@@ -212,13 +267,15 @@ namespace md::env {
          * @brief returns all pairs of linked cells
          * @return A vector with GridCellPairs
          */
-        const std::vector<GridCellPair> & linked_cells();
+        const std::vector<CellPair> & linked_cells();
 
         /**
          * @brief returns all cells at the boundary
          * @return A vector with GridCell pointers
          */
         const std::vector<GridCell*> & boundary_cells();
+
+        size_t particle_count() const;
 
         /**
          * @brief Updates the relevant grid cells when a particle moves from one cell to another.
@@ -243,10 +300,11 @@ namespace md::env {
         /**
         * @brief Builds pairs of neighboring cells.
         */
-        void build_cell_pairs();
+        void build_cell_pairs(const std::array<BoundaryRule, 6> & rules);
 
-        std::unordered_map<int3, GridCell, Int3Hasher> cells {}; ///< A hash map storing the cells in the grid.
-        std::vector<GridCellPair> cell_pairs{};                  ///< A vector of linked cell pairs.
+        // std::unordered_map<int3, GridCell, Int3Hasher> cells {}; ///< A hash map storing the cells in the grid.
+        ankerl::unordered_dense::map<int3, GridCell, Int3Hasher> cells{};
+        std::vector<CellPair> cell_pairs{};                  ///< A vector of linked cell pairs.
         std::vector<GridCell*> border_cells;                     ///< A vector of cells at the domain boundary
 
         uint3 cell_count{};         ///< The number of cells in the grid along each dimension.

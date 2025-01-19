@@ -2,10 +2,6 @@
 
 #include <iostream>
 
-#ifndef DEFAULT_LOG_LEVEL
-    #define DEFAULT_LOG_LEVEL spdlog::level::info
-#endif
-
 namespace md::io {
     void md::io::Logger::initialize_logger() {
         // Create Console and File sink

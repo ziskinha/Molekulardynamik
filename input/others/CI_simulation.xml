@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <simulation>
     <output>
-        <baseName>simulation_output</baseName>
+        <baseName>output</baseName>
         <writeFrequency>1000</writeFrequency>
     </output>
 
     <parameters>
-        <tEnd>10.0</tEnd>
-        <deltaT>0.1</deltaT>
+        <tEnd>1</tEnd>
+        <deltaT>0.0005</deltaT>
         <cutoff_radius>3.0</cutoff_radius>
+        <gravitational_force> 0 </gravitational_force>
     </parameters>
 
     <Boundary
@@ -24,11 +25,16 @@
             EXTENT_WIDTH="10.0"
             EXTENT_HEIGHT="10.0"
             EXTENT_DEPTH="1.0"
+            Force_type="lennardJones"
+            force_arg1="1"
+            force_arg2="1"
     />
 
+    <GridConstant> 3 </GridConstant>
 
     <Forces>
-        <Force type="lennardJones" arg1="5" arg2="1"/>
+        <Force type="lennardJones" partType="0" arg1="1" arg2="1"/>
+        <Force type="lennardJones" partType="1" arg1="1" arg2="1"/>
     </Forces>
 
     <spheres>
@@ -43,6 +49,6 @@
         <width>1</width>
         <mass>1</mass>
         <dimension>2</dimension>
-        <type>0</type>
+        <type>1</type>
     </spheres>
 </simulation>
