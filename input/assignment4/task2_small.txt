@@ -2,7 +2,7 @@
 
 general:
 # duration   delta_t     write_freq   cutoff_radius   parallel_strategy  output_baseName
-25            0.0005         100           2.5                2                output
+25            0.0005         100           2.5              2                output
 
 cuboids:
 # LL-cord       velocity        N            h           m       br_v    dim   type   state(0: STATIONARY, 1: ALIVE)

@@ -307,10 +307,10 @@ void ParticleGrid::build(const Boundary & boundary, const double grid_const, std
             return 0;
         }
         else if (idx2[axis] < block.origin[axis]) {
-            return block.idx[axis];
+            return blocks[axis + 1].size() > block.idx[axis] ? block.idx[axis] : 0;
         }
         else {
-            return block.idx[axis] + 1;
+            return blocks[axis + 1].size() > block.idx[axis] + 1 ? block.idx[axis] + 1 : 0;
         }
     }
 
