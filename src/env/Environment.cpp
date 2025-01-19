@@ -235,7 +235,7 @@ namespace md::env {
                    sphere.type, sphere.dimension, sphere.state);
     }
 
-    void Environment::build() {
+    void Environment::build(bool build_blocks) {
         if (initialized) {
             SPDLOG_ERROR("Environment is already initialized!");
             return;
@@ -304,7 +304,7 @@ namespace md::env {
             }
         }
 
-        grid.build(boundary, grid_constant, particle_storage);
+        grid.build(boundary, grid_constant, particle_storage, build_blocks);
         initialized = true;
         SPDLOG_INFO("Environment successfully built.");
     }
@@ -352,6 +352,10 @@ namespace md::env {
 
     const std::vector<CellPair>& Environment::linked_cells() {
         return grid.linked_cells();
+    }
+
+    const std::vector<std::vector<Block>>& Environment::block_sets() {
+        return grid.block_sets();
     }
 
     void Environment::apply_boundary(Particle& particle) {

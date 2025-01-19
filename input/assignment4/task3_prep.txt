@@ -1,6 +1,6 @@
 general:
-# duration   delta_t     write_freq   cutoff_radius   output_baseName
-15            0.0005       500           3                output
+# duration   delta_t     write_freq   cutoff_radius  parallel_strategy  output_baseName
+15            0.0005       500           3                 0                 output
 
 cuboids:
 # LL-cord       velocity        N            h           m       br_v    dim   particle_type state(0: STATIONARY, 1: ALIVE)

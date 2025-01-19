@@ -11,6 +11,7 @@
 # * delta_t  (1 double value)
 # * write freqency (1 double value)
 # * cutoff radius  (1 double value)
+# * parallel strategy (0: none, 1: cell lcok, 2: spatial decomposition)
 # * output baseName (1 string)
 #
 # Particle data consists of
@@ -28,7 +29,7 @@
 # * average thermal velocity
 # * dimension (either 2 or 3)
 # * Particle type (1 int value)
-# * Particle type (1 int value (0: STATIONARY, 1: ALIVE))
+# * Particle state (1 int value (0: STATIONARY, 1: ALIVE))
 #
 # Sphere data consists of
 # * xyz-coordinates of the center (3 double values)
@@ -39,7 +40,7 @@
 # * average thermal velocity
 # * dimension (either 2 or 3)
 # * Particle type (1 int value)
-# * Particle type (1 int value (0: STATIONARY, 1: ALIVE))
+# * Particle state (1 int value (0: STATIONARY, 1: ALIVE))
 #
 # Membrane data consists of
 # * xyz-coordinates of origin (3 double values)
@@ -63,8 +64,8 @@
 # + delta_T: Temperature difference (1 double value), -1 if not defined
 
 general:
-# duration   delta_t     write_freq   cutoff_radius   output_baseName
--              -            -               -               -
+# duration   delta_t     write_freq   cutoff_radius   parallel_strategy  output_baseName
+-              -            -               -               -                 -
 
 particles:
 # origin       velocity       mass       particle_type

@@ -121,7 +121,7 @@ namespace md::env {
          * @brief Initializes the simulation environment, setting up the grid and boundary conditions.
          * It checks the validity of the boundary extents and grid constant. If necessary, applies default values.
          */
-        void build();
+        void build(bool build_blocks = false);
 
 
         /**
@@ -252,6 +252,12 @@ namespace md::env {
          * @return A const reference to the vector of the linked cell pairs.
          */
         const std::vector<CellPair>& linked_cells();
+
+        /**
+         * @brief Retrieves the block sets of the simulation, used for spatial decomposition parallelization.
+         * @return
+         */
+        const std::vector<std::vector<Block>>& block_sets();
 
 
         /**

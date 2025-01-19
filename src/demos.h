@@ -1,7 +1,7 @@
 # pragma once
 
 #include "io/IOStrategy.h"
-#include "core/StoermerVerlet.h"
+#include "core/StoermerVerlet/StoermerVerlet.h"
 #include "env/Environment.h"
 #include "env/Force.h"
 #include "core/Statistics.h"

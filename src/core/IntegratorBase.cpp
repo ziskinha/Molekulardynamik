@@ -62,7 +62,7 @@ namespace md::Integrator {
         const int total_steps = static_cast<int>((end_time - start_time) / dt);
 
         for (double t = start_time; t < end_time; t += dt, step++) {
-            simulation_step_omp1(step, dt);
+            simulation_step(step, dt);
 
             if (stats && step % stats->compute_freq == 0) {
                 stats->compute(env);
@@ -90,7 +90,7 @@ namespace md::Integrator {
         for (double t = start_time; t < end_time; t += dt, step++) {
             modifications += env.size(env::Particle::ALIVE);
             auto start = std::chrono::high_resolution_clock::now();
-            simulation_step_omp1(step, dt);
+            simulation_step(step, dt);
             auto end = std::chrono::high_resolution_clock::now();
             total_micros += std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
         }

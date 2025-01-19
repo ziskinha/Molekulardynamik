@@ -61,8 +61,6 @@ namespace md::Integrator {
          * @brief Abstract method for performing a single simulation step.
          */
         virtual void simulation_step(unsigned int, double) {};
-        // TODO
-        virtual void simulation_step_omp1(unsigned int, double) {};
 
         env::Environment& env;            ///< Reference to the environment.
         const env::Thermostat thermostat; ///< Thermostat to adjust temperature of the environment

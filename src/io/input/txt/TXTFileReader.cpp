@@ -287,7 +287,9 @@ namespace md::io {
         }
 
         args.env.set_boundary(args.boundary);
-        args.env.build();
+
+        bool build_blocks = args.parallel_strategy == 2 ? true : false;
+        args.env.build(build_blocks);
     }
 
     /// -----------------------------------------
@@ -311,7 +313,7 @@ namespace md::io {
     }
 
     /// -----------------------------------------
-    /// \brief Parse general information, such as time, wirteFrequency ...
+    /// \brief Parse general information
     /// -----------------------------------------
     void parse_general(const std::string& line, ProgramArguments &args) {
         SPDLOG_DEBUG("Reading general information: {}", line);
@@ -320,8 +322,8 @@ namespace md::io {
         std::vector<double> vals;
         double num;
 
-        // Required values: 1 (duration) + 1 (delta_t) + 1 (write_freq) + 1 (cutoff_radius) + 1 string (output_name)
-        for (int i = 0; i < 4; ++i) {
+        // Required values: 1 (duration) + 1 (delta_t) + 1 (write_freq) + 1 (cutoff_radius) + 1 int (parallel_strategy) + 1 string (output_name)
+        for (int i = 0; i < 5; ++i) {
             if (!(data_stream >> num)) {
                 SPDLOG_ERROR("Not enough numbers in line: {}", line);
                 exit(-1);
@@ -340,6 +342,8 @@ namespace md::io {
         args.dt = vals[1];
         args.write_freq = vals[2];
         args.cutoff_radius = vals[3];
+        // parallel_strategy: [0] = no parallelization, [1] = cell lock, [2] = spatial decomposition
+        args.parallel_strategy = vals[4];
         args.output_baseName = basename;
     }
 
