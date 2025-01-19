@@ -22,8 +22,8 @@
             CENTER_BOUNDARY_ORIGINX="0.0"
             CENTER_BOUNDARY_ORIGINY="0.0"
             CENTER_BOUNDARY_ORIGINZ="0.0"
-            EXTENT_WIDTH="100.0"
-            EXTENT_HEIGHT="100.0"
+            EXTENT_WIDTH="10.0"
+            EXTENT_HEIGHT="10.0"
             EXTENT_DEPTH="1.0"
             Force_type="lennardJones"
             force_arg1="1"
@@ -37,32 +37,15 @@
         <Force type="lennardJones" partType="1" arg1="1" arg2="1"/>
     </Forces>
 
-    <cuboids>
-        <x>20</x>
-        <y>20</y>
-        <z>0</z>
-        <vel1>10</vel1>
-        <vel2>10</vel2>
-        <vel3>0</vel3>
-        <numPartX>20</numPartX>
-        <numPartY>20</numPartY>
-        <numPartZ>1</numPartZ>
-        <thermal_v>0.1</thermal_v>
-        <width>1.0</width>
-        <mass>1.0</mass>
-        <dimension>2</dimension>
-        <type>0</type>
-    </cuboids>
-
     <spheres>
-        <x>70</x>
-        <y>70</y>
+        <x>5</x>
+        <y>5</y>
         <z>0</z>
-        <vel1>-10</vel1>
-        <vel2>-10</vel2>
+        <vel1>0</vel1>
+        <vel2>0</vel2>
         <vel3>0</vel3>
         <thermal_v>0.1</thermal_v>
-        <radius>10</radius>
+        <radius>3</radius>
         <width>1</width>
         <mass>1</mass>
         <dimension>2</dimension>

@@ -10,6 +10,15 @@
 #include "utils/ContainerUtils.h"
 
 /**
+ * @file ParticleGrid.cpp
+ * @brief Implements the Linked cells.
+ *
+ * The following plot visualizes the benefit of Linked Cells:
+ *
+ * @image html input/images/plot.png "Performance plot" width=800px height=600px
+ */
+
+/**
  * @brief Contains classes and structures for managing the environment of the simulation.
  */
 namespace md::env {
