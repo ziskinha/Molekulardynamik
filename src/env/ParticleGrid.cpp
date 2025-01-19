@@ -443,13 +443,8 @@ void ParticleGrid::build(const Boundary & boundary, const double grid_const, std
             auto& old = cells.at(old_cell);
             auto& current = cells.at(new_cell);
 
-            old.lock_cell();
             old.particles.erase(particle);
-            old.unlock_cell();
-
-            current.lock_cell();
             current.particles.insert(particle);
-            current.unlock_cell();
 
             SPDLOG_TRACE("Particle at {} changed cells from {} to {}", particle->position, old_cell, new_cell);
         }

@@ -6,9 +6,7 @@ namespace md::Integrator {
 
     void StoermerVerletCellLock::simulation_step(const unsigned step, const double dt) {
         // update position
-#pragma omp for
-        for (size_t i = 0; i < env.size(); i++) {
-            auto &p = env[i];
+        for (auto &p: env.particles()) {
             p.update_position(dt * p.velocity + pow(dt, 2) / (2 * p.mass) * p.force);
             p.update_grid();
             p.reset_force();
