@@ -212,6 +212,8 @@ void ParticleGrid::build(const Boundary & boundary, const double grid_const, std
         const auto y = static_cast<INT_T>(pos[1] / cell_size[1]);
         const auto z = static_cast<INT_T>(pos[2] / cell_size[2]);
 
+
+
         if (static_cast<UINT_T>(x) >= cell_count[0] || static_cast<UINT_T>(y) >= cell_count[1] ||
             static_cast<UINT_T>(z) >= cell_count[2]) {
             return OUTSIDE_CELL;

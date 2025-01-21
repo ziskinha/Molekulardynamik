@@ -42,9 +42,10 @@ TEST(ForceTest, Lennard_Jones_test) {
 
 // check correctnes of per-particle force application
 TEST(ForceTest, per_particle_force) {
-    force_manager1.add_force(md::env::LennardJones(0, 0, 0), 0); // no force
-    force_manager1.add_force(md::env::LennardJones(1.0, 1.0, 5), {0,1});
-    md::vec3 calculated_force = perform_calculation(force_manager1, particle1, particle2);
+    md::env::ForceManager force_manager2 = md::env::ForceManager();
+    force_manager2.add_force(md::env::LennardJones(0, 0, 0), 0); // no force
+    force_manager2.add_force(md::env::LennardJones(1.0, 1.0, 5), {0,1});
+    md::vec3 calculated_force = perform_calculation(force_manager2, particle1, particle2);
 
     EXPECT_NEAR(calculated_force[0], 2 * -0.00010243277487532, 1e-5);
     EXPECT_NEAR(calculated_force[1], 3 * 0.00010243277487532, 1e-5);

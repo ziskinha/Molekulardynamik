@@ -40,14 +40,14 @@ TEST(EnvironmentTest, stationary_particles_test) {
     md::env::Boundary boundary;
     boundary.extent = {6,6,6};
     boundary.origin = {0,0, 0};
-    boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC);
+    boundary.set_boundary_rule(md::env::BoundaryRule::VELOCITY_REFLECTION);
 
     md::env::Environment env;
     env.add_particle({2, 2, 2}, {0, 0, 0}, 1, 0,  md::env::Particle::STATIONARY);
     env.add_particle({4,4,4}, {0, 0, 0}, 1, 0, md::env::Particle::STATIONARY);
 
     env.add_cuboid({1,1,1}, {}, {4,4,4}, 1, 1);
-    env.set_force(md::env::InverseSquare(2, 5), 0);
+    env.set_force(md::env::InverseSquare(2, 4), 0);
     env.set_boundary(boundary);
 
     env.build();
