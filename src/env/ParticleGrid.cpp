@@ -264,10 +264,4 @@ void ParticleGrid::build(const Boundary & boundary, const double grid_const, std
     vec3 ParticleGrid::position_in_grid(const vec3& abs_position) const {
         return abs_position - boundary_origin;
     }
-
-    vec3 ParticleGrid::position_in_cell(const vec3& abs_position) const {
-        const vec3 grid_pos = position_in_grid(abs_position);
-        const GridCell & cell = cells.at(what_cell(abs_position));
-        return grid_pos - cell.origin;
-    }
 } //namespace md::env

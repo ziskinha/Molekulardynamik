@@ -15,9 +15,10 @@ namespace md::core {
          * @param env
          */
         virtual void compute(const env::Environment & env) = 0;
+        virtual ~Statistics() {}
 
         /**
-         * @brief TODO?
+         * @brief number of iterations between each statistics calculation
          */
         const int compute_freq;
     };
@@ -36,7 +37,7 @@ namespace md::core {
          */
         void compute(const env::Environment & env) override;
     private:
-        int n_bins;  ///< The number of bins along the x-axis. TODO?
+        int n_bins;  ///< The number of bins along the x-axis.
     };
 } // namespace md::core
 

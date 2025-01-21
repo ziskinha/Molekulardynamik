@@ -277,7 +277,6 @@ namespace md::env {
         void update_cells(Particle* particle, const int3& old_cell, const int3& new_cell);
 
         vec3 position_in_grid(const vec3& abs_position) const;
-        vec3 position_in_cell(const vec3& abs_position) const;
 
     private:
         /**
