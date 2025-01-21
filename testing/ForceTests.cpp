@@ -4,7 +4,7 @@
 #include "../src/env/Force.h"
 #include "../src/env/Common.h"
 #include "../src/effects/ConstantForce.h"
-#include "../src/core/StoermerVerlet.h"
+#include "core/StoermerVerlet/StoermerVerlet.h"
 
 auto grid = md::env::ParticleGrid();
 auto particle1 = md::env::Particle(0, grid, {1, 5, 4}, {3, 3, 3}, 5, 0);

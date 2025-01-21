@@ -2,7 +2,7 @@
 
 #include "../src/env/Environment.h"
 #include "../src/utils/MaxwellBoltzmannDistribution.h"
-#include "../src/core/StoermerVerlet.h"
+#include "core/StoermerVerlet/StoermerVerlet.h"
 #include "core/Statistics.h"
 
 auto grid = md::env::ParticleGrid();
