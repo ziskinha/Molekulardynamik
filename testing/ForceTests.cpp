@@ -8,7 +8,7 @@
 
 auto grid = md::env::ParticleGrid();
 auto particle1 = md::env::Particle(0, grid, {1, 5, 4}, {3, 3, 3}, 5, 0);
-auto particle2 = md::env::Particle(0, grid, {3, 2, 1}, {0, 0, 0}, 5, 0);
+auto particle2 = md::env::Particle(1, grid, {3, 2, 1}, {0, 0, 0}, 5, 0);
 md::env::ForceManager force_manager1 = md::env::ForceManager();
 
 
@@ -40,6 +40,17 @@ TEST(ForceTest, Lennard_Jones_test) {
     EXPECT_NEAR(calculated_force[2], 3 * 0.00010243277487532, 1e-5);
 }
 
+// check correctnes of per-particle force application
+TEST(ForceTest, per_particle_force) {
+    force_manager1.add_force(md::env::LennardJones(0, 0, 0), 0); // no force
+    force_manager1.add_force(md::env::LennardJones(1.0, 1.0, 5), {0,1});
+    md::vec3 calculated_force = perform_calculation(force_manager1, particle1, particle2);
+
+    EXPECT_NEAR(calculated_force[0], 2 * -0.00010243277487532, 1e-5);
+    EXPECT_NEAR(calculated_force[1], 3 * 0.00010243277487532, 1e-5);
+    EXPECT_NEAR(calculated_force[2], 3 * 0.00010243277487532, 1e-5);
+}
+
 // check the correctness of LennardJones calculation when dist_squared > cutoff_radius * cutoff_radius
 TEST(ForceTest, lennard_jones_cutoff_radius_test) {
     force_manager1.add_force(md::env::LennardJones(), 0);
@@ -50,7 +61,7 @@ TEST(ForceTest, lennard_jones_cutoff_radius_test) {
     EXPECT_TRUE(calculated_force[2] == 0);
 }
 
-// chek the correctness of mixed forces
+// check the correctness of mixed forces
 TEST(ForceTest, mixed_force_test) {
     auto grid2 = md::env::ParticleGrid();
     auto particle3 = md::env::Particle(0, grid2, {1, 5, 4}, {3, 3, 3}, 5, 0);
@@ -64,6 +75,7 @@ TEST(ForceTest, mixed_force_test) {
     EXPECT_NEAR(calculated_force[1], 0.02748428, 0.001);
     EXPECT_NEAR(calculated_force[2], 0.02748428, 0.001);
 }
+
 
 // test the correctness of gravity application
 TEST(ForceTest, gravity_test) {
@@ -152,3 +164,4 @@ TEST(ForceTest, pulling_force_test2) {
         EXPECT_EQ(p.force[2], 0);
     }
 }
+
