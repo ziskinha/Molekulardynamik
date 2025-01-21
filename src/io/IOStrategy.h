@@ -6,6 +6,7 @@
 
 #include "env/Environment.h"
 #include "effects/Thermostat.h"
+#include "effects/ConstantForce.h"
 #include "io/Logger/Logger.h"
 #include "io/Output/CheckpointWriter.h"
 
@@ -34,7 +35,9 @@ namespace md::io {
         double dt;
         double cutoff_radius;
         int write_freq;
+        int parallel_strategy;
         unsigned int temp_adj_freq = std::numeric_limits<unsigned int>::max();
+        std::vector<env::ConstantForce> external_forces;
     };
 
     /**
@@ -51,10 +54,12 @@ namespace md::io {
                 "       benchmark:           {}\n"
                 "       override:            {}\n"
                 "       output format:       {}\n"
-                "       output name:         {}",
+                "       output name:         {}\n"
+                "       parallelization:     {}",
                 args.duration, args.dt, args.write_freq, args.env.size(env::Particle::ALIVE | env::Particle::STATIONARY),
                 args.benchmark ? "true" : "false", args.override ? "true" : "false",
-                args.output_format == OutputFormat::XYZ ? "XYZ" : "VTK", args.output_baseName);
+                args.output_format == OutputFormat::XYZ ? "XYZ" : "VTK", args.output_baseName,
+                args.parallel_strategy == 1 ? "cell lock" : (args.parallel_strategy == 2 ? "spatial decomposition" : "none"));
     }
 
     /**

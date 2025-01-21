@@ -1,7 +1,7 @@
 # pragma once
 
 #include "io/IOStrategy.h"
-#include "core/StoermerVerlet.h"
+#include "core/StoermerVerlet/StoermerVerlet.h"
 #include "env/Environment.h"
 #include "env/Force.h"
 #include "core/Statistics.h"
@@ -218,12 +218,12 @@ inline void membrane_simulation() {
 
     env::Environment env;
     env.set_boundary(boundary);
-    env.add_membrane({15, 15, 1.5}, {0,0,0}, {50,50,1}, 2.2, 1, 300, 4*1.1225);
+    env.add_membrane({15, 15, 1.5}, {0, 0, 0}, {50, 50, 1}, 2.2, 1, 300, 4 * 1.1225);
     env.set_force(env::LennardJones(1, 1, 1.1225), 0);
     env.build();
 
     env::ConstantForce gravity = env::Gravity(-0.001);
-    env::ConstantForce pull_force ({0,0,1}, 0.8, env::MarkBox({15 + 17*2.2, 15 + 24*2.2, 0}, {15 + 18.1*2.2, 15 + 25.1*2.2, 2}), 0, 150);
+    env::ConstantForce pull_force ({0, 0, 1}, 0.8, env::MarkBox({15 + 17 * 2.2, 15 + 24 * 2.2, 0}, {15 + 18.1 * 2.2, 15 + 25.1 * 2.2, 2}), 0, 150);
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
     Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, env::Thermostat(), {gravity, pull_force});

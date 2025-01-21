@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <omp.h>
 
 #include "ankerl/unordered_dense.h"
 #include "env/Common.h"
@@ -62,6 +63,15 @@ namespace md::env {
          */
         bool operator==(const GridCell& other) const;
 
+        /**
+         * @brief locks the lock of cell.
+         */
+        void lock_cell();
+        /**
+         * @brief unlocks the lock of the cell
+         */
+        void unlock_cell();
+
         const Type type;   ///< The type of the grid cell.
         const vec3 origin; ///< The coordinates of the origin of the grid cell.
         const vec3 size;   ///< The size of the grid cell.
@@ -71,6 +81,9 @@ namespace md::env {
         particle_container particles{}; ///< The set of particles inside the grid cell.
     private:
         static int count;  ///< A counter for generating unique ids for grid cells.
+#ifdef _OPENMP
+        omp_lock_t lock;
+#endif
     };
 
     /**
@@ -199,6 +212,17 @@ namespace md::env {
 
 
     /**
+     * @brief Structure representing a block used for spatial decomposition parallelization.
+     */
+    struct Block {
+        int3 origin;   ///< The origin of the block.
+        int3 extent;   ///< The extent of the block.
+        int3 idx;      ///< The index of the block.
+        std::vector<CellPair> cell_pairs;   ///< The cell pairs lying within the block.
+    };
+
+
+    /**
      * @brief A class representing the particle grid.
      */
     class ParticleGrid {
@@ -211,7 +235,7 @@ namespace md::env {
          * @param grid_const The constant used to define grid cell size.
          * @param particles The particles that fill the cells.
          */
-        void build(const Boundary & boundary, double grid_const, std::vector<Particle>& particles);
+        void build(const Boundary & boundary, double grid_const, std::vector<Particle>& particles, bool build_blocks);
 
         /**
          * @brief Retrieves the grid cell corresponding the index.
@@ -255,10 +279,51 @@ namespace md::env {
         [[nodiscard]] std::vector<int3> get_cell_indices() const;
 
         /**
+         * @brief Computes the displacements of cells in the environment.
+         * @return A vector of displacements.
+         */
+        std::vector<int3> compute_displacements();
+
+        /**
+         * @brief Computes the distribution of blocks for parallelization based on the number of threads. Blocks are
+         * built along the linked cells.
+         * @return The block distribution as an `int3` (representing the number of blocks along each axis).
+         */
+        int3 compute_block_distribution ();
+
+        /**
+         * @brief Builds the blocks for parallelization, considering periodic boundary conditions.
+         * @param periodic_directions A vector indicating which directions are periodic.
+         */
+        void build_blocks(std::vector<bool> periodic_directions);
+
+        /**
+         * @brief Calculates the index of the communication block to which the pair should be assigned.
+         * @param block The normal block in which one cell of the pair is currently located.
+         * @param axis The axis along which communication is being considered.
+         * @param idx2 The index of the second element in the pair.
+         * @return The index of the communication block.
+         */
+        int get_communication_block_index(Block block, int axis, int3 idx2);
+
+        /**
          * @brief returns all pairs of linked cells
          * @return A vector with GridCellPairs
          */
         const std::vector<CellPair> & linked_cells();
+
+        /**
+         * @brief returns the block sets.
+         *
+         * The returned block sets include:
+         * [0]: Normal blocks,
+         * [1]: Communication blocks along the x-axis,
+         * [2]: Communication blocks along the y-axis,
+         * [3]: Communication blocks along the z-axis.
+         *
+         * @return A reference to the vector of vectors of blocks.
+         */
+        const std::vector<std::vector<Block>> & block_sets();
 
         /**
          * @brief returns all cells at the boundary
@@ -289,13 +354,23 @@ namespace md::env {
 
         /**
         * @brief Builds pairs of neighboring cells.
+        * @param rules The boundary rules of the environment.
         */
         void build_cell_pairs(const std::array<BoundaryRule, 6> & rules);
 
+        /**
+         * @brief Builds pairs of neighboring cells and assigns them to the corresponding blocks.
+         * @param rules The boundary rules of the environment.
+         */
+        void build_cell_pairs_and_blocks(const std::array<BoundaryRule, 6> & rules);
+
+        // TODO dead code
         // std::unordered_map<int3, GridCell, Int3Hasher> cells {}; ///< A hash map storing the cells in the grid.
         ankerl::unordered_dense::map<int3, GridCell, Int3Hasher> cells{};
         std::vector<CellPair> cell_pairs{};                  ///< A vector of linked cell pairs.
-        std::vector<GridCell*> border_cells;                     ///< A vector of cells at the domain boundary
+        std::vector<GridCell*> border_cells;                 ///< A vector of cells at the domain boundary
+        // [0]: normal blocks, [1]: communication_blocks_x, [2]: communication_blocks_y, [3]: communication_blocks_z
+        std::vector<std::vector<Block>> blocks;
 
         uint3 cell_count{};         ///< The number of cells in the grid along each dimension.
         vec3 cell_size{};           ///< The size of each grid cell.

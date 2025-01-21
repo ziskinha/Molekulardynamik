@@ -121,7 +121,7 @@ namespace md::env {
          * @brief Initializes the simulation environment, setting up the grid and boundary conditions.
          * It checks the validity of the boundary extents and grid constant. If necessary, applies default values.
          */
-        void build();
+        void build(bool build_blocks = false);
 
 
         /**
@@ -170,9 +170,9 @@ namespace md::env {
          * @param origin Coordinate of the lower left front-side corner.
          * @param velocity Initial velocity for all particles.
          * @param num_particles Number of particles along each dimension: N1 x N2 x N3.
-         * @param thermal_v Thermal velocity of the particles.
          * @param width Distance between the particles.
          * @param mass Mass of each particle.
+         * @param thermal_v Thermal velocity of the particles.
          * @param type Type of each particle (default: 0).
          * @param dimension Dimension of the cuboid (default: INFER).
          * @param state Initial state of the particles (default: ALIVE).
@@ -189,10 +189,10 @@ namespace md::env {
          * @brief Adds a sphere to the environment.
          * @param origin Coordinates of the center.
          * @param velocity Initial velocity of all particles.
-         * @param thermal_v Thermal velocity of the particles.
          * @param radius The radius in terms of the number of molecules along the radius.
          * @param width Distance between the particles.
          * @param mass The mass of the particles.
+         * @param thermal_v Thermal velocity of the particles.
          * @param type The type of each particle (default: 0).
          * @param dimension Dimension of the sphere (default: INFER).
          * @param state Initial state of the particles (default: ALIVE).
@@ -252,6 +252,12 @@ namespace md::env {
          * @return A const reference to the vector of the linked cell pairs.
          */
         const std::vector<CellPair>& linked_cells();
+
+        /**
+         * @brief Retrieves the block sets of the simulation, used for spatial decomposition parallelization.
+         * @return
+         */
+        const std::vector<std::vector<Block>>& block_sets();
 
 
         /**

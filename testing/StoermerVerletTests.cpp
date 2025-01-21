@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "../src/core/IntegratorBase.h"
-#include "../src/core/StoermerVerlet.h"
+#include "core/StoermerVerlet/StoermerVerlet.h"
 #include "../src/env/Environment.h"
 #include "../src/env/Force.h"
 

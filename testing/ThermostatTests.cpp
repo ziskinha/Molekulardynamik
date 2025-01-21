@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "core/StoermerVerlet.h"
+#include "core/StoermerVerlet/StoermerVerlet.h"
 #include "effects/Thermostat.h"
 #include "env/Environment.h"
 

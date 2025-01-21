@@ -1,6 +1,11 @@
 # Group E: Scientific Computing Molekulardynamik
 Welcome to our Molecular Simulation Project! :)
 
+This project is part of the practical course "Scientific Computing (PSE) Molekulardynamik" at TUM during the winter 
+semester 2024/25.
+
+[![Continuous Integration](https://github.com/ziskinha/Molekulardynamik/actions/workflows/ContinuousIntegration.yml/badge.svg)](https://github.com/ziskinha/Molekulardynamik/actions/workflows/ContinuousIntegration.yml)
+
 ## Build Instructions
 To generate the build files use cmake:
 
