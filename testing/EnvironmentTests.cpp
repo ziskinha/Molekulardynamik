@@ -2,6 +2,8 @@
 
 #include "../src/env/Environment.h"
 #include "../src/utils/MaxwellBoltzmannDistribution.h"
+#include "../src/core/StoermerVerlet.h"
+#include "core/Statistics.h"
 
 auto grid = md::env::ParticleGrid();
 auto particle1 = md::env::Particle(0, grid, {1, 5, 4}, {3, 3, 3}, 5, 0);
@@ -32,6 +34,45 @@ TEST(EnvironmentTest, size_test) {
     EXPECT_EQ(env.size(md::env::Particle::ALIVE | md::env::Particle::STATIONARY), 5);
     EXPECT_EQ(env.size(md::env::Particle::ALIVE | md::env::Particle::STATIONARY | md::env::Particle::DEAD), 6);
 }
+
+// test whether stationary particles stay stationary
+TEST(EnvironmentTest, stationary_particles_test) {
+    md::env::Boundary boundary;
+    boundary.extent = {6,6,6};
+    boundary.origin = {0,0, 0};
+    boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC);
+
+    md::env::Environment env;
+    env.add_particle({2, 2, 2}, {0, 0, 0}, 1, 0,  md::env::Particle::STATIONARY);
+    env.add_particle({4,4,4}, {0, 0, 0}, 1, 0, md::env::Particle::STATIONARY);
+
+    env.add_cuboid({1,1,1}, {}, {4,4,4}, 1, 1);
+    env.set_force(md::env::InverseSquare(2, 5), 0);
+    env.set_boundary(boundary);
+
+    env.build();
+
+    EXPECT_EQ(env[0].position[0], 2);
+    EXPECT_EQ(env[0].position[1], 2);
+    EXPECT_EQ(env[0].position[2], 2);
+
+    EXPECT_EQ(env[1].position[0], 4);
+    EXPECT_EQ(env[1].position[1], 4);
+    EXPECT_EQ(env[1].position[2], 4);
+
+    md::Integrator::StoermerVerlet simulator(env);
+    simulator.simulate(0, 2, 0.01);
+
+    EXPECT_EQ(env[0].position[0], 2);
+    EXPECT_EQ(env[0].position[1], 2);
+    EXPECT_EQ(env[0].position[2], 2);
+
+    EXPECT_EQ(env[1].position[0], 4);
+    EXPECT_EQ(env[1].position[1], 4);
+    EXPECT_EQ(env[1].position[2], 4);
+}
+
+
 // check if container returns correct particle from the container
 TEST(EnvironmentTest, index_test) {
     auto part = md::env::ParticleCreateInfo({1, 5, 4}, {3, 3, 3}, 5, 0);
