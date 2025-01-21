@@ -236,7 +236,7 @@ namespace md::io {
                 SPDLOG_DEBUG("Parsed gravity force: \n"
                              "       Direction:  [{}, {}, {}]\n"
                              "       Strength:   {}",
-                            vals[0], vals[1], vals[2]);
+                            vals[0], vals[1], vals[2], vals[3]);
             }
             else if (force_name == "pull force") {
                 bool const_acc = vals.size() == 13 ? static_cast<bool>(vals[12]) : false;

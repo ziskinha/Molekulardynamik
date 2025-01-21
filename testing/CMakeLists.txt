@@ -6,6 +6,8 @@ function(add_test_executable test_name)
             ${CMAKE_SOURCE_DIR}/src/env/*.h
             ${CMAKE_SOURCE_DIR}/src/core/*.cpp
             ${CMAKE_SOURCE_DIR}/src/core/*.h
+            ${CMAKE_SOURCE_DIR}/src/core/StoermerVerlet/*.cpp
+            ${CMAKE_SOURCE_DIR}/src/core/StoermerVerlet/*.h
             ${CMAKE_SOURCE_DIR}/src/effects/*.cpp
             ${CMAKE_SOURCE_DIR}/src/effects/*.h
             ${CMAKE_SOURCE_DIR}/src/io/Output/CheckpointWriter.cpp

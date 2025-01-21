@@ -235,7 +235,7 @@ namespace md::env {
          * @param grid_const The constant used to define grid cell size.
          * @param particles The particles that fill the cells.
          */
-        void build(const Boundary & boundary, double grid_const, std::vector<Particle>& particles, bool build_blocks);
+        void build(const Boundary & boundary, double grid_const, std::vector<Particle>& particles, bool build_blocks = false);
 
         /**
          * @brief Retrieves the grid cell corresponding the index.

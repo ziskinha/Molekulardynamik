@@ -182,16 +182,16 @@ inline void nano_scale_simulation() {
     // walls
     env.add_cuboid({1, 0.5, 0.5}, {}, {2, 30, 12}, 1, 1, 0, 0, env::Dimension::THREE, env::Particle::STATIONARY);
     env.add_cuboid({27.2, 0.5, 0.5}, {}, {2, 30, 12}, 1, 1, 0, 0, env::Dimension::THREE, env::Particle::STATIONARY);
-    env.set_force(env::LennardJones(2, 1.1, 2.5), 0);
+    env.set_force(env::LennardJones(2, 1.1, 2.75), 0);
 
     // fluid
-    env.add_cuboid({3.2, 0.6, 0.6}, {}, {20, 25, 10}, 1.2, 1, 0, 1);
-    env.set_force(env::LennardJones(1, 1, 2.5), 1);
+    env.add_cuboid({3.2, 0.6, 0.6}, {}, {20, 25, 10}, 1.2, 1, 0, 1, env::Dimension::THREE);
+    env.set_force(env::LennardJones(1, 1, 2.75), 1);
     env.build();
 
     env::ConstantForce gravity = env::Gravity(-0.8, {0, 1, 0});
 
-    env::Thermostat thermostat(40);
+    env::Thermostat thermostat(40, 40);
     thermostat.set_initial_temperature(env);
 
     auto stats = std::make_unique<core::NanoFlowStatistics>(10000, 50);
