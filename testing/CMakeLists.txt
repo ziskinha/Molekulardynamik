@@ -4,8 +4,8 @@ function(add_test_executable test_name)
             ${CMAKE_SOURCE_DIR}/testing/${test_name}.cpp
             ${CMAKE_SOURCE_DIR}/src/env/*.cpp
             ${CMAKE_SOURCE_DIR}/src/env/*.h
-            ${CMAKE_SOURCE_DIR}/src/core/*.cpp
-            ${CMAKE_SOURCE_DIR}/src/core/*.h
+            ${CMAKE_SOURCE_DIR}/src/core/IntegratorBase.cpp
+            ${CMAKE_SOURCE_DIR}/src/core/IntegratorBase.h
             ${CMAKE_SOURCE_DIR}/src/core/StoermerVerlet/*.cpp
             ${CMAKE_SOURCE_DIR}/src/core/StoermerVerlet/*.h
             ${CMAKE_SOURCE_DIR}/src/effects/*.cpp
