@@ -231,9 +231,12 @@ namespace md::io {
                              vals[1], vals[0], args.cutoff_radius);
             }
             else if (force_name == "gravity") {
-                env::ConstantForce gravity = env::Gravity(vals[0]);
+                env::ConstantForce gravity = env::Gravity(vals[3], {vals[0], vals[1], vals[2]});
                 args.external_forces.push_back(gravity);
-                SPDLOG_DEBUG("Parsed gravity force: {}", vals[0]);
+                SPDLOG_DEBUG("Parsed gravity force: \n"
+                             "       Direction:  [{}, {}, {}]\n"
+                             "       Strength:   {}",
+                            vals[0], vals[1], vals[2]);
             }
             else if (force_name == "pull force") {
                 bool const_acc = vals.size() == 13 ? static_cast<bool>(vals[12]) : false;

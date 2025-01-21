@@ -87,10 +87,10 @@ force:
 # name           parameter   particle_type
 lennard_jones    - -               -
 inverse_square   -                 -
-# name          parameter
-gravity          -
+# name          direction    strength
+gravity          - - -          -
 # name          direction    strength   MarkBox_bottom_left_corner  MarkBox_top_right_corner  start_t end_t  const_acc(default: false)
-pull_force      - - -           -                - - -                      - - -                -     -       -
+pull_force       - - -           -                - - -                      - - -                -     -       -
 
 
 environment:
