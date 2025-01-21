@@ -1,8 +1,6 @@
 #pragma once
 
 #include <limits>
-#define INF_TEMP std::numeric_limits<double>::max()
-#define NO_TEMP (-1)
 
 namespace md::env {
     class Environment;
@@ -12,6 +10,9 @@ namespace md::env {
      */
     class Thermostat {
     public:
+        static constexpr double INF_TEMP = std::numeric_limits<double>::max();
+        static constexpr double NO_TEMP = -1;
+
         /**
          * @brief Constructs a Thermostat object.
          * @param init_T The initial temperature (default: NO_TEMP).
