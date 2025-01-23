@@ -215,6 +215,12 @@ namespace md::env {
      * @brief Structure representing a block used for spatial decomposition parallelization.
      */
     struct Block {
+        /**
+         * @brief Creates a string representation of a Block.
+         * @return A string describing the Block.
+         */
+        [[nodiscard]] std::string to_string() const;
+
         int3 origin;   ///< The origin of the block.
         int3 extent;   ///< The extent of the block.
         int3 idx;      ///< The index of the block.
@@ -287,6 +293,7 @@ namespace md::env {
         /**
          * @brief Computes the distribution of blocks for parallelization based on the number of threads. Blocks are
          * built along the linked cells.
+         * @param n_threads The number of threads available (used for testing).
          * @return The block distribution as an `int3` (representing the number of blocks along each axis).
          */
         int3 compute_block_distribution ();
@@ -294,6 +301,7 @@ namespace md::env {
         /**
          * @brief Builds the blocks for parallelization, considering periodic boundary conditions.
          * @param periodic_directions A vector indicating which directions are periodic.
+         * @param n_threads The number of threads available (used for testing).
          */
         void build_blocks(std::vector<bool> periodic_directions);
 
@@ -342,6 +350,8 @@ namespace md::env {
         void update_cells(Particle* particle, const int3& old_cell, const int3& new_cell);
 
         vec3 position_in_grid(const vec3& abs_position) const;
+
+        UINT_T n_threads = 1; ///< Number of available threads (turns into omp_get_max_threads() if no other value is provided).
 
     private:
         /**

@@ -182,13 +182,71 @@ void ParticleGrid::build(const Boundary & boundary, const double grid_const, std
     }
 
 
+    void ParticleGrid::build_cell_pairs(const std::array<BoundaryRule, 6> & rules) {
+        std::vector<int3> displacements = compute_displacements();
+
+        const bool periodic_x = rules[Boundary::LEFT] == PERIODIC;
+        const bool periodic_y = rules[Boundary::TOP] == PERIODIC;
+        const bool periodic_z = rules[Boundary::FRONT] == PERIODIC;
+
+        // add cell pairs
+        for (UINT_T x = 0; x < cell_count[0]; x++) {
+            for (UINT_T y = 0; y < cell_count[1]; y++) {
+                for (UINT_T z = 0; z < cell_count[2]; z++) {
+                    int3 idx1 = {static_cast<INT_T>(x), static_cast<INT_T>(y), static_cast<INT_T>(z)};
+                    cell_pairs.emplace_back(cells.at(idx1), cells.at(idx1),  CellPair::PERIODIC_NONE);
+
+                    for (const auto d : displacements) {
+                        CellPair::Periodicity periodicity = CellPair::PERIODIC_NONE;
+                        int3 idx2 = idx1 + d;
+
+                        // ensure pairs are added when periodic conditions are applied
+                        if (periodic_x && wrap_around(idx2[0], cell_count[0])) periodicity |=  CellPair::PERIODIC_X;
+                        if (periodic_y && wrap_around(idx2[1], cell_count[1])) periodicity |=  CellPair::PERIODIC_Y;
+                        if (periodic_z && wrap_around(idx2[2], cell_count[2])) periodicity |=  CellPair::PERIODIC_Z;
+
+                        if (idx1 >= idx2  // ensure only unique pairs are added
+                            || idx2[0] < 0 || idx2[1] < 0 || idx2[2] < 0 ||
+                            static_cast<UINT_T>(idx2[0]) >= cell_count[0] ||
+                            static_cast<UINT_T>(idx2[1]) >= cell_count[1] ||
+                            static_cast<UINT_T>(idx2[2]) >= cell_count[2]) {
+                            continue;
+                        }
+
+                        cell_pairs.emplace_back(cells.at(idx1), cells.at(idx2), periodicity);
+                    }
+                }
+            }
+        }
+    }
+
+    /// -----------------------------------------
+    /// \brief Block initilization methods
+    /// -----------------------------------------
+    std::string Block::to_string() const {
+        std::stringstream stream;
+        using ::operator<<;
+        stream << "origin: " << origin << " extent: " << extent <<
+               " idx: " << idx << "\n" << "cell pairs: ";
+
+        for (auto& cell_pair : cell_pairs) {
+            stream << "[" << cell_pair.cell1.id << ", " << cell_pair.cell2.id << "] ";
+        }
+
+        return stream.str();
+    }
+
+
     int3 ParticleGrid::compute_block_distribution () {
         int3 distribution = {1, 1, 1};
         UINT_T n_blocks = 1;
-        UINT_T n_threads = 4;
+
+        // For testing purposes n_threads could have a different value.
+        if (n_threads == 1) {
 #ifdef _OPENMP
-        n_threads = omp_get_max_threads();
+            n_threads = omp_get_max_threads();
 #endif
+        }
 
         while (n_blocks < n_threads) {
             // Find direction to increment
@@ -255,7 +313,7 @@ void ParticleGrid::build(const Boundary & boundary, const double grid_const, std
             // If some blocks contain only one linked cell along this axis, only one communication block is needed.
             // because they wouldn't have enough distance to avoid race conditions.
             int block_num = cell_count[i] / block_distribution[i] >= 2 ?
-                    periodic_directions[i] ? block_distribution[i] : block_distribution[i] - 1 : 1;
+                            (periodic_directions[i] ? block_distribution[i] : block_distribution[i] - 1 ) : 1;
 
             for (int n = 0; n < block_num; ++n) {
                 blocks[i + 1].emplace_back();
@@ -264,55 +322,18 @@ void ParticleGrid::build(const Boundary & boundary, const double grid_const, std
     }
 
 
-    void ParticleGrid::build_cell_pairs(const std::array<BoundaryRule, 6> & rules) {
-        std::vector<int3> displacements = compute_displacements();
-
-        const bool periodic_x = rules[Boundary::LEFT] == PERIODIC;
-        const bool periodic_y = rules[Boundary::TOP] == PERIODIC;
-        const bool periodic_z = rules[Boundary::FRONT] == PERIODIC;
-
-        // add cell pairs
-        for (UINT_T x = 0; x < cell_count[0]; x++) {
-            for (UINT_T y = 0; y < cell_count[1]; y++) {
-                for (UINT_T z = 0; z < cell_count[2]; z++) {
-                    int3 idx1 = {static_cast<INT_T>(x), static_cast<INT_T>(y), static_cast<INT_T>(z)};
-                    cell_pairs.emplace_back(cells.at(idx1), cells.at(idx1),  CellPair::PERIODIC_NONE);
-
-                    for (const auto d : displacements) {
-                        CellPair::Periodicity periodicity = CellPair::PERIODIC_NONE;
-                        int3 idx2 = idx1 + d;
-
-                        // ensure pairs are added when periodic conditions are applied
-                        if (periodic_x && wrap_around(idx2[0], cell_count[0])) periodicity |=  CellPair::PERIODIC_X;
-                        if (periodic_y && wrap_around(idx2[1], cell_count[1])) periodicity |=  CellPair::PERIODIC_Y;
-                        if (periodic_z && wrap_around(idx2[2], cell_count[2])) periodicity |=  CellPair::PERIODIC_Z;
-
-                        if (idx1 >= idx2  // ensure only unique pairs are added
-                            || idx2[0] < 0 || idx2[1] < 0 || idx2[2] < 0 ||
-                            static_cast<UINT_T>(idx2[0]) >= cell_count[0] ||
-                            static_cast<UINT_T>(idx2[1]) >= cell_count[1] ||
-                            static_cast<UINT_T>(idx2[2]) >= cell_count[2]) {
-                            continue;
-                        }
-
-                        cell_pairs.emplace_back(cells.at(idx1), cells.at(idx2), periodicity);
-                    }
-                }
-            }
-        }
-    }
-
     int ParticleGrid::get_communication_block_index(Block block, int axis, int3 idx2) {
         if (static_cast<UINT_T>(idx2[axis]) == cell_count[axis] - 1 || idx2[axis] == 0 || blocks[axis + 1].size() == 1) {
             return 0;
         }
         else if (idx2[axis] < block.origin[axis]) {
-            return blocks[axis + 1].size() > block.idx[axis] ? block.idx[axis] : 0;
+            return static_cast<int>(blocks[axis + 1].size()) > block.idx[axis] ? block.idx[axis] : 0;
         }
         else {
-            return blocks[axis + 1].size() > block.idx[axis] + 1 ? block.idx[axis] + 1 : 0;
+            return static_cast<int>(blocks[axis + 1].size()) > block.idx[axis] + 1 ? block.idx[axis] + 1 : 0;
         }
     }
+
 
     void ParticleGrid::build_cell_pairs_and_blocks(const std::array<BoundaryRule, 6> & rules) {
         std::vector<bool> periodic_directions = {
