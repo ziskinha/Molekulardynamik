@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 
-    <xsd:simpleType name="DimensionT">
+    <!-- Fundamental types -->
+    <xsd:simpleType name="Vec3Type">
+        <xsd:restriction>
+            <xsd:simpleType>
+                <xsd:list itemType="xsd:double"/>
+            </xsd:simpleType>
+            <xsd:length value="3"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="Int3Type">
+        <xsd:restriction>
+            <xsd:simpleType>
+                <xsd:list itemType="xsd:int"/>
+            </xsd:simpleType>
+            <xsd:length value="3"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- Types -->
+    <xsd:simpleType name="DimensionType">
         <xsd:restriction base="xsd:int">
             <xsd:enumeration value="2"/>
             <xsd:enumeration value="3"/>
@@ -15,14 +35,14 @@
         </xsd:restriction>
     </xsd:simpleType>
 
-    <xsd:complexType name="Force">
-        <xsd:attribute name="type" type="ForceType" use="required"/>
-        <xsd:attribute name="partType" type="xsd:int" use="required"/>
-        <xsd:attribute name="arg1" type="xsd:double" use="optional"/>
-        <xsd:attribute name="arg2" type="xsd:double" use="optional"/>
-    </xsd:complexType>
+    <xsd:simpleType name="ConstantForceType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="gravity"/>
+            <xsd:enumeration value="pullForce"/>
+        </xsd:restriction>
+    </xsd:simpleType>
 
- <xsd:simpleType name="BoundaryType">
+     <xsd:simpleType name="BoundaryType">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="OUTFLOW"/>
             <xsd:enumeration value="VELOCITY_REFLECTION"/>
@@ -31,6 +51,41 @@
         </xsd:restriction>
     </xsd:simpleType>
 
+    <xsd:simpleType name="ParticleStateType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="ALIVE"/>
+            <xsd:enumeration value="STATIONARY"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="ParallelType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="NONE"/>
+            <xsd:enumeration value="CELL_LOCK"/>
+            <xsd:enumeration value="SPATIAL_DECOMPOSITION"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- Forces -->
+    <xsd:complexType name="Force">
+        <xsd:attribute name="type" type="ForceType" use="required"/>
+        <xsd:attribute name="partType" type="xsd:int" use="required"/>
+        <xsd:attribute name="arg1" type="xsd:double" use="optional"/>
+        <xsd:attribute name="arg2" type="xsd:double" use="optional"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="ConstantForce">
+        <xsd:attribute name="type" type="ConstantForceType" use="required"/>
+        <xsd:attribute name="direction" type="Vec3Type" use="required"/>
+        <xsd:attribute name="strength" type="xsd:double" use="required"/>
+        <xsd:attribute name="MarkBoxVec1" type="Vec3Type" use="optional"/>
+        <xsd:attribute name="MarkBoxVec2" type="Vec3Type" use="optional"/>
+        <xsd:attribute name="start_t" type="xsd:double" use="optional" default="0"/>
+        <xsd:attribute name="end_t" type="xsd:double" use="optional" default="0"/>
+        <xsd:attribute name="const_acc" type="xsd:boolean" use="optional" default="false"/>
+    </xsd:complexType>
+
+    <!-- Boundary -->
     <xsd:complexType name="Boundary">
         <xsd:attribute name="typeLEFT" type="BoundaryType" use="required"/>
         <xsd:attribute name="typeRIGHT" type="BoundaryType" use="required"/>
@@ -38,47 +93,44 @@
         <xsd:attribute name="typeBOTTOM" type="BoundaryType" use="required"/>
         <xsd:attribute name="typeFRONT" type="BoundaryType" use="required"/>
         <xsd:attribute name="typeBACK" type="BoundaryType" use="required"/>
-      
-        <xsd:attribute name="CENTER_BOUNDARY_ORIGINX" type="xsd:double"/>
-        <xsd:attribute name="CENTER_BOUNDARY_ORIGINY" type="xsd:double"/>
-        <xsd:attribute name="CENTER_BOUNDARY_ORIGINZ" type="xsd:double"/>
-        <xsd:attribute name="EXTENT_WIDTH" type="xsd:double"/>
-        <xsd:attribute name="EXTENT_HEIGHT" type="xsd:double"/>
-        <xsd:attribute name="EXTENT_DEPTH" type="xsd:double"/>
-        <xsd:attribute name="Force_type" type="ForceType"/>
-        <xsd:attribute name="force_arg1" type="xsd:double"/>
-        <xsd:attribute name="force_arg2" type="xsd:double" use="optional"/>
 
+        <xsd:attribute name="origin" type="Vec3Type" use="required"/>
+        <xsd:attribute name="extent" type="Vec3Type" use="required"/>
+        <xsd:attribute name="grid_constant" type="xsd:double" use="required"/>
+        <xsd:attribute name="force_type" type="ForceType" use="optional"/>
+        <xsd:attribute name="force_arg1" type="xsd:double" use="optional"/>
+        <xsd:attribute name="force_arg2" type="xsd:double" use="optional"/>
     </xsd:complexType>
 
     <xsd:element name="simulation">
         <xsd:complexType>
             <xsd:sequence>
-
+                <!-- Output information -->
                 <xsd:element name="output" minOccurs="1" maxOccurs="1">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element name="baseName" type="xsd:string"/>
-                            <xsd:element name="writeFrequency" type="xsd:int"/>
+                            <xsd:element name="base_name" type="xsd:string"/>
+                            <xsd:element name="write_frequency" type="xsd:int"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
 
+                <!-- Simulation information -->
                 <xsd:element name="parameters" minOccurs="1" maxOccurs="1">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element name="tEnd" type="xsd:double"/>
-                            <xsd:element name="deltaT" type="xsd:double"/>
+                            <xsd:element name="end_t" type="xsd:double"/>
+                            <xsd:element name="delta_t" type="xsd:double"/>
                             <xsd:element name="cutoff_radius" type="xsd:double"/>
-                            <xsd:element name="gravitational_force" type="xsd:double"/>
+                            <xsd:element name="parallel_strategy" type="ParallelType"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
 
-                
+                <!-- Environment information -->
                 <xsd:element name="Boundary" type="Boundary" minOccurs="1" maxOccurs="1"/>
-                <xsd:element name="GridConstant" type="xsd:double" minOccurs="1" maxOccurs="1"/>
-                   
+
+                <!-- Force information -->
                 <xsd:element name="Forces">
                     <xsd:complexType>
                         <xsd:sequence>
@@ -87,68 +139,84 @@
                     </xsd:complexType>
                 </xsd:element>
 
+                <!-- Constant Force information -->
+                <xsd:element name="ConstantForces">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="ConstantForce" type="ConstantForce" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+
+                <!-- Thermostat information -->
                  <xsd:element name="Thermostat" minOccurs="0">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element name="n_thermostats" type="xsd:int" minOccurs="0" maxOccurs="1"/>
-                            <xsd:element name="init_T" type="xsd:double" minOccurs="0" maxOccurs="1"/>
-                            <xsd:element name="target_T" type="xsd:double" minOccurs="0" maxOccurs="1"/>
-                            <xsd:element name="temp_dT" type="xsd:double" minOccurs="0" maxOccurs="1"/>
+                            <xsd:element name="n_thermostats" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+                            <xsd:element name="init_T" type="xsd:double" minOccurs="1" maxOccurs="1"/>
+                            <xsd:element name="target_T" type="xsd:double" minOccurs="0" maxOccurs="1" default="-1"/>
+                            <xsd:element name="temp_dT" type="xsd:double" minOccurs="0" maxOccurs="1" default="1000"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
 
+                <!-- Particle information -->
                 <xsd:element name="particles" minOccurs="0" maxOccurs="unbounded">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element name="x" type="xsd:double"/>
-                            <xsd:element name="y" type="xsd:double"/>
-                            <xsd:element name="z" type="xsd:double"/>
-                            <xsd:element name="vel1" type="xsd:double"/>
-                            <xsd:element name="vel2" type="xsd:double"/>
-                            <xsd:element name="vel3" type="xsd:double"/>
+                            <xsd:element name="origin" type="Vec3Type"/>
+                            <xsd:element name="velocity" type="Vec3Type"/>
                             <xsd:element name="mass" type="xsd:double"/>
                             <xsd:element name="type"  type="xsd:int"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
 
+                <!-- Cuboid information -->
                 <xsd:element name="cuboids" minOccurs="0" maxOccurs="unbounded">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element name="x" type="xsd:double"/>
-                            <xsd:element name="y" type="xsd:double"/>
-                            <xsd:element name="z" type="xsd:double"/>
-                            <xsd:element name="vel1" type="xsd:double"/>
-                            <xsd:element name="vel2" type="xsd:double"/>
-                            <xsd:element name="vel3" type="xsd:double"/>
-                            <xsd:element name="numPartX" type="xsd:unsignedInt"/>
-                            <xsd:element name="numPartY" type="xsd:unsignedInt"/>
-                            <xsd:element name="numPartZ" type="xsd:unsignedInt"/>
-                            <xsd:element name="thermal_v" type="xsd:double"/>
+                            <xsd:element name="origin" type="Vec3Type"/>
+                            <xsd:element name="velocity" type="Vec3Type"/>
+                            <xsd:element name="numPart" type="Int3Type"/>
+                            <xsd:element name="thermal_v" type="xsd:double" default="0"/>
                             <xsd:element name="width" type="xsd:double"/>
                             <xsd:element name="mass" type="xsd:double"/>
-                            <xsd:element name="dimension" type="DimensionT"/>
-                            <xsd:element name="type"  type="xsd:int"/>
+                            <xsd:element name="dimension" type="DimensionType"/>
+                            <xsd:element name="type"  type="xsd:int" default="0"/>
+                            <xsd:element name="state" type="ParticleStateType" default="ALIVE"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
 
+                <!-- Sphere information -->
               <xsd:element name="spheres" minOccurs="0" maxOccurs="unbounded">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element name="x" type="xsd:double"/>
-                            <xsd:element name="y" type="xsd:double"/>
-                            <xsd:element name="z" type="xsd:double"/>
-                            <xsd:element name="vel1" type="xsd:double"/>
-                            <xsd:element name="vel2" type="xsd:double"/>
-                            <xsd:element name="vel3" type="xsd:double"/>
-                            <xsd:element name="thermal_v" type="xsd:double"/>
+                            <xsd:element name="origin" type="Vec3Type"/>
+                            <xsd:element name="velocity" type="Vec3Type"/>
+                            <xsd:element name="thermal_v" type="xsd:double" default="0"/>
                             <xsd:element name="radius" type="xsd:int"/>
                             <xsd:element name="width" type="xsd:double"/>
                             <xsd:element name="mass" type="xsd:double"/>
-                            <xsd:element name="dimension" type="DimensionT"/>
-                            <xsd:element name="type"  type="xsd:int"/>
+                            <xsd:element name="dimension" type="DimensionType"/>
+                            <xsd:element name="type"  type="xsd:int" default="0"/>
+                            <xsd:element name="state" type="ParticleStateType" default="ALIVE"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+
+                <!-- Membrane information -->
+                <xsd:element name="membranes" minOccurs="0" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="origin" type="Vec3Type"/>
+                            <xsd:element name="velocity" type="Vec3Type"/>
+                            <xsd:element name="numPart" type="Int3Type"/>
+                            <xsd:element name="width" type="xsd:double"/>
+                            <xsd:element name="mass" type="xsd:double"/>
+                            <xsd:element name="k" type="xsd:double"/>
+                            <xsd:element name="type"  type="xsd:int" default="0"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>

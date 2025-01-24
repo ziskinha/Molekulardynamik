@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <simulation>
     <output>
-        <base_name>output</base_name>
-        <write_frequency>1000</write_frequency>
+        <base_name>simulation_output</base_name>
+        <write_frequency>100</write_frequency>
     </output>
 
     <parameters>
-        <end_t>0.5</end_t>
+        <end_t>5</end_t>
         <delta_t>0.0005</delta_t>
         <cutoff_radius>2.5</cutoff_radius>
         <parallel_strategy>CELL_LOCK</parallel_strategy>
@@ -20,50 +20,67 @@
             typeFRONT="OUTFLOW"
             typeBACK="OUTFLOW"
             origin="0 0 0"
-            extent="20 20 20"
+            extent="60 60 60"
             grid_constant="2.5"
             force_type="lennardJones"
             force_arg1="1"
-            force_arg2="1.1"
+            force_arg2="1.2"
     />
 
     <Forces>
         <Force type="lennardJones" partType="0" arg1="1" arg2="1"/>
-        <Force type="lennardJones" partType="1" arg1="1" arg2="1.2"/>
+        <Force type="lennardJones" partType="1" arg1="1" arg2="1"/>
     </Forces>
 
     <ConstantForces>
-        <ConstantForce type="gravity" direction="0 1 0" strength="-12.44"/>
+        <ConstantForce type="gravity" direction="0 1 0" strength="-0.8"/>
     </ConstantForces>
 
     <Thermostat>
-        <n_thermostats>100</n_thermostats>
+        <n_thermostats>10</n_thermostats>
         <init_T>40</init_T>
-        <target_T>40</target_T>
+        <target_T>50</target_T>
         <temp_dT>-1</temp_dT>
     </Thermostat>
 
+    <particles>
+        <origin>1 2 3</origin>
+        <velocity>3 2 1</velocity>
+        <mass>1</mass>
+        <type>0</type>
+    </particles>
+
     <cuboids>
-        <origin>1 1 1</origin>
-        <velocity>5 5 5</velocity>
-        <numPart>9 9 9</numPart>
+        <origin>5 10 15</origin>
+        <velocity>1 2 3</velocity>
+        <numPart>20 30 40</numPart>
         <thermal_v>0</thermal_v>
         <width>1</width>
         <mass>2</mass>
         <dimension>3</dimension>
         <type>0</type>
-        <state>ALIVE</state>
+        <state>STATIONARY</state>
     </cuboids>
 
     <spheres>
-        <origin>14 14 14</origin>
-        <velocity>-5 -5 -5</velocity>
+        <origin>45 40 30</origin>
+        <velocity>1 2 3</velocity>
         <thermal_v>0</thermal_v>
         <radius>5</radius>
         <width>1</width>
-        <mass>1</mass>
+        <mass>4</mass>
         <dimension>3</dimension>
-        <type>1</type>
+        <type>0</type>
         <state>ALIVE</state>
     </spheres>
+
+    <membranes>
+        <origin>45 10 10</origin>
+        <velocity>2 4 6</velocity>
+        <numPart>20 30 40</numPart>
+        <width>1</width>
+        <mass>1</mass>
+        <k>2</k>
+        <type>0</type>
+    </membranes>
 </simulation>
