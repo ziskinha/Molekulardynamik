@@ -1025,28 +1025,22 @@ Forces (::std::auto_ptr< Forces_type > x)
   this->Forces_.set (x);
 }
 
-const simulation::ConstantForces_type& simulation::
+const simulation::ConstantForces_sequence& simulation::
 ConstantForces () const
 {
-  return this->ConstantForces_.get ();
+  return this->ConstantForces_;
 }
 
-simulation::ConstantForces_type& simulation::
+simulation::ConstantForces_sequence& simulation::
 ConstantForces ()
 {
-  return this->ConstantForces_.get ();
+  return this->ConstantForces_;
 }
 
 void simulation::
-ConstantForces (const ConstantForces_type& x)
+ConstantForces (const ConstantForces_sequence& s)
 {
-  this->ConstantForces_.set (x);
-}
-
-void simulation::
-ConstantForces (::std::auto_ptr< ConstantForces_type > x)
-{
-  this->ConstantForces_.set (x);
+  this->ConstantForces_ = s;
 }
 
 const simulation::Thermostat_optional& simulation::
@@ -1305,22 +1299,28 @@ Force (const Force_sequence& s)
 // ConstantForces
 // 
 
-const ConstantForces::ConstantForce_sequence& ConstantForces::
+const ConstantForces::ConstantForce_type& ConstantForces::
 ConstantForce () const
 {
-  return this->ConstantForce_;
+  return this->ConstantForce_.get ();
 }
 
-ConstantForces::ConstantForce_sequence& ConstantForces::
+ConstantForces::ConstantForce_type& ConstantForces::
 ConstantForce ()
 {
-  return this->ConstantForce_;
+  return this->ConstantForce_.get ();
 }
 
 void ConstantForces::
-ConstantForce (const ConstantForce_sequence& s)
+ConstantForce (const ConstantForce_type& x)
 {
-  this->ConstantForce_ = s;
+  this->ConstantForce_.set (x);
+}
+
+void ConstantForces::
+ConstantForce (::std::auto_ptr< ConstantForce_type > x)
+{
+  this->ConstantForce_.set (x);
 }
 
 
@@ -3253,14 +3253,13 @@ simulation::
 simulation (const output_type& output,
             const parameters_type& parameters,
             const Boundary_type& Boundary,
-            const Forces_type& Forces,
-            const ConstantForces_type& ConstantForces)
+            const Forces_type& Forces)
 : ::xml_schema::type (),
   output_ (output, this),
   parameters_ (parameters, this),
   Boundary_ (Boundary, this),
   Forces_ (Forces, this),
-  ConstantForces_ (ConstantForces, this),
+  ConstantForces_ (this),
   Thermostat_ (this),
   particles_ (this),
   cuboids_ (this),
@@ -3273,14 +3272,13 @@ simulation::
 simulation (::std::auto_ptr< output_type > output,
             ::std::auto_ptr< parameters_type > parameters,
             ::std::auto_ptr< Boundary_type > Boundary,
-            ::std::auto_ptr< Forces_type > Forces,
-            ::std::auto_ptr< ConstantForces_type > ConstantForces)
+            ::std::auto_ptr< Forces_type > Forces)
 : ::xml_schema::type (),
   output_ (output, this),
   parameters_ (parameters, this),
   Boundary_ (Boundary, this),
   Forces_ (Forces, this),
-  ConstantForces_ (ConstantForces, this),
+  ConstantForces_ (this),
   Thermostat_ (this),
   particles_ (this),
   cuboids_ (this),
@@ -3403,11 +3401,8 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       ::std::auto_ptr< ConstantForces_type > r (
         ConstantForces_traits::create (i, f, this));
 
-      if (!ConstantForces_.present ())
-      {
-        this->ConstantForces_.set (r);
-        continue;
-      }
+      this->ConstantForces_.push_back (r);
+      continue;
     }
 
     // Thermostat
@@ -3496,13 +3491,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
   {
     throw ::xsd::cxx::tree::expected_element< char > (
       "Forces",
-      "");
-  }
-
-  if (!ConstantForces_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "ConstantForces",
       "");
   }
 }
@@ -3902,9 +3890,16 @@ Forces::
 //
 
 ConstantForces::
-ConstantForces ()
+ConstantForces (const ConstantForce_type& ConstantForce)
 : ::xml_schema::type (),
-  ConstantForce_ (this)
+  ConstantForce_ (ConstantForce, this)
+{
+}
+
+ConstantForces::
+ConstantForces (::std::auto_ptr< ConstantForce_type > ConstantForce)
+: ::xml_schema::type (),
+  ConstantForce_ (ConstantForce, this)
 {
 }
 
@@ -3948,11 +3943,21 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       ::std::auto_ptr< ConstantForce_type > r (
         ConstantForce_traits::create (i, f, this));
 
-      this->ConstantForce_.push_back (r);
-      continue;
+      if (!ConstantForce_.present ())
+      {
+        this->ConstantForce_.set (r);
+        continue;
+      }
     }
 
     break;
+  }
+
+  if (!ConstantForce_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "ConstantForce",
+      "");
   }
 }
 
@@ -6053,13 +6058,16 @@ operator<< (::xercesc::DOMElement& e, const simulation& i)
 
   // ConstantForces
   //
+  for (simulation::ConstantForces_const_iterator
+       b (i.ConstantForces ().begin ()), n (i.ConstantForces ().end ());
+       b != n; ++b)
   {
     ::xercesc::DOMElement& s (
       ::xsd::cxx::xml::dom::create_element (
         "ConstantForces",
         e));
 
-    s << i.ConstantForces ();
+    s << *b;
   }
 
   // Thermostat
@@ -6236,16 +6244,13 @@ operator<< (::xercesc::DOMElement& e, const ConstantForces& i)
 
   // ConstantForce
   //
-  for (ConstantForces::ConstantForce_const_iterator
-       b (i.ConstantForce ().begin ()), n (i.ConstantForce ().end ());
-       b != n; ++b)
   {
     ::xercesc::DOMElement& s (
       ::xsd::cxx::xml::dom::create_element (
         "ConstantForce",
         e));
 
-    s << *b;
+    s << i.ConstantForce ();
   }
 }
 

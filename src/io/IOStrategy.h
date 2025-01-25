@@ -28,7 +28,6 @@ namespace md::io {
         env::Thermostat thermostat;
         OutputFormat output_format;
         std::string output_baseName;
-        std::string force;
         bool benchmark;
         bool override;
         double duration;

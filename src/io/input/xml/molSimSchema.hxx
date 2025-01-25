@@ -1370,19 +1370,19 @@ class simulation: public ::xml_schema::type
   // ConstantForces
   //
   typedef ::ConstantForces ConstantForces_type;
+  typedef ::xsd::cxx::tree::sequence< ConstantForces_type > ConstantForces_sequence;
+  typedef ConstantForces_sequence::iterator ConstantForces_iterator;
+  typedef ConstantForces_sequence::const_iterator ConstantForces_const_iterator;
   typedef ::xsd::cxx::tree::traits< ConstantForces_type, char > ConstantForces_traits;
 
-  const ConstantForces_type&
+  const ConstantForces_sequence&
   ConstantForces () const;
 
-  ConstantForces_type&
+  ConstantForces_sequence&
   ConstantForces ();
 
   void
-  ConstantForces (const ConstantForces_type& x);
-
-  void
-  ConstantForces (::std::auto_ptr< ConstantForces_type > p);
+  ConstantForces (const ConstantForces_sequence& s);
 
   // Thermostat
   //
@@ -1478,14 +1478,12 @@ class simulation: public ::xml_schema::type
   simulation (const output_type&,
               const parameters_type&,
               const Boundary_type&,
-              const Forces_type&,
-              const ConstantForces_type&);
+              const Forces_type&);
 
   simulation (::std::auto_ptr< output_type >,
               ::std::auto_ptr< parameters_type >,
               ::std::auto_ptr< Boundary_type >,
-              ::std::auto_ptr< Forces_type >,
-              ::std::auto_ptr< ConstantForces_type >);
+              ::std::auto_ptr< Forces_type >);
 
   simulation (const ::xercesc::DOMElement& e,
               ::xml_schema::flags f = 0,
@@ -1517,7 +1515,7 @@ class simulation: public ::xml_schema::type
   ::xsd::cxx::tree::one< parameters_type > parameters_;
   ::xsd::cxx::tree::one< Boundary_type > Boundary_;
   ::xsd::cxx::tree::one< Forces_type > Forces_;
-  ::xsd::cxx::tree::one< ConstantForces_type > ConstantForces_;
+  ConstantForces_sequence ConstantForces_;
   Thermostat_optional Thermostat_;
   particles_sequence particles_;
   cuboids_sequence cuboids_;
@@ -1754,23 +1752,25 @@ class ConstantForces: public ::xml_schema::type
   // ConstantForce
   //
   typedef ::ConstantForce ConstantForce_type;
-  typedef ::xsd::cxx::tree::sequence< ConstantForce_type > ConstantForce_sequence;
-  typedef ConstantForce_sequence::iterator ConstantForce_iterator;
-  typedef ConstantForce_sequence::const_iterator ConstantForce_const_iterator;
   typedef ::xsd::cxx::tree::traits< ConstantForce_type, char > ConstantForce_traits;
 
-  const ConstantForce_sequence&
+  const ConstantForce_type&
   ConstantForce () const;
 
-  ConstantForce_sequence&
+  ConstantForce_type&
   ConstantForce ();
 
   void
-  ConstantForce (const ConstantForce_sequence& s);
+  ConstantForce (const ConstantForce_type& x);
+
+  void
+  ConstantForce (::std::auto_ptr< ConstantForce_type > p);
 
   // Constructors.
   //
-  ConstantForces ();
+  ConstantForces (const ConstantForce_type&);
+
+  ConstantForces (::std::auto_ptr< ConstantForce_type >);
 
   ConstantForces (const ::xercesc::DOMElement& e,
                   ::xml_schema::flags f = 0,
@@ -1798,7 +1798,7 @@ class ConstantForces: public ::xml_schema::type
          ::xml_schema::flags);
 
   protected:
-  ConstantForce_sequence ConstantForce_;
+  ::xsd::cxx::tree::one< ConstantForce_type > ConstantForce_;
 };
 
 class Thermostat: public ::xml_schema::type

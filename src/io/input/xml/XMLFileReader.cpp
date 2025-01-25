@@ -186,19 +186,19 @@ namespace md::io {
                 throw std::invalid_argument("Unknown boundary type: " + type);
             };
 
-            env::Boundary boundary;
-            boundary.extent = {boundary_xml.extent()[0], boundary_xml.extent()[1], boundary_xml.extent()[2]};
-            SPDLOG_DEBUG(fmt::format("Parsed boundary extent: [{}, {}, {}]", boundary.extent[0], boundary.extent[1], boundary.extent[2]));
+            args.boundary.extent = {boundary_xml.extent()[0], boundary_xml.extent()[1], boundary_xml.extent()[2]};
+            SPDLOG_DEBUG(fmt::format("Parsed boundary extent: [{}, {}, {}]",
+                                     args.boundary.extent[0], args.boundary.extent[1], args.boundary.extent[2]));
 
-            boundary.origin = {boundary_xml.origin()[0], boundary_xml.origin()[1], boundary_xml.origin()[2]};
-            SPDLOG_DEBUG(fmt::format("Parsed boundary origin: [{}, {}, {}]", boundary.origin[0], boundary.origin[1], boundary.origin[2]));
+            args.boundary.origin = {boundary_xml.origin()[0], boundary_xml.origin()[1], boundary_xml.origin()[2]};
+            SPDLOG_DEBUG(fmt::format("Parsed boundary origin: [{}, {}, {}]", args.boundary.origin[0], args.boundary.origin[1], args.boundary.origin[2]));
 
-            boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeFRONT()), env::BoundaryNormal::FRONT);
-            boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeBACK()), env::BoundaryNormal::BACK);
-            boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeRIGHT()), env::BoundaryNormal::RIGHT);
-            boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeTOP()), env::BoundaryNormal::TOP);
-            boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeLEFT()), env::BoundaryNormal::LEFT);
-            boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeBOTTOM()), env::BoundaryNormal::BOTTOM);
+            args.boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeFRONT()), env::BoundaryNormal::FRONT);
+            args.boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeBACK()), env::BoundaryNormal::BACK);
+            args.boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeRIGHT()), env::BoundaryNormal::RIGHT);
+            args.boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeTOP()), env::BoundaryNormal::TOP);
+            args.boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeLEFT()), env::BoundaryNormal::LEFT);
+            args.boundary.set_boundary_rule(extract_boundary_type(boundary_xml.typeBOTTOM()), env::BoundaryNormal::BOTTOM);
 
             SPDLOG_DEBUG(fmt::format("Parsed boundary rules - FRONT: {}, BACK: {}, RIGHT: {}, LEFT: {}, TOP: {}, BOTTOM: {}",
                          boundary_xml.typeFRONT(), boundary_xml.typeBACK(), boundary_xml.typeRIGHT(),
@@ -206,14 +206,14 @@ namespace md::io {
 
             if (boundary_xml.force_type()) {
                 if (boundary_xml.force_type().get() == "lennardJones") {
-                    boundary.set_boundary_force(env::Boundary::LennardJonesForce(
+                    args.boundary.set_boundary_force(env::Boundary::LennardJonesForce(
                             boundary_xml.force_arg1().get(), boundary_xml.force_arg2().get()));
 
                     SPDLOG_DEBUG(fmt::format("Parsed boundary force: Lennard Jones with epsilon = {}, sigma = {}",
                                              boundary_xml.force_arg1().get(), boundary_xml.force_arg2().get()));
                 }
                 else if (boundary_xml.force_type().get() == "inverseSquare") {
-                    boundary.set_boundary_force(env::Boundary::InverseDistanceForce(
+                    args.boundary.set_boundary_force(env::Boundary::InverseDistanceForce(
                             args.cutoff_radius, boundary_xml.force_arg1().get()));
 
                     SPDLOG_DEBUG(fmt::format("Parsed boundary force: Inverse Square with cutoff = {}, pre factor = {}",
@@ -255,7 +255,9 @@ namespace md::io {
             /// -----------------------------------------
             ///  Parse constant force information
             /// -----------------------------------------
-            for (const auto& constant_force : simulation->ConstantForces().ConstantForce()) {
+            for (const auto& constant_force2 : simulation->ConstantForces()) {
+                auto& constant_force = constant_force2.ConstantForce();
+
                 if (constant_force.type() == "gravity") {
                     env::ConstantForce gravity = env::Gravity(constant_force.strength(),
                             {constant_force.direction()[0],constant_force.direction()[1], constant_force.direction()[2]});
@@ -293,7 +295,7 @@ namespace md::io {
                 }
             }
 
-            args.env.set_boundary(boundary);
+            args.env.set_boundary(args.boundary);
             args.env.build();
 
 

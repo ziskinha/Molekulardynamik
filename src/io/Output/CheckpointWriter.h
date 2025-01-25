@@ -4,7 +4,12 @@
 namespace md::io {
     class CheckpointWriter {
     public:
-        explicit CheckpointWriter();
+        /**
+         * @brief Constructs a new CheckpointWriter object.
+         * @param file_base_name base name of the checkpoint files (default: "checkpoint").
+         * @param output_dir name of the output directory (default: "Checkpoint").
+         */
+        explicit CheckpointWriter(std::string file_base_name = "checkpoint", std::string output_dir = "Checkpoint");
         virtual ~CheckpointWriter() = default;
 
         /**
@@ -14,7 +19,8 @@ namespace md::io {
          */
         void write_checkpoint_file(env::Environment& env, size_t num);
 
-    protected:
-        const std::string file_base_name;
+    private:
+        const std::string file_base_name;  ///< base name of the checkpoint files.
+        const std::string output_dir;      ///< name of the output directory.
     };
 } // namespace md::io

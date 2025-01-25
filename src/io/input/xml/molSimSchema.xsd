@@ -140,10 +140,10 @@
                 </xsd:element>
 
                 <!-- Constant Force information -->
-                <xsd:element name="ConstantForces">
+                <xsd:element name="ConstantForces" minOccurs="0" maxOccurs="unbounded">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element name="ConstantForce" type="ConstantForce" minOccurs="0" maxOccurs="unbounded"/>
+                            <xsd:element name="ConstantForce" type="ConstantForce"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>

@@ -1,6 +1,6 @@
 # function to add test executables
-function(add_test_executable test_name)
-    file(GLOB TEST_SOURCES
+function(add_test_executable test_name use_input)
+    file(GLOB_RECURSE TEST_SOURCES
             ${CMAKE_SOURCE_DIR}/testing/${test_name}.cpp
             ${CMAKE_SOURCE_DIR}/src/env/*.cpp
             ${CMAKE_SOURCE_DIR}/src/env/*.h
@@ -12,6 +12,20 @@ function(add_test_executable test_name)
             ${CMAKE_SOURCE_DIR}/src/effects/*.h
             ${CMAKE_SOURCE_DIR}/src/io/Output/CheckpointWriter.cpp
     )
+
+    if(${use_input})
+        list(APPEND TEST_SOURCES
+            ${CMAKE_SOURCE_DIR}/src/io/IOStrategy.h
+            ${CMAKE_SOURCE_DIR}/src/io/IOStrategy.cpp
+            ${CMAKE_SOURCE_DIR}/src/io/input/txt/TXTFileReader.h
+            ${CMAKE_SOURCE_DIR}/src/io/input/txt/TXTFileReader.cpp
+            ${CMAKE_SOURCE_DIR}/src/io/input/xml/XMLFileReader.h
+            ${CMAKE_SOURCE_DIR}/src/io/input/xml/XMLFileReader.cpp
+            ${CMAKE_SOURCE_DIR}/src/io/input/xml/molSimSchema.cxx
+            ${CMAKE_SOURCE_DIR}/src/io/input/xml/molSimSchema.hxx
+            ${CMAKE_SOURCE_DIR}/src/io/input/xml/molSimSchema.xsd
+        )
+    endif()
 
     add_executable(${test_name} ${TEST_SOURCES})
 
@@ -37,10 +51,11 @@ function(add_test_executable test_name)
 endfunction()
 
 # add the tests
-add_test_executable(EnvironmentTests)
-add_test_executable(ForceTests)
-add_test_executable(StoermerVerletTests)
-add_test_executable(LinkedCellsTests)
-add_test_executable(BoundaryConditionTests)
-add_test_executable(ThermostatTests)
-add_test_executable(ParallelizationTests)
+add_test_executable(EnvironmentTests OFF)
+add_test_executable(ForceTests OFF)
+add_test_executable(StoermerVerletTests OFF)
+add_test_executable(LinkedCellsTests OFF)
+add_test_executable(BoundaryConditionTests OFF)
+add_test_executable(ThermostatTests OFF)
+add_test_executable(ParallelizationTests OFF)
+add_test_executable(IOTests ON)

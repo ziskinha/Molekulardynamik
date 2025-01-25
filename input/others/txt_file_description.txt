@@ -84,13 +84,13 @@ membranes:
 - - -            - - -         - - -     -       -     -           -
 
 force:
-# name           parameter   particle_type
+# lennard_jones/inverse_square  parameter   particle_type
 lennard_jones    - -               -
 inverse_square   -                 -
-# name          direction    strength
+# gravity       direction    strength
 gravity          - - -          -
-# name          direction    strength   MarkBox_bottom_left_corner  MarkBox_top_right_corner  start_t end_t  const_acc(default: false)
-pull_force       - - -           -                - - -                      - - -                -     -       -
+# pull_force    direction    strength   MarkBox_origin  MarkBox_extent  start_t end_t  const_acc(default: false)
+pull_force       - - -           -           - - -          - - -           -     -       -
 
 
 environment:
