@@ -9,7 +9,7 @@
         <end_t>0.5</end_t>
         <delta_t>0.0005</delta_t>
         <cutoff_radius>2.5</cutoff_radius>
-        <parallel_strategy>CELL_LOCK</parallel_strategy>
+        <parallel_strategy>NONE</parallel_strategy>
     </parameters>
 
     <Boundary

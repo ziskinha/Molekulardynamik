@@ -18,11 +18,11 @@ namespace md::Integrator {
         /**
          * @brief Constructs a IntegratorBase object with a reference to a ParticleContainer and OutputWriter.
          * @param environment physical system to be simulated.
-         * @param writer used to log/plot particle data.
-         * @param checkpoint_writer
-         * @param thermostat
-         * @param external_forces
-         * @param stats
+         * @param writer Pointer to an OutputWriterBase for writing output files.
+         * @param checkpoint_writer Pointer to an CheckpointWriter to save a simulation state.
+         * @param thermostat Thermostat to be used.
+         * @param external_forces A list of external forces applied to the particles during the simulation.
+         * @param stats Pointer to a Statistics object for statistics.
          */
         explicit IntegratorBase(env::Environment& environment,
                                 std::unique_ptr<io::OutputWriterBase> writer = nullptr,
@@ -38,8 +38,8 @@ namespace md::Integrator {
 
         /**
          * @brief Runs the simulation over a given time interval with specified step size and output frequency.
-         * @param start_time
-         * @param end_time
+         * @param start_time The start time of the simulation.
+         * @param end_time The end time of the simulation.
          * @param dt Δt The time increment for each simulation step.
          * @param temp_adj_freq Number of time steps between periodic temperature adjustments.
          * @param write_freq The frequency with which the data is written to output.
@@ -49,8 +49,8 @@ namespace md::Integrator {
         /**
          * @brief Benchmarks the performance of the simulation. Calculates the total execution time and the average
          * execution time per step.
-         * @param start_time
-         * @param end_time
+         * @param start_time The start time of the simulation.
+         * @param end_time The end time of the simnulation.
          * @param dt Δt The time increment for each simulation step.
          * @param temp_adj_freq Number of time steps between periodic temperature adjustments.
          */
@@ -65,7 +65,7 @@ namespace md::Integrator {
         env::Environment& env;            ///< Reference to the environment.
         const env::Thermostat thermostat; ///< Thermostat to adjust temperature of the environment
         unsigned int temp_adjust_freq;    ///< Number of time steps between periodic temperature adjustments.
-        std::vector<env::ConstantForce> external_forces;
+        std::vector<env::ConstantForce> external_forces;  ///< List of constant external forces applied to the particles.
 
        private:
         std::unique_ptr<io::OutputWriterBase> writer;  ///< The output writer.

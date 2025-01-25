@@ -77,7 +77,7 @@ namespace md::io {
 
         /**
          * @brief Plots particle data at a given iteration.
-         * @param environment
+         * @param environment The environment of the particles.
          * @param iteration The current simulation iteration.
          */
         virtual void plot_particles(const env::Environment& environment, int iteration) = 0;
@@ -111,8 +111,8 @@ namespace md::io {
 
     /**
      * @brief Reads an input file depending on its format.
-     * @param filename
-     * @param args
+     * @param filename The name of the file.
+     * @param args The ProgramArguments.
      */
     void read_file(const std::string& filename, ProgramArguments& args);
 }  // namespace md::io

@@ -121,9 +121,9 @@ namespace md::env {
 
         /**
          * @brief Creates an inverse distance boundary force.
-         * @param cutoff
-         * @param pre_factor
-         * @param exponent
+         * @param cutoff The cutoff_radius.
+         * @param pre_factor The pre_factor of inverse distance force.
+         * @param exponent The exponent of inverse distance force.
          * @return A callable object representing the inverse distance force.
          */
         static BoundaryForce InverseDistanceForce(double cutoff, double pre_factor, int exponent = 2);

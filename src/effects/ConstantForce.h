@@ -16,7 +16,7 @@ namespace md::env {
          * @brief Constructor.
          * @param direction The direction of the force.
          * @param strength The strength of the force.
-         * @param marker The function to select which particles are affected .
+         * @param marker The function to select which particles are affected.
          * @param start_time Start time of the force application.
          * @param end_time End time of the force application.
          * @param const_acceleration Indicates if the force applies constant acceleration.
@@ -25,7 +25,7 @@ namespace md::env {
 
         /**
          * @brief Marks the particles that should be affected by the force.
-         * @param env
+         * @param env The environment of the particles.
          */
         void mark_particles(const Environment& env);
         /**

@@ -36,7 +36,7 @@ namespace md::env {
          * @param velocity Velocity vector of the particle.
          * @param mass Mass of particle (default: 0).
          * @param type Type of particle (default: 0).
-         * @param state
+         * @param state The state of the particles (default: ALIVE).
          */
         ParticleCreateInfo(const vec3& position, const vec3& velocity, double mass, int type = 0,  Particle::State state = Particle::ALIVE);
         vec3 position{};
@@ -60,7 +60,7 @@ namespace md::env {
          * @param mass Mass of each particle.
          * @param dimension Dimension of the cuboid.
          * @param type Type of each particle (default: 0).
-         * @param state
+         * @param state The state of the particles (default: ALIVE).
          */
         CuboidCreateInfo(const vec3& origin, const vec3& initial_v, const uint3& num_particles, double width,
             double mass, double thermal_v = 0, int type = 0, Dimension dimension = Dimension::INFER,
@@ -90,7 +90,7 @@ namespace md::env {
          * @param mass The mass of the particles.
          * @param dimension Dimension of the sphere.
          * @param type The type of each particle (default: 0).
-         * @param state
+         * @param state The state of the particles (default: ALIVE).
          */
         SphereCreateInfo(const vec3& origin, const vec3& initial_v, int radius, double width, double mass,
             double thermal_v = 0, int type = 0, Dimension dimension = Dimension::INFER,
@@ -132,7 +132,7 @@ namespace md::env {
         /**
          * @brief Sets the force with which particles interact of a given type interact.
          * @param force The type force to be used.
-         * @param particle_type
+         * @param particle_type The particle type it should be used for.
          */
         void set_force(const ForceType& force, int particle_type);
         /**
@@ -142,7 +142,7 @@ namespace md::env {
         void set_boundary(const Boundary& boundary);
         /**
         * @brief Sets the dimension of the environment.
-        * @param dim
+        * @param dim The dimension.
         */
         void set_dimension(Dimension dim);
         /**
@@ -182,7 +182,7 @@ namespace md::env {
             Particle::State state = Particle::ALIVE);
         /**
          * @brief Adds a sphere to the environment.
-         * @param sphere
+         * @param sphere A SphereCreateInfo describing the sphere.
          */
         void add_sphere(const SphereCreateInfo& sphere);
         /**
@@ -220,7 +220,7 @@ namespace md::env {
          * @brief Computes the force between two particles.
          * @param p1 The first particle.
          * @param p2 The second particle.
-         * @param pair
+         * @param pair The cellPair.
          * @return The force between the two particles.
          */
         [[nodiscard]] vec3 force(const Particle& p1, const Particle& p2, const CellPair & pair) const;
@@ -255,7 +255,7 @@ namespace md::env {
 
         /**
          * @brief Retrieves the block sets of the simulation, used for spatial decomposition parallelization.
-         * @return
+         * @return A vector of vectors of Block objects.
          */
         const std::vector<std::vector<Block>>& block_sets();
 

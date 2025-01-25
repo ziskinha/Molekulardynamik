@@ -31,9 +31,9 @@ namespace md::env {
 
         /**
          * @brief Constructs a Lennard-Jones object with parameters.
-         * @param epsilon
-         * @param sigma
-         * @param cutoff
+         * @param epsilon The lennard-jones epsilon.
+         * @param sigma The lennard-jones sigma.
+         * @param cutoff The cutoff-radius.
          */
         LennardJones(const double epsilon, const double sigma, const double cutoff)
             : ForceBase(cutoff), epsilon(epsilon), sigma(sigma) {}
@@ -53,8 +53,8 @@ namespace md::env {
 
         /**
          * @brief Constructs an inverse-square force object with parameters.
-         * @param pre_factor
-         * @param cutoff
+         * @param pre_factor The pre-factor of inverse square force.
+         * @param cutoff The cutoff-radius.
          */
         InverseSquare(const double pre_factor, const double cutoff)
             : ForceBase(cutoff), pre_factor(pre_factor) {}
@@ -168,8 +168,8 @@ namespace md::env {
         /**
          * @brief Evaluates the force between two particles.
          * @param diff The difference of the particles.
-         * @param p1
-         * @param p2
+         * @param p1 The first particle.
+         * @param p2 The second particle.
          * @return The force acting between the two particles.
          */
         vec3 evaluate(const vec3& diff, const Particle& p1, const Particle& p2) const;
@@ -198,9 +198,9 @@ namespace md::env {
         std::unordered_map<ParticleIDPair, ForceType, ForceKeyHash> localized_force_types;
         ///< Map of particle types to force configurations.
         ankerl::unordered_dense::map<ParticleTypePair, Force, ForceKeyHash> global_forces;
-        ///< forces between particle types
+        ///< forces between particle types.
         ankerl::unordered_dense::map<ParticleIDPair, Force, ForceKeyHash> localized_forces;
-        ///< forces between specific particles
+        ///< forces between specific particles.
         double cutoff_radius; ///< The cutoff radius.
     };
 } // namespace md::env

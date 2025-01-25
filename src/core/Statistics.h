@@ -18,7 +18,7 @@ namespace md::core {
         virtual ~Statistics() {}
 
         /**
-         * @brief number of iterations between each statistics calculation
+         * @brief number of iterations between each statistics calculation.
          */
         const int compute_freq;
     };
