@@ -6,7 +6,7 @@
     </output>
 
     <parameters>
-        <end_t>5</end_t>
+        <end_t>1</end_t>
         <delta_t>0.0005</delta_t>
         <cutoff_radius>2.5</cutoff_radius>
         <parallel_strategy>CELL_LOCK</parallel_strategy>
@@ -37,23 +37,23 @@
     </ConstantForces>
 
     <Thermostat>
-        <n_thermostats>10</n_thermostats>
+        <n_thermostats>100</n_thermostats>
         <init_T>40</init_T>
         <target_T>50</target_T>
         <temp_dT>-1</temp_dT>
     </Thermostat>
 
     <particles>
-        <origin>1 2 3</origin>
-        <velocity>3 2 1</velocity>
+        <origin>1 1 1</origin>
+        <velocity>1 1 1</velocity>
         <mass>1</mass>
         <type>0</type>
     </particles>
 
     <cuboids>
-        <origin>5 10 15</origin>
-        <velocity>1 2 3</velocity>
-        <numPart>20 30 40</numPart>
+        <origin>5 5 5</origin>
+        <velocity>5 5 5</velocity>
+        <numPart>5 5 5</numPart>
         <thermal_v>0</thermal_v>
         <width>1</width>
         <mass>2</mass>
@@ -63,8 +63,8 @@
     </cuboids>
 
     <spheres>
-        <origin>45 40 30</origin>
-        <velocity>1 2 3</velocity>
+        <origin>20 20 20</origin>
+        <velocity>4 4 4</velocity>
         <thermal_v>0</thermal_v>
         <radius>5</radius>
         <width>1</width>
@@ -75,12 +75,12 @@
     </spheres>
 
     <membranes>
-        <origin>45 10 10</origin>
-        <velocity>2 4 6</velocity>
-        <numPart>20 30 40</numPart>
+        <origin>40 40 40</origin>
+        <velocity>3 3 3</velocity>
+        <numPart>5 5 1</numPart>
         <width>1</width>
         <mass>1</mass>
-        <k>2</k>
+        <k>300</k>
         <type>0</type>
     </membranes>
 </simulation>

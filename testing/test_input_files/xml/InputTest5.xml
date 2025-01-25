@@ -37,7 +37,7 @@
         <numPart>10 10 1</numPart>
         <width>1</width>
         <mass>1</mass>
-        <k>2</k>
+        <k>300</k>
         <type>0</type>
     </membranes>
 

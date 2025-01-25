@@ -10,6 +10,14 @@ namespace md::Integrator {
         auto writer = create_writer(args.output_baseName, args.output_format, args.override);
         auto checkpoint_writer = io::create_checkpoint_writer();
 
+#ifndef _OPENMP
+        if (args.parallel_strategy == 1 || args.parallel_strategy == 2) {
+            SPDLOG_INFO("A parallelization strategy was selected, but the program was compiled without the OpenMP flag. "
+                        "Using no parallelization now. To enable parallelization, compile with the \"-fopenmp\" flag.");
+            args.parallel_strategy = 0;
+        }
+#endif
+
         switch (args.parallel_strategy) {
             case 1:
                 return std::make_unique<StoermerVerletCellLock>(args.env, std::move(writer), std::move(checkpoint_writer),

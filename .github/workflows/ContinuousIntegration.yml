@@ -24,7 +24,7 @@ jobs:
         run: |
             mkdir build
             cd build
-            cmake -DCMAKE_BUILD_TYPE=Debug ..
+            cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-fopenmp"
             make
             ./MolSim ../input/others/CI_simulation.xml VTK -f
 
@@ -44,6 +44,6 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake ..
+          cmake .. -DCMAKE_CXX_FLAGS="-fopenmp"
           make
           ctest --output-on-failure

@@ -145,15 +145,15 @@ TEST(ParallelizationTest, cell_lock_test) {
     simulator_cell_lock.simulate(0, 0.05, 0.0005);
 
     for (size_t i = 0; i < env_without_1.size(); i++) {
-        EXPECT_EQ(env_without_1[i].force[0], env_cell_lock[i].force[0]);
-        EXPECT_EQ(env_without_1[i].force[1], env_cell_lock[i].force[1]);
-        EXPECT_EQ(env_without_1[i].force[2], env_cell_lock[i].force[2]);
+        EXPECT_NEAR(env_without_1[i].force[0], env_cell_lock[i].force[0], 1e-10);
+        EXPECT_NEAR(env_without_1[i].force[1], env_cell_lock[i].force[1], 1e-10);
+        EXPECT_NEAR(env_without_1[i].force[2], env_cell_lock[i].force[2], 1e-10);
     }
 
     for (size_t i = 0; i < env_without_1.size(); i++) {
-        EXPECT_EQ(env_without_1[i].velocity[0], env_cell_lock[i].velocity[0]);
-        EXPECT_EQ(env_without_1[i].velocity[1], env_cell_lock[i].velocity[1]);
-        EXPECT_EQ(env_without_1[i].velocity[2], env_cell_lock[i].velocity[2]);
+        EXPECT_NEAR(env_without_1[i].velocity[0], env_cell_lock[i].velocity[0], 1e-10);
+        EXPECT_NEAR(env_without_1[i].velocity[1], env_cell_lock[i].velocity[1], 1e-10);
+        EXPECT_NEAR(env_without_1[i].velocity[2], env_cell_lock[i].velocity[2], 1e-10);
     }
 }
 
@@ -173,14 +173,14 @@ TEST(ParallelizationTest, spatial_decomposition_test) {
     simulator_spatial.simulate(0, 0.05, 0.0005);
 
     for (size_t i = 0; i < env_without_2.size(); i++) {
-        EXPECT_EQ(env_without_2[i].force[0], env_spatial[i].force[0]);
-        EXPECT_EQ(env_without_2[i].force[1], env_spatial[i].force[1]);
-        EXPECT_EQ(env_without_2[i].force[2], env_spatial[i].force[2]);
+        EXPECT_NEAR(env_without_2[i].force[0], env_spatial[i].force[0], 1e-10);
+        EXPECT_NEAR(env_without_2[i].force[1], env_spatial[i].force[1], 1e-10);
+        EXPECT_NEAR(env_without_2[i].force[2], env_spatial[i].force[2], 1e-10);
     }
 
     for (size_t i = 0; i < env_without_2.size(); i++) {
-        EXPECT_EQ(env_without_2[i].velocity[0], env_spatial[i].velocity[0]);
-        EXPECT_EQ(env_without_2[i].velocity[1], env_spatial[i].velocity[1]);
-        EXPECT_EQ(env_without_2[i].velocity[2], env_spatial[i].velocity[2]);
+        EXPECT_NEAR(env_without_2[i].velocity[0], env_spatial[i].velocity[0], 1e-10);
+        EXPECT_NEAR(env_without_2[i].velocity[1], env_spatial[i].velocity[1], 1e-10);
+        EXPECT_NEAR(env_without_2[i].velocity[2], env_spatial[i].velocity[2], 1e-10);
     }
 }
