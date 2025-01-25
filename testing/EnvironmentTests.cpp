@@ -141,3 +141,39 @@ TEST(EnvironmentTest, add_cuboid_test) {
     EXPECT_TRUE(env[1].mass == 5);
     EXPECT_TRUE(env[1].type == 0);
 }
+
+TEST(EnvironmentTest,add_membrane_test){
+    md::env::Environment env;
+    env.add_membrane({0,0,0},{1,1,0},{2,1,1},5,2,1,1,0);
+    env.build();
+    ASSERT_TRUE(env.size(md::env::Particle::ALIVE) == 2);
+    EXPECT_TRUE(env[0].position[0] == 0);
+    EXPECT_TRUE(env[0].position[1] == 0);
+    EXPECT_TRUE(env[0].position[2] == 0);
+
+    EXPECT_TRUE(env[0].velocity[0] == 1);
+    EXPECT_TRUE(env[0].velocity[1] == 1);
+    EXPECT_TRUE(env[0].velocity[2] == 0);
+
+    EXPECT_TRUE(env[0].mass == 2);
+    EXPECT_TRUE(env[0].type == 0);
+
+    EXPECT_TRUE(env[0].force[0] == 0);
+    EXPECT_TRUE(env[0].force[1] == 0);
+    EXPECT_TRUE(env[0].force[2] == 0);
+
+    EXPECT_TRUE(env[1].position[0] == 5);
+    EXPECT_TRUE(env[1].position[1] == 0);
+    EXPECT_TRUE(env[1].position[2] == 0);
+
+    EXPECT_TRUE(env[1].velocity[0] == 1);
+    EXPECT_TRUE(env[1].velocity[1] == 1);
+    EXPECT_TRUE(env[1].velocity[2] == 0);
+
+    EXPECT_TRUE(env[1].mass == 2);
+    EXPECT_TRUE(env[1].type == 0);
+
+    EXPECT_TRUE(env[1].force[0] == 0);
+    EXPECT_TRUE(env[1].force[1] == 0);
+    EXPECT_TRUE(env[1].force[2] == 0);
+}
