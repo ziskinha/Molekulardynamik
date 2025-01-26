@@ -13,8 +13,8 @@ namespace md::Integrator {
 #ifndef _OPENMP
         if (args.parallel_strategy == 1 || args.parallel_strategy == 2) {
             SPDLOG_INFO("A parallelization strategy was selected, but the program was compiled without the OpenMP flag. "
-                        "Using no parallelization now. To enable parallelization, compile with the \"-fopenmp\" flag.");
-            args.parallel_strategy = 0;
+                        "To enable parallelization, please compile with the \"-fopenmp\" flag.");
+            exit(-1);
         }
 #endif
 

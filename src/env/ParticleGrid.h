@@ -285,6 +285,55 @@ namespace md::env {
         [[nodiscard]] std::vector<int3> get_cell_indices() const;
 
         /**
+         * @brief returns all pairs of linked cells
+         * @return A vector with GridCellPairs
+         */
+        const std::vector<CellPair> & linked_cells();
+
+        /**
+         * @brief returns the block sets.
+         *
+         * The returned block sets include:
+         * [0]: Normal blocks,
+         * [1]: Communication blocks along the x-axis,
+         * [2]: Communication blocks along the y-axis,
+         * [3]: Communication blocks along the z-axis.
+         *
+         * @return A reference to the vector of vectors of blocks.
+         */
+        const std::vector<std::vector<Block>> & block_sets();
+
+        /**
+         * @brief returns all cells at the boundary
+         * @return A vector with GridCell pointers
+         */
+        const std::vector<GridCell*> & boundary_cells();
+
+        /**
+         * @brief Number of particles.
+         * @return The number of particles.
+         */
+        size_t particle_count() const;
+
+        /**
+         * @brief Updates the relevant grid cells when a particle moves from one cell to another.
+         * @param particle Pointer to the particle which moves.
+         * @param old_cell The index of the old cell (before moving).
+         * @param new_cell The index of the new cell (after moving).
+         */
+        void update_cells(Particle* particle, const int3& old_cell, const int3& new_cell);
+
+        /**
+         * @brief The position in the gird relative to the boundary origin.
+         * @param abs_position
+         * @return
+         */
+        vec3 position_in_grid(const vec3& abs_position) const;
+
+        UINT_T n_threads = 1; ///< Number of available threads (turns into omp_get_max_threads() if no other value is provided).
+
+    private:
+        /**
          * @brief Computes the displacements of cells in the environment.
          * @return A vector of displacements.
          */
@@ -314,46 +363,7 @@ namespace md::env {
          */
         int get_communication_block_index(Block block, int axis, int3 idx2);
 
-        /**
-         * @brief returns all pairs of linked cells
-         * @return A vector with GridCellPairs
-         */
-        const std::vector<CellPair> & linked_cells();
 
-        /**
-         * @brief returns the block sets.
-         *
-         * The returned block sets include:
-         * [0]: Normal blocks,
-         * [1]: Communication blocks along the x-axis,
-         * [2]: Communication blocks along the y-axis,
-         * [3]: Communication blocks along the z-axis.
-         *
-         * @return A reference to the vector of vectors of blocks.
-         */
-        const std::vector<std::vector<Block>> & block_sets();
-
-        /**
-         * @brief returns all cells at the boundary
-         * @return A vector with GridCell pointers
-         */
-        const std::vector<GridCell*> & boundary_cells();
-
-        size_t particle_count() const;
-
-        /**
-         * @brief Updates the relevant grid cells when a particle moves from one cell to another.
-         * @param particle Pointer to the particle which moves.
-         * @param old_cell The index of the old cell (before moving).
-         * @param new_cell The index of the new cell (after moving).
-         */
-        void update_cells(Particle* particle, const int3& old_cell, const int3& new_cell);
-
-        vec3 position_in_grid(const vec3& abs_position) const;
-
-        UINT_T n_threads = 1; ///< Number of available threads (turns into omp_get_max_threads() if no other value is provided).
-
-    private:
         /**
         * @brief Builds the grid cells based on the given extent and grid constant.
         * @param extent The size of the simulation space.

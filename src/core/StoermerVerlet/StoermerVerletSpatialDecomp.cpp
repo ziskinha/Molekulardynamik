@@ -50,16 +50,16 @@ namespace md::Integrator {
 
         // apply constant forces
         for (auto &f: external_forces) {
+            const std::vector<size_t> marked_particles = f.marked_particles();
 #pragma omp parallel for
-            for (size_t id = 0; id < f.marked_particles().size(); ++id) {
-                f.apply_force(env[id], dt * step);
+            for (size_t i = 0; i < marked_particles.size(); ++i) {
+                f.apply_force(env[marked_particles[i]], dt * step);
             }
         }
 
         // update velocities
-#pragma omp parallel for
-        for (size_t i = 0; i < env.size(); i++) {
-            env[i].velocity = env[i].velocity + dt / 2 / env[i].mass * (env[i].force + env[i].old_force);
+        for (auto &p: env.particles()) {
+            p.velocity = p.velocity + dt / 2 / p.mass * (p.force + p.old_force);
         }
 
         // apply thermostat

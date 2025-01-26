@@ -49,6 +49,7 @@ namespace md::io {
             else if (strategy == "SPATIAL_DECOMPOSITION") args.parallel_strategy = 2;
             else args.parallel_strategy = 0;
 
+            bool build_blocks = args.parallel_strategy == 2 ? true : false;
 
             /// -----------------------------------------
             ///  Parse particle information
@@ -296,7 +297,7 @@ namespace md::io {
             }
 
             args.env.set_boundary(args.boundary);
-            args.env.build();
+            args.env.build(build_blocks);
 
 
             /// -----------------------------------------
