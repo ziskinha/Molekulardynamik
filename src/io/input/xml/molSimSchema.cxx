@@ -1511,6 +1511,36 @@ type (const type_type& x)
   this->type_.set (x);
 }
 
+const particles::state_type& particles::
+state () const
+{
+  return this->state_.get ();
+}
+
+particles::state_type& particles::
+state ()
+{
+  return this->state_.get ();
+}
+
+void particles::
+state (const state_type& x)
+{
+  this->state_.set (x);
+}
+
+void particles::
+state (::std::auto_ptr< state_type > x)
+{
+  this->state_.set (x);
+}
+
+const particles::state_type& particles::
+state_default_value ()
+{
+  return state_default_value_;
+}
+
 
 // cuboids
 // 
@@ -4130,16 +4160,21 @@ Thermostat::
 // particles
 //
 
+const particles::state_type particles::state_default_value_ (
+  "ALIVE");
+
 particles::
 particles (const origin_type& origin,
            const velocity_type& velocity,
            const mass_type& mass,
-           const type_type& type)
+           const type_type& type,
+           const state_type& state)
 : ::xml_schema::type (),
   origin_ (origin, this),
   velocity_ (velocity, this),
   mass_ (mass, this),
-  type_ (type, this)
+  type_ (type, this),
+  state_ (state, this)
 {
 }
 
@@ -4151,7 +4186,8 @@ particles (const particles& x,
   origin_ (x.origin_, f, this),
   velocity_ (x.velocity_, f, this),
   mass_ (x.mass_, f, this),
-  type_ (x.type_, f, this)
+  type_ (x.type_, f, this),
+  state_ (x.state_, f, this)
 {
 }
 
@@ -4163,7 +4199,8 @@ particles (const ::xercesc::DOMElement& e,
   origin_ (this),
   velocity_ (this),
   mass_ (this),
-  type_ (this)
+  type_ (this),
+  state_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -4232,6 +4269,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // state
+    //
+    if (n.name () == "state" && n.namespace_ ().empty ())
+    {
+      ::std::auto_ptr< state_type > r (
+        state_traits::create (i, f, this));
+
+      if (!state_.present ())
+      {
+        this->state_.set (r);
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -4262,6 +4313,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "type",
       "");
   }
+
+  if (!state_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "state",
+      "");
+  }
 }
 
 particles* particles::
@@ -4281,6 +4339,7 @@ operator= (const particles& x)
     this->velocity_ = x.velocity_;
     this->mass_ = x.mass_;
     this->type_ = x.type_;
+    this->state_ = x.state_;
   }
 
   return *this;
@@ -6353,6 +6412,17 @@ operator<< (::xercesc::DOMElement& e, const particles& i)
         e));
 
     s << i.type ();
+  }
+
+  // state
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "state",
+        e));
+
+    s << i.state ();
   }
 }
 

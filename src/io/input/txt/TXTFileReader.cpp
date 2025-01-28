@@ -55,20 +55,21 @@ namespace md::io {
     void parse_particle(const std::string& line, Environment& env) {
         SPDLOG_DEBUG("Reading Particle:    {}", line);
 
-        // Minimum required values: 3 (origin) + 3 (velocity) + 1 (mass) + 1 (type) + optional 3 (force)
-        auto vals = parse_values(line, 8);
+        // Minimum required values: 3 (origin) + 3 (velocity) + 1 (mass) + 1 (type) + 1 (state) +  optional 3 (force)
+        auto vals = parse_values(line, 9);
 
         vec3 origin = {vals[0], vals[1], vals[2]};
         vec3 init_v = {vals[3], vals[4], vals[5]};
         double mass = vals[6];
         int type = static_cast<int>(vals[7]);
+        auto state = vals[8] == 0 ? env::Particle::STATIONARY : env::Particle::ALIVE;
 
         vec3 force = {0, 0, 0};
-        if (vals.size() == 11) {
-            force = {vals[8], vals[9], vals[10]};
+        if (vals.size() == 12) {
+            force = {vals[9], vals[10], vals[11]};
         }
 
-        env.add_particle({origin[0], origin[1], origin[2]}, {init_v[0], init_v[1], init_v[2]}, mass, type, Particle::ALIVE, force);
+        env.add_particle({origin[0], origin[1], origin[2]}, {init_v[0], init_v[1], init_v[2]}, mass, type, state, force);
 
         SPDLOG_DEBUG(
             "Parsed Particle:\n"

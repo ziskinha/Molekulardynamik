@@ -57,17 +57,20 @@ namespace md::io {
             for (const auto& particle : simulation->particles()) {
                 args.env.add_particle({particle.origin()[0], particle.origin()[1], particle.origin()[2]},
                                       {particle.velocity()[0], particle.velocity()[1], particle.velocity()[2]},
-                                      particle.mass(), particle.type());
+                                      particle.mass(), particle.type(),
+                                      particle.state() == "ALIVE" ? env::Particle::ALIVE : env::Particle::STATIONARY);
 
                 SPDLOG_DEBUG(fmt::format(
                         "Parsed Particle:\n"
                         "       Origin:           [{}, {}, {}]\n"
                         "       Initial Velocity: [{}, {}, {}]\n"
                         "       Mass:             {}\n"
-                        "       Type:             {}",
+                        "       Type:             {}\n"
+                        "       State:            {}",
                         particle.origin()[0], particle.origin()[1], particle.origin()[2],
                         particle.velocity()[0], particle.velocity()[1], particle.velocity()[2],
-                        particle.mass(), particle.type()));
+                        particle.mass(), particle.type(),
+                        particle.state() == env::Particle::ALIVE ? "ALIVE" : "STATIONARY"));
             }
 
 
@@ -258,8 +261,8 @@ namespace md::io {
             /// -----------------------------------------
             ///  Parse constant force information
             /// -----------------------------------------
-            for (const auto& constant_force2 : simulation->ConstantForces()) {
-                auto& constant_force = constant_force2.ConstantForce();
+            for (const auto& constant_forces : simulation->ConstantForces()) {
+                auto& constant_force = constant_forces.ConstantForce();
 
                 if (constant_force.type() == "gravity") {
                     env::ConstantForce gravity = env::Gravity(constant_force.strength(),
