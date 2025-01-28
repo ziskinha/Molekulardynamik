@@ -323,6 +323,10 @@ namespace md::env {
         Environment(const Environment&) = delete;
         Environment& operator=(const Environment&) = delete;
 
+        /**
+         * @brief Used for testing.
+         */
+        friend class FriendClassForTests;
     private:
         /**
          * @brief Filters particles based on their state and location within the grid.

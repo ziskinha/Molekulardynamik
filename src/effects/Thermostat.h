@@ -42,6 +42,10 @@ namespace md::env {
          */
         void adjust_temperature(Environment & env) const;
 
+        /**
+         * @brief Used for testing.
+         */
+        friend class FriendClassForTests;
     private:
         double init_temp;        ///< The initial temperature.
         double target_temp;      ///< The target temperature.

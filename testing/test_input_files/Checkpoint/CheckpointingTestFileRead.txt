@@ -5,9 +5,9 @@ general:
 25            0.5           100           2.5              0                 output
 
 particles:
-# origin             velocity         mass    type     old_force
-0.5 0.5 0.5       0.5 0.5 0.5          1.5     0        1 1.5 2
-1.5 1.5 1.5       1.5 1.5 1.5          1.5     1       2.5 3 3.5
+# origin             velocity         mass    type   state(0: STATIONARY, 1: ALIVE)   old_force
+0.5 0.5 0.5       0.5 0.5 0.5          1.5     0                0                       1 1.5 2
+1.5 1.5 1.5       1.5 1.5 1.5          1.5     1                1                      2.5 3 3.5
 
 force:
 # lennard_jones/inverse_square  parameter   particle_type

@@ -4,7 +4,7 @@
 #include "iostream"
 
 constexpr const char* GENERAL_HEADER = "# duration   delta_t     write_freq   cutoff_radius   parallel_strategy  output_baseName";
-constexpr const char* PARTICLE_HEADER = "# origin             velocity         mass    type     old_force";
+constexpr const char* PARTICLE_HEADER = "# origin             velocity         mass    type   state(0: STATIONARY, 1: ALIVE)   old_force";
 constexpr const char* FORCE_HEADER = "# lennard_jones/inverse_square  parameter   particle_type\n"
                                      "# gravity       direction    strength\n"
                                      "# pull_force    direction    strength   MarkBox_bottom_left_corner  MarkBox_top_right_corner  start_t end_t  const_acc(default: false)";
@@ -58,11 +58,12 @@ namespace md::io {
         outfile << "particles:" << std::endl;
         outfile << PARTICLE_HEADER << std::endl;
 
-        for (auto & particle : env.particles(env::GridCell::INSIDE, env::Particle::ALIVE)) {
+        for (auto & particle : env.particles(env::GridCell::INSIDE, env::Particle::ALIVE | env::Particle::STATIONARY)) {
             outfile << particle.position[0] << " " << particle.position[1] << " " << particle.position[2] << SPACE
                     << particle.velocity[0] << " " << particle.velocity[1] << " " << particle.velocity[2] << SPACE
                     << particle.mass << SPACE
                     << particle.type << SPACE
+                    << (particle.state == env::Particle::ALIVE ? 1 : 0) << SPACE
                     << particle.old_force[0] << " " << particle.old_force[1] << " " << particle.old_force[2]
                     << std::endl;
         }
