@@ -64,3 +64,20 @@ If you want to disable creating the Doxygen target (e.g., if Doxygen is not inst
 cmake -DENABLE_DOXYGEN=OFF ..
 ```
 
+## Parallelization Instructions
+The simulation can also be run using one of two parallelization strategies. 
+To enable parallelization, the program must be compiled with the OpenMP flag:
+```bash
+cmake .. -DCMAKE_CXX_FLAGS="-fopenmp"
+```
+The parallelization strategy can be selected via the XML configuration file as follows:
+```bash
+    <parameters>
+        [...]
+        <parallel_strategy>STRATEGY</parallel_strategy>
+    </parameters>
+```
+Where **STRATEGY** can be one of the following options:
+- **CELL_LOCK** Locks the linked cells in a way that allows the force calculation to be performed in parallel.
+- **SPATIAL_DECOMPOSITION** Divides the simulation space so that the force calculation can be performed in parallel.
+- **NONE** No parallelization.
