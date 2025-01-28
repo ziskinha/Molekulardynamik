@@ -25,7 +25,7 @@ namespace md::env {
 
     void ConstantForce::apply_force(Particle& particle, const double t) const {
         if (t >= start_time && t <= end_time) {
-            particle.force = particle.force + strength / (const_acceleration ? particle.mass : 1.0) * direction;
+            particle.force = particle.force + strength * (const_acceleration ? particle.mass : 1.0) * direction;
         }
     }
 

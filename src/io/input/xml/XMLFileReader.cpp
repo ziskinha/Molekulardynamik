@@ -87,8 +87,8 @@ namespace md::io {
 
                 args.env.add_cuboid({cuboid.origin()[0], cuboid.origin()[1], cuboid.origin()[2]},
                                     {cuboid.velocity()[0], cuboid.velocity()[1], cuboid.velocity()[2]},
-                                    {static_cast<int>(cuboid.numPart()[0]), static_cast<int>(cuboid.numPart()[1]),
-                                     static_cast<int>(cuboid.numPart()[2])},
+                                    {static_cast<UINT_T>(cuboid.numPart()[0]), static_cast<UINT_T>(cuboid.numPart()[1]),
+                                     static_cast<UINT_T>(cuboid.numPart()[2])},
                                     cuboid.width(), cuboid.mass(), cuboid.thermal_v(), cuboid.type(), dimension, state);
 
                 SPDLOG_DEBUG(fmt::format(
@@ -153,8 +153,8 @@ namespace md::io {
             for (const auto& membrane : simulation->membranes()) {
                 args.env.add_membrane({membrane.origin()[0], membrane.origin()[1], membrane.origin()[2]},
                                       {membrane.velocity()[0], membrane.velocity()[1], membrane.velocity()[2]},
-                                      {static_cast<int>(membrane.numPart()[0]), static_cast<int>(membrane.numPart()[1]),
-                                       static_cast<int>(membrane.numPart()[2])},
+                                      {static_cast<UINT_T>(membrane.numPart()[0]), static_cast<UINT_T>(membrane.numPart()[1]),
+                                       static_cast<UINT_T>(membrane.numPart()[2])},
                                       membrane.width(), membrane.mass(), membrane.k(), args.cutoff_radius,
                                       membrane.type());
 
