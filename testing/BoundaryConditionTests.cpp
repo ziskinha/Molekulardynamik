@@ -187,3 +187,26 @@ TEST(BoundaryConditionsTest, corner_condition_test) {
     simulator.simulate(0, 1, 0.001, 10000);
     EXPECT_TRUE(env.operator[](0).state == md::env::Particle::DEAD);
 }
+
+// test periodic boundary conditon edge case that requires multiple teleports
+TEST(BoundaryConditionsTest, periodi_condition_edge_case) {
+    md::env::Environment env;
+    md::env::Boundary boundary;
+    boundary.set_boundary_rule(md::env::BoundaryRule::PERIODIC);
+    boundary.origin = {0, 0, 0};
+    boundary.extent = {3, 3, 3};
+    env.set_grid_constant(1);
+    env.set_boundary(boundary);
+    env.add_particle({2.995, 2.985, 2.99}, {2, 2, 2}, 1, 0);
+    env.build();
+
+    md::Integrator::StoermerVerlet simulator(env);
+    simulator.simulate(0, 0.03, 0.01, 1000);
+
+    int i = 0;
+
+    EXPECT_NEAR(env.operator[](0).position[0], 0.015, 1e5);
+    EXPECT_NEAR(env.operator[](0).position[0], 0.005, 1e5);
+    EXPECT_NEAR(env.operator[](0).position[0], 0.01, 1e5);
+
+}
