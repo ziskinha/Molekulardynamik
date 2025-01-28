@@ -100,7 +100,7 @@ TEST(ForceTest, gravity_test) {
     for (auto & p : env.particles()) {
         EXPECT_EQ(p.force[0], 0);
         EXPECT_EQ(p.force[1], 0);
-        EXPECT_EQ(p.force[2], -5);
+        EXPECT_EQ(p.force[2], -20);
     }
 }
 
