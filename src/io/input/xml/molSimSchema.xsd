@@ -168,6 +168,7 @@
                             <xsd:element name="velocity" type="Vec3Type"/>
                             <xsd:element name="mass" type="xsd:double"/>
                             <xsd:element name="type"  type="xsd:int"/>
+                            <xsd:element name="state" type="ParticleStateType" default="ALIVE"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>

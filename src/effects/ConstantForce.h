@@ -39,6 +39,11 @@ namespace md::env {
          * @return A reference to a vector containing the IDs.
          */
         const std::vector<size_t> & marked_particles();
+
+        /**
+         * @brief Used for testing.
+         */
+        friend class FriendClassForTests;
     private:
         std::vector<size_t> marked;  ///< List of particle IDs affected by the force.
         ParticleMarker marker;       ///< Function to select which particles are affected.

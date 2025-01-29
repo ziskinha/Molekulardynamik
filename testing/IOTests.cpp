@@ -3,12 +3,42 @@
 #include<string>
 
 #include "../src/env/Environment.h"
+#include "../src/env/Force.h"
 #include "../src/effects/ConstantForce.h"
 #include "../src/io/IOStrategy.h"
 #include "../src/io/input/txt/TXTFileReader.h"
 #include "../src/io/input/xml/XMLFileReader.h"
 
 using namespace md;
+
+namespace md::env {
+    class FriendClassForTests {
+    public:
+        /// -----------------------------------------
+        /// Environment Class
+        /// -----------------------------------------
+        double get_grid_constant(Environment &env) { return env.grid_constant; }
+
+        /// -----------------------------------------
+        /// Thermostat Class
+        /// -----------------------------------------
+        double get_init_temp(Thermostat &thermostat) { return thermostat.init_temp; }
+        double get_target_temp(Thermostat &thermostat) { return thermostat.target_temp; }
+        double get_max_temp_change(Thermostat &thermostat) { return thermostat.max_temp_change;}
+
+        /// -----------------------------------------
+        /// ConstantForce Class
+        /// -----------------------------------------
+        vec3 get_direction(ConstantForce &const_force) { return const_force.direction; }
+        double get_strength(ConstantForce &const_force) { return const_force.strength; }
+        double get_start_time(ConstantForce &const_force) { return const_force.start_time; }
+        double get_end_time(ConstantForce &const_force) { return const_force.end_time; }
+        bool get_const_acc(ConstantForce &const_force) { return const_force.const_acceleration; }
+    };
+}
+
+env::FriendClassForTests env_friend;
+
 
 /// -----------------------------------------
 /// Checkpointing tests
@@ -20,7 +50,7 @@ TEST(IOTest, write_checkpointing_file_test) {
     env.add_particle({0.5, 0.5, 0.5}, {0.5, 0.5, 0.5}, 1.5, 0, env::Particle::ALIVE);
     env.add_particle({1.5, 1.5, 1.5}, {1.5, 1.5, 1.5}, 1.5, 1, env::Particle::ALIVE);
     env.add_particle({2.5, 2.5, 2.5}, {2.5, 2.5, 2.5}, 2.5, 2, env::Particle::ALIVE);
-    env.add_particle({3.5, 3.5, 3.5}, {3.5, 3.5, 3.5}, 3.5, 3, env::Particle::ALIVE);
+    env.add_particle({3.5, 3.5, 3.5}, {3.5, 3.5, 3.5}, 3.5, 3, env::Particle::STATIONARY);
     env.build();
 
     env[0].old_force = {1, 2, 3};
@@ -56,6 +86,7 @@ TEST(IOTest, write_checkpointing_file_test) {
 }
 
 // tests if force is read correctly from a checkpoint file
+// (just checking force here, since other input is tested in read_particle_txt_file_test)
 TEST(IOTest, read_checkpointing_file_test) {
     io::ProgramArguments args;
     io::read_file_txt("../../testing/test_input_files/Checkpoint/CheckpointingTestFileRead.txt", args);
@@ -108,6 +139,38 @@ TEST(IOTest, read_boundary_xml_file_test) {
     EXPECT_EQ(args.boundary.boundary_rules()[3], env::BoundaryRule::VELOCITY_REFLECTION);
     EXPECT_EQ(args.boundary.boundary_rules()[4], env::BoundaryRule::OUTFLOW);
     EXPECT_EQ(args.boundary.boundary_rules()[5], env::BoundaryRule::OUTFLOW);
+
+    EXPECT_EQ(env_friend.get_grid_constant(args.env), 2.5);
+}
+
+// tests if thermostat info is read correctly from a xml file.
+TEST(IOTest, read_thermostat_xml_file_test) {
+    io::ProgramArguments args;
+    io::read_file_xml("../../testing/test_input_files/xml/InputTest6.xml", args);
+
+    EXPECT_EQ(env_friend.get_init_temp(args.thermostat), 40);
+    EXPECT_EQ(env_friend.get_target_temp(args.thermostat), 50);
+    EXPECT_EQ(env_friend.get_max_temp_change(args.thermostat), 4);
+    EXPECT_EQ(args.temp_adj_freq, 100);
+}
+
+// tests if constant force info is read correctly from a xml file.
+TEST(IOTest, read_const_force_xml_test) {
+    io::ProgramArguments args;
+    io::read_file_xml("../../testing/test_input_files/xml/InputTest7.xml", args);
+
+    EXPECT_EQ(args.external_forces.size(), 2);
+
+    vec3 exp_direction = {0, 1, 0};
+    EXPECT_EQ(env_friend.get_direction(args.external_forces[0]), exp_direction);
+    EXPECT_EQ(env_friend.get_strength(args.external_forces[0]), -12.44);
+
+    exp_direction = {1, 0, 0};
+    EXPECT_EQ(env_friend.get_direction(args.external_forces[1]), exp_direction);
+    EXPECT_EQ(env_friend.get_strength(args.external_forces[1]), 5);
+    EXPECT_EQ(env_friend.get_start_time(args.external_forces[1]), 3);
+    EXPECT_EQ(env_friend.get_end_time(args.external_forces[1]), 9);
+    EXPECT_FALSE(env_friend.get_const_acc(args.external_forces[1]));
 }
 
 // tests if particle info is read correctly from a xml file.
@@ -115,7 +178,7 @@ TEST(IOTest, read_particle_xml_file_test) {
     io::ProgramArguments args;
     io::read_file_xml("../../testing/test_input_files/xml/InputTest2.xml", args);
 
-    EXPECT_EQ(args.env.size(), 2);
+    EXPECT_EQ(args.env.size(env::Particle::ALIVE | env::Particle::STATIONARY), 2);
 
     // particle 1
     vec3 exp_position = {1, 2, 3};
@@ -124,6 +187,8 @@ TEST(IOTest, read_particle_xml_file_test) {
     EXPECT_EQ(args.env[0].velocity, exp_velocity);
     EXPECT_EQ(args.env[0].mass, 1);
     EXPECT_EQ(args.env[0].type, 0);
+    int state = args.env[0].state == env::Particle::ALIVE ? 1 : 0;
+    EXPECT_EQ(state, 1);
 
     // particle 2
     exp_position = {7, 8, 9};
@@ -132,6 +197,8 @@ TEST(IOTest, read_particle_xml_file_test) {
     EXPECT_EQ(args.env[1].velocity, exp_velocity);
     EXPECT_EQ(args.env[1].mass, 2);
     EXPECT_EQ(args.env[1].type, 1);
+    state = args.env[1].state == env::Particle::ALIVE ? 1 : 0;
+    EXPECT_EQ(state, 0);
 }
 
 // tests if cuboid info is read correctly from a xml file.
@@ -267,6 +334,38 @@ TEST(IOTest, read_boundary_txt_file_test) {
     EXPECT_EQ(args.boundary.boundary_rules()[3], env::BoundaryRule::VELOCITY_REFLECTION);
     EXPECT_EQ(args.boundary.boundary_rules()[4], env::BoundaryRule::OUTFLOW);
     EXPECT_EQ(args.boundary.boundary_rules()[5], env::BoundaryRule::OUTFLOW);
+
+    EXPECT_EQ(env_friend.get_grid_constant(args.env), 2.5);
+}
+
+// tests if thermostat info is read correctly from a txt file.
+TEST(IOTest, read_thermostat_txt_file_test) {
+    io::ProgramArguments args;
+    io::read_file_txt("../../testing/test_input_files/txt/InputTest6.txt", args);
+
+    EXPECT_EQ(env_friend.get_init_temp(args.thermostat), 40);
+    EXPECT_EQ(env_friend.get_target_temp(args.thermostat), 50);
+    EXPECT_EQ(env_friend.get_max_temp_change(args.thermostat), 4);
+    EXPECT_EQ(args.temp_adj_freq, 100);
+}
+
+// tests if constant force info is read correctly from a txt file.
+TEST(IOTest, read_const_force_txt_test) {
+    io::ProgramArguments args;
+    io::read_file_txt("../../testing/test_input_files/txt/InputTest7.txt", args);
+
+    EXPECT_EQ(args.external_forces.size(), 2);
+
+    vec3 exp_direction = {0, 1, 0};
+    EXPECT_EQ(env_friend.get_direction(args.external_forces[0]), exp_direction);
+    EXPECT_EQ(env_friend.get_strength(args.external_forces[0]), -12.44);
+
+    exp_direction = {1, 0, 0};
+    EXPECT_EQ(env_friend.get_direction(args.external_forces[1]), exp_direction);
+    EXPECT_EQ(env_friend.get_strength(args.external_forces[1]), 5);
+    EXPECT_EQ(env_friend.get_start_time(args.external_forces[1]), 3);
+    EXPECT_EQ(env_friend.get_end_time(args.external_forces[1]), 9);
+    EXPECT_FALSE(env_friend.get_const_acc(args.external_forces[1]));
 }
 
 // tests if particle info is read correctly from a txt file.
@@ -274,31 +373,27 @@ TEST(IOTest, read_particle_txt_file_test) {
     io::ProgramArguments args;
     io::read_file_txt("../../testing/test_input_files/txt/InputTest2.txt", args);
 
-    EXPECT_EQ(args.env.size(), 2);
+    EXPECT_EQ(args.env.size(env::Particle::ALIVE | env::Particle::STATIONARY), 2);
 
     // particle 1
-    EXPECT_EQ(args.env[0].position[0], 1);
-    EXPECT_EQ(args.env[0].position[1], 2);
-    EXPECT_EQ(args.env[0].position[2], 3);
-
-    EXPECT_EQ(args.env[0].velocity[0], 4);
-    EXPECT_EQ(args.env[0].velocity[1], 5);
-    EXPECT_EQ(args.env[0].velocity[2], 6);
-
+    vec3 exp_position = {1, 2, 3};
+    vec3 exp_velocity = {4, 5, 6};
+    EXPECT_EQ(args.env[0].position, exp_position);
+    EXPECT_EQ(args.env[0].velocity, exp_velocity);
     EXPECT_EQ(args.env[0].mass, 1);
     EXPECT_EQ(args.env[0].type, 0);
+    int state = args.env[0].state == env::Particle::ALIVE ? 1 : 0;
+    EXPECT_EQ(state, 1);
 
     // particle 2
-    EXPECT_EQ(args.env[1].position[0], 7);
-    EXPECT_EQ(args.env[1].position[1], 8);
-    EXPECT_EQ(args.env[1].position[2], 9);
-
-    EXPECT_EQ(args.env[1].velocity[0], 10);
-    EXPECT_EQ(args.env[1].velocity[1], 11);
-    EXPECT_EQ(args.env[1].velocity[2], 12);
-
+    exp_position = {7, 8, 9};
+    exp_velocity = {10, 11, 12};
+    EXPECT_EQ(args.env[1].position, exp_position);
+    EXPECT_EQ(args.env[1].velocity, exp_velocity);
     EXPECT_EQ(args.env[1].mass, 2);
     EXPECT_EQ(args.env[1].type, 1);
+    state = args.env[1].state == env::Particle::ALIVE ? 1 : 0;
+    EXPECT_EQ(state, 0);
 }
 
 // tests if cuboid info is read correctly from a txt file.

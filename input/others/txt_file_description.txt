@@ -68,8 +68,8 @@ general:
 -              -            -               -               -                 -
 
 particles:
-# origin       velocity       mass       particle_type
-- - -            - - -          -              -
+# origin       velocity       mass       particle_type     state(0: STATIONARY, 1: ALIVE)
+- - -            - - -          -              -                 -
 
 cuboids:
 # origin       velocity        N            h           m       br_v    dim   particle_type  state(0: STATIONARY, 1: ALIVE)

@@ -1976,12 +1976,33 @@ class particles: public ::xml_schema::type
   void
   type (const type_type& x);
 
+  // state
+  //
+  typedef ::ParticleStateType state_type;
+  typedef ::xsd::cxx::tree::traits< state_type, char > state_traits;
+
+  const state_type&
+  state () const;
+
+  state_type&
+  state ();
+
+  void
+  state (const state_type& x);
+
+  void
+  state (::std::auto_ptr< state_type > p);
+
+  static const state_type&
+  state_default_value ();
+
   // Constructors.
   //
   particles (const origin_type&,
              const velocity_type&,
              const mass_type&,
-             const type_type&);
+             const type_type&,
+             const state_type&);
 
   particles (const ::xercesc::DOMElement& e,
              ::xml_schema::flags f = 0,
@@ -2013,6 +2034,8 @@ class particles: public ::xml_schema::type
   ::xsd::cxx::tree::one< velocity_type > velocity_;
   ::xsd::cxx::tree::one< mass_type > mass_;
   ::xsd::cxx::tree::one< type_type > type_;
+  ::xsd::cxx::tree::one< state_type > state_;
+  static const state_type state_default_value_;
 };
 
 class cuboids: public ::xml_schema::type

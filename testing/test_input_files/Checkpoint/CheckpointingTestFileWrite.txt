@@ -5,11 +5,11 @@ general:
 # -- Please provide the missing values or delete -- #
 
 particles:
-# origin             velocity         mass    type     old_force
-0.5 0.5 0.5     0.5 0.5 0.5     1.5     0     1 2 3
-1.5 1.5 1.5     1.5 1.5 1.5     1.5     1     4 5 6
-2.5 2.5 2.5     2.5 2.5 2.5     2.5     2     7 8 9
-3.5 3.5 3.5     3.5 3.5 3.5     3.5     3     10 11 12
+# origin             velocity         mass    type   state(0: STATIONARY, 1: ALIVE)   old_force
+0.5 0.5 0.5     0.5 0.5 0.5     1.5     0     1     1 2 3
+1.5 1.5 1.5     1.5 1.5 1.5     1.5     1     1     4 5 6
+2.5 2.5 2.5     2.5 2.5 2.5     2.5     2     1     7 8 9
+3.5 3.5 3.5     3.5 3.5 3.5     3.5     3     0     10 11 12
  
 force:
 # lennard_jones/inverse_square  parameter   particle_type
