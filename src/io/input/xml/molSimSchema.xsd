@@ -221,6 +221,16 @@
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
+
+                <!-- Statistics -->
+                <xsd:element name="statistics" minOccurs="0" maxOccurs="1">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="compute_freq" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+                            <xsd:element name="n_bins" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>

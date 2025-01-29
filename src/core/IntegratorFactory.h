@@ -10,6 +10,5 @@ namespace md::Integrator {
      * @param stats (optional)
      * @return A unique pointer to an "IntegratorBase" object.
      */
-    std::unique_ptr<IntegratorBase> create_simulator(io::ProgramArguments &args,
-                                                     std::unique_ptr<core::Statistics> stats = nullptr);
+    std::unique_ptr<IntegratorBase> create_simulator(io::ProgramArguments &args);
 }

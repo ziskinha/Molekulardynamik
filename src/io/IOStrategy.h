@@ -7,6 +7,7 @@
 #include "env/Environment.h"
 #include "effects/Thermostat.h"
 #include "effects/ConstantForce.h"
+#include "core/Statistics.h"
 #include "io/Logger/Logger.h"
 #include "io/Output/CheckpointWriter.h"
 
@@ -37,6 +38,7 @@ namespace md::io {
         int parallel_strategy;
         unsigned int temp_adj_freq = std::numeric_limits<unsigned int>::max();
         std::vector<env::ConstantForce> external_forces;
+        std::unique_ptr<core::Statistics> stats = nullptr;
     };
 
     /**

@@ -271,6 +271,7 @@ class particles;
 class cuboids;
 class spheres;
 class membranes;
+class statistics;
 
 #include <memory>    // ::std::auto_ptr
 #include <limits>    // std::numeric_limits
@@ -1473,6 +1474,27 @@ class simulation: public ::xml_schema::type
   void
   membranes (const membranes_sequence& s);
 
+  // statistics
+  //
+  typedef ::statistics statistics_type;
+  typedef ::xsd::cxx::tree::optional< statistics_type > statistics_optional;
+  typedef ::xsd::cxx::tree::traits< statistics_type, char > statistics_traits;
+
+  const statistics_optional&
+  statistics () const;
+
+  statistics_optional&
+  statistics ();
+
+  void
+  statistics (const statistics_type& x);
+
+  void
+  statistics (const statistics_optional& x);
+
+  void
+  statistics (::std::auto_ptr< statistics_type > p);
+
   // Constructors.
   //
   simulation (const output_type&,
@@ -1521,6 +1543,7 @@ class simulation: public ::xml_schema::type
   cuboids_sequence cuboids_;
   spheres_sequence spheres_;
   membranes_sequence membranes_;
+  statistics_optional statistics_;
 };
 
 class output: public ::xml_schema::type
@@ -2599,6 +2622,72 @@ class membranes: public ::xml_schema::type
   ::xsd::cxx::tree::one< type_type > type_;
 };
 
+class statistics: public ::xml_schema::type
+{
+  public:
+  // compute_freq
+  //
+  typedef ::xml_schema::int_ compute_freq_type;
+  typedef ::xsd::cxx::tree::traits< compute_freq_type, char > compute_freq_traits;
+
+  const compute_freq_type&
+  compute_freq () const;
+
+  compute_freq_type&
+  compute_freq ();
+
+  void
+  compute_freq (const compute_freq_type& x);
+
+  // n_bins
+  //
+  typedef ::xml_schema::int_ n_bins_type;
+  typedef ::xsd::cxx::tree::traits< n_bins_type, char > n_bins_traits;
+
+  const n_bins_type&
+  n_bins () const;
+
+  n_bins_type&
+  n_bins ();
+
+  void
+  n_bins (const n_bins_type& x);
+
+  // Constructors.
+  //
+  statistics (const compute_freq_type&,
+              const n_bins_type&);
+
+  statistics (const ::xercesc::DOMElement& e,
+              ::xml_schema::flags f = 0,
+              ::xml_schema::container* c = 0);
+
+  statistics (const statistics& x,
+              ::xml_schema::flags f = 0,
+              ::xml_schema::container* c = 0);
+
+  virtual statistics*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  statistics&
+  operator= (const statistics& x);
+
+  virtual 
+  ~statistics ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< compute_freq_type > compute_freq_;
+  ::xsd::cxx::tree::one< n_bins_type > n_bins_;
+};
+
 #include <iosfwd>
 
 #include <xercesc/sax/InputSource.hpp>
@@ -2912,6 +3001,9 @@ operator<< (::xercesc::DOMElement&, const spheres&);
 
 void
 operator<< (::xercesc::DOMElement&, const membranes&);
+
+void
+operator<< (::xercesc::DOMElement&, const statistics&);
 
 #include <xsd/cxx/post.hxx>
 

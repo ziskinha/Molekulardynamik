@@ -321,6 +321,20 @@ namespace md::io {
                 args.thermostat.set_initial_temperature(args.env);
             }
 
+
+            /// -----------------------------------------
+            ///  Parse Statistics
+            /// -----------------------------------------
+            if (simulation->statistics()) {
+                args.stats = std::make_unique<md::core::NanoFlowStatistics>(simulation->statistics()->compute_freq(),
+                                                                            simulation->statistics()->n_bins());
+
+                SPDLOG_DEBUG(fmt::format("Parsed stats: \n"
+                             "       compute_freq: {}\n"
+                             "       n_bins:       {}",
+                             simulation->statistics()->compute_freq(), simulation->statistics()->n_bins()));
+            }
+
             file.close();
         }
         catch (const xml_schema::exception& e) {

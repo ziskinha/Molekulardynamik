@@ -17,8 +17,7 @@ int main(const int argc, char* argv[]) {
         default:;
     };
 
-    std::unique_ptr<md::core::Statistics> stats = std::make_unique<md::core::NanoFlowStatistics>(10000, 50);
-    auto simulator = md::Integrator::create_simulator(args,std::move(stats));
+    auto simulator = md::Integrator::create_simulator(args);
 
     if (!args.benchmark) {
         simulator->simulate(0, args.duration, args.dt, args.write_freq, args.temp_adj_freq);

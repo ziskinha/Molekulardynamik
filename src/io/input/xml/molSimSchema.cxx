@@ -1145,6 +1145,36 @@ membranes (const membranes_sequence& s)
   this->membranes_ = s;
 }
 
+const simulation::statistics_optional& simulation::
+statistics () const
+{
+  return this->statistics_;
+}
+
+simulation::statistics_optional& simulation::
+statistics ()
+{
+  return this->statistics_;
+}
+
+void simulation::
+statistics (const statistics_type& x)
+{
+  this->statistics_.set (x);
+}
+
+void simulation::
+statistics (const statistics_optional& x)
+{
+  this->statistics_ = x;
+}
+
+void simulation::
+statistics (::std::auto_ptr< statistics_type > x)
+{
+  this->statistics_.set (x);
+}
+
 
 // output
 // 
@@ -2115,6 +2145,46 @@ membranes::type_type membranes::
 type_default_value ()
 {
   return type_type (0);
+}
+
+
+// statistics
+// 
+
+const statistics::compute_freq_type& statistics::
+compute_freq () const
+{
+  return this->compute_freq_.get ();
+}
+
+statistics::compute_freq_type& statistics::
+compute_freq ()
+{
+  return this->compute_freq_.get ();
+}
+
+void statistics::
+compute_freq (const compute_freq_type& x)
+{
+  this->compute_freq_.set (x);
+}
+
+const statistics::n_bins_type& statistics::
+n_bins () const
+{
+  return this->n_bins_.get ();
+}
+
+statistics::n_bins_type& statistics::
+n_bins ()
+{
+  return this->n_bins_.get ();
+}
+
+void statistics::
+n_bins (const n_bins_type& x)
+{
+  this->n_bins_.set (x);
 }
 
 
@@ -3294,7 +3364,8 @@ simulation (const output_type& output,
   particles_ (this),
   cuboids_ (this),
   spheres_ (this),
-  membranes_ (this)
+  membranes_ (this),
+  statistics_ (this)
 {
 }
 
@@ -3313,7 +3384,8 @@ simulation (::std::auto_ptr< output_type > output,
   particles_ (this),
   cuboids_ (this),
   spheres_ (this),
-  membranes_ (this)
+  membranes_ (this),
+  statistics_ (this)
 {
 }
 
@@ -3331,7 +3403,8 @@ simulation (const simulation& x,
   particles_ (x.particles_, f, this),
   cuboids_ (x.cuboids_, f, this),
   spheres_ (x.spheres_, f, this),
-  membranes_ (x.membranes_, f, this)
+  membranes_ (x.membranes_, f, this),
+  statistics_ (x.statistics_, f, this)
 {
 }
 
@@ -3349,7 +3422,8 @@ simulation (const ::xercesc::DOMElement& e,
   particles_ (this),
   cuboids_ (this),
   spheres_ (this),
-  membranes_ (this)
+  membranes_ (this),
+  statistics_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -3493,6 +3567,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       continue;
     }
 
+    // statistics
+    //
+    if (n.name () == "statistics" && n.namespace_ ().empty ())
+    {
+      ::std::auto_ptr< statistics_type > r (
+        statistics_traits::create (i, f, this));
+
+      if (!this->statistics_)
+      {
+        this->statistics_.set (r);
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -3548,6 +3636,7 @@ operator= (const simulation& x)
     this->cuboids_ = x.cuboids_;
     this->spheres_ = x.spheres_;
     this->membranes_ = x.membranes_;
+    this->statistics_ = x.statistics_;
   }
 
   return *this;
@@ -5165,6 +5254,118 @@ membranes::
 {
 }
 
+// statistics
+//
+
+statistics::
+statistics (const compute_freq_type& compute_freq,
+            const n_bins_type& n_bins)
+: ::xml_schema::type (),
+  compute_freq_ (compute_freq, this),
+  n_bins_ (n_bins, this)
+{
+}
+
+statistics::
+statistics (const statistics& x,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  compute_freq_ (x.compute_freq_, f, this),
+  n_bins_ (x.n_bins_, f, this)
+{
+}
+
+statistics::
+statistics (const ::xercesc::DOMElement& e,
+            ::xml_schema::flags f,
+            ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  compute_freq_ (this),
+  n_bins_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void statistics::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // compute_freq
+    //
+    if (n.name () == "compute_freq" && n.namespace_ ().empty ())
+    {
+      if (!compute_freq_.present ())
+      {
+        this->compute_freq_.set (compute_freq_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // n_bins
+    //
+    if (n.name () == "n_bins" && n.namespace_ ().empty ())
+    {
+      if (!n_bins_.present ())
+      {
+        this->n_bins_.set (n_bins_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!compute_freq_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "compute_freq",
+      "");
+  }
+
+  if (!n_bins_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "n_bins",
+      "");
+  }
+}
+
+statistics* statistics::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class statistics (*this, f, c);
+}
+
+statistics& statistics::
+operator= (const statistics& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->compute_freq_ = x.compute_freq_;
+    this->n_bins_ = x.n_bins_;
+  }
+
+  return *this;
+}
+
+statistics::
+~statistics ()
+{
+}
+
 #include <istream>
 #include <xsd/cxx/xml/sax/std-input-source.hxx>
 #include <xsd/cxx/tree/error-handler.hxx>
@@ -6196,6 +6397,18 @@ operator<< (::xercesc::DOMElement& e, const simulation& i)
 
     s << *b;
   }
+
+  // statistics
+  //
+  if (i.statistics ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "statistics",
+        e));
+
+    s << *i.statistics ();
+  }
 }
 
 void
@@ -6716,6 +6929,34 @@ operator<< (::xercesc::DOMElement& e, const membranes& i)
         e));
 
     s << i.type ();
+  }
+}
+
+void
+operator<< (::xercesc::DOMElement& e, const statistics& i)
+{
+  e << static_cast< const ::xml_schema::type& > (i);
+
+  // compute_freq
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "compute_freq",
+        e));
+
+    s << i.compute_freq ();
+  }
+
+  // n_bins
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "n_bins",
+        e));
+
+    s << i.n_bins ();
   }
 }
 

@@ -1,16 +1,15 @@
 #include "CSVWriter.h"
+#include <io/Logger/Logger.h>
 
-#include <spdlog/spdlog.h>
-#include <sys/stat.h>
 namespace md::io{
 CSVWriter::CSVWriter(int bins, std::string filename) : bins{bins} {
    
     file = std::ofstream{ filename + ".csv"};
     if (!file.is_open()) {
-        spdlog::error("Failure while opening {}.csv",filename);
-        exit(1);
+        SPDLOG_ERROR("Failure while opening {}.csv",filename);
+        exit(-1);
     }else {
-        spdlog::info("{}.csv was opened",filename);
+        SPDLOG_INFO("{}.csv was opened",filename);
     }
 
     file << "time,";
