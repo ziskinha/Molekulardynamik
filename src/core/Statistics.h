@@ -1,5 +1,6 @@
 #pragma once
 #include "env/Environment.h"
+#include "io/Output/CSVWriter.h"
 
 namespace md::core {
 
@@ -14,7 +15,7 @@ namespace md::core {
          * @brief virtual method fot computing statistics.
          * @param env
          */
-        virtual void compute(const env::Environment & env) = 0;
+        virtual void compute(const env::Environment & env, double time) = 0;
         virtual ~Statistics() {}
 
         /**
@@ -35,9 +36,11 @@ namespace md::core {
          * @brief Computes the nano-scale flow statistics, such as for velocity and density and TODO writes them to a CSV file.
          * @param env
          */
-        void compute(const env::Environment & env) override;
+        void compute(const env::Environment & env, double time) override;
     private:
-        int n_bins;  ///< The number of bins along the x-axis.
+        int n_bins; 
+        md::io::CSVWriter velocityWriter;
+        md::io::CSVWriter densityWriter;
     };
 } // namespace md::core
 

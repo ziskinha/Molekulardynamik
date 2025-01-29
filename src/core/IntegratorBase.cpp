@@ -56,7 +56,7 @@ namespace md::Integrator {
    
 
  void IntegratorBase::simulate(const double start_time, const double end_time, const double dt,
-                                  const unsigned int write_freq, const unsigned int temp_adj_freq) {
+                                    const unsigned int write_freq, const unsigned int temp_adj_freq) {
         temp_adjust_freq = temp_adj_freq;
         int step = 0;
         const int total_steps = static_cast<int>((end_time - start_time) / dt);
@@ -65,7 +65,7 @@ namespace md::Integrator {
             simulation_step(step, dt);
 
             if (stats && step % stats->compute_freq == 0) {
-                stats->compute(env);
+                stats->compute(env,t);
             }
 
             if (writer && step % write_freq == 0) {
