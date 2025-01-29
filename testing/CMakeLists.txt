@@ -22,7 +22,9 @@ function(add_test_executable test_name use_input)
             ${CMAKE_SOURCE_DIR}/src/io/input/xml/molSimSchema.cxx
             ${CMAKE_SOURCE_DIR}/src/io/Output/VTKWriter.cpp
             ${CMAKE_SOURCE_DIR}/src/io/Output/XYZWriter.cpp
+            ${CMAKE_SOURCE_DIR}/src/io/Output/CSVWriter.cpp
             ${CMAKE_SOURCE_DIR}/src/io/Output/VTK\ unstructured/vtk-unstructured.cpp
+            ${CMAKE_SOURCE_DIR}/src/core/Statistics.cpp
         )
     endif()
 
