@@ -62,6 +62,10 @@
 # * n_thermostats
 # * T_target: target temperature (1 double value), -1 if not defined
 # + delta_T: Temperature difference (1 double value), -1 if not defined
+#
+# Statistics data consist of
+# * compute_freq (1 int value)
+# * n_bins (1 int value)
 
 general:
 # duration   delta_t     write_freq   cutoff_radius   parallel_strategy  output_baseName
@@ -101,3 +105,7 @@ environment:
 thermostats:
 # T_init     n_thermos     T_target(for no target: -1)      delta_T(for no delta_t: -1)
  -              -                     -                                 -
+
+ statistics:
+ # compute_freq   n_bins
+ -                  -

@@ -7,7 +7,7 @@ CSVWriter::CSVWriter(int bins, std::string filename) : bins{bins} {
     file = std::ofstream{ filename + ".csv"};
     if (!file.is_open()) {
         SPDLOG_ERROR("Failure while opening {}.csv",filename);
-        exit(-1);
+        exit(1);
     }else {
         SPDLOG_INFO("{}.csv was opened",filename);
     }

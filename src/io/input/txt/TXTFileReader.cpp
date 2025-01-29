@@ -316,6 +316,25 @@ namespace md::io {
                     init_T, args.temp_adj_freq, target_T, dT);
     }
 
+
+    /// -----------------------------------------
+    /// \brief Parse statistics information
+    /// -----------------------------------------
+    void parse_statistics(const std::string& line, ProgramArguments &args) {
+        SPDLOG_DEBUG("Reading Thermostats:     {}", line);
+
+        // Minimum required values: 1 (compute_freq) + 1 (n_bins)
+        auto vals = parse_values(line, 2);
+
+        args.stats = std::make_unique<md::core::NanoFlowStatistics>(vals[0], vals[1]);
+
+        SPDLOG_DEBUG(fmt::format("Parsed stats: \n"
+                                 "       compute_freq: {}\n"
+                                 "       n_bins:       {}",
+                                 vals[0], vals[1]));
+    }
+
+
     /// -----------------------------------------
     /// \brief Parse general information
     /// -----------------------------------------
@@ -362,7 +381,8 @@ namespace md::io {
         SPDLOG_INFO("Start reading file {}", file_name);
 
         std::string line;
-        enum Section { NONE, GENERAL, PARTICLES, CUBOIDS, SPHERES, FORCE, ENVIRONMENT, THERMOSTATS, MEMBRANE} section = NONE;
+        enum Section { NONE, GENERAL, PARTICLES, CUBOIDS, SPHERES, FORCE, ENVIRONMENT, THERMOSTATS, MEMBRANE, STATISTICS}
+                        section = NONE;
 
         std::unordered_map<std::string, Section> sectionMap = {
                 {"general:", GENERAL},
@@ -372,7 +392,8 @@ namespace md::io {
                 {"force:", FORCE},
                 {"environment:", ENVIRONMENT},
                 {"thermostats:", THERMOSTATS},
-                {"membranes:", MEMBRANE}
+                {"membranes:", MEMBRANE},
+                {"statistics:", STATISTICS}
         };
 
         while (std::getline(infile, line)) {
@@ -411,6 +432,8 @@ namespace md::io {
                 parse_environment(line, args);
             else if (section == THERMOSTATS)
                 parse_thermostats(line, args);
+            else if (section == STATISTICS)
+                parse_statistics(line, args);
         }
 
         SPDLOG_INFO("File successfully read: {}", file_name);
