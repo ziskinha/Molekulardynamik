@@ -2,7 +2,7 @@
 
 general:
 # duration   delta_t     write_freq   cutoff_radius   parallel_strategy  output_baseName
-50          0.0005          100          2.75              1               output
+50          0.0005          100          2.75              1              output
 
 cuboids:
 # origin       velocity        N            h        m     br_v    dim   particle_type  state(0: STATIONARY, 1: ALIVE)
