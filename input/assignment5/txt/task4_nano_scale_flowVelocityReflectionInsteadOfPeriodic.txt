@@ -20,7 +20,7 @@ gravity           0 1 0          -0.8
 environment:
 # (Boundary condition identification: 0: OUTFLOW, 1: PERIODIC, 2: REPULSIVE FORCE, 3: VELOCITY REFLECTION)
 # boundary_origin     boundary_extent     grid_constant    boundary_conds(left, right, top, bottom, front, back)
-0 0 0                    30 30 12             2.75                     0 0 3 3 3 3
+0 0 0                    30 30 12             2.75                     0 0 1 1 3 3
 
 thermostats:
 # T_init     n_thermos     T_target(for no target: -1)      delta_T(for no delta_t: -1)
