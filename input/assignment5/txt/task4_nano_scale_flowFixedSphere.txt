@@ -12,7 +12,7 @@ cuboids:
 
 spheres:
 # origin         velocity      R      h      m      br_v     dim  particle_type   state(0: STATIONARY, 1: ALIVE)
-13,1 15 5          0 0 0       5     1.0     1        0       3        0                0
+13.1 15 5          0 0 0       5     1.0     1        0       3        0                0
 
 force:
 # name           parameter   particle_type
