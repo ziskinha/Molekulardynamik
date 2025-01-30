@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulation>
+    <output>
+        <base_name>output</base_name>
+        <write_frequency>100</write_frequency>
+    </output>
+
+    <parameters>
+        <end_t>50</end_t>
+        <delta_t>0.0005</delta_t>
+        <cutoff_radius>2.75</cutoff_radius>
+        <parallel_strategy>CELL_LOCK</parallel_strategy>
+    </parameters>
+
+    <Boundary
+            typeLEFT="OUTFLOW"
+            typeRIGHT="OUTFLOW"
+            typeTOP="PERIODIC"
+            typeBOTTOM="PERIODIC"
+            typeFRONT="PERIODIC"
+            typeBACK="PERIODIC"
+            origin="0 0 0"
+            extent="30 30 12"
+            grid_constant="2.75"
+    />
+
+    <Forces>
+        <!-- Walls -->
+        <Force type="lennardJones" partType="0" arg1="2" arg2="1.1"/>
+        <!-- Fluid -->
+        <Force type="lennardJones" partType="1" arg1="1" arg2="1"/>
+    </Forces>
+
+    <ConstantForces>
+        <ConstantForce type="gravity" direction="0 1 0" strength="-0.8"/>
+    </ConstantForces>
+
+    <Thermostat>
+        <n_thermostats>10</n_thermostats>
+        <init_T>40</init_T>
+        <target_T>40</target_T>
+        <temp_dT>-1</temp_dT>
+    </Thermostat>
+
+    <!-- Walls -->
+    <cuboids>
+        <origin>1 0.5 0.5</origin>
+        <velocity>0 0 0</velocity>
+        <numPart>2 30 12</numPart>
+        <thermal_v>0</thermal_v>
+        <width>1</width>
+        <mass>1</mass>
+        <dimension>3</dimension>
+        <type>0</type>
+        <state>STATIONARY</state>
+    </cuboids>
+    <cuboids>
+        <origin>27.2 0.5 0.5</origin>
+        <velocity>0 0 0</velocity>
+        <numPart>2 30 12</numPart>
+        <thermal_v>0</thermal_v>
+        <width>1</width>
+        <mass>1</mass>
+        <dimension>3</dimension>
+        <type>0</type>
+        <state>STATIONARY</state>
+    </cuboids>
+
+    <!-- Fluid -->
+    <cuboids>
+        <origin>3.2 0.6 0.6</origin>
+        <velocity>0 0 0</velocity>
+        <numPart>20 25 10</numPart>
+        <thermal_v>0</thermal_v>
+        <width>1.2</width>
+        <mass>1</mass>
+        <dimension>3</dimension>
+        <type>1</type>
+        <state>ALIVE</state>
+    </cuboids>
+
+    <spheres>
+    <origin>13,1 15 5</origin>
+    <velocity>0 0 0</velocity>
+    <thermal_v>0</thermal_v>
+    <radius>5</radius>
+    <width>1.0</width>
+    <mass>1</mass>
+    <dimension>3</dimension>
+    <type>0</type>
+    <state>STATIONARY</state>
+</spheres>
+
+<statistics>
+    <compute_freq>10000</compute_freq>
+    <n_bins>50</n_bins>
+</statistics>
+
+</simulation>
