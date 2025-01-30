@@ -8,6 +8,7 @@ TEST(CSVWriterTest, FileCreation) {
     std::ifstream file("statistics.csv");
     ASSERT_TRUE(file.is_open()); 
     file.close();
+    std::remove("statistics.csv");  
 
 }
 
@@ -22,6 +23,7 @@ TEST(CSVWriterTest, HeaderWrite) {
 
     EXPECT_EQ(header, "time&vel&dens/bins,1,2,3");
     file2.close();
+    std::remove("statistics.csv");  
 
 }
 
