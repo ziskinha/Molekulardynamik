@@ -153,10 +153,6 @@ namespace md::env {
                         intersection[non_axis[1]] >= 0 && intersection[non_axis[1]] <= extent[non_axis[1]]) {
                         apply_rule(normal, particle, current_cell);
 
-                        // if (particle.cell == int3{-1, -1, -1} && particle.state == Particle::ALIVE) {
-                        //     apply_boundary(particle, current_cell, previous_cell);
-                        // }
-
                         return;
                     }
                 }
