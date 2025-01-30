@@ -1,12 +1,12 @@
 #include "CSVWriter.h"
-#include <spdlog/spdlog.h>
+#include "io/Logger/Logger.h"
 
 namespace md::io{
 CSVWriter::CSVWriter(int bins) : bins{bins} {
    
     file = std::ofstream{"statistics.csv"};
     if (!file.is_open()) {
-        spdlog::error("Failure while opening statistics.csv");
+       SPDLOG_ERROR("Failure while opening statistics.csv");
         file.close();
         exit(1);
     }
@@ -51,6 +51,5 @@ void CSVWriter::writeData(std::vector<double> &vel,std::vector<double> &dens, do
             file << "\n";
         }
     }
-    
 }
 }
