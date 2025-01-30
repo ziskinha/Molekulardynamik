@@ -1,18 +1,17 @@
 #include "CSVWriter.h"
-#include <io/Logger/Logger.h>
+#include <spdlog/spdlog.h>
 
 namespace md::io{
-CSVWriter::CSVWriter(int bins, std::string filename) : bins{bins} {
+CSVWriter::CSVWriter(int bins) : bins{bins} {
    
-    file = std::ofstream{ filename + ".csv"};
+    file = std::ofstream{"statistics.csv"};
     if (!file.is_open()) {
-        SPDLOG_ERROR("Failure while opening {}.csv",filename);
+        spdlog::error("Failure while opening statistics.csv");
+        file.close();
         exit(1);
-    }else {
-        SPDLOG_INFO("{}.csv was opened",filename);
     }
 
-    file << "time,";
+    file << "time&vel&dens/bins,";
 
     for(int i = 1; i <= bins; i++) {
         file << i;
@@ -29,10 +28,12 @@ CSVWriter::~CSVWriter() {
     file.close();
 }
 
-void CSVWriter::writeData(std::vector<double> &values, double time) {
+void CSVWriter::writeData(std::vector<double> &vel,std::vector<double> &dens, double time) {
     file << time << ",";
+    file << "\n";
+    file <<"v" <<",";
     for(int i = 0; i < bins; i++) {
-        file << values[i];
+        file << vel[i];
         if(i < bins - 1) {
             file << ",";
         }
@@ -40,6 +41,16 @@ void CSVWriter::writeData(std::vector<double> &values, double time) {
             file << "\n";
         }
     }
-   
+        file <<"d" <<",";
+         for(int i = 0; i < bins; i++) {
+        file << dens[i];
+        if(i < bins - 1) {
+            file << ",";
+        }
+        else {
+            file << "\n";
+        }
+    }
+    
 }
 }

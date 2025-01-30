@@ -39,8 +39,7 @@ namespace md::core {
         void compute(const env::Environment & env, double time) override;
     private:
         int n_bins;                        ///< Number of bins.
-        md::io::CSVWriter velocityWriter;  ///< A CSV Writer for the velocity statistics.
-        md::io::CSVWriter densityWriter;   ///< A CSV Writer  for the density statistics.
+        md::io::CSVWriter writer;          ///< A CSV Writer  for the statistics.
     };
 } // namespace md::core
 

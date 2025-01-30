@@ -16,7 +16,7 @@ int main(const int argc, char* argv[]) {
             exit(-1);
         default:;
     };
-
+    
     auto simulator = md::Integrator::create_simulator(args);
 
     if (!args.benchmark) {

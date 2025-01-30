@@ -8,7 +8,7 @@
 
 namespace md::core {
     NanoFlowStatistics::NanoFlowStatistics(const int compute_freq, const int n_bins):
-        Statistics(compute_freq), n_bins(n_bins), velocityWriter(n_bins,"velocityStats"), densityWriter(n_bins, "densityStats") {}
+        Statistics(compute_freq), n_bins(n_bins), writer(n_bins){}
 
     void NanoFlowStatistics::compute(const env::Environment& env, double time) {
         const double bin_width = env.extent()[0] / static_cast<double>(n_bins);
@@ -32,8 +32,8 @@ namespace md::core {
             avg_density[i] /= bin_volume;
         }
 
-        velocityWriter.writeData(avg_velocity, time);
-        densityWriter.writeData(avg_density, time);
+        // TODO write averages to csv file
+        writer.writeData(avg_velocity, avg_density, time);
         SPDLOG_DEBUG("avg_velocity: [{}]", fmt::join(avg_velocity, ", "));
         SPDLOG_DEBUG("avg_density: [{}]", fmt::join(avg_density, ", "));
     }   

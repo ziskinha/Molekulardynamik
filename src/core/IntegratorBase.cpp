@@ -60,11 +60,11 @@ namespace md::Integrator {
         temp_adjust_freq = temp_adj_freq;
         int step = 0;
         const int total_steps = static_cast<int>((end_time - start_time) / dt);
-
+        if(stats){
         for (double t = start_time; t < end_time; t += dt, step++) {
             simulation_step(step, dt);
 
-            if (stats && step % stats->compute_freq == 0) {
+            if (step % stats->compute_freq == 0) {
                 stats->compute(env,t);
             }
 
@@ -73,6 +73,17 @@ namespace md::Integrator {
                 writer->plot_particles(env, step);
             }
             SHOW_PROGRESS(step, total_steps);
+        }
+        } else{
+            for (double t = start_time; t < end_time; t += dt, step++) {
+            simulation_step(step, dt);
+
+            if (writer && step % write_freq == 0) {
+                SPDLOG_DEBUG("Plotting particles @ iteration {}, time {}", step, t);
+                writer->plot_particles(env, step);
+            }
+            SHOW_PROGRESS(step, total_steps);
+        }
         }
 
         if (checkpoint_writer) {

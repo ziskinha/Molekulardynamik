@@ -11,6 +11,8 @@ function(add_test_executable test_name use_input)
             ${CMAKE_SOURCE_DIR}/src/effects/*.cpp
             ${CMAKE_SOURCE_DIR}/src/effects/*.h
             ${CMAKE_SOURCE_DIR}/src/io/Output/CheckpointWriter.cpp
+            ${CMAKE_SOURCE_DIR}/src/io/Output/CSVWriter.cpp
+
     )
 
     if(${use_input})
