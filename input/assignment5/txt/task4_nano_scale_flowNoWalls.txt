@@ -1,0 +1,29 @@
+# for file format info please take a look at /input/others/txt_file_description.txt
+
+general:
+# duration   delta_t     write_freq   cutoff_radius   parallel_strategy  output_baseName
+50          0.0005          100          2.75              1               output
+
+cuboids:
+# origin       velocity        N            h        m     br_v    dim   particle_type  state(0: STATIONARY, 1: ALIVE)
+3.2 0.6 0.6     0 0 0       20 25 10       1.2       1      0       3        1                1
+
+force:
+# name           parameter   particle_type
+lennard_jones     2.0   1.1        0
+lennard_jones     1.0   1.0        1
+# name          direction      strength
+gravity           0 1 0          -0.8
+
+environment:
+# (Boundary condition identification: 0: OUTFLOW, 1: VELOCITY REFLECTION, 2: REPULSIVE FORCE, 3: VELOCITY REFLECTION)
+# boundary_origin     boundary_extent     grid_constant    boundary_conds(left, right, top, bottom, front, back)
+0 0 0                    30 30 12             2.75                     0 0 1 1 1 1
+
+thermostats:
+# T_init     n_thermos     T_target(for no target: -1)      delta_T(for no delta_t: -1)
+40              10                   40                             -1
+
+ statistics:
+ # compute_freq   n_bins
+ 10000               50
