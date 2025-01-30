@@ -3,8 +3,8 @@ general:
 20           0.0005         100            2.5               2               output
 
 membranes:
-# origin         velocity        N       h       m     k      particle_type
-1 2 3             4 5 6       10 10 1    1       1     2           0
+# origin         velocity        N       h       m     k   cutoff   particle_type
+1 2 3             4 5 6       10 10 1    1       1     2     2.5      0
 
 environment:
 # (Boundary condition identification: 0: OUTFLOW, 1: PERIODIC, 2: REPULSIVE FORCE, 3: VELOCITY REFLECTION)

@@ -33,14 +33,14 @@ namespace md::core {
         NanoFlowStatistics(int compute_freq, int n_bins);
 
         /**
-         * @brief Computes the nano-scale flow statistics, such as for velocity and density and TODO writes them to a CSV file.
+         * @brief Computes the nano-scale flow statistics, such as for velocity and density and writes them to a CSV file.
          * @param env
          */
         void compute(const env::Environment & env, double time) override;
     private:
-        int n_bins; 
-        md::io::CSVWriter velocityWriter;
-        md::io::CSVWriter densityWriter;
+        int n_bins;                        ///< Number of bins.
+        md::io::CSVWriter velocityWriter;  ///< A CSV Writer for the velocity statistics.
+        md::io::CSVWriter densityWriter;   ///< A CSV Writer  for the density statistics.
     };
 } // namespace md::core
 

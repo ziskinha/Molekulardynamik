@@ -158,7 +158,7 @@ namespace md::io {
                                       {membrane.velocity()[0], membrane.velocity()[1], membrane.velocity()[2]},
                                       {static_cast<UINT_T>(membrane.numPart()[0]), static_cast<UINT_T>(membrane.numPart()[1]),
                                        static_cast<UINT_T>(membrane.numPart()[2])},
-                                      membrane.width(), membrane.mass(), membrane.k(), args.cutoff_radius,
+                                      membrane.width(), membrane.mass(), membrane.k(), membrane.cutoff(),
                                       membrane.type());
 
                 SPDLOG_DEBUG(fmt::format(
@@ -174,7 +174,7 @@ namespace md::io {
                         membrane.origin()[0], membrane.origin()[1], membrane.origin()[2],
                         membrane.velocity()[0], membrane.velocity()[1], membrane.velocity()[2],
                         membrane.numPart()[0], membrane.numPart()[1], membrane.numPart()[2],
-                        membrane.width(), membrane.mass(), membrane.k(), args.cutoff_radius,
+                        membrane.width(), membrane.mass(), membrane.k(), membrane.cutoff(),
                         membrane.type()));
             }
 

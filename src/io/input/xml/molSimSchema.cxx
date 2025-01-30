@@ -2123,6 +2123,24 @@ k (const k_type& x)
   this->k_.set (x);
 }
 
+const membranes::cutoff_type& membranes::
+cutoff () const
+{
+  return this->cutoff_.get ();
+}
+
+membranes::cutoff_type& membranes::
+cutoff ()
+{
+  return this->cutoff_.get ();
+}
+
+void membranes::
+cutoff (const cutoff_type& x)
+{
+  this->cutoff_.set (x);
+}
+
 const membranes::type_type& membranes::
 type () const
 {
@@ -5028,6 +5046,7 @@ membranes (const origin_type& origin,
            const width_type& width,
            const mass_type& mass,
            const k_type& k,
+           const cutoff_type& cutoff,
            const type_type& type)
 : ::xml_schema::type (),
   origin_ (origin, this),
@@ -5036,6 +5055,7 @@ membranes (const origin_type& origin,
   width_ (width, this),
   mass_ (mass, this),
   k_ (k, this),
+  cutoff_ (cutoff, this),
   type_ (type, this)
 {
 }
@@ -5051,6 +5071,7 @@ membranes (const membranes& x,
   width_ (x.width_, f, this),
   mass_ (x.mass_, f, this),
   k_ (x.k_, f, this),
+  cutoff_ (x.cutoff_, f, this),
   type_ (x.type_, f, this)
 {
 }
@@ -5066,6 +5087,7 @@ membranes (const ::xercesc::DOMElement& e,
   width_ (this),
   mass_ (this),
   k_ (this),
+  cutoff_ (this),
   type_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
@@ -5160,6 +5182,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // cutoff
+    //
+    if (n.name () == "cutoff" && n.namespace_ ().empty ())
+    {
+      if (!cutoff_.present ())
+      {
+        this->cutoff_.set (cutoff_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     // type
     //
     if (n.name () == "type" && n.namespace_ ().empty ())
@@ -5216,6 +5249,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "");
   }
 
+  if (!cutoff_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "cutoff",
+      "");
+  }
+
   if (!type_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
@@ -5243,6 +5283,7 @@ operator= (const membranes& x)
     this->width_ = x.width_;
     this->mass_ = x.mass_;
     this->k_ = x.k_;
+    this->cutoff_ = x.cutoff_;
     this->type_ = x.type_;
   }
 
@@ -6918,6 +6959,17 @@ operator<< (::xercesc::DOMElement& e, const membranes& i)
         e));
 
     s << ::xml_schema::as_double(i.k ());
+  }
+
+  // cutoff
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "cutoff",
+        e));
+
+    s << ::xml_schema::as_double(i.cutoff ());
   }
 
   // type

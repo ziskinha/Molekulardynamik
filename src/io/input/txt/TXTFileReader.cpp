@@ -178,9 +178,10 @@ namespace md::io {
         const double width = vals[9];
         const double mass = vals[10];
         const double k = vals[11];
-        const int type = vals[12];
+        const double cutoff = vals[12];
+        const int type = vals[13];
 
-        args.env.add_membrane(origin, init_v, num_particles, width, mass, k, args.cutoff_radius, type);
+        args.env.add_membrane(origin, init_v, num_particles, width, mass, k, cutoff, type);
 
         SPDLOG_DEBUG(
                 "Parsed Membrane:\n"
@@ -190,9 +191,10 @@ namespace md::io {
                 "       Width:               {}\n"
                 "       Mass:                {}\n"
                 "       k:                   {}\n"
+                "       cutoff:              {}\n"
                 "       Type:                {}",
                 origin[0], origin[1], origin[2], init_v[0], init_v[1], init_v[2], num_particles[0], num_particles[1],
-                num_particles[2], width, mass, k, type);
+                num_particles[2], width, mass, k, cutoff, type);
     }
 
     /// -----------------------------------------

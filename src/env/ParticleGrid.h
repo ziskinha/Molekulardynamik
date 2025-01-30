@@ -384,9 +384,7 @@ namespace md::env {
          */
         void build_cell_pairs_and_blocks(const std::array<BoundaryRule, 6> & rules);
 
-        // TODO dead code
-        // std::unordered_map<int3, GridCell, Int3Hasher> cells {}; ///< A hash map storing the cells in the grid.
-        ankerl::unordered_dense::map<int3, GridCell, Int3Hasher> cells{};
+        ankerl::unordered_dense::map<int3, GridCell, Int3Hasher> cells{};  ///< A hash map storing the cells in the grid.
         std::vector<CellPair> cell_pairs{};                  ///< A vector of linked cell pairs.
         std::vector<GridCell*> border_cells;                 ///< A vector of cells at the domain boundary
         // [0]: normal blocks, [1]: communication_blocks_x, [2]: communication_blocks_y, [3]: communication_blocks_z

@@ -28,7 +28,7 @@ namespace md::env {
         : type(type), origin(coord), size(size), idx(idx), id(count++) {
         particles.max_load_factor(0.8);
 #ifdef _OPENMP
-        SPDLOG_DEBUG("Lock initialized for cell {}", id);
+        SPDLOG_TRACE("Lock initialized for cell {}", id);
         omp_init_lock(&lock);
 #endif
     }
@@ -44,14 +44,14 @@ namespace md::env {
 
     void GridCell::lock_cell() {
 #ifdef _OPENMP
-        SPDLOG_DEBUG("Lock set for cell {}", id);
+        SPDLOG_TRACE("Lock set for cell {}", id);
         omp_set_lock(&lock);
 #endif
     }
 
     void GridCell::unlock_cell() {
 #ifdef _OPENMP
-        SPDLOG_DEBUG("Lock unset for cell {}", id);
+        SPDLOG_TRACE("Lock unset for cell {}", id);
         omp_unset_lock(&lock);
 #endif
     }
@@ -363,7 +363,6 @@ void ParticleGrid::build(const Boundary & boundary, const double grid_const, std
                             if (periodic_directions[1] && wrap_around(idx2[1], cell_count[1])) periodicity |=  CellPair::PERIODIC_Y;
                             if (periodic_directions[2] && wrap_around(idx2[2], cell_count[2])) periodicity |=  CellPair::PERIODIC_Z;
 
-                            // TODO anpassen
                             if (idx1 >= idx2  // ensure only unique pairs are added
                                 || idx2[0] < 0 || idx2[1] < 0 || idx2[2] < 0 ||
                                 static_cast<UINT_T>(idx2[0]) >= cell_count[0] ||

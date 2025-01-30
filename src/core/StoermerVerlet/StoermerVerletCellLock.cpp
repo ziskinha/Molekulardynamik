@@ -61,7 +61,7 @@ namespace md::Integrator {
 #pragma omp parallel for
         for (size_t i = 0; i < (env.size(env::Particle::ALIVE | env::Particle::STATIONARY | env::Particle::DEAD)); ++i) {
             auto &p = env[i];
-            if (p.state == env::Particle::ALIVE && __builtin_expect(p.cell[0] != -1, 1)) {
+            if (p.state == env::Particle::ALIVE) {
                 p.velocity = p.velocity + dt / 2 / p.mass * (p.force + p.old_force);
             }
         }

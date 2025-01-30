@@ -2560,6 +2560,20 @@ class membranes: public ::xml_schema::type
   void
   k (const k_type& x);
 
+  // cutoff
+  //
+  typedef ::xml_schema::double_ cutoff_type;
+  typedef ::xsd::cxx::tree::traits< cutoff_type, char, ::xsd::cxx::tree::schema_type::double_ > cutoff_traits;
+
+  const cutoff_type&
+  cutoff () const;
+
+  cutoff_type&
+  cutoff ();
+
+  void
+  cutoff (const cutoff_type& x);
+
   // type
   //
   typedef ::xml_schema::int_ type_type;
@@ -2585,6 +2599,7 @@ class membranes: public ::xml_schema::type
              const width_type&,
              const mass_type&,
              const k_type&,
+             const cutoff_type&,
              const type_type&);
 
   membranes (const ::xercesc::DOMElement& e,
@@ -2619,6 +2634,7 @@ class membranes: public ::xml_schema::type
   ::xsd::cxx::tree::one< width_type > width_;
   ::xsd::cxx::tree::one< mass_type > mass_;
   ::xsd::cxx::tree::one< k_type > k_;
+  ::xsd::cxx::tree::one< cutoff_type > cutoff_;
   ::xsd::cxx::tree::one< type_type > type_;
 };
 

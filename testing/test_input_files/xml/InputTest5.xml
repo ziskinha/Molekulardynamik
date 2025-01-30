@@ -38,6 +38,7 @@
         <width>1</width>
         <mass>1</mass>
         <k>300</k>
+        <cutoff>2.5</cutoff>
         <type>0</type>
     </membranes>
 

@@ -32,7 +32,6 @@ namespace md::core {
             avg_density[i] /= bin_volume;
         }
 
-        // TODO write averages to csv file
         velocityWriter.writeData(avg_velocity, time);
         densityWriter.writeData(avg_density, time);
         SPDLOG_DEBUG("avg_velocity: [{}]", fmt::join(avg_velocity, ", "));

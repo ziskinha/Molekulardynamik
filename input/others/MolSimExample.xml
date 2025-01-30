@@ -48,6 +48,7 @@
         <velocity>1 1 1</velocity>
         <mass>1</mass>
         <type>0</type>
+        <state>ALIVE</state>
     </particles>
 
     <cuboids>
@@ -81,6 +82,12 @@
         <width>1</width>
         <mass>1</mass>
         <k>300</k>
+        <cutoff>4.49</cutoff>
         <type>0</type>
     </membranes>
+
+    <statistics>
+        <compute_freq>1000</compute_freq>
+        <n_bins>50</n_bins>
+    </statistics>
 </simulation>

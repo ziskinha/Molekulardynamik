@@ -84,8 +84,8 @@ spheres:
 - - -            - - -         -      -      -        -       -         -           -
 
 membranes:
-# origin         velocity        N       h       m     k      particle_type
-- - -            - - -         - - -     -       -     -           -
+# origin         velocity        N       h       m     k   cutoff   particle_type
+- - -            - - -         - - -     -       -     -     -           -
 
 force:
 # lennard_jones/inverse_square  parameter   particle_type

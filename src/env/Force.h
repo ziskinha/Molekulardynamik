@@ -195,8 +195,9 @@ namespace md::env {
         static Force mix_forces(const ForceType& force1, const ForceType& force2);
 
         std::unordered_map<ParticleType, ForceType> global_force_types;
+        ///< Map of particle types to force type.
         std::unordered_map<ParticleIDPair, ForceType, ForceKeyHash> localized_force_types;
-        ///< Map of particle types to force configurations.
+        ///< Map of particle pairs to force configurations.
         ankerl::unordered_dense::map<ParticleTypePair, Force, ForceKeyHash> global_forces;
         ///< forces between particle types.
         ankerl::unordered_dense::map<ParticleIDPair, Force, ForceKeyHash> localized_forces;

@@ -217,6 +217,7 @@
                             <xsd:element name="width" type="xsd:double"/>
                             <xsd:element name="mass" type="xsd:double"/>
                             <xsd:element name="k" type="xsd:double"/>
+                            <xsd:element name="cutoff" type="xsd:double"/>
                             <xsd:element name="type"  type="xsd:int" default="0"/>
                         </xsd:sequence>
                     </xsd:complexType>
