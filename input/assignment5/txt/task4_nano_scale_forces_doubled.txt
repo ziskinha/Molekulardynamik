@@ -28,4 +28,4 @@ thermostats:
 
 statistics:
 # compute_freq   n_bins
-10000               50 
+10000               30 
