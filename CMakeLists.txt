@@ -18,7 +18,8 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
 elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
     # Standard release optimization
-    set(CMAKE_CXX_FLAGS_RELEASE "-O2 -D DEBUG" CACHE STRING "Optimization for Release" FORCE)
+    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -mtune=native -flto -funroll-loops -finline-functions -D DEBUG" CACHE STRING "Optimization for Release" FORCE)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg -flto")
 elseif (CMAKE_BUILD_TYPE STREQUAL "Benchmark")
     # Aggressive optimization and profiling flags for Benchmark
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -march=native -mtune=native -flto -funroll-loops -finline-functions")
@@ -30,13 +31,6 @@ elseif (CMAKE_BUILD_TYPE STREQUAL "Profile")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg -flto")
     add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_OFF)
 endif()
-
-# -Ofast: Most aggressive optimization level
-# -march=native: Enable instructions for the local machine architecture
-# -mtune=native: Optimize for the local machine's performance
-# -flto: Enable link-time optimization
-# -funroll-loops: Unroll loops for better performance
-# -finline-functions: Aggressively inline small and medium-sized functions
 
 # collect all cpp files
 file(GLOB_RECURSE MY_SRC
@@ -53,10 +47,7 @@ add_executable(MolSim ${MY_SRC})
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-target_compile_features(MolSim
-        PRIVATE
-        cxx_std_23
-)
+target_compile_features(MolSim PRIVATE cxx_std_23)
 
 target_include_directories(MolSim
         PUBLIC
@@ -67,13 +58,7 @@ target_include_directories(MolSim
 )
 
 find_package(XercesC REQUIRED)
-
-target_link_libraries(MolSim
-        # stuff that is used in headers and source files
-        PUBLIC
-        #xerces-c
-        XercesC::XercesC
-)
+target_link_libraries(MolSim PUBLIC XercesC::XercesC)
 
 # activate all compiler warnings. Clean up your code :P
 # depending on the compiler different flags are used
@@ -82,7 +67,6 @@ target_compile_options(MolSim
         $<$<CXX_COMPILER_ID:GNU>:-Wall -Wextra -Wpedantic>
         # disable some spam warnings for icpc...
         $<$<CXX_COMPILER_ID:Intel>:-w3 -wd383,981,1418,1572,2259>
-
         $<$<CXX_COMPILER_ID:Clang>:-Wall -Wextra -Wpedantic>
 )
 

@@ -11,13 +11,14 @@
 # * delta_t  (1 double value)
 # * write freqency (1 double value)
 # * cutoff radius  (1 double value)
+# * parallel strategy (0: none, 1: cell lcok, 2: spatial decomposition)
 # * output baseName (1 string)
 #
 # Particle data consists of
 # * xyz-coordinates (3 double values)
 # * velocities (3 double values)
 # * mass (1 double value)
-# * Particle type (1 double value)
+# * Particle type (1 int value)
 #
 # Cuboid data consists of
 # * xyz-coordinates of lower left corner (3 double values)
@@ -27,6 +28,8 @@
 # * mass (1 double value)
 # * average thermal velocity
 # * dimension (either 2 or 3)
+# * Particle type (1 int value)
+# * Particle state (1 int value (0: STATIONARY, 1: ALIVE))
 #
 # Sphere data consists of
 # * xyz-coordinates of the center (3 double values)
@@ -36,12 +39,22 @@
 # * mass (1 double value)
 # * average thermal velocity
 # * dimension (either 2 or 3)
+# * Particle type (1 int value)
+# * Particle state (1 int value (0: STATIONARY, 1: ALIVE))
+#
+# Membrane data consists of
+# * xyz-coordinates of origin (3 double values)
+# * velocities (3 double values)
+# * number of particles in each dimension (3 integer values)
+# * width between each adjacent particle (1 double value)
+# * mass (1 double value)
+# * k (1 double value)
+# * Particle type (1 int value)
 #
 # Environment data consist of
 # * xyz-coordinates of lower left corner (3 double values)
 # * boundary extent (3 double values)
 # * grid_constant (1 double value)
-# * gravity_constant (1 double value)
 # * boundary conditions (6 int values -> (LEFT, RIGHT, TOP, BOTTOM, FRONT, BACK)) (0: OUTFLOW, 1: PERIODIC, 2: REPULSIVE FORCE, 3: VELOCITY REFLECTION)
 #
 # Thermostats data consist of
@@ -49,32 +62,50 @@
 # * n_thermostats
 # * T_target: target temperature (1 double value), -1 if not defined
 # + delta_T: Temperature difference (1 double value), -1 if not defined
+#
+# Statistics data consist of
+# * compute_freq (1 int value)
+# * n_bins (1 int value)
 
 general:
-# duration   delta_t     write_freq   cutoff_radius   output_baseName
--              -            -               -               -
+# duration   delta_t     write_freq   cutoff_radius   parallel_strategy  output_baseName
+-              -            -               -               -                 -
 
 particles:
-# origin       velocity       mass       particle_type
-- - -            - - -          -              -
+# origin       velocity       mass       particle_type     state(0: STATIONARY, 1: ALIVE)
+- - -            - - -          -              -                 -
 
 cuboids:
-# LL-cord       velocity        N            h           m       br_v    dim   particle_type
-- - -            - - -        - - -          -           -        -       -         -
+# origin       velocity        N            h           m       br_v    dim   particle_type  state(0: STATIONARY, 1: ALIVE)
+- - -            - - -        - - -         -           -        -       -         -           -
 
 spheres:
-# origin         velocity      R      h      m      br_v     dim  particle_type
-- - -            - - -         -     -       -        -       -         -
+# origin         velocity      R      h      m      br_v     dim  particle_type   state(0: STATIONARY, 1: ALIVE)
+- - -            - - -         -      -      -        -       -         -           -
+
+membranes:
+# origin         velocity        N       h       m     k   cutoff   particle_type
+- - -            - - -         - - -     -       -     -     -           -
 
 force:
-# name           parameter   particle_type
+# lennard_jones/inverse_square  parameter   particle_type
 lennard_jones    - -               -
+inverse_square   -                 -
+# gravity       direction    strength
+gravity          - - -          -
+# pull_force    direction    strength   MarkBox_origin  MarkBox_extent  start_t end_t  const_acc(default: false)
+pull_force       - - -           -           - - -          - - -           -     -       -
+
 
 environment:
 # (Boundary condition identification: 0: OUTFLOW, 1: PERIODIC, 2: REPULSIVE FORCE, 3: VELOCITY REFLECTION)
-# boundary_origin     boundary_extent     grid_constant   grav_const    boundary_conds(left, right, top, bottom, front, back)
-- - -                     - - -                -             -               - - - - - -
+# boundary_origin     boundary_extent     grid_constant    boundary_conds(left, right, top, bottom, front, back)
+- - -                     - - -                -                            - - - - - -
 
 thermostats:
 # T_init     n_thermos     T_target(for no target: -1)      delta_T(for no delta_t: -1)
  -              -                     -                                 -
+
+ statistics:
+ # compute_freq   n_bins
+ -                  -

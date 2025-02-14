@@ -11,7 +11,7 @@ namespace md::env {
     /// \brief Particle Class Methods
     /// -----------------------------------------
     Particle::Particle(const size_t id, ParticleGrid& grid, const vec3& position, const vec3& velocity,
-                       const double mass, const int type, const vec3 force)
+                       const double mass, const int type, const State state, const vec3& force)
         : position(position),
           old_position(),
           velocity(velocity),
@@ -21,7 +21,7 @@ namespace md::env {
           mass(mass),
           type(type),
           id(id),
-          state(ALIVE),
+          state(state),
           grid(grid) {
         SPDLOG_TRACE("Particle generated! id: {}, position: {}", id, position);
     }

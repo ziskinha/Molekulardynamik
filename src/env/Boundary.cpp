@@ -53,7 +53,7 @@ namespace md::env {
         ASSERT(axis >= 0 && axis <= 2, "Axis must be 0, 1, or 2.");
         if (axis == 0) return {1, 2};
         if (axis == 1) return {0, 2};
-        if (axis == 2) return {1, 2};
+        if (axis == 2) return {1, 0};
         return {-1, -1};
     }
 
@@ -79,6 +79,7 @@ namespace md::env {
         if (face_normal[2] == 1)  return FRONT;
         if (face_normal[2] == -1) return BACK;
         ASSERT(false, "Invalid face normal");
+        return {};
     }
 
     double distance_to_boundary(const Particle & particle, const int3 & normal, const GridCell & cell) {
@@ -151,6 +152,7 @@ namespace md::env {
                     if (intersection[non_axis[0]] >= 0 && intersection[non_axis[0]] <= extent[non_axis[0]] &&
                         intersection[non_axis[1]] >= 0 && intersection[non_axis[1]] <= extent[non_axis[1]]) {
                         apply_rule(normal, particle, current_cell);
+
                         return;
                     }
                 }
@@ -251,7 +253,6 @@ namespace md::env {
     void Boundary::velocity_reflection_rule(Particle& particle, const int3 & normal, const GridCell& cell) const {
         if (cell.type != GridCell::OUTSIDE) return;
 
-        // TODO implement double reflection
         const vec3 pos = particle.old_position - origin;
         const vec3 diff = particle.position - particle.old_position;
         const int axis = axis_from_normal(normal);

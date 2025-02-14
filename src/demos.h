@@ -1,9 +1,10 @@
 # pragma once
 
 #include "io/IOStrategy.h"
-#include "core/StoermerVerlet.h"
+#include "core/StoermerVerlet/StoermerVerlet.h"
 #include "env/Environment.h"
 #include "env/Force.h"
+#include "core/Statistics.h"
 
 using namespace md;
 
@@ -157,41 +158,74 @@ inline void thermostat_test() {
     simulator.simulate(0, args.duration, args.dt, args.write_freq, 1000);
 }
 
-inline void test_10000_particles() {
-   io::ProgramArguments args;
 
-    args.duration = 5;
+inline void nano_scale_simulation() {
+    io::ProgramArguments args;
+    args.output_format = io::OutputFormat::VTK;
+    args.benchmark = false;
+    args.override = true;
+    args.output_baseName = "output";
+    args.duration = 20;
     args.dt = 0.0005;
-    args.temp_adj_freq = 1000;
-    args.write_freq= 100;
+    args.write_freq = 10;
 
     env::Boundary boundary;
-    // boundary size
-    boundary.extent = {110, 110, 1};
-    boundary.origin = {0, 0, 0};
+    boundary.extent = {30, 30, 12};
+    boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::TOP);
+    boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::BOTTOM);
+    boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::FRONT);
+    boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::BACK);
 
-    //boundary conditions
-    boundary.set_boundary_rule(env::BoundaryRule::OUTFLOW);
-    boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::LEFT);
-    boundary.set_boundary_rule(env::BoundaryRule::PERIODIC, env::BoundaryNormal::RIGHT);
-    boundary.set_boundary_rule(env::BoundaryRule::VELOCITY_REFLECTION, env::BoundaryNormal::TOP);
-    boundary.set_boundary_rule(env::BoundaryRule::VELOCITY_REFLECTION, env::BoundaryNormal::BOTTOM);
+    env::Environment env;
+    env.set_boundary(boundary);
 
-    //boundary.set_boundary_force(env::Boundary::LennardJonesForce(1, 1.2));
-    args.env.set_boundary(boundary);
+    // walls
+    env.add_cuboid({1, 0.5, 0.5}, {}, {2, 30, 12}, 1, 1, 0, 0, env::Dimension::THREE, env::Particle::STATIONARY);
+    env.add_cuboid({27.2, 0.5, 0.5}, {}, {2, 30, 12}, 1, 1, 0, 0, env::Dimension::THREE, env::Particle::STATIONARY);
+    env.set_force(env::LennardJones(2, 1.1, 2.75), 0);
 
-    // Liquid 1, type = 0
-    args.env.add_cuboid({5, 5, 0}, {1, 1, 0}, {100, 100, 1}, 0, 1, 2, 2, 0);
-    args.env.set_force(env::LennardJones(1, 1.2, 3), 0);
+    // fluid
+    env.add_cuboid({3.2, 0.6, 0.6}, {}, {20, 25, 10}, 1.2, 1, 0, 1, env::Dimension::THREE);
+    env.set_force(env::LennardJones(1, 1, 2.75), 1);
+    env.build();
 
-    args.env.set_grid_constant(3);
-    args.env.set_gravity_constant(-12.44);
-    args.env.build();
+    env::ConstantForce gravity = env::Gravity(-0.8, {0, 1, 0});
 
-    env::Thermostat thermostat(40, 25);
-    thermostat.set_initial_temperature(args.env);
+    env::Thermostat thermostat(40, 40);
+    thermostat.set_initial_temperature(env);
+
+    auto stats = std::make_unique<core::NanoFlowStatistics>(10000, 50);
+    auto writer = create_writer(args.output_baseName, args.output_format, args.override);
+
+    Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, thermostat, {gravity}, std::move(stats));
+    simulator.simulate(0, args.duration, args.dt, args.write_freq, 10);
+}
+
+
+inline void membrane_simulation() {
+    io::ProgramArguments args;
+    args.output_format = io::OutputFormat::VTK;
+    args.benchmark = false;
+    args.override = true;
+    args.output_baseName = "output";
+    args.duration = 500;
+    args.dt = 0.01;
+    args.write_freq = 40;
+
+    env::Boundary boundary;
+    boundary.extent = {148, 148, 148};
+    boundary.set_boundary_rule(env::BoundaryRule::VELOCITY_REFLECTION);
+
+    env::Environment env;
+    env.set_boundary(boundary);
+    env.add_membrane({15, 15, 1.5}, {0, 0, 0}, {50, 50, 1}, 2.2, 1, 300, 4 * 1.1225);
+    env.set_force(env::LennardJones(1, 1, 1.1225), 0);
+    env.build();
+
+    env::ConstantForce gravity = env::Gravity(-0.001);
+    env::ConstantForce pull_force ({0, 0, 1}, 0.8, env::MarkBox({15 + 17 * 2.2, 15 + 24 * 2.2, 0}, {15 + 18.1 * 2.2, 15 + 25.1 * 2.2, 2}), 0, 150);
 
     auto writer = create_writer(args.output_baseName, args.output_format, args.override);
-    Integrator::StoermerVerlet simulator(args.env, std::move(writer), nullptr, thermostat);
-    simulator.benchmark(0, args.duration, args.dt, 1000);
+    Integrator::StoermerVerlet simulator(env, std::move(writer), nullptr, env::Thermostat(), {gravity, pull_force});
+    simulator.simulate(0, args.duration, args.dt, args.write_freq);
 }

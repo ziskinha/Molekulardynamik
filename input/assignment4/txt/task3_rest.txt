@@ -1,8 +1,8 @@
 # for file format info please take a look at /input/others/txt_file_description.txt
 
 general:
-# duration   delta_t     write_freq   cutoff_radius   output_baseName
-25            0.0005       500           3                output
+# duration   delta_t     write_freq   cutoff_radius  parallel_strategy  output_baseName
+25            0.0005       500           3                 0                 output
 
 particles:
 # origin             velocity         mass    type     old_force
@@ -12508,15 +12508,17 @@ particles:
 301.722 41.8966 0     -0.470887 1.71053 0     1     0     -1.05911 18.1573 0     
 
 spheres:
-# origin         velocity      R      h      m      br_v     dim  particle_type
-150 150 0       0.0 0.0 0.0    20    1.2    1.0      0        2       1
+# origin         velocity      R      h      m      br_v     dim  particle_type state(0: STATIONARY, 1: ALIVE)
+150 150 0       0.0 0.0 0.0    20    1.2    1.0      0        2       1            1
 
 force:
 # name          parameter   particle_type
 lennard_jones    1.0 1.2          0
 lennard_jones    1.0 1.2          1
+# name          direction      strength
+gravity           0 1 0        -12.44
 
 environment:
 # (Boundary condition identification: 0: OUTFLOW, 1: PERIODIC, 2: REPULSIVE FORCE, 3: VELOCITY REFLECTION)
-# boundary_origin     boundary_extent     grid_constant   grav_const    boundary_conds(left, right, top, bottom, front, back)
-0 0 0                  303 180 1              3            -12.44          2 2 2 2 0 0
+# boundary_origin     boundary_extent     grid_constant     boundary_conds(left, right, top, bottom, front, back)
+0 0 0                  303 180 1              3                  2 2 2 2 0 0

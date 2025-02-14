@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulation>
+    <output>
+        <base_name>output</base_name>
+        <write_frequency>100</write_frequency>
+    </output>
+
+    <parameters>
+        <end_t>20</end_t>
+        <delta_t>0.0005</delta_t>
+        <cutoff_radius>2.5</cutoff_radius>
+        <parallel_strategy>SPATIAL_DECOMPOSITION</parallel_strategy>
+    </parameters>
+
+    <Boundary
+            typeLEFT="PERIODIC"
+            typeRIGHT="PERIODIC"
+            typeTOP="REPULSIVE_FORCE"
+            typeBOTTOM="VELOCITY_REFLECTION"
+            typeFRONT="OUTFLOW"
+            typeBACK="OUTFLOW"
+            origin="0 0 0"
+            extent="100 50 75"
+            grid_constant="2.5"
+            force_type="lennardJones"
+            force_arg1="1"
+            force_arg2="1.2"
+    />
+
+    <Forces>
+        <Force type="lennardJones" partType="0" arg1="1" arg2="1"/>
+    </Forces>
+
+    <cuboids>
+        <origin>1 2 3</origin>
+        <velocity>4 5 6</velocity>
+        <numPart>3 4 5</numPart>
+        <thermal_v>0</thermal_v>
+        <width>1</width>
+        <mass>1</mass>
+        <dimension>3</dimension>
+        <type>0</type>
+        <state>ALIVE</state>
+    </cuboids>
+
+    <cuboids>
+        <origin>19 20 21</origin>
+        <velocity>7 8 9</velocity>
+        <numPart>1 2 3</numPart>
+        <thermal_v>0</thermal_v>
+        <width>1</width>
+        <mass>2</mass>
+        <dimension>3</dimension>
+        <type>1</type>
+        <state>STATIONARY</state>
+    </cuboids>
+</simulation>

@@ -13,7 +13,6 @@
 #define FORCE_CUTOFF_AUTO std::numeric_limits<double>::min()
 
 namespace md::env {
-
     /**
      * @brief Structure for defining force-related configurations.
      */
@@ -24,7 +23,7 @@ namespace md::env {
     /**
      * @brief Represents the Lennard-Jones force between two particles.
      */
-    struct LennardJones : ForceBase{
+    struct LennardJones : ForceBase {
         /**
          * @brief Default constructor.
          */
@@ -32,12 +31,13 @@ namespace md::env {
 
         /**
          * @brief Constructs a Lennard-Jones object with parameters.
-         * @param epsilon
-         * @param sigma
-         * @param cutoff
+         * @param epsilon The lennard-jones epsilon.
+         * @param sigma The lennard-jones sigma.
+         * @param cutoff The cutoff-radius.
          */
         LennardJones(const double epsilon, const double sigma, const double cutoff)
-        : ForceBase(cutoff), epsilon(epsilon), sigma(sigma) {}
+            : ForceBase(cutoff), epsilon(epsilon), sigma(sigma) {}
+
         double epsilon = 5;
         double sigma = 1;
     };
@@ -45,7 +45,7 @@ namespace md::env {
     /**
      * @brief Represents an inverse-square force between two particles.
      */
-    struct InverseSquare : ForceBase{
+    struct InverseSquare : ForceBase {
         /**
          * @brief Default constructor.
          */
@@ -53,16 +53,31 @@ namespace md::env {
 
         /**
          * @brief Constructs an inverse-square force object with parameters.
-         * @param pre_factor
-         * @param cutoff
+         * @param pre_factor The pre-factor of inverse square force.
+         * @param cutoff The cutoff-radius.
          */
         InverseSquare(const double pre_factor, const double cutoff)
-        : ForceBase(cutoff), pre_factor(pre_factor) {}
+            : ForceBase(cutoff), pre_factor(pre_factor) {}
+
         double pre_factor = 1;
     };
 
 
-    using ForceType = std::variant<LennardJones, InverseSquare>;
+    struct Harmonic : ForceBase {
+        Harmonic() = default;
+
+        /**
+        * @brief Harmonic force for membrane.
+        */
+        Harmonic(const double k, const double r0, const double cutoff)
+            : ForceBase(cutoff), k(k), r0(r0) {}
+
+        double k{};
+        double r0{};
+    };
+
+
+    using ForceType = std::variant<LennardJones, InverseSquare, Harmonic>;
 
 
     class Force {
@@ -97,8 +112,8 @@ namespace md::env {
         [[nodiscard]] double cutoff() const;
 
     private:
-        double cutoff_radius;    ///< The cutoff radius for the calculations.
-        ForceFunc force_func {}; ///< The force function used for the calculations.
+        double cutoff_radius;   ///< The cutoff radius for the calculations.
+        ForceFunc force_func{}; ///< The force function used for the calculations.
     };
 
 
@@ -106,8 +121,10 @@ namespace md::env {
      * @brief Manages forces of particles with different types.
      */
     class ForceManager {
-        using ParticleType = int;
-        using ForceKey = std::pair<ParticleType, ParticleType>;
+        using ParticleType = Particle::Type;
+        using ParticleID = Particle::ID;
+        using ParticleTypePair = std::pair<ParticleType, ParticleType>;
+        using ParticleIDPair = std::pair<ParticleID, ParticleID>;
 
         /**
          * @brief Hash to use pairs of particles types as keys.
@@ -125,6 +142,7 @@ namespace md::env {
                 return std::hash<T1>()(key.first) ^ (std::hash<T2>()(key.second) << 1);
             }
         };
+
     public:
         /**
          * @brief Default constructor.
@@ -145,15 +163,16 @@ namespace md::env {
          * @param particle_type The type of particle for which the force should apply.
          */
         void add_force(const ForceType& force, int particle_type);
+        void add_force(const ForceType& force, const ParticleIDPair& particle_ids);
 
         /**
          * @brief Evaluates the force between two particles.
          * @param diff The difference of the particles.
-         * @param p1
-         * @param p2
+         * @param p1 The first particle.
+         * @param p2 The second particle.
          * @return The force acting between the two particles.
          */
-        vec3 evaluate(const vec3 &diff, const Particle& p1, const Particle& p2) const;
+        vec3 evaluate(const vec3& diff, const Particle& p1, const Particle& p2) const;
 
         /**
          * @brief Retrieves the cutoff radius.
@@ -175,9 +194,14 @@ namespace md::env {
          */
         static Force mix_forces(const ForceType& force1, const ForceType& force2);
 
-        std::unordered_map<ParticleType, ForceType> force_types;   ///< Map of particle types to force configurations.
-        ankerl::unordered_dense::map<ForceKey, Force, ForceKeyHash> forces;  ///< Map of force key pairs to mixed forces.
-        double cutoff_radius;  ///< The cutoff radius.
+        std::unordered_map<ParticleType, ForceType> global_force_types;
+        ///< Map of particle types to force type.
+        std::unordered_map<ParticleIDPair, ForceType, ForceKeyHash> localized_force_types;
+        ///< Map of particle pairs to force configurations.
+        ankerl::unordered_dense::map<ParticleTypePair, Force, ForceKeyHash> global_forces;
+        ///< forces between particle types.
+        ankerl::unordered_dense::map<ParticleIDPair, Force, ForceKeyHash> localized_forces;
+        ///< forces between specific particles.
+        double cutoff_radius; ///< The cutoff radius.
     };
-
-}  // namespace md::env
+} // namespace md::env

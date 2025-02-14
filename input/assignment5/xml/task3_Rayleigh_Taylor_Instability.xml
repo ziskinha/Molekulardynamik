@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulation>
+    <output>
+        <base_name>output</base_name>
+        <write_frequency>100</write_frequency>
+    </output>
+
+    <parameters>
+        <end_t>100</end_t>
+        <delta_t>0.0005</delta_t>
+        <cutoff_radius>3.6</cutoff_radius>
+        <parallel_strategy>CELL_LOCK</parallel_strategy>
+    </parameters>
+
+    <Boundary
+            typeLEFT="PERIODIC"
+            typeRIGHT="PERIODIC"
+            typeTOP="REPULSIVE_FORCE"
+            typeBOTTOM="REPULSIVE_FORCE"
+            typeFRONT="PERIODIC"
+            typeBACK="PERIODIC"
+            origin="0 0 0"
+            extent="60 60 60"
+            grid_constant="3.6"
+            force_type="lennardJones"
+            force_arg1="1"
+            force_arg2="1.15"
+    />
+
+    <Forces>
+        <Force type="lennardJones" partType="0" arg1="1" arg2="1.2"/>
+        <Force type="lennardJones" partType="1" arg1="1" arg2="1.1"/>
+    </Forces>
+
+    <ConstantForces>
+        <ConstantForce type="gravity" direction="0 1 0" strength="-12.44"/>
+    </ConstantForces>
+
+    <Thermostat>
+        <n_thermostats>1000</n_thermostats>
+        <init_T>40</init_T>
+        <target_T>40</target_T>
+        <temp_dT>-1</temp_dT>
+    </Thermostat>
+
+    <cuboids>
+        <origin>0.6 0.6 0.6</origin>
+        <velocity>0 0 0</velocity>
+        <numPart>50 20 50</numPart>
+        <thermal_v>0</thermal_v>
+        <width>1.2</width>
+        <mass>1</mass>
+        <dimension>3</dimension>
+        <type>0</type>
+        <state>ALIVE</state>
+    </cuboids>
+
+    <cuboids>
+        <origin>0.6 24.6 0.6</origin>
+        <velocity>0 0 0</velocity>
+        <numPart>50 20 50</numPart>
+        <thermal_v>0</thermal_v>
+        <width>1.2</width>
+        <mass>2</mass>
+        <dimension>3</dimension>
+        <type>1</type>
+        <state>ALIVE</state>
+    </cuboids>
+</simulation>

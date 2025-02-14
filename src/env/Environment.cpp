@@ -10,48 +10,51 @@
 #define WARN_IF_INIT(msg)                                                                                     \
     do {                                                                                                      \
         if (initialized) {                                                                                    \
-            SPDLOG_WARN("You are trying to {} in an initialized environment. Request will be ignored.", msg); \
-            return;                                                                                           \
+            SPDLOG_ERROR("You are trying to {} in an initialized environment.", msg); \
+            exit(-1);                                                                                           \
         }                                                                                                     \
     } while (0)
 
 namespace md::env {
-
     /// -----------------------------------------
     /// \brief CreateInfo Constructors
     /// -----------------------------------------
     ParticleCreateInfo::ParticleCreateInfo(const vec3& position, const vec3& velocity, const double mass,
-                                           const int type)
-        : position(position), velocity(velocity), mass(mass), type(type) {}
+                                           const int type, Particle::State state)
+        : position(position), velocity(velocity), mass(mass), type(type), state(state) {}
 
     CuboidCreateInfo::CuboidCreateInfo(const vec3& origin, const vec3& initial_v, const uint3& num_particles,
-                                       const double thermal_v, const double width, const double mass,
-                                       const uint8_t dimension, const int type)
+                                       const double width, const double mass, const double thermal_v, const int type,
+                                       const Dimension dimension, const Particle::State state)
         : origin(origin),
           initial_v(initial_v),
           num_particles(num_particles),
           thermal_v(thermal_v),
           width(width),
           mass(mass),
+          type(type),
           dimension(dimension),
-          type(type) {}
+          state(state)
+    {}
 
-    SphereCreateInfo::SphereCreateInfo(const vec3 &origin, const vec3 &initial_v, const double thermal_v,
-                                       const int radius, const double width, const double mass, const uint8_t dimension, const int type)
-        : origin(origin),
-          initial_v(initial_v),
-          thermal_v(thermal_v),
-          radius(radius),
-          width(width),
-          mass(mass),
-          dimension(dimension),
-          type(type){}
+    SphereCreateInfo::SphereCreateInfo(const vec3& origin, const vec3& initial_v, const int radius, const double width,
+    const double mass, const double thermal_v, const int type, const Dimension dimension, const Particle::State state) :
+    origin(origin),
+      initial_v(initial_v),
+      thermal_v(thermal_v),
+      radius(radius),
+      width(width),
+      mass(mass),
+      type(type),
+      dimension(dimension),
+      state(state)
+    {}
 
     /// -----------------------------------------
     /// Environment Class Methods
     /// -----------------------------------------
     Environment::Environment()
-        : dimension(Dimension::INFER), grid_constant(GRID_CONSTANT_AUTO), initialized(false), g_grav(0) {}
+        : dimension(Dimension::INFER), grid_constant(GRID_CONSTANT_AUTO), initialized(false), num_stat_particles(0) {}
 
     /// -----------------------------------------
     ///  Methods for environment setup
@@ -74,34 +77,58 @@ namespace md::env {
     void Environment::set_dimension(const Dimension dim) {
         WARN_IF_INIT("set the dimension");
         dimension = dim;
-        // TODO use dimension for initializing cuboid and sphere velocities
     }
 
-    void Environment::set_gravity_constant(const double g) {
-        g_grav = g;
+    vec3 Environment::average_velocity() {
+        vec3 v = {};
+        for (const auto& p : particle_storage) {
+            v = v + p.velocity;
+        }
+        return 1.0 / size(Particle::ALIVE) * v;
     }
 
-    vec3 Environment::gravity_force(const Particle& particle) const {
-        return vec3{0, particle.mass * g_grav, 0};
+    void Environment::scale_thermal_velocity(double scalar, vec3 mean_v) {
+        for (auto& particle : particles(GridCell::INSIDE, Particle::ALIVE)) {
+            // combined with thermostat we perform the subtraction twice -> maybe rewrite code to only do this once?
+            particle.velocity = scalar * (particle.velocity - mean_v) + mean_v;
+        }
     }
 
-    void Environment::add_particle(const vec3& position, const vec3& velocity, double mass, int type, const vec3& force) {
+    size_t Environment::add_particle(const vec3& position, const vec3& velocity, double mass, int type,
+                                   const Particle::State state, const vec3& force) {
         WARN_IF_INIT("add particles");
-        particle_storage.emplace_back(particle_storage.size(), grid, position, velocity, mass, type, force);
+
+        size_t id = particle_storage.size();
+        particle_storage.emplace_back(id, grid, position, velocity, mass, type, state, force);
+        if (state == Particle::STATIONARY) num_stat_particles++;
         SPDLOG_TRACE("Particle added to env. Position: [{}, {}, {}], Velocity: [{}, {}, {}], Mass: {}, Type: {}",
                      position[0], position[1], position[2], velocity[0], velocity[1], velocity[2], mass, type);
+        return id;
     }
 
     void Environment::add_particles(const std::vector<ParticleCreateInfo>& particles) {
         for (auto& x : particles) {
-            add_particle(x.position, x.velocity, x.mass, x.type);
+            add_particle(x.position, x.velocity, x.mass, x.type, x.state);
         }
     }
 
-    void Environment::add_cuboid(const vec3& origin, const vec3& initial_v, const uint3& num_particles,
-                                 const double thermal_v, const double width, const double mass, uint8_t const dimension,
-                                 const int type) {
+    void Environment::add_cuboid(const CuboidCreateInfo& cuboid) {
+        add_cuboid(cuboid.origin, cuboid.initial_v, cuboid.num_particles, cuboid.width, cuboid.mass,
+        cuboid.thermal_v, cuboid.type, cuboid.dimension, cuboid.state);
+    }
+
+    void Environment::add_cuboid(const vec3& origin, const vec3& velocity, const uint3& num_particles, const double width,
+        const double mass, const double thermal_v, const int type, const Dimension dimension, const Particle::State state) {
         WARN_IF_INIT("add particles (cuboids)");
+        if (num_particles[0] == 0 || num_particles[1] == 0 || num_particles[2] == 0) {
+            SPDLOG_ERROR("num_particles contains 0 particles in at least one direction");
+            exit(3000);
+        }
+
+        auto dim = static_cast<uint8_t>(dimension);
+        if (dimension == Dimension::INFER) {
+            dim = num_particles[2] == 1 ? 2 : 3;
+        }
 
         particle_storage.reserve(particle_storage.size() + num_particles[0] * num_particles[1] * num_particles[2]);
 
@@ -109,27 +136,27 @@ namespace md::env {
             for (unsigned int y = 0; y < num_particles[1]; ++y) {
                 for (unsigned int z = 0; z < num_particles[2]; ++z) {
                     vec3 pos = origin + vec3({x * width, y * width, z * width});
-                    vec3 vel = initial_v + maxwellBoltzmannDistributedVelocity(thermal_v, dimension);
-                    add_particle(pos, vel, mass, type);
+                    vec3 vel = velocity + maxwellBoltzmannDistributedVelocity(thermal_v, dim);
+                    add_particle(pos, vel, mass, type, state);
                 }
             }
         }
     }
 
-    void Environment::add_cuboid(const CuboidCreateInfo& cuboid) {
-        add_cuboid(cuboid.origin, cuboid.initial_v, cuboid.num_particles, cuboid.thermal_v, cuboid.width, cuboid.mass,
-                   cuboid.dimension, cuboid.type);
-    }
-
-    void Environment::add_sphere(const vec3& origin, const vec3& initial_v, const double thermal_v, const int radius,
-                                 const double width, const double mass, const uint8_t dimension, const int type) {
+    void Environment::add_sphere(const vec3& origin, const vec3& velocity, const int radius, const double width, const double mass,
+        const double thermal_v, const int type, Dimension dimension, const Particle::State state) {
         WARN_IF_INIT("add particles (sphere)");
+        if (dimension == Dimension::INFER) {
+            SPDLOG_ERROR("cannot infer dimension of particle sphere");
+            exit(3000);
+        }
         int num_particles = 0;
+        const auto dim = static_cast<uint8_t>(dimension);
 
         //calculate the number of particles to be added
-        if (dimension == 3) {
+        if (dim == 3) {
             num_particles = static_cast<int>(std::ceil((4.0 / 3.0) * M_PI * std::pow(radius / width, 3)));
-        } else if (dimension == 2) {
+        } else if (dim == 2) {
             num_particles = static_cast<int>(std::ceil(M_PI * std::pow(radius / width, 2)));
         }
 
@@ -137,28 +164,78 @@ namespace md::env {
 
         for (int x = -radius; x <= radius; ++x) {
             for (int y = -radius; y <= radius; ++y) {
-                for (int z = - radius; z <= radius; ++z) {
-                    if (dimension == 2 && z != 0) continue;
+                for (int z = -radius; z <= radius; ++z) {
+                    if (dim == 2 && z != 0) continue;
 
                     const vec3 current_pos = {x * width, y * width, z * width};
                     const double distance_to_origin = ArrayUtils::L2Norm(current_pos);
 
                     if (distance_to_origin <= radius * width) {
                         vec3 pos = origin + current_pos;
-                        vec3 vel = initial_v + maxwellBoltzmannDistributedVelocity(thermal_v, dimension);
-                        add_particle(pos, vel, mass, type);
+                        vec3 vel = velocity + maxwellBoltzmannDistributedVelocity(thermal_v, dim);
+                        add_particle(pos, vel, mass, type, state);
                     }
                 }
             }
         }
     }
 
-    void Environment::add_sphere(const SphereCreateInfo& sphere) {
-        add_sphere(sphere.origin, sphere.initial_v, sphere.thermal_v, sphere.radius, sphere.width, sphere.mass,
-                   sphere.dimension, sphere.type);
+    void Environment::add_membrane(const vec3& origin, const vec3& velocity, const uint3& num_particles, const double width,
+        const double mass, double k, const double cutoff, const int type) {
+
+        if (num_particles[0] == 0 || num_particles[1] == 0 || num_particles[2] == 0) {
+            SPDLOG_ERROR("num_particles contains 0 particles in at least one direction");
+            exit(3000);
+        }
+        if (num_particles[2] != 1) {
+            SPDLOG_ERROR("Membrane should be 2D");
+            exit(3000);
+        }
+
+        particle_storage.reserve(particle_storage.size() + num_particles[0] * num_particles[1]);
+        std::vector<size_t> particle_ids(num_particles[0] * num_particles[1]);
+
+        auto index = [&](const unsigned int x, const unsigned int y) {
+            return x + num_particles[0] * y;
+        };
+
+        // add particles
+        for (unsigned int x = 0; x < num_particles[0]; ++x) {
+            for (unsigned int y = 0; y < num_particles[1]; ++y) {
+                vec3 pos = origin + vec3({x * width, y * width, 0});
+                size_t particle_id = add_particle(pos, velocity, mass, type);
+                particle_ids[index(x, y)] = particle_id;
+            }
+        }
+
+        // add forces
+        for (int x = 0; x < static_cast<int>(num_particles[0]); ++x) {
+            for (int y = 0; y < static_cast<int>(num_particles[1]); ++y) {
+                size_t id1 = particle_ids[index(x, y)];
+                for (int dx = -1; dx <= 1; ++dx) {
+                    for (int dy = -1; dy <= 1; ++dy) {
+                        if (dx == 0 && dy == 0) continue;
+                        const int nx = x + dx;
+                        const int ny = y + dy;
+
+                        if (nx >= 0 && nx < static_cast<int>(num_particles[0]) && ny >= 0 && ny < static_cast<int>(num_particles[1])) {
+                            size_t id2 = particle_ids[index(nx, ny)];
+                            const double r0 = ArrayUtils::L2Norm(particle_storage[id1].position - particle_storage[id2].position);
+                            forces.add_force(Harmonic(k, r0, cutoff), {id1, id2});
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    void Environment::build() {
+
+    void Environment::add_sphere(const SphereCreateInfo& sphere) {
+        add_sphere(sphere.origin, sphere.initial_v, sphere.radius, sphere.width, sphere.mass, sphere.thermal_v,
+                   sphere.type, sphere.dimension, sphere.state);
+    }
+
+    void Environment::build(bool build_blocks) {
         if (initialized) {
             SPDLOG_ERROR("Environment is already initialized!");
             return;
@@ -176,13 +253,14 @@ namespace md::env {
                 boundary.origin[i] = -boundary.extent[i] / 2;
             }
         }
-        for (Particle & particle : particle_storage) {
+        for (Particle& particle : particle_storage) {
             const vec3 pos = particle.position - boundary.origin;
             if (pos[0] < 0 || pos[1] < 0 || pos[2] < 0 ||
                 pos[0] > boundary.extent[0] || pos[1] > boundary.extent[1] || pos[2] > boundary.extent[2]) {
-                SPDLOG_ERROR("Particle is being initialized outside of the boundary. Particle position: {}", particle.position);
+                SPDLOG_ERROR("Particle is being initialized outside of the boundary. Particle position: {}",
+                             particle.position);
                 throw std::invalid_argument("invalid particle position");
-                }
+            }
         }
         if (boundary.requires_force_function()) {
             if (!boundary.has_force_function()) {
@@ -200,7 +278,8 @@ namespace md::env {
             grid_constant = forces.cutoff();
         }
         if (grid_constant == GRID_CONSTANT_AUTO) {
-            if (boundary.extent[0] == MAX_EXTENT && boundary.extent[1] == MAX_EXTENT && boundary.extent[2] == MAX_EXTENT) {
+            if (boundary.extent[0] == MAX_EXTENT && boundary.extent[1] == MAX_EXTENT && boundary.extent[2] ==
+                MAX_EXTENT) {
                 grid_constant = MAX_EXTENT;
                 SPDLOG_DEBUG("Using GRID_CONSTANT_AUTO. Grid constant set to MAX_EXTENT", grid_constant);
             } else {
@@ -208,15 +287,16 @@ namespace md::env {
                 SPDLOG_DEBUG("Using GRID_CONSTANT_AUTO. Grid constant set to force cutoff: {}", grid_constant);
             }
         }
-        if (grid_constant < 0) {
-            SPDLOG_ERROR("Grid constant is negative. Grid constant should be chosen positive and at least the size of the force cutoff");
+        if (grid_constant <= 0) {
+            SPDLOG_ERROR(
+                "Grid constant < 0. Grid constant should be chosen positive and at least the size of the force cutoff");
             throw std::invalid_argument("Grid constant is negative.");
         }
 
         // infer dimensionality
         if (dimension == Dimension::INFER) {
             dimension = Dimension::TWO;
-            for (auto & p : particle_storage) {
+            for (auto& p : particle_storage) {
                 if (p.position[3] != 0 || p.velocity[3] != 0) {
                     dimension = Dimension::THREE;
                     break;
@@ -224,7 +304,7 @@ namespace md::env {
             }
         }
 
-        grid.build(boundary, grid_constant, particle_storage);
+        grid.build(boundary, grid_constant, particle_storage, build_blocks);
         initialized = true;
         SPDLOG_INFO("Environment successfully built.");
     }
@@ -237,7 +317,8 @@ namespace md::env {
         return (x2 + n) - x1;
     }
 
-    vec3 Environment::force(const Particle& p1, const Particle& p2, const CellPair & pair) const {
+    vec3 Environment::force(const Particle& p1, const Particle& p2, const CellPair& pair) const {
+        if (p1.type == Particle::STATIONARY && p2.type == Particle::STATIONARY) return {};
         vec3 diff = p2.position - p1.position;
 
         // handle force wrap around
@@ -255,31 +336,47 @@ namespace md::env {
     }
 
     size_t Environment::size(const Particle::State state) const {
-        if (state == Particle::ALIVE)
-            return grid.particle_count();
         if (state == Particle::DEAD)
             return particle_storage.size() - grid.particle_count();
-        if(state & Particle::DEAD && state & Particle::ALIVE)
+        if (state == Particle::STATIONARY)
+            return num_stat_particles;
+        if (state == Particle::ALIVE)
+            return grid.particle_count() - num_stat_particles;
+        if (state == (Particle::ALIVE | Particle::STATIONARY))
+            return grid.particle_count();
+        if (state == (Particle::DEAD | Particle::ALIVE | Particle::STATIONARY))
             return particle_storage.size();
-        throw std::invalid_argument("invalid particle state");
+        SPDLOG_ERROR("invalid particle state or unsupported state combination in Environment::size: {}", static_cast<int>(state));
+        exit(3000);
     }
 
-    const std::vector<CellPair> & Environment::linked_cells() {
+    const std::vector<CellPair>& Environment::linked_cells() {
         return grid.linked_cells();
     }
 
+    const std::vector<std::vector<Block>>& Environment::block_sets() {
+        return grid.block_sets();
+    }
+
     void Environment::apply_boundary(Particle& particle) {
-        const auto & current = grid.get_cell(particle.cell);
-        const auto & previous = grid.get_cell(grid.what_cell(particle.old_position));
+        const auto& current = grid.get_cell(particle.cell);
+        const auto& previous = grid.get_cell(grid.what_cell(particle.old_position));
         boundary.apply_boundary(particle, current, previous);
     }
 
-    double Environment::temperature() const {
+    double Environment::temperature(const vec3& avg_vel) const {
         double energy = 0;
-        for (auto & particle : particles(GridCell::INSIDE, Particle::ALIVE)) {
-            energy +=  particle.mass * ArrayUtils::L2NormSquared(particle.velocity);
+        for (auto& particle : particles(GridCell::INSIDE, Particle::ALIVE)) {
+            energy += particle.mass * ArrayUtils::L2NormSquared(particle.velocity - avg_vel);
         }
-        return energy/static_cast<double>(dim()*size());
+        return energy / static_cast<double>(dim() * size(Particle::ALIVE));
+    }
+
+    vec3 Environment::extent() const {
+        return boundary.extent;
+    }
+    vec3 Environment::origin() const {
+        return boundary.origin;
     }
 
     int Environment::dim() const {
@@ -297,4 +394,4 @@ namespace md::env {
         const bool location_ok = grid.get_cell(particle).type & type;
         return state_ok && location_ok;
     }
-}  // namespace md::env
+} // namespace md::env

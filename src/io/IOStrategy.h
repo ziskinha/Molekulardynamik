@@ -5,7 +5,9 @@
 #include <string>
 
 #include "env/Environment.h"
-#include "env/Thermostat.h"
+#include "effects/Thermostat.h"
+#include "effects/ConstantForce.h"
+#include "core/Statistics.h"
 #include "io/Logger/Logger.h"
 #include "io/Output/CheckpointWriter.h"
 
@@ -27,14 +29,16 @@ namespace md::io {
         env::Thermostat thermostat;
         OutputFormat output_format;
         std::string output_baseName;
-        std::string force;
         bool benchmark;
         bool override;
         double duration;
         double dt;
         double cutoff_radius;
         int write_freq;
+        int parallel_strategy;
         unsigned int temp_adj_freq = std::numeric_limits<unsigned int>::max();
+        std::vector<env::ConstantForce> external_forces;
+        std::unique_ptr<core::Statistics> stats = nullptr;
     };
 
     /**
@@ -51,10 +55,12 @@ namespace md::io {
                 "       benchmark:           {}\n"
                 "       override:            {}\n"
                 "       output format:       {}\n"
-                "       output name:         {}",
-                args.duration, args.dt, args.write_freq, args.env.size(), args.benchmark ? "true" : "false",
-                args.override ? "true" : "false", args.output_format == OutputFormat::XYZ ? "XYZ" : "VTK",
-                args.output_baseName);
+                "       output name:         {}\n"
+                "       parallelization:     {}",
+                args.duration, args.dt, args.write_freq, args.env.size(env::Particle::ALIVE | env::Particle::STATIONARY),
+                args.benchmark ? "true" : "false", args.override ? "true" : "false",
+                args.output_format == OutputFormat::XYZ ? "XYZ" : "VTK", args.output_baseName,
+                args.parallel_strategy == 1 ? "cell lock" : (args.parallel_strategy == 2 ? "spatial decomposition" : "none"));
     }
 
     /**
@@ -73,7 +79,7 @@ namespace md::io {
 
         /**
          * @brief Plots particle data at a given iteration.
-         * @param environment
+         * @param environment The environment of the particles.
          * @param iteration The current simulation iteration.
          */
         virtual void plot_particles(const env::Environment& environment, int iteration) = 0;
@@ -107,8 +113,8 @@ namespace md::io {
 
     /**
      * @brief Reads an input file depending on its format.
-     * @param filename
-     * @param args
+     * @param filename The name of the file.
+     * @param args The ProgramArguments.
      */
     void read_file(const std::string& filename, ProgramArguments& args);
 }  // namespace md::io

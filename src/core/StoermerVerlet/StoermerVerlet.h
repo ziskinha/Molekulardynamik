@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IntegratorBase.h"
+#include "core/IntegratorBase.h"
 
 namespace md::Integrator {
 

@@ -57,7 +57,6 @@ namespace md::parse {
 
         io::read_file(arguments[1], args);
 
-        // set options
         args.benchmark = flag_exists("-b");
         args.override = flag_exists("-f");
 

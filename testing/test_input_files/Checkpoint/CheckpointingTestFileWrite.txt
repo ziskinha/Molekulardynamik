@@ -1,0 +1,28 @@
+# for file format info please take a look at /input/others/txt_file_description.txt
+
+general:
+# duration   delta_t     write_freq   cutoff_radius   parallel_strategy  output_baseName
+# -- Please provide the missing values or delete -- #
+
+particles:
+# origin             velocity         mass    type   state(0: STATIONARY, 1: ALIVE)   old_force
+0.5 0.5 0.5     0.5 0.5 0.5     1.5     0     1     1 2 3
+1.5 1.5 1.5     1.5 1.5 1.5     1.5     1     1     4 5 6
+2.5 2.5 2.5     2.5 2.5 2.5     2.5     2     1     7 8 9
+3.5 3.5 3.5     3.5 3.5 3.5     3.5     3     0     10 11 12
+ 
+force:
+# lennard_jones/inverse_square  parameter   particle_type
+# gravity       direction    strength
+# pull_force    direction    strength   MarkBox_bottom_left_corner  MarkBox_top_right_corner  start_t end_t  const_acc(default: false)
+# -- Please provide the missing values or delete -- #
+
+environment:
+# (Boundary condition identification: 0: OUTFLOW, 1: PERIODIC, 2: REPULSIVE FORCE, 3: VELOCITY REFLECTION)
+# boundary_origin     boundary_extent     grid_constant    boundary_conds(left, right, top, bottom, front, back)
+# -- Please provide the missing values or delete -- #
+
+thermostats:
+# T_init     n_thermos     T_target(for no target: -1)      delta_T(for no delta_t: -1)
+# -- Please provide the missing values or delete -- #
+

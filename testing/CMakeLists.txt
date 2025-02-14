@@ -1,13 +1,34 @@
 # function to add test executables
-function(add_test_executable test_name)
+function(add_test_executable test_name use_input)
     file(GLOB TEST_SOURCES
             ${CMAKE_SOURCE_DIR}/testing/${test_name}.cpp
             ${CMAKE_SOURCE_DIR}/src/env/*.cpp
             ${CMAKE_SOURCE_DIR}/src/env/*.h
-            ${CMAKE_SOURCE_DIR}/src/core/*.cpp
-            ${CMAKE_SOURCE_DIR}/src/core/*.h
+            ${CMAKE_SOURCE_DIR}/src/core/IntegratorBase.cpp
+            ${CMAKE_SOURCE_DIR}/src/core/IntegratorBase.h
+            ${CMAKE_SOURCE_DIR}/src/core/StoermerVerlet/*.cpp
+            ${CMAKE_SOURCE_DIR}/src/core/StoermerVerlet/*.h
+            ${CMAKE_SOURCE_DIR}/src/effects/*.cpp
+            ${CMAKE_SOURCE_DIR}/src/effects/*.h
             ${CMAKE_SOURCE_DIR}/src/io/Output/CheckpointWriter.cpp
+            ${CMAKE_SOURCE_DIR}/src/io/Output/CSVWriter.cpp
+
     )
+
+    if(${use_input})
+        list(APPEND TEST_SOURCES
+            ${CMAKE_SOURCE_DIR}/src/io/IOStrategy.h
+            ${CMAKE_SOURCE_DIR}/src/io/IOStrategy.cpp
+            ${CMAKE_SOURCE_DIR}/src/io/input/txt/TXTFileReader.cpp
+            ${CMAKE_SOURCE_DIR}/src/io/input/xml/XMLFileReader.cpp
+            ${CMAKE_SOURCE_DIR}/src/io/input/xml/molSimSchema.cxx
+            ${CMAKE_SOURCE_DIR}/src/io/Output/VTKWriter.cpp
+            ${CMAKE_SOURCE_DIR}/src/io/Output/XYZWriter.cpp
+            ${CMAKE_SOURCE_DIR}/src/io/Output/CSVWriter.cpp
+            ${CMAKE_SOURCE_DIR}/src/io/Output/VTK\ unstructured/vtk-unstructured.cpp
+            ${CMAKE_SOURCE_DIR}/src/core/Statistics.cpp
+        )
+    endif()
 
     add_executable(${test_name} ${TEST_SOURCES})
 
@@ -33,9 +54,12 @@ function(add_test_executable test_name)
 endfunction()
 
 # add the tests
-add_test_executable(EnvironmentTests)
-add_test_executable(ForceTests)
-add_test_executable(StoermerVerletTests)
-add_test_executable(LinkedCellsTests)
-add_test_executable(BoundaryConditionTests)
-add_test_executable(ThermostatTests)
+add_test_executable(EnvironmentTests OFF)
+add_test_executable(ForceTests OFF)
+add_test_executable(StoermerVerletTests OFF)
+add_test_executable(LinkedCellsTests OFF)
+add_test_executable(BoundaryConditionTests OFF)
+add_test_executable(ThermostatTests OFF)
+add_test_executable(ParallelizationTests OFF)
+add_test_executable(IOTests ON)
+add_test_executable(CSVWriterTest OFF)

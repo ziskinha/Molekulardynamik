@@ -21,6 +21,8 @@ namespace md::env {
     }
 
 
+
+
     Force InverseSquareForce(const double pre_factor, double cutoff_radius) {
         if (cutoff_radius == FORCE_CUTOFF_AUTO) cutoff_radius = 10 * pre_factor;
 
@@ -56,33 +58,67 @@ namespace md::env {
         return Force(force_func, cutoff_radius);
     }
 
+    Force HarmonicForce(const double k, const double r0, double cutoff_radius) {
+        if (cutoff_radius == FORCE_CUTOFF_AUTO) cutoff_radius = 2 * r0;
+
+        const Force::ForceFunc force_func = [=](const vec3& diff, const Particle&, const Particle&) {
+            const double dist = ArrayUtils::L2Norm(diff);
+            return - k * (dist - r0) / dist * diff;
+        };
+
+        return Force(force_func, cutoff_radius);
+    }
+
+
+
 
     ForceManager::ForceManager()
         : cutoff_radius(0) {}
 
     void ForceManager::init() {
         std::vector<int> types;
-        for (const auto& key : std::views::keys(force_types)) {
+        for (const auto& key : std::views::keys(global_force_types)) {
            types.push_back(key);
         }
 
         for (size_t i = 0; i < types.size(); i++) {
             for (size_t j = 0; j < types.size(); j++) {
-                auto force1 = force_types[static_cast<int>(i)];
-                auto force2 = force_types[static_cast<int>(j)];
+                auto force1 = global_force_types[static_cast<int>(i)];
+                auto force2 = global_force_types[static_cast<int>(j)];
 
-                forces[{types[i], types[j]}] = mix_forces(force1, force2);
-                cutoff_radius = std::max(cutoff_radius, forces[{types[i], types[j]}].cutoff() );
+                global_forces[{types[i], types[j]}] = mix_forces(force1, force2);
+                cutoff_radius = std::max(cutoff_radius, global_forces[{types[i], types[j]}].cutoff() );
             }
         }
+
+        for (auto [particle_ids, force] : localized_force_types) {
+            localized_forces[particle_ids] = mix_forces(force, force);
+            cutoff_radius = std::max(cutoff_radius, localized_forces[particle_ids].cutoff() );
+        }
+
+
+        global_force_types.clear();
+        localized_force_types.clear();
     }
 
     void ForceManager::add_force(const ForceType& force, const int particle_type) {
-        force_types[particle_type] = force;
+        global_force_types[particle_type] = force;
+    }
+
+    void ForceManager::add_force(const ForceType& force, const ParticleIDPair& particle_ids) {
+        localized_force_types[particle_ids] = force;
     }
 
     vec3 ForceManager::evaluate(const vec3& diff, const Particle& p1, const Particle& p2) const {
-        return forces.at({p1.type, p2.type})(diff, p1, p2);
+        vec3 force = global_forces.at({p1.type, p2.type})(diff, p1, p2);
+
+        if (!localized_forces.empty()) {
+            if (const auto it = localized_forces.find({p1.id, p2.id}); it != localized_forces.end()) {
+                force = force + it->second(diff, p1, p2);
+            }
+        }
+
+        return force;
     }
 
     double ForceManager::cutoff() const {
@@ -105,6 +141,16 @@ namespace md::env {
                 const double G = sqrt(is1->pre_factor * is2->pre_factor);
                 const double cutoff = std::max(is1->cutoff, is2->cutoff);
                 return InverseSquareForce(G, cutoff);
+            }
+        }
+
+        // Check if both are Harmonic
+        if (const auto* h1 = std::get_if<Harmonic>(&force1)) {
+            if (const auto* h2 = std::get_if<Harmonic>(&force2)) {
+                const double r0 = (h1->r0 + h2->r0) / 2;
+                const double k = (h1->k + h2->k) / 2;
+                const double cutoff = std::max(h1->cutoff, h2->cutoff);
+                return HarmonicForce(k, r0, cutoff);
             }
         }
 

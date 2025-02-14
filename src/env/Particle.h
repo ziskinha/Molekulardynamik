@@ -17,12 +17,16 @@ namespace md::env {
      * @brief Structure representing a particle.
      */
     struct Particle {
+        using Type = int;
+        using ID = size_t;
+
         /**
          * @brief Enumeration of the possible states of a particle.
          */
         enum State {
             ALIVE = 0x1,
             DEAD = 0x2,
+            STATIONARY = 0x4
         };
 
         /**
@@ -32,11 +36,12 @@ namespace md::env {
          * @param position The initial position of the particle.
          * @param velocity The initial velocity of the particle.
          * @param mass The initial mass of the particle.
-         * @param force The initial force of the particle.
          * @param type The type of the particle (default: {0, 0, 0}.
+         * @param state The state of the particle (default: ALIVE).
+         * @param force The initial force of the particle.
          */
         Particle(size_t id, ParticleGrid& grid, const vec3& position, const vec3& velocity, double mass, int type,
-                 vec3 force  = {0, 0, 0});
+            State state = ALIVE, const vec3& force  = {0, 0, 0});
 
         /**
          * @brief Copy constructor for Particle.
@@ -81,8 +86,8 @@ namespace md::env {
         int3 cell;          ///< The current cell of the particle.
 
         double mass;      ///< The mass of the particle.
-        int type;         ///< The type of the particle.
-        const size_t id;  ///< The id of the particle.
+        Type type;         ///< The type of the particle.
+        const ID id;  ///< The id of the particle.
         State state;      ///< The state of the particle.
 
        private:

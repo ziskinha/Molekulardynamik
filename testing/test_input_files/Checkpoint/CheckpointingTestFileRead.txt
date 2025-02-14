@@ -1,0 +1,20 @@
+# for file format info please take a look at /input/others/txt_file_description.txt
+
+general:
+# duration   delta_t     write_freq   cutoff_radius   parallel_strategy  output_baseName
+25            0.5           100           2.5              0                 output
+
+particles:
+# origin             velocity         mass    type   state(0: STATIONARY, 1: ALIVE)   old_force
+0.5 0.5 0.5       0.5 0.5 0.5          1.5     0                0                       1 1.5 2
+1.5 1.5 1.5       1.5 1.5 1.5          1.5     1                1                      2.5 3 3.5
+
+force:
+# lennard_jones/inverse_square  parameter   particle_type
+lennard_jones                     1 1             0
+lennard_jones                     1 1.1           1
+
+environment:
+# (Boundary condition identification: 0: OUTFLOW, 1: PERIODIC, 2: REPULSIVE FORCE, 3: VELOCITY REFLECTION)
+# boundary_origin     boundary_extent     grid_constant    boundary_conds(left, right, top, bottom, front, back)
+0 0 0                     5 5 5                2.5               0 0 0 0 0 0

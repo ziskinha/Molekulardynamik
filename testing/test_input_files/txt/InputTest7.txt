@@ -1,0 +1,14 @@
+general:
+# duration   delta_t     write_freq   cutoff_radius   parallel_strategy  output_baseName
+20           0.0005         100            2.5               2               output
+
+force:     -
+# gravity       direction    strength
+gravity          0 1 0        -12.44
+# pull_force    direction    strength   MarkBox_origin  MarkBox_extent  start_t end_t  const_acc(default: false)
+pull_force       1 0 0          5           5 5 5          10 10 10        3      9       0
+
+environment:
+# (Boundary condition identification: 0: OUTFLOW, 1: PERIODIC, 2: REPULSIVE FORCE, 3: VELOCITY REFLECTION)
+# boundary_origin     boundary_extent     grid_constant    boundary_conds(left, right, top, bottom, front, back)
+0 0 0                   100 50 75             2.5               1 1 3 3 0 0

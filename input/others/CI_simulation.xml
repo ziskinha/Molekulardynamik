@@ -1,54 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <simulation>
     <output>
-        <baseName>output</baseName>
-        <writeFrequency>1000</writeFrequency>
+        <base_name>output</base_name>
+        <write_frequency>1000</write_frequency>
     </output>
 
     <parameters>
-        <tEnd>1</tEnd>
-        <deltaT>0.0005</deltaT>
-        <cutoff_radius>3.0</cutoff_radius>
-        <gravitational_force> 0 </gravitational_force>
+        <end_t>0.5</end_t>
+        <delta_t>0.0005</delta_t>
+        <cutoff_radius>2.5</cutoff_radius>
+        <parallel_strategy>NONE</parallel_strategy>
     </parameters>
 
     <Boundary
-            typeLEFT="VELOCITY_REFLECTION"
-            typeRIGHT="VELOCITY_REFLECTION"
+            typeLEFT="PERIODIC"
+            typeRIGHT="PERIODIC"
             typeTOP="VELOCITY_REFLECTION"
             typeBOTTOM="VELOCITY_REFLECTION"
-            typeFRONT="VELOCITY_REFLECTION"
-            typeBACK="VELOCITY_REFLECTION"
-            CENTER_BOUNDARY_ORIGINX="0.0"
-            CENTER_BOUNDARY_ORIGINY="0.0"
-            CENTER_BOUNDARY_ORIGINZ="0.0"
-            EXTENT_WIDTH="10.0"
-            EXTENT_HEIGHT="10.0"
-            EXTENT_DEPTH="1.0"
-            Force_type="lennardJones"
+            typeFRONT="OUTFLOW"
+            typeBACK="OUTFLOW"
+            origin="0 0 0"
+            extent="20 20 20"
+            grid_constant="2.5"
+            force_type="lennardJones"
             force_arg1="1"
-            force_arg2="1"
+            force_arg2="1.1"
     />
-
-    <GridConstant> 3 </GridConstant>
 
     <Forces>
         <Force type="lennardJones" partType="0" arg1="1" arg2="1"/>
-        <Force type="lennardJones" partType="1" arg1="1" arg2="1"/>
+        <Force type="lennardJones" partType="1" arg1="1" arg2="1.2"/>
     </Forces>
 
+    <ConstantForces>
+        <ConstantForce type="gravity" direction="0 1 0" strength="-12.44"/>
+    </ConstantForces>
+
+    <Thermostat>
+        <n_thermostats>100</n_thermostats>
+        <init_T>40</init_T>
+        <target_T>40</target_T>
+        <temp_dT>-1</temp_dT>
+    </Thermostat>
+
+    <cuboids>
+        <origin>1 1 1</origin>
+        <velocity>5 5 5</velocity>
+        <numPart>9 9 9</numPart>
+        <thermal_v>0</thermal_v>
+        <width>1</width>
+        <mass>2</mass>
+        <dimension>3</dimension>
+        <type>0</type>
+        <state>ALIVE</state>
+    </cuboids>
+
     <spheres>
-        <x>5</x>
-        <y>5</y>
-        <z>0</z>
-        <vel1>0</vel1>
-        <vel2>0</vel2>
-        <vel3>0</vel3>
-        <thermal_v>0.1</thermal_v>
-        <radius>3</radius>
+        <origin>14 14 14</origin>
+        <velocity>-5 -5 -5</velocity>
+        <thermal_v>0</thermal_v>
+        <radius>5</radius>
         <width>1</width>
         <mass>1</mass>
-        <dimension>2</dimension>
+        <dimension>3</dimension>
         <type>1</type>
+        <state>ALIVE</state>
     </spheres>
 </simulation>
